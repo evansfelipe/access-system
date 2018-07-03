@@ -3,7 +3,7 @@
     <input  type="{{ $type }}" 
             class="form-control{{ $errors->has($name) ? ' is-invalid' : '' }}"
             name="{{$name}}" value="{{old($name)}}" 
-            required
+            {{ isset($required) && !$required ? '' : 'required' }}
     >
     @if($errors->has($name))
         <span class="invalid-feedback" role="alert">

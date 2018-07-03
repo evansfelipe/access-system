@@ -14,6 +14,11 @@ class Person extends Model
         return $this->hasMany('App\Card');
     }
 
+    public function company()
+    {
+        return $this->belongsTo('App\Company');
+    }
+
     public function fullName() 
     {
         return $this->last_name . ', ' . $this->name;
@@ -39,6 +44,6 @@ class Person extends Model
 
     public function getInactiveCards()
     {
-        return $this->cards()->where('active','=',false)->get();
+        return $this->cards()->where('active','=',false)->orderBy('updated_at','desc')->get();
     }
 }

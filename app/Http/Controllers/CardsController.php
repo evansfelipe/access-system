@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateCardRequest;
 
+use App\Http\Traits\SaveCardTrait;
+
 use App\Card;
 use App\Person;
 
 
 class CardsController extends Controller
 {
+    use SaveCardTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -40,14 +44,9 @@ class CardsController extends Controller
     public function store(CreateCardRequest $request)
     {
         // Tries to get the current active card of the person 
-        $id = $request->person_id;
-        $person = Person::find($id);
+        $person_id = $request->person_id;
+        $person = Person::find($person_id);
         $current = $person->getActiveCard();
-        // Creates a new card and saves it to the database as the current active card
-        $card = new Card();
-        $card->person_id = $id;
-        $card->active = true;
-        $card->save();
         // If there was an active card, deactivates it.
         // Its done here because we want to be sure of having always and active card, 
         // so we save the new one first
@@ -55,8 +54,10 @@ class CardsController extends Controller
             $current->active = false;
             $current->save();
         }
+        // Creates a new card and saves it to the database as the current active card
+        $this->saveCard($person_id);
         // Redirection
-        return redirect()->route('people.show', $id);
+        return redirect()->route('people.show', $person_id);
     }
 
     /**
@@ -90,7 +91,16 @@ class CardsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $card = Card::findOrFail($id);
+
+        if(isset($request->active)) {
+            $request->validate(['active' => 'boolean']);
+            $card->active = $request->active;
+        }
+
+        $card->save();
+
+        return redirect()->back();
     }
 
     /**

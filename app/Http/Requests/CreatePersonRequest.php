@@ -27,7 +27,9 @@ class CreatePersonRequest extends FormRequest
             'cuil' => 'required|unique:people|string|min:10|max:15',
             'last_name' => 'required|string|max:50',
             'name' => 'required|string|max:50',
-            'sex' => 'required|string|in:F,M,O'
+            'sex' => 'required|string|in:F,M,O',
+            'birthday' => ['required','string',"regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/"],
+            'company_id' => 'required|integer|exists:companies,id'
         ];
     }
 }

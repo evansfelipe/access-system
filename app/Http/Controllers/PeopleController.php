@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Http\Traits\SaveCardTrait;
+
+use App\Company;
 use App\Person;
 use App\Card;
 use App\Http\Requests\CreatePersonRequest;
 
 class PeopleController extends Controller
 {
+    use SaveCardTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +32,12 @@ class PeopleController extends Controller
      */
     public function create()
     {
-        return view('people.create');
+        $companies = Company::orderBy('name','asc')->get();
+        $companies_data = [];
+        foreach($companies as $company) {
+            array_push($companies_data, ['value' => $company->id, 'text' => $company->name]);
+        }
+        return view('people.create')->with(['companies_data' => $companies_data]);
     }
 
     /**
@@ -44,12 +54,11 @@ class PeopleController extends Controller
         $person->last_name = $request->last_name;
         $person->name = $request->name;
         $person->sex = $request->sex;
+        $person->birthday = $request->birthday;
+        $person->company_id = $request->company_id;
         $person->save();
         // Creates the first card associated to this person
-        $card = new Card();
-        $card->active = true;
-        $card->person_id = $person->id;
-        $card->save();
+        $this->saveCard($person->id);
         // Redirection
         return redirect()->route('people.show', $person->id);
     }
