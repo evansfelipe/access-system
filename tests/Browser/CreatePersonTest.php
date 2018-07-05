@@ -41,7 +41,7 @@ class CreatePersonTest extends DuskTestCase
                     ->assertRouteIs('people.create')
                     ->assertPresent('@cuil-is-invalid');
         });
-        // A CUIL with more than 10 characters
+        // A CUIL with more than 15 characters
         $this->browse(function (Browser $browser) {
             // Navigates to the people's creation route
             $browser->visit(route('people.create'));
@@ -71,8 +71,8 @@ class CreatePersonTest extends DuskTestCase
             // Validates that the browser was redirected to the view corresponding to the data of
             // the person created, and that in the same view you can see the name of that person
             $browser->assertRouteIs('people.show', $person->id)
-                    ->assertSee($this->lastName)
-                    ->assertSee($this->name);
+                    ->assertSee($person->last_name)
+                    ->assertSee($person->name);
         });
     }
 
