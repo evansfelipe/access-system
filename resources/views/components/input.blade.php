@@ -2,10 +2,10 @@
     <label for="{{ $name }}">{{ $label }}:</label>
     <input  dusk="{{ $name }}"
             name="{{ $name }}"
-            type="{{ $type }}" 
+            type="{{ $type }}"
             class="form-control 
                    {{ $errors->has($name) ? 'is-invalid' : '' }}"
-            value="{{old($name)}}"
+            value="{{ old($name) ? old($name) : (isset($value) ? $value : '') }}"
             {{ isset($required) && !$required ? '' : 'required' }}
     >
     @if($errors->has($name))

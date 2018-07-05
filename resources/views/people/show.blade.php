@@ -12,7 +12,7 @@
             
             <div class="row d-flex align-items-center">
                 <div class="col col-md-3 text-center">
-                    <img src="https://blog.searchofficespace.com/wp-content/uploads/2017/10/no-image.jpg" class="img-fluid rounded-circle" alt="{{ $person->last_name }} image">
+                    <img src="{{empty($person->picture_name) ? asset('/pictures/no-image.jpg') : asset('/pictures/'.$person->picture_name)}}" class="img-fluid rounded-circle" alt="{{ $person->last_name }} image">
                 </div>
 
                 <div class="col col-md-3">

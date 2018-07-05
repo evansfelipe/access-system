@@ -5,7 +5,7 @@
             class="form-control"
     >
         @foreach($options as $option)
-            <option @if(old($name)==$option['value']) selected @endif 
+            <option @if((old($name)==$option['value']) || (isset($value) && $value==$option['value'])) selected @endif 
                     value="{{$option['value']}}"
             >
                     {{$option['text']}}

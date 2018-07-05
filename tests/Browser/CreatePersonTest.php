@@ -14,18 +14,42 @@ class CreatePersonTest extends DuskTestCase
     private $lastName = 'Last Name';
     private $longLastName = 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'; // 51 characters
 
+    private $birthday = '12311995'; // As the dusk browser is an english version of chrome, date input has the mm/dd/YYYY format
+
     private $shortCuil = '111111111';        // 9 characters
     private $validCuil = '11111111111111';   // 14 characters
     private $longCuil  = '1111111111111111'; // 16 characters
 
-    private function fillInputs(Browser $browser, $name, $lastName, $cuil)
+    private function fillInputs(Browser $browser, $name, $lastName, $cuil, $birthday)
     {
         $browser->type('@last_name', $lastName)
                 ->type('@name', $name)
                 ->type('@cuil', $cuil)
                 ->select('@sex')
                 ->select('@company_id')
-                ->keys('@birthday', '01012018');
+                ->keys('@birthday', $birthday);
+    }
+
+    /**
+     * A successful person creation.
+     */
+    public function testPersonCreationSuccess()
+    {
+        $this->browse(function (Browser $browser) {
+            // Navigates to the people's creation route
+            $browser->visit(route('people.create'));
+            // Fills each input
+            $this->fillInputs($browser, $this->name, $this->lastName, $this->validCuil, $this->birthday);
+            // Submits the form
+            $browser->press('@create-person-submit');
+            // Gets the data of the just created person
+            $person = Person::where('cuil', '=', $this->validCuil)->first();
+            // Validates that the browser was redirected to the view corresponding to the data of
+            // the person created, and that in the same view you can see the name of that person
+            $browser->assertRouteIs('people.show', $person->id)
+                    ->assertSee($this->lastName)
+                    ->assertSee($this->name);
+        });
     }
 
     /**
@@ -37,7 +61,7 @@ class CreatePersonTest extends DuskTestCase
             // Navigates to the people's creation route
             $browser->visit(route('people.create'));
             // Fills each input
-            $this->fillInputs($browser, $this->name, $this->lastName, $this->shortCuil);
+            $this->fillInputs($browser, $this->name, $this->lastName, $this->shortCuil, $this->birthday);
             // Submits the form and validates that the cuil was invalid
             $browser->press('@create-person-submit')
                     ->assertRouteIs('people.create')
@@ -54,33 +78,11 @@ class CreatePersonTest extends DuskTestCase
             // Navigates to the people's creation route
             $browser->visit(route('people.create'));
             // Fills each input
-            $this->fillInputs($browser, $this->name, $this->lastName, $this->longCuil);
+            $this->fillInputs($browser, $this->name, $this->lastName, $this->longCuil, $this->birthday);
             // Submits the form and validates that the cuil was invalid
             $browser->press('@create-person-submit')
                     ->assertRouteIs('people.create')
                     ->assertPresent('@cuil-is-invalid');
-        });
-    }
-
-    /**
-     * A successful person creation.
-     */
-    public function testPersonCreationSuccess()
-    {
-        $this->browse(function (Browser $browser) {
-            // Navigates to the people's creation route
-            $browser->visit(route('people.create'));
-            // Fills each input
-            $this->fillInputs($browser, $this->name, $this->lastName, $this->validCuil);
-            // Submits the form
-            $browser->press('@create-person-submit');
-            // Gets the data of the just created person
-            $person = Person::where('cuil', '=', $this->validCuil)->first();
-            // Validates that the browser was redirected to the view corresponding to the data of
-            // the person created, and that in the same view you can see the name of that person
-            $browser->assertRouteIs('people.show', $person->id)
-                    ->assertSee($person->last_name)
-                    ->assertSee($person->name);
         });
     }
 
@@ -96,7 +98,7 @@ class CreatePersonTest extends DuskTestCase
             // Navigates to the people's creation route
             $browser->visit(route('people.create'));
             // Fills each input
-            $this->fillInputs($browser, $this->name, $this->lastName, $this->validCuil);
+            $this->fillInputs($browser, $this->name, $this->lastName, $this->validCuil, $this->birthday);
             // Submits the form and validates that the route hasn't change (because the 
             // person shouldn't be created) and that the cuil was invalid
             $browser->press('@create-person-submit')
@@ -114,7 +116,7 @@ class CreatePersonTest extends DuskTestCase
             // Navigates to the people's creation route
             $browser->visit(route('people.create'));
             // Fills each input
-            $this->fillInputs($browser, $this->longName, $this->lastName, $this->validCuil);
+            $this->fillInputs($browser, $this->longName, $this->lastName, $this->validCuil, $this->birthday);
             // Submits the form and validates that the name was invalid
             $browser->press('@create-person-submit')
                     ->assertRouteIs('people.create')
@@ -131,11 +133,29 @@ class CreatePersonTest extends DuskTestCase
             // Navigates to the people's creation route
             $browser->visit(route('people.create'));
             // Fills each input
-            $this->fillInputs($browser, $this->name, $this->longLastName, $this->validCuil);
+            $this->fillInputs($browser, $this->name, $this->longLastName, $this->validCuil, $this->birthday);
             // Submits the form and validates that the last name was invalid
             $browser->press('@create-person-submit')
                     ->assertRouteIs('people.create')
                     ->assertPresent('@last_name-is-invalid');
+        });
+    }
+
+    /**
+     * Error creating a new person since birthday is a future date.
+     */
+    public function testPersonCreationFutureBirthday()
+    {
+        // dd(date('dmY', strtotime(' +1 day')));
+        $this->browse(function (Browser $browser) {
+            // Navigates to the people's creation route
+            $browser->visit(route('people.create'));
+            // Fills each input
+            $this->fillInputs($browser, $this->name, $this->lastName, $this->validCuil, date('mdY', strtotime('+1 day'))); // As the dusk browser is an english version of chrome, date input has the mm/dd/YYYY format
+            // Submits the form and validates that the birthday was invalid
+            $browser->press('@create-person-submit')
+                    ->assertRouteIs('people.create')
+                    ->assertPresent('@birthday-is-invalid');
         });
     }
 }

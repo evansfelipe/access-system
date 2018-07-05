@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\People;
 
-use App\Card;
+use App\Person;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateCardRequest extends FormRequest
+class UpdatePersonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,10 @@ class CreateCardRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = Card::getValidationRules();
-
-        array_push($rules['person_id'], 'required');
-        
+        $rules = Person::getValidationRules();
+        if($this->cuil != $this->person->cuil) {
+            array_push($rules['cuil'], 'unique:people');
+        }
         return $rules;
     }
 }
