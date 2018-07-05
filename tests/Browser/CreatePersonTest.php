@@ -9,16 +9,19 @@ use App\Person;
 class CreatePersonTest extends DuskTestCase
 {
     private $name = 'Name';
+    private $longName = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'; // 51 characters
+
     private $lastName = 'Last Name';
+    private $longLastName = 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'; // 51 characters
 
     private $shortCuil = '111111111';        // 9 characters
     private $validCuil = '11111111111111';   // 14 characters
     private $longCuil  = '1111111111111111'; // 16 characters
 
-    private function fillInputs(Browser $browser, $cuil)
+    private function fillInputs(Browser $browser, $name, $lastName, $cuil)
     {
-        $browser->type('@last_name', $this->lastName)
-                ->type('@name', $this->name)
+        $browser->type('@last_name', $lastName)
+                ->type('@name', $name)
                 ->type('@cuil', $cuil)
                 ->select('@sex')
                 ->select('@company_id')
@@ -26,27 +29,32 @@ class CreatePersonTest extends DuskTestCase
     }
 
     /**
-     * Error creating a new person since CUIL has more / fewer characters than allowed.
+     * Error creating a new person since CUIL has fewer characters than allowed.
      */
-    public function testPersonCreationCuilFail()
+    public function testPersonCreationShortCuil()
     {
-        // A CUIL with less than 10 characters
         $this->browse(function (Browser $browser) {
             // Navigates to the people's creation route
             $browser->visit(route('people.create'));
             // Fills each input
-            $this->fillInputs($browser, $this->shortCuil);
+            $this->fillInputs($browser, $this->name, $this->lastName, $this->shortCuil);
             // Submits the form and validates that the cuil was invalid
             $browser->press('@create-person-submit')
                     ->assertRouteIs('people.create')
                     ->assertPresent('@cuil-is-invalid');
         });
-        // A CUIL with more than 15 characters
+    }
+
+    /**
+     * Error creating a new person since CUIL has more characters than allowed.
+     */
+    public function testPersonCreationLongCuil()
+    {
         $this->browse(function (Browser $browser) {
             // Navigates to the people's creation route
             $browser->visit(route('people.create'));
             // Fills each input
-            $this->fillInputs($browser, $this->longCuil);
+            $this->fillInputs($browser, $this->name, $this->lastName, $this->longCuil);
             // Submits the form and validates that the cuil was invalid
             $browser->press('@create-person-submit')
                     ->assertRouteIs('people.create')
@@ -63,7 +71,7 @@ class CreatePersonTest extends DuskTestCase
             // Navigates to the people's creation route
             $browser->visit(route('people.create'));
             // Fills each input
-            $this->fillInputs($browser, $this->validCuil);
+            $this->fillInputs($browser, $this->name, $this->lastName, $this->validCuil);
             // Submits the form
             $browser->press('@create-person-submit');
             // Gets the data of the just created person
@@ -88,12 +96,46 @@ class CreatePersonTest extends DuskTestCase
             // Navigates to the people's creation route
             $browser->visit(route('people.create'));
             // Fills each input
-            $this->fillInputs($browser, $this->validCuil);
+            $this->fillInputs($browser, $this->name, $this->lastName, $this->validCuil);
             // Submits the form and validates that the route hasn't change (because the 
             // person shouldn't be created) and that the cuil was invalid
             $browser->press('@create-person-submit')
                     ->assertRouteIs('people.create')
                     ->assertPresent('@cuil-is-invalid');
+        });
+    }
+
+    /**
+     * Error creating a new person since name has more characters than allowed.
+     */
+    public function testPersonCreationLongName()
+    {
+        $this->browse(function (Browser $browser) {
+            // Navigates to the people's creation route
+            $browser->visit(route('people.create'));
+            // Fills each input
+            $this->fillInputs($browser, $this->longName, $this->lastName, $this->validCuil);
+            // Submits the form and validates that the name was invalid
+            $browser->press('@create-person-submit')
+                    ->assertRouteIs('people.create')
+                    ->assertPresent('@name-is-invalid');
+        });
+    }
+
+    /**
+     * Error creating a new person since last name has more characters than allowed.
+     */
+    public function testPersonCreationLongLastName()
+    {
+        $this->browse(function (Browser $browser) {
+            // Navigates to the people's creation route
+            $browser->visit(route('people.create'));
+            // Fills each input
+            $this->fillInputs($browser, $this->name, $this->longLastName, $this->validCuil);
+            // Submits the form and validates that the last name was invalid
+            $browser->press('@create-person-submit')
+                    ->assertRouteIs('people.create')
+                    ->assertPresent('@last_name-is-invalid');
         });
     }
 }
