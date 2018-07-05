@@ -48,7 +48,7 @@
 
                 <br>
 
-                @submitbutton(['color' => 'success']) Guardar @endsubmitbutton
+                @submitbutton(['id' => 'create-person-submit', 'color' => 'success']) Guardar @endsubmitbutton
             </form>
         @endpanel
     </div>

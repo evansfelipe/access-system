@@ -43,13 +43,11 @@ class CardsController extends Controller
      */
     public function store(CreateCardRequest $request)
     {
-        // Tries to get the current active card of the person 
         $person_id = $request->person_id;
+        // Gets the person associated with the card's person_id
         $person = Person::find($person_id);
+        // If there is an active card, deactivates it before creating the new active card
         $current = $person->getActiveCard();
-        // If there was an active card, deactivates it.
-        // Its done here because we want to be sure of having always and active card, 
-        // so we save the new one first
         if($current) {
             $current->active = false;
             $current->save();
@@ -63,10 +61,10 @@ class CardsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Card  $card
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Card $card)
     {
         //
     }
@@ -74,10 +72,10 @@ class CardsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Card  $card
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Card $card)
     {
         //
     }
@@ -86,13 +84,11 @@ class CardsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Card  $card
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Card $card)
     {
-        $card = Card::findOrFail($id);
-
         if(isset($request->active)) {
             $request->validate(['active' => 'boolean']);
             $card->active = $request->active;
@@ -106,10 +102,10 @@ class CardsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Card  $card
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Card $card)
     {
         //
     }

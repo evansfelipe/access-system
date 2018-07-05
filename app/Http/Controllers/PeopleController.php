@@ -1,18 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-
-use App\Http\Traits\SaveCardTrait;
-
-use App\Company;
+// Models
 use App\Person;
+use App\Company;
 use App\Card;
+// Requests
+use Illuminate\Http\Request;
 use App\Http\Requests\CreatePersonRequest;
+// Traits
+use App\Http\Traits\SaveCardTrait;
 
 class PeopleController extends Controller
 {
+    // As we are going to save cards associated with one or more persons, we need to use the correspondent Trait.
     use SaveCardTrait;
 
     /**
@@ -32,12 +33,19 @@ class PeopleController extends Controller
      */
     public function create()
     {
+        // Gets all companies loaded on the system
         $companies = Company::orderBy('name','asc')->get();
+        // Creates an empty array to send the companies data to the view
         $companies_data = [];
+        // Adds each company to the data array as a key => value array
         foreach($companies as $company) {
-            array_push($companies_data, ['value' => $company->id, 'text' => $company->name]);
+            array_push($companies_data, [
+                'value' => $company->id, // Select's option (html) value that the form will submit
+                'text' => $company->name // Select's option (html) text that the user will see
+            ]);
         }
-        return view('people.create')->with(['companies_data' => $companies_data]);
+        // Returns the people's creation view with the correspondent companies data 
+        return view('people.create', ['companies_data' => $companies_data]);
     }
 
     /**
@@ -50,12 +58,12 @@ class PeopleController extends Controller
     {
         // Creates the new person with the given data
         $person = new Person();
-        $person->cuil = $request->cuil;
         $person->last_name = $request->last_name;
         $person->name = $request->name;
+        $person->cuil = $request->cuil;
         $person->sex = $request->sex;
-        $person->birthday = $request->birthday;
         $person->company_id = $request->company_id;
+        $person->birthday = $request->birthday;
         $person->save();
         // Creates the first card associated to this person
         $this->saveCard($person->id);
@@ -66,22 +74,21 @@ class PeopleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Person  $person
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Person $person)
     {
-        $person = Person::find($id);
         return view('people.show')->withPerson($person);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Person  $person
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Person $person)
     {
         //
     }
@@ -90,10 +97,10 @@ class PeopleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Person  $person
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Person $person)
     {
         //
     }
@@ -101,10 +108,10 @@ class PeopleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Person  $person
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Person $person)
     {
         //
     }
