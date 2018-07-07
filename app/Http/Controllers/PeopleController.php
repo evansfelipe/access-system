@@ -125,7 +125,7 @@ class PeopleController extends Controller
     public function update(UpdatePersonRequest $request, Person $person)
     {
         // Done before set the new data because we need to use the old cuil
-        if($request->cuil != $person->cuil) {
+        if($request->cuil != $person->cuil && !empty($person->picture_name)) {
             $extension = explode(".", $person->picture_name)[1];
             $filename = $request->cuil . '.' . $extension;
             rename("pictures/".$person->picture_name, "pictures/".$filename);

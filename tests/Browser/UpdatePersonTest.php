@@ -15,6 +15,7 @@ class UpdatePersonTest extends DuskTestCase
     private $longLastName = 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'; // 51 characters
 
     private $birthday = '12311995'; // As the dusk browser is an english version of chrome, date input has the mm/dd/YYYY format
+    private $birthday_prior_1900 = '12311899';
 
     private $shortCuil = '111111111';        // 9 characters
     private $validCuil = '11111111111111';   // 14 characters
@@ -138,6 +139,23 @@ class UpdatePersonTest extends DuskTestCase
                     ->press('@edit-person-submit')
                     ->assertRouteIs('people.edit', $person->id)
                     ->assertPresent('@last_name-is-invalid');
+        });
+    }
+
+    /**
+     * Error editing a new person since birthday is prior 1900.
+     * @group run
+     */
+    public function testPersonUpdateOutdatedBirthday()
+    {
+        $person = Person::all()->random();
+        $this->browse(function (Browser $browser) use ($person) {
+            // Navigates to the people's creation route
+            $browser->visit(route('people.edit', $person->id))
+                    ->keys('@birthday', $this->birthday_prior_1900)
+                    ->press('@edit-person-submit')
+                    ->assertRouteIs('people.edit', $person->id)
+                    ->assertPresent('@birthday-is-invalid');
         });
     }
 

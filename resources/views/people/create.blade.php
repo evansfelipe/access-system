@@ -43,6 +43,7 @@
                     
                     <div class="col-12 col-md-6">
                         @input(['type' => 'date', 'label' => 'Fecha de nacimiento', 'name' => 'birthday'])@endinput
+                        {{-- @datepicker(['label' => 'Fecha de nacimiento', 'name' => 'birthday'])@enddatepicker --}}
                     </div>
                 </div>
 

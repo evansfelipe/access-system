@@ -13,7 +13,7 @@ class Person extends Model
             'last_name' => ['string','max:50'],
             'name' => ['string','max:50'],
             'sex' => ['string','in:F,M,O'],
-            'birthday' => ['string',"regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",'before:'.date('Y-m-d')],
+            'birthday' => ['string',"regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",'after:'.date('1900-01-01'),'before:'.date('Y-m-d')],
             'company_id' => ['integer','exists:companies,id'],
             'picture' => ['image','mimes:jpeg,jpg,png']
         ];

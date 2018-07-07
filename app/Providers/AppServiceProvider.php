@@ -17,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::component('components.input', 'input');
         Blade::component('components.panel', 'panel');
         Blade::component('components.select', 'select');
+        Blade::component('components.datepicker', 'datepicker');
         Blade::component('components.submit-button', 'submitbutton');
     }
 

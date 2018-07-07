@@ -16,20 +16,26 @@
                 </div>
 
                 <div class="col col-md-3">
-
-                    <i class="far fa-id-card"></i> {{ $person->cuil }}
-                    <br>
-
-                    @switch($person->sex)
-                        @case('F') <i class="fas fa-venus"></i> @break
-                        @case('M') <i class="fas fa-mars"></i>  @break
-                        @case('O') <i class="fas fa-genderless"></i> @break
-                    @endswitch
-                    {{ $person->sexToString() }} 
-
-                    <br>
-
-                    <i class="far fa-calendar-alt" title="Fecha de nacimiento"></i> {{ date('d-m-Y', strtotime($person->birthday)) }}
+                    <table>
+                        <tr title="Cuil">
+                            <td class="text-center"><i class="far fa-id-card"></i></td>
+                            <td> {{ $person->cuil }} </td>
+                        </tr>
+                        <tr title="Sexo">
+                            <td class="text-center">
+                                @switch($person->sex)
+                                    @case('F') <i class="fas fa-venus"></i> @break
+                                    @case('M') <i class="fas fa-mars"></i>  @break
+                                    @case('O') <i class="fas fa-genderless"></i> @break
+                                @endswitch
+                            </td>
+                            <td> {{ $person->sexToString() }} </td>
+                        </tr>
+                        <tr title="Fecha de nacimiento">
+                            <td class="text-center"><i class="far fa-calendar-alt"></i></td>
+                            <td> {{ date('d-m-Y', strtotime($person->birthday)) }} </td>
+                        </tr>
+                    </table>
                 </div>
 
                 <div class="col-12 col-md-6">

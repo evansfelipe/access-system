@@ -15,6 +15,7 @@ class CreatePersonTest extends DuskTestCase
     private $longLastName = 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'; // 51 characters
 
     private $birthday = '12311995'; // As the dusk browser is an english version of chrome, date input has the mm/dd/YYYY format
+    private $birthday_prior_1900 = '12311899';
 
     private $shortCuil = '111111111';        // 9 characters
     private $validCuil = '11111111111111';   // 14 characters
@@ -142,6 +143,24 @@ class CreatePersonTest extends DuskTestCase
     }
 
     /**
+     * Error creating a new person since birthday is prior 1900.
+     * @group run
+     */
+    public function testPersonCreationOutdatedBirthday()
+    {
+        $this->browse(function (Browser $browser) {
+            // Navigates to the people's creation route
+            $browser->visit(route('people.create'));
+            // Fills each input
+            $this->fillInputs($browser, $this->name, $this->lastName, $this->validCuil, $this->birthday_prior_1900);
+            // Submits the form and validates that the birthday was invalid
+            $browser->press('@create-person-submit')
+                    ->assertRouteIs('people.create')
+                    ->assertPresent('@birthday-is-invalid');
+        });
+    }
+
+    /**
      * Error creating a new person since birthday is a future date.
      */
     public function testPersonCreationFutureBirthday()
@@ -158,4 +177,5 @@ class CreatePersonTest extends DuskTestCase
                     ->assertPresent('@birthday-is-invalid');
         });
     }
+
 }

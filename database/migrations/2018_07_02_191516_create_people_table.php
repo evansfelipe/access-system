@@ -20,7 +20,7 @@ class CreatePeopleTable extends Migration
             $table->string('last_name', 50)->required();
             $table->string('name', 50)->required();
             $table->char('sex', 1)->required();
-            $table->timestamp('birthday')->required();
+            $table->datetime('birthday')->required();
             $table->string('picture_name')->default('');
             $table->timestamps();
         });
