@@ -78,9 +78,45 @@ class PeopleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        // Sync request
+        if(!$request->ajax()) {
+            return view('people.index');
+        }
+        // Async request
+        else {
+            // Gets each person stored on the system
+            $people = Person::select('id', 'name','last_name','cuil','company_id');
+            // If the last name filter is set, then filters the data over this column
+            if(isset($request->lastnamefilter)) {
+                $people->where('last_name', 'like', '%'.$request->lastnamefilter.'%');
+            }
+            // If the name filter is set, then filters the data over this column
+            if(isset($request->namefilter)) {
+                $people->where('name', 'like', '%'.$request->namefilter.'%');
+            }
+            // If the cuil filter is set, then filters the data over this column
+            if(isset($request->cuilfilter)) {
+                $people->where('cuil', 'like', '%'.$request->cuilfilter.'%');
+            }
+            // If the company name filter is set, then filters the data over this column
+            // Filters the company table with the given filter, and then gets each person
+            // whose company_id is inside the id array obtained.
+            if(isset($request->companynamefilter)) {
+                $company = Company::where('name', 'like', '%'.$request->companynamefilter.'%')->pluck('id')->toArray();
+                $people->whereIn('company_id', $company);
+            }
+            // Gets the filtered data
+            $fetchedPeople = $people->get();
+            // Adds to each gotten person the company name
+            foreach($fetchedPeople as $person) {
+                $person->company;
+                $person->url = route('people.show', $person->id);
+            }
+            // Returns the response to the async request
+            return response($fetchedPeople);
+        }
     }
 
     /**
