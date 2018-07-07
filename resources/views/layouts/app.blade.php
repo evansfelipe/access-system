@@ -21,7 +21,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     @yield('css')
-    
+    <style>
+        input[type="date"], input[type="datetime-local"], input[type="time"], input[type="month"], input[type="week"] { height: 38px }
+    </style>
 </head>
 <body>
     <div id="app">
