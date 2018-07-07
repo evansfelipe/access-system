@@ -17,42 +17,61 @@ class PeopleController extends Controller
     // As we are going to save cards associated with one or more persons, we need to use the correspondent Trait.
     use SaveCardTrait;
 
+    /**
+     * Given a Person and a Request, stores the new data sent on the request on the person attributes.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Person $person
+     */
     private function setPerson(Person $person, Request $request)
     {
+        // Assigns the basic person data
         $person->last_name = $request->last_name;
         $person->name = $request->name;
         $person->cuil = $request->cuil;
         $person->sex = $request->sex;
         $person->company_id = $request->company_id;
         $person->birthday = $request->birthday;
-
+        // If there is a picture, handles its storing
         if($request->hasFile('picture')) {
+            // If we are updating a person, and the person has a picture name assigned, that means there already is a picture
+            // of this user loaded on the system, so we need to delete it before storing the new one.
             if(!empty($person->picture_name)) {
                 unlink('pictures/'.$person->picture_name);
             }
+            // Gets the uploaded picture and his extension
             $file = $request->file('picture');
             $extension = $file->getClientOriginalExtension();
+            // Creates the filename of the image using the unique cuil of the user and the extension of the uploaded file.
             $filename = $request->cuil . '.' . $extension;
+            // Saves the image
             $file->move('pictures/', $filename);
+            // Assigns the filename to the person data
             $person->picture_name = $filename;
         }
     }
 
+    /**
+     * Creates a relational array with each company, where the key of each component is a company's id, and the value
+     * is the company's name. It's used to display the basic information about the stored companies on the system at some blade view.
+     * 
+     * @return Array
+     */
     private function companiesDataToKeyValue()
     {
+        // Gets all the companies of the system
         $companies = Company::orderBy('name','asc')->get();
         // Creates an empty array to send the companies data to the view
         $companies_data = [];
         // Adds each company to the data array as a key => value array
         foreach($companies as $company) {
             array_push($companies_data, [
-                'value' => $company->id, // Select's option (html) value that the form will submit
-                'text' => $company->name // Select's option (html) text that the user will see
+                'value' => $company->id,
+                'text' => $company->name
             ]);
         }
         return $companies_data;
     }
-
 
     /**
      * Display a listing of the resource.
@@ -71,7 +90,7 @@ class PeopleController extends Controller
      */
     public function create()
     {
-        return view('people.create', ['companies_data' => $this->companiesDataToKeyValue()]);
+        return view('people.create')->with('companies_data', $this->companiesDataToKeyValue());
     }
 
     /**
@@ -82,7 +101,7 @@ class PeopleController extends Controller
      */
     public function store(CreatePersonRequest $request)
     {
-        // Creates the new person with the given data
+        // Creates and stores the new person with the given data
         $person = new Person();
         $this->setPerson($person, $request);
         $person->save();
@@ -100,7 +119,7 @@ class PeopleController extends Controller
      */
     public function show(Person $person)
     {
-        return view('people.show')->withPerson($person);
+        return view('people.show')->with('person', $person);
     }
 
     /**
@@ -111,7 +130,7 @@ class PeopleController extends Controller
      */
     public function edit(Person $person)
     {
-        return view('people.edit')->withPerson($person)
+        return view('people.edit')->with('person', $person)
                                   ->with('companies_data', $this->companiesDataToKeyValue());
     }
 
@@ -124,15 +143,22 @@ class PeopleController extends Controller
      */
     public function update(UpdatePersonRequest $request, Person $person)
     {
-        // Done before set the new data because we need to use the old cuil
-        if($request->cuil != $person->cuil) {
-            $extension = explode(".", $person->picture_name)[1];
+        // If the cuil has changed, we need to rename the name of the picture stored on the server.
+        // Done before set the new data because we need to use the old cuil.
+        if(($request->cuil != $person->cuil) && !empty($person->picture_name)) {
+            // As the picture name has the format {cuil.extension}, dividing the name in the dot and accessing the component number one we get the extension 
+            $extension = explode('.', $person->picture_name)[1];
+            // Creates the new file name with the new cuil and the current file extension
             $filename = $request->cuil . '.' . $extension;
-            rename("pictures/".$person->picture_name, "pictures/".$filename);
+            // Renames the file on disk
+            rename('pictures/'.$person->picture_name, 'pictures/'.$filename);
+            // Updates the picture name attribute of the person
             $person->picture_name = $filename;
         }
+        // Updates and stores the given person with the given data.
         $this->setPerson($person, $request);
         $person->save();
+        // Redirection
         return redirect()->route('people.show', $person->id);
     }
 
