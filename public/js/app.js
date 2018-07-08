@@ -13867,7 +13867,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(12);
-module.exports = __webpack_require__(43);
+module.exports = __webpack_require__(48);
 
 
 /***/ }),
@@ -47156,13 +47156,13 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(52)
+  __webpack_require__(40)
 }
-var normalizeComponent = __webpack_require__(40)
+var normalizeComponent = __webpack_require__(45)
 /* script */
-var __vue_script__ = __webpack_require__(41)
+var __vue_script__ = __webpack_require__(46)
 /* template */
-var __vue_template__ = __webpack_require__(54)
+var __vue_template__ = __webpack_require__(47)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -47202,282 +47202,46 @@ module.exports = Component.exports
 
 /***/ }),
 /* 40 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-/* globals __VUE_SSR_CONTEXT__ */
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
+// load the styles
+var content = __webpack_require__(41);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(43)("29a8c346", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a50419c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PeopleIndex.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a50419c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PeopleIndex.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
 }
-
 
 /***/ }),
 /* 41 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+exports = module.exports = __webpack_require__(42)(false);
+// imports
 
-/* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        var _this = this;
 
-        axios.get('/people').then(function (response) {
-            _this.$data.people = response.data;
-            _this.orderBy(_this.$data.currentOrderBy);
-        });
-    },
+// module
+exports.push([module.i, "\n.table-wrapper[data-v-3a50419c] {\n    overflow-x: auto;\n}\ntable.table-hover > thead > tr > th[data-v-3a50419c] {\n    border-top: 0px;\n    cursor: pointer;\n    width: 25%;\n    -webkit-touch-callout: none; /* iOS Safari */\n    -moz-user-select: none; /* Firefox */\n    -webkit-user-select: none; /* Safari */ /* Konqueror HTML */\n        -ms-user-select: none; /* Internet Explorer/Edge */\n            user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */\n}\ntable.table-hover > tbody > tr[data-v-3a50419c]:hover {\n    cursor: pointer;\n    background-color: #f1f7fc;\n}\ndiv.searcher[data-v-3a50419c] {\n    background: #fafafa;\n}\ninput[data-v-3a50419c] {\n    margin-bottom: 5px;\n}\n", ""]);
 
-    data: function data() {
-        return {
-            name: "",
-            lastName: "",
-            cuil: "",
-            companyName: "",
-            people: [{
-                name: "",
-                last_name: "",
-                cuil: "",
-                company: {
-                    name: ""
-                }
-            }],
-            currentOrderBy: "company_name",
-            currentOrder: -1
-        };
-    },
-    methods: {
-        sendRequest: function sendRequest() {
-            var _this2 = this;
+// exports
 
-            var query = 'namefilter=' + this.$data.name;
-            query += '&lastnamefilter=' + this.$data.lastName;
-            query += '&cuilfilter=' + this.$data.cuil;
-            query += '&companynamefilter=' + this.$data.companyName;
-            axios.get('/people?' + query).then(function (response) {
-                _this2.$data.people = response.data;
-                _this2.$data.currentOrder *= -1;
-                _this2.orderBy(_this2.$data.currentOrderBy);
-            });
-        },
-        showProfile: function showProfile(url) {
-            window.location.href = url;
-        },
-        orderBy: function orderBy(col) {
-            var _this3 = this;
-
-            if (this.$data.people.length > 0) {
-                if (col === this.$data.currentOrderBy) {
-                    this.$data.currentOrder *= -1;
-                } else {
-                    this.$data.currentOrder = 1;
-                }
-                this.$data.people.sort(function (a, b) {
-                    if (col === 'company_name') {
-                        return _this3.$data.currentOrder * a.company.name.localeCompare(b.company.name);
-                    }
-                    return _this3.$data.currentOrder * a[col].localeCompare(b[col]);
-                });
-
-                var column = document.getElementById(this.$data.currentOrderBy);
-                var actualIcon = column.getElementsByTagName('I')[0];
-
-                if (actualIcon) {
-                    column.removeChild(actualIcon);
-                }
-
-                this.$data.currentOrderBy = col;
-                column = document.getElementById(col);
-
-                var icon = document.createElement("I");
-                if (this.$data.currentOrder > 0) {
-                    icon.classList += "fas fa-sort-up float-right";
-                } else {
-                    icon.classList += "fas fa-sort-down float-right";
-                }
-
-                column.appendChild(icon);
-            }
-        }
-    }
-});
 
 /***/ }),
-/* 42 */,
-/* 43 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 44 */,
-/* 45 */
+/* 42 */
 /***/ (function(module, exports) {
 
 /*
@@ -47559,11 +47323,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -47582,7 +47342,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(51)
+var listToStyles = __webpack_require__(44)
 
 /*
 type StyleObject = {
@@ -47791,7 +47551,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 51 */
+/* 44 */
 /***/ (function(module, exports) {
 
 /**
@@ -47824,47 +47584,280 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 45 */
+/***/ (function(module, exports) {
 
-// style-loader: Adds some css to the DOM by adding a <style> tag
+/* globals __VUE_SSR_CONTEXT__ */
 
-// load the styles
-var content = __webpack_require__(53);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(50)("29a8c346", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a50419c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PeopleIndex.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a50419c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PeopleIndex.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
 }
 
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(45)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\ntable.table-hover > thead > tr > th[data-v-3a50419c] {\n    border-top: 0px;\n    cursor: pointer;\n    width: 25%;\n    -webkit-touch-callout: none; /* iOS Safari */\n    -webkit-user-select: none; /* Safari */ /* Konqueror HTML */\n    -moz-user-select: none; /* Firefox */\n        -ms-user-select: none; /* Internet Explorer/Edge */\n            user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */\n}\ntable.table-hover > tbody > tr[data-v-3a50419c]:hover {\n    cursor: pointer;\n    background-color: #f1f7fc;\n}\ndiv.searcher[data-v-3a50419c] {\n    background: #fafafa;\n}\n", ""]);
-
-// exports
-
 
 /***/ }),
-/* 54 */
+/* 46 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: { initialpeople: { type: String, required: true } },
+    data: function data() {
+        var parsedPeople = JSON.parse(this.initialpeople);
+        return {
+            last_name: "",
+            name: "",
+            cuil: "",
+            company_name: "",
+            unfilteredPeople: parsedPeople,
+            people: parsedPeople,
+            currentSortedColumn: "company_name",
+            currentSortingOrder: 1
+        };
+    },
+    watch: {
+        last_name: function last_name() {
+            var _this = this;
+
+            this.people = this.unfilteredPeople.filter(function (person) {
+                return _this.applyFiltersConditions(person);
+            });
+        },
+        name: function name() {
+            var _this2 = this;
+
+            this.people = this.unfilteredPeople.filter(function (person) {
+                return _this2.applyFiltersConditions(person);
+            });
+        },
+        cuil: function cuil() {
+            var _this3 = this;
+
+            this.people = this.unfilteredPeople.filter(function (person) {
+                return _this3.applyFiltersConditions(person);
+            });
+        },
+        company_name: function company_name() {
+            var _this4 = this;
+
+            this.people = this.unfilteredPeople.filter(function (person) {
+                return _this4.applyFiltersConditions(person);
+            });
+        }
+    },
+    methods: {
+        applyFiltersConditions: function applyFiltersConditions(person) {
+            return person.last_name.toUpperCase().includes(this.last_name.toUpperCase()) && person.name.toUpperCase().includes(this.name.toUpperCase()) && person.cuil.toUpperCase().includes(this.cuil.toUpperCase()) && person.company_name.toUpperCase().includes(this.company_name.toUpperCase());
+        },
+
+        showProfile: function showProfile(url) {
+            window.location.href = url;
+        },
+        sortColumn: function sortColumn(colID) {
+            var _this5 = this;
+
+            if (this.people.length > 0) {
+                // If the column that is being sorted hasn't changed since the last time, then reverse the sorting order.
+                // Otherwise, resets the sorting order to the default.
+                this.currentSortingOrder = colID === this.currentSortedColumn ? -this.currentSortingOrder : 1;
+                // Sorts the people array using the target column and the sorting order.
+                this.people.sort(function (a, b) {
+                    return _this5.currentSortingOrder * a[colID].localeCompare(b[colID]);
+                });
+                // Tries to get the fontawesome icon from the target column.
+                var targetColumn = document.getElementById(this.currentSortedColumn);
+                var icon = targetColumn.getElementsByTagName('i')[0];
+                // If the icon exists, then removes the icon.
+                if (icon) targetColumn.removeChild(icon);
+                // Updates the current sorted column and gets the reference to this document element.
+                this.currentSortedColumn = colID;
+                targetColumn = document.getElementById(colID);
+                // Creates a new i element that will be used to place the new fontawesome icon.
+                icon = document.createElement("i");
+                // Add the correspondent class to the icon based on the current sorting order.
+                icon.classList.add('float-right', 'fas', this.currentSortingOrder > 0 ? 'fa-sort-up' : 'fa-sort-down');
+                // Appends the icon as a child of the current sorted column.
+                targetColumn.appendChild(icon);
+            }
+        }
+    }
+});
+
+/***/ }),
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -47881,24 +47874,24 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.lastName,
-                  expression: "lastName"
+                  value: _vm.last_name,
+                  expression: "last_name"
                 }
               ],
               staticClass: "form-control",
               attrs: {
                 placeholder: "Apellido",
+                dusk: "last_name",
                 name: "last_name",
                 type: "text"
               },
-              domProps: { value: _vm.lastName },
+              domProps: { value: _vm.last_name },
               on: {
-                keyup: _vm.sendRequest,
                 input: function($event) {
                   if ($event.target.composing) {
                     return
                   }
-                  _vm.lastName = $event.target.value
+                  _vm.last_name = $event.target.value
                 }
               }
             })
@@ -47915,10 +47908,14 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
-              attrs: { placeholder: "Nombre", name: "name", type: "text" },
+              attrs: {
+                placeholder: "Nombre",
+                dusk: "name",
+                name: "name",
+                type: "text"
+              },
               domProps: { value: _vm.name },
               on: {
-                keyup: _vm.sendRequest,
                 input: function($event) {
                   if ($event.target.composing) {
                     return
@@ -47940,10 +47937,14 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
-              attrs: { placeholder: "CUIL", name: "cuil", type: "text" },
+              attrs: {
+                placeholder: "CUIL",
+                dusk: "cuil",
+                name: "cuil",
+                type: "text"
+              },
               domProps: { value: _vm.cuil },
               on: {
-                keyup: _vm.sendRequest,
                 input: function($event) {
                   if ($event.target.composing) {
                     return
@@ -47960,24 +47961,24 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.companyName,
-                  expression: "companyName"
+                  value: _vm.company_name,
+                  expression: "company_name"
                 }
               ],
               staticClass: "form-control",
               attrs: {
                 placeholder: "Nombre de la empresa",
+                dusk: "company_name",
                 name: "company",
                 type: "text"
               },
-              domProps: { value: _vm.companyName },
+              domProps: { value: _vm.company_name },
               on: {
-                keyup: _vm.sendRequest,
                 input: function($event) {
                   if ($event.target.composing) {
                     return
                   }
-                  _vm.companyName = $event.target.value
+                  _vm.company_name = $event.target.value
                 }
               }
             })
@@ -47989,7 +47990,7 @@ var render = function() {
     _c("br"),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-body" }, [
+      _c("div", { staticClass: "card-body table-wrapper" }, [
         _vm.people.length > 0
           ? _c("table", { staticClass: "table table-hover" }, [
               _c("thead", [
@@ -48000,7 +48001,7 @@ var render = function() {
                       attrs: { id: "last_name" },
                       on: {
                         click: function($event) {
-                          _vm.orderBy("last_name")
+                          _vm.sortColumn("last_name")
                         }
                       }
                     },
@@ -48013,7 +48014,7 @@ var render = function() {
                       attrs: { id: "name" },
                       on: {
                         click: function($event) {
-                          _vm.orderBy("name")
+                          _vm.sortColumn("name")
                         }
                       }
                     },
@@ -48026,7 +48027,7 @@ var render = function() {
                       attrs: { id: "cuil" },
                       on: {
                         click: function($event) {
-                          _vm.orderBy("cuil")
+                          _vm.sortColumn("cuil")
                         }
                       }
                     },
@@ -48039,7 +48040,7 @@ var render = function() {
                       attrs: { id: "company_name" },
                       on: {
                         click: function($event) {
-                          _vm.orderBy("company_name")
+                          _vm.sortColumn("company_name")
                         }
                       }
                     },
@@ -48062,13 +48063,15 @@ var render = function() {
                       }
                     },
                     [
-                      _c("td", [_vm._v(_vm._s(person.last_name))]),
+                      _c("td", { attrs: { dusk: "td_last_name" } }, [
+                        _vm._v(_vm._s(person.last_name))
+                      ]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(person.name))]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(person.cuil))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(person.company.name))])
+                      _c("td", [_vm._v(_vm._s(person.company_name))])
                     ]
                   )
                 })
@@ -48090,6 +48093,12 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-3a50419c", module.exports)
   }
 }
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

@@ -59,4 +59,15 @@ class Person extends Model
     {
         return $this->cards()->where('active','=',false)->orderBy('updated_at','desc')->get();
     }
+
+    public function toArray()
+    {
+        return [
+            'last_name' => $this->last_name,
+            'name' => $this->name,
+            'cuil' => $this->cuil,
+            'company_name' => $this->company->name,
+            'url' => route('people.show', $this->id)
+        ];
+    }
 }

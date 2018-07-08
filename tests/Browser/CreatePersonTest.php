@@ -144,7 +144,6 @@ class CreatePersonTest extends DuskTestCase
 
     /**
      * Error creating a new person since birthday is prior 1900.
-     * @group run
      */
     public function testPersonCreationOutdatedBirthday()
     {
