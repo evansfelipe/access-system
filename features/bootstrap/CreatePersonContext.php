@@ -9,22 +9,18 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Tests\TestCase;
 // Laravel test helpers
 use Illuminate\Http\UploadedFile;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 // Our data models
 use App\Card;
 use App\Person;
 use App\Company;
-use App\User;
 
 /**
  * Defines the person creation context.
  */
 class CreatePersonContext extends TestCase implements Context
 {
-    use DatabaseMigrations;
-
-    protected $data;
-    protected $response;
+    protected $data; // Must be a reference to shared context data
+    protected $response; // Must be a reference to shared context response
     protected $picture_extension;
 
     /**
@@ -42,53 +38,19 @@ class CreatePersonContext extends TestCase implements Context
     /** @BeforeScenario */
     public function before(BeforeScenarioScope $scope)
     {
-        $this->artisan('migrate:refresh');
-        $this->artisan('db:seed');
-        $this->data = [];
-        $this->response = null;
+        $environment = $scope->getEnvironment();
+        $shared = $environment->getContext('SharedContext');
+
+        $this->data = &$shared->data;
+        $this->response = &$shared->response;
+
         $this->picture_extension = null;
     }
 
-    /** @AfterScenario */
-    public function after(AfterScenarioScope $scope) {}
-
-    /** @Given Im logged as an :type */
-    public function imLoggedAsAn($type)
+    /** @When I add a random company id to this person */
+    public function iAddARandomCompanyIdToThisPerson()
     {
-        $condition = null;        
-        switch($type) {
-            case "root":
-                $condition = User::ROOT;
-                break;
-            case "administration":
-                $condition = User::ADMINISTRATION;
-                break;
-            case "security":
-                $condition = User::SECURITY;
-                break;
-            default:
-                throw new Exception();
-                break;
-        }
-        $user = User::where('type', $condition)->first();
-        Session::start();
-        $this->actingAs($user);
-    }
-
-    /** @When I create a new person with the following data: */
-    public function iCreateNewPersonWithTheFollowingData(TableNode $table)
-    {
-        foreach($table as $row) {
-            $this->data['last_name']  = $row['last_name'] ?? null;
-            $this->data['name']       = $row['name']      ?? null;
-            $this->data['cuil']       = $row['cuil']      ?? null;
-            $this->data['sex']        = $row['sex']       ?? null;
-            $this->data['birthday']   = $row['birthday']  ?? null;
-            $this->data['company_id'] = null;
-            if(isset($row['company_id'])) {
-                $this->data['company_id'] = $row['company_id'] === 'random' ? Company::all()->random()->id : $row['company_id'];
-            }
-        }
+        $this->data['company_id'] = Company::all()->random()->id;
     }
 
     /** @When I add a picture to this person with the :ext extension */
@@ -96,30 +58,6 @@ class CreatePersonContext extends TestCase implements Context
     {
         $this->picture_extension = $ext;
         $this->data['picture'] = UploadedFile::fake()->image('this-is-the-name.'.$ext);
-    }
-
-    /** @When I store this new person to the database */
-    public function iStoreThisNewPersonToTheDatabase()
-    {
-        $this->data['_token'] = csrf_token();
-        $this->response = $this->call('POST', route('people.store'), $this->data);
-    }
-
-    /** @Then the response shouldn't have errors */
-    public function theResponseShouldNotHaveErrors()
-    {
-        // A singleton response should resolve the problem of sharing this method within contexts
-        $this->response->assertSessionHasNoErrors();
-    }
-
-    /** @Then the response should have errors in: */
-    public function theResponseShouldHaveErrorsIn(TableNode $table)
-    {
-        $fields = [];
-        foreach($table as $row) {
-            array_push($fields, $row['field']);
-        }
-        $this->response->assertSessionHasErrors($fields);
     }
 
     /** @Then I should be able to retrieve the same person I created from the database */
