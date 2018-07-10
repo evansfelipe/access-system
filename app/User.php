@@ -9,6 +9,10 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public const ROOT = 0;
+    public const ADMINISTRATION = 1;
+    public const SECURITY = 2;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,4 +30,5 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
 }

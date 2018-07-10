@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Requests\People;
-
+use Auth;
+use App\User;
 use App\Person;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +15,7 @@ class UpdatePersonRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return !Auth::guest() && (Auth::user()->type === User::ADMINISTRATION || Auth::user()->type === User::ROOT);
     }
 
     /**

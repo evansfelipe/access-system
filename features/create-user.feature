@@ -2,6 +2,9 @@ Feature: Create a new person
     In order to track the people activity inside the system
     The administrator should be able to create new people
 
+    Background:
+      Given   Im logged as an "administration"
+
     Scenario: Creating a new person with all the data required
         When  I create a new person with the following data:
               | last_name | name | cuil        | sex | company_id | birthday   |

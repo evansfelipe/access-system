@@ -19,6 +19,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('/people', 'PeopleController');
+Route::middleware('administration')->group(function() {
+    Route::resource('/people', 'PeopleController');
+    Route::resource('/cards', 'CardsController');
+});
 
-Route::resource('/cards', 'CardsController');

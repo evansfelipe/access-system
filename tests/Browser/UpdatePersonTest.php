@@ -21,6 +21,12 @@ class UpdatePersonTest extends DuskTestCase
     private $validCuil = '11111111111111';   // 14 characters
     private $longCuil  = '1111111111111111'; // 16 characters
 
+    public function setUp()
+    {
+        parent::setUp();
+        $this->logInAs('administration');
+    }
+
     private function fillInputs(Browser $browser, $name, $lastName, $cuil, $birthday)
     {
         $browser->type('@last_name', $lastName)

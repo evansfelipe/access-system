@@ -14,6 +14,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\Card;
 use App\Person;
 use App\Company;
+use App\User;
 
 /**
  * Defines the person creation context.
@@ -44,10 +45,35 @@ class CreatePersonContext extends TestCase implements Context
         $this->artisan('migrate:refresh');
         $this->artisan('db:seed');
         $this->data = [];
+        $this->response = null;
+        $this->picture_extension = null;
     }
 
     /** @AfterScenario */
     public function after(AfterScenarioScope $scope) {}
+
+    /** @Given Im logged as an :type */
+    public function imLoggedAsAn($type)
+    {
+        $condition = null;        
+        switch($type) {
+            case "root":
+                $condition = User::ROOT;
+                break;
+            case "administration":
+                $condition = User::ADMINISTRATION;
+                break;
+            case "security":
+                $condition = User::SECURITY;
+                break;
+            default:
+                throw new Exception();
+                break;
+        }
+        $user = User::where('type', $condition)->first();
+        Session::start();
+        $this->actingAs($user);
+    }
 
     /** @When I create a new person with the following data: */
     public function iCreateNewPersonWithTheFollowingData(TableNode $table)
@@ -57,7 +83,7 @@ class CreatePersonContext extends TestCase implements Context
             $this->data['name']       = $row['name']      ?? null;
             $this->data['cuil']       = $row['cuil']      ?? null;
             $this->data['sex']        = $row['sex']       ?? null;
-            $this->data['birthday']   = $row['birthday']   ?? null;
+            $this->data['birthday']   = $row['birthday']  ?? null;
             $this->data['company_id'] = null;
             if(isset($row['company_id'])) {
                 $this->data['company_id'] = $row['company_id'] === 'random' ? Company::all()->random()->id : $row['company_id'];
@@ -75,7 +101,6 @@ class CreatePersonContext extends TestCase implements Context
     /** @When I store this new person to the database */
     public function iStoreThisNewPersonToTheDatabase()
     {
-        Session::start();
         $this->data['_token'] = csrf_token();
         $this->response = $this->call('POST', route('people.store'), $this->data);
     }
@@ -88,7 +113,7 @@ class CreatePersonContext extends TestCase implements Context
     }
 
     /** @Then the response should have errors in: */
-    public function theResponseShouldHaveErrors(TableNode $table)
+    public function theResponseShouldHaveErrorsIn(TableNode $table)
     {
         $fields = [];
         foreach($table as $row) {

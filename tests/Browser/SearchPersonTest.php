@@ -9,11 +9,12 @@ use App\Person;
 
 class SearchPersonTest extends DuskTestCase
 {
-    /**
-     * A Dusk test example.
-     * @return void
-     *@group run
-     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->logInAs('administration');
+    }
+
     public function testSearchInputs()
     {
         $this->browse(function (Browser $browser) {

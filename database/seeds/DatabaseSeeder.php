@@ -13,5 +13,23 @@ class DatabaseSeeder extends Seeder
     {
         factory(App\Company::class, 15)->create();
         factory(App\Person::class, 50)->create();
+        DB::table('users')->insert([
+            'name' => 'Root',
+            'email' =>'root@example.com',
+            'password' => bcrypt('secret'),
+            'type' => \App\User::ROOT
+        ]);
+        DB::table('users')->insert([
+            'name' => 'Administrator',
+            'email' =>'administrator@example.com',
+            'password' => bcrypt('secret'),
+            'type' => \App\User::ADMINISTRATION
+        ]);
+        DB::table('users')->insert([
+            'name' => 'Security',
+            'email' =>'security@example.com',
+            'password' => bcrypt('secret'),
+            'type' => \App\User::SECURITY
+        ]);
     }
 }
