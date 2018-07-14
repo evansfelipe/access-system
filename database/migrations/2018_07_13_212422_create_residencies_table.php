@@ -20,7 +20,7 @@ class CreateResidenciesTable extends Migration
             $table->string('apartment',15)->nullable();
             $table->string('cp',10)->nullable();
             $table->string('country',25)->nullable();
-            $table->string('pronvince',25)->nullable();
+            $table->string('province',25)->nullable();
             $table->string('city',25)->nullable();
             $table->timestamps();
         });

@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+use App\Person;
+
 class CreatePeopleTable extends Migration
 {
     /**
@@ -15,16 +17,17 @@ class CreatePeopleTable extends Migration
     {
         Schema::create('people', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('last_name', 50)->required();
-            $table->string('name', 50)->required();
+            $table->string('last_name', Person::LENGTHS['last_name']['max'])->required();
+            $table->string('name', Person::LENGTHS['name']['max'])->required();
             $table->integer('document_type')->unsigned()->required();
-            $table->string('document_number', 15)->required();
-            $table->string('cuil', 15)->unique()->required();
+            $table->string('document_number', Person::LENGTHS['document_number']['max'])->required();
+            $table->string('cuil', Person::LENGTHS['cuil']['max'])->unique()->required();
             $table->datetime('birthday')->nullable();
             $table->char('sex', 1)->nullable();
             $table->string('blood_type',3)->nullable();
             $table->string('picture_name')->default('');
-            $table->json('extra')->nullable();
+            $table->string('pna', Person::LENGTHS['pna']['max'])->nullable();
+            $table->json('contact')->nullable();
             $table->timestamps();
         });
     }

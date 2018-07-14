@@ -29,12 +29,7 @@ class PeopleController extends Controller
         // Assigns the basic person data
         $person->last_name = $request->last_name;
         $person->name = $request->name;
-        if($request->document_type === 'dni'){
-            $person->document_type = Person::DNI;
-        }
-        else if($request->document_type === 'passport'){
-            $person->document_type = Person::PASSPORT;
-        }
+        $person->document_type = $request->document_type;
         $person->document_number = $request->document_number;
         $person->cuil = $request->cuil;
         $person->birthday = $request->birthday;
@@ -57,6 +52,13 @@ class PeopleController extends Controller
             // Assigns the filename to the person data
             $person->picture_name = $filename;
         }
+        $person->pna = $request->pna;
+        $person->contact = json_encode([
+            'fax' => $request->fax,
+            'mail' => $request->email,
+            'home_phone' => $request->home_phone,
+            'mobile_phone' => $request->mobile_phone
+        ]);
     }
 
     private function setResidency(Residency $residency, int $person_id, Request $request)

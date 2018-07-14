@@ -27,17 +27,17 @@ class CreatePersonRequest extends FormRequest
     public function rules()
     {
         $person_rules = Person::getValidationRules();
-        $resPersonidency_rules = Residency::getValidationRules();
+        $residency_rules = Residency::getValidationRules();
 
-        array_push($person_rules['last_name'], 'required');
-        array_push($person_rules['name'], 'required');
-        array_push($person_rules['document_type'], 'required');
+        array_push($person_rules['last_name'],       'required');
+        array_push($person_rules['name'],            'required');
+        array_push($person_rules['document_type'],   'required');
         array_push($person_rules['document_number'], 'required');
-        array_push($person_rules['cuil'], 'required');
-        array_push($person_rules['cuil'], 'unique:people');
+        array_push($person_rules['cuil'],            'required');
+        array_push($person_rules['cuil'],       'unique:people');
 
-        $rules = array_merge($person_rules, $resPersonidency_rules);
-        
+        $rules = array_merge($person_rules, $residency_rules);
+
         return $rules;
     }
 }
