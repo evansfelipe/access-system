@@ -23,6 +23,21 @@
     @yield('css')
     <style>
         input[type="date"], input[type="datetime-local"], input[type="time"], input[type="month"], input[type="week"] { height: 38px }
+        
+        .btn-circle {
+            border-radius:100%;
+        }
+
+        .btn-outline-unique {
+            border-color: #3F729B;
+            color: #3F729B;
+            background-color: transparent;
+        }
+
+        .btn-outline-unique:hover {
+            background-color: #3F729B;
+            color: white;
+        }
     </style>
 </head>
 <body>

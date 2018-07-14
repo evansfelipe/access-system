@@ -7,17 +7,15 @@ use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 // Php tests class
 use Tests\TestCase;
-// Laravel test helpers
-use Illuminate\Http\UploadedFile;
 // Our data models
 use App\Card;
 use App\Person;
-use App\Company;
+
 
 /**
  * Defines the person creation context.
  */
-class CreatePersonContext extends TestCase implements Context
+class PersonContext extends TestCase implements Context
 {
     protected $data; // Must be a reference to shared context data
     protected $response; // Must be a reference to shared context response
@@ -43,33 +41,19 @@ class CreatePersonContext extends TestCase implements Context
 
         $this->data = &$shared->data;
         $this->response = &$shared->response;
-
-        $this->picture_extension = null;
+        $this->picture_extension = &$shared->picture_extension;
     }
 
-    /** @When I add a random company id to this person */
-    public function iAddARandomCompanyIdToThisPerson()
-    {
-        $this->data['company_id'] = Company::all()->random()->id;
-    }
-
-    /** @When I add a picture to this person with the :ext extension */
-    public function iAddAPictureToThisPersonWithTheExtension($ext)
-    {
-        $this->picture_extension = $ext;
-        $this->data['picture'] = UploadedFile::fake()->image('this-is-the-name.'.$ext);
-    }
-
-    /** @Then I should be able to retrieve the same person I created from the database */
+    /** @Then I should be able to retrieve the same person I created/updated from the database */
     public function iShouldBeAbleToRetrieveTheSamePersonICreatedFromTheDatabase()
     {
-        $retrieve = Person::where('cuil', '=', $this->data['cuil'])->first();
+        $retrieve = Person::where('cuil', $this->data['cuil'])->first();
         $this->assertEquals($this->data['last_name'], $retrieve->last_name);
         $this->assertEquals($this->data['name'], $retrieve->name);
         $this->assertEquals($this->data['cuil'], $retrieve->cuil);
         $this->assertEquals($this->data['sex'], $retrieve->sex);
         $this->assertEquals($this->data['company_id'], $retrieve->company_id);
-        $this->assertEquals(date($this->data['birthday'].' 00:00:00'), $retrieve->birthday);
+        $this->assertEquals(date($this->data['birthday']).' 00:00:00', $retrieve->birthday);
         if($this->picture_extension) {
             $this->assertEquals($this->data['cuil'] . '.' . $this->picture_extension, $retrieve->picture_name);
         }
@@ -82,4 +66,18 @@ class CreatePersonContext extends TestCase implements Context
         $cards = Card::where('person_id', $retrieve->id)->where('active', $status === 'active' ? true : false)->get();
         $this->assertTrue($cards->count() >= $number);
     }
+
+    /** @Given The cuil :cuil of an existing person */
+    public function theCuilOfAnExistingPerson($cuil)
+    {
+        $person = Person::where('cuil', $cuil)->first();
+        $this->data['id'] = $person->id;
+        $this->data['last_name'] = $person->last_name;
+        $this->data['name'] = $person->name;
+        $this->data['cuil'] = $person->cuil;
+        $this->data['sex'] = $person->sex;
+        $this->data['company_id'] = $person->company_id;
+        // $this->data['birthday'] = $person->birthday;
+    }
+
 }

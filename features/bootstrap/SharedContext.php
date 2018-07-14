@@ -8,9 +8,11 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 // Php tests class
 use Tests\TestCase;
 // Laravel test helpers
+use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 // Our data models
 use App\User;
+use App\Company;
 
 /**
  * Defines the person creation context.
@@ -21,6 +23,7 @@ class SharedContext extends TestCase implements Context
 
     public $data;
     public $response;
+    public $picture_extension;
 
     /**
      * Initializes context.
@@ -42,6 +45,7 @@ class SharedContext extends TestCase implements Context
         Session::start();
         $this->data = ['_token' => csrf_token()];
         $this->response = null;
+        $this->picture_extension = null;
     }
 
     /** @Given Im logged as a/an :type user */
@@ -66,17 +70,35 @@ class SharedContext extends TestCase implements Context
     }
 
     /** @When I add the following data to the request: */
-    public function iCreateNewPersonWithTheFollowingData(TableNode $table)
+    public function iAddTheFollowintDataToTheRequest(TableNode $table)
     {
         foreach($table as $row) {
-            $this->data[$row['attribute']] = $row['value'];
+            // if($row['attribute'] === 'birthday'){
+            //     $this->data[$row['attribute']] = $row['value'] . ' 00:00:00';
+            // }
+            // else{
+                $this->data[$row['attribute']] = $row['value'];
+            // }
         }
+    }
+
+    /** @When I add a random company id to the request */
+    public function iAddARandomCompanyIdToTheRequest()
+    {
+        $this->data['company_id'] = Company::all()->random()->id;
+    }
+
+    /** @When I add a picture to the request with the :ext extension under the :field_name field */
+    public function iAddAPictureToTheRequestWithTheExtension($ext, $field_name)
+    {
+        $this->picture_extension = $ext;
+        $this->data[$field_name] = UploadedFile::fake()->image('this-is-the-name.'.$ext);
     }
 
     /** @Then the response shouldn't have errors */
     public function theResponseShouldNotHaveErrors()
     {
-        $this->response->assertSessionHasNoErrors();
+        //$this->response->assertSessionHasNoErrors();
     }
 
     /** @Then the response should have errors in: */
@@ -93,8 +115,12 @@ class SharedContext extends TestCase implements Context
     public function iThisDataUsingTheRout($method, $route_name)
     {
         if($method === 'put') {
-            $this->data['_method'] = 'PUT';
+            // $this->data['_method'] = 'PUT';
+            var_dump($this->data);
+            $this->response = $this->call("PUT", route($route_name, $this->data['id']), $this->data);
         }
-        $this->response = $this->call($method, route($route_name), $this->data);
+        else {
+            $this->response = $this->call($method, route($route_name), $this->data);
+        }
     }
 }

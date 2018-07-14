@@ -4,6 +4,7 @@ namespace App\Http\Requests\People;
 use Auth;
 use App\User;
 use App\Person;
+use App\Residency;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreatePersonRequest extends FormRequest
@@ -25,16 +26,18 @@ class CreatePersonRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = Person::getValidationRules();
+        $person_rules = Person::getValidationRules();
+        $resPersonidency_rules = Residency::getValidationRules();
 
-        array_push($rules['cuil'],       'required');
-        array_push($rules['cuil'],       'unique:people');
-        array_push($rules['last_name'],  'required');
-        array_push($rules['name'],       'required');
-        array_push($rules['sex'],        'required');
-        array_push($rules['birthday'],   'required');
-        array_push($rules['company_id'], 'required');
+        array_push($person_rules['last_name'], 'required');
+        array_push($person_rules['name'], 'required');
+        array_push($person_rules['document_type'], 'required');
+        array_push($person_rules['document_number'], 'required');
+        array_push($person_rules['cuil'], 'required');
+        array_push($person_rules['cuil'], 'unique:people');
 
+        $rules = array_merge($person_rules, $resPersonidency_rules);
+        
         return $rules;
     }
 }

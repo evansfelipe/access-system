@@ -15,13 +15,16 @@ class CreatePeopleTable extends Migration
     {
         Schema::create('people', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('company_id')->unsigned();
-            $table->string('cuil', 15)->unique()->required();
             $table->string('last_name', 50)->required();
             $table->string('name', 50)->required();
-            $table->char('sex', 1)->required();
-            $table->datetime('birthday')->required();
+            $table->integer('document_type')->unsigned()->required();
+            $table->string('document_number', 15)->required();
+            $table->string('cuil', 15)->unique()->required();
+            $table->datetime('birthday')->nullable();
+            $table->char('sex', 1)->nullable();
+            $table->string('blood_type',3)->nullable();
             $table->string('picture_name')->default('');
+            $table->json('extra')->nullable();
             $table->timestamps();
         });
     }

@@ -8,7 +8,11 @@
 --}}
 <div class="form-group">
     {{-- Shows the label for this input --}}
-    <label for="{{ $name }}">{{ $label }}:</label>
+    @if(isset($label) && $label != "_blank")
+        <label for="{{ $name }}">{{ $label }}:</label>
+    @elseif($label == "_blank")
+        <label for="{{ $name }}">&nbsp;</label>
+    @endif
     {{-- The input will be of the type indicated on the "type" variable --}}
     <input  type="{{ $type }}"
             {{-- The dusk attribute is used for Dusk tests and the name attribute is used to retrieve the input's value on server. --}}

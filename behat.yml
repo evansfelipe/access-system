@@ -2,5 +2,5 @@ default:
     suites:
         default:
             contexts:
-                - CreatePersonContext
+                - PersonContext
                 - SharedContext

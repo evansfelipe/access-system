@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 // Models
 use App\Person;
+use App\Residency;
 use App\Company;
 use App\Card;
 // Requests
@@ -28,10 +29,17 @@ class PeopleController extends Controller
         // Assigns the basic person data
         $person->last_name = $request->last_name;
         $person->name = $request->name;
+        if($request->document_type === 'dni'){
+            $person->document_type = Person::DNI;
+        }
+        else if($request->document_type === 'passport'){
+            $person->document_type = Person::PASSPORT;
+        }
+        $person->document_number = $request->document_number;
         $person->cuil = $request->cuil;
-        $person->sex = $request->sex;
-        $person->company_id = $request->company_id;
         $person->birthday = $request->birthday;
+        $person->sex = $request->sex;
+        $person->blood_type = $request->blood_type;
         // If there is a picture, handles its storing
         if($request->hasFile('picture')) {
             // If we are updating a person, and the person has a picture name assigned, that means there already is a picture
@@ -49,6 +57,18 @@ class PeopleController extends Controller
             // Assigns the filename to the person data
             $person->picture_name = $filename;
         }
+    }
+
+    private function setResidency(Residency $residency, int $person_id, Request $request)
+    {
+        // Assigns the residency of a person
+        $residency->person_id = $person_id;
+        $residency->street = $request->street;
+        $residency->apartment = $request->apartment;
+        $residency->cp = $request->cp;
+        $residency->country = $request->country;
+        $residency->province = $request->province;
+        $residency->city = $request->city;
     }
 
     /**
@@ -90,7 +110,7 @@ class PeopleController extends Controller
      */
     public function create()
     {
-        return view('people.create')->with('companies_data', $this->companiesDataToKeyValue());
+        return view('people.create');
     }
 
     /**
@@ -105,6 +125,10 @@ class PeopleController extends Controller
         $person = new Person();
         $this->setPerson($person, $request);
         $person->save();
+        // Creates and stores the new person's residency with the given data
+        $residency = new Residency();
+        $this->setResidency($residency, $person->id, $request);
+        $residency->save();
         // Creates the first card associated to this person
         $this->saveCard($person->id);
         // Redirection
@@ -130,8 +154,7 @@ class PeopleController extends Controller
      */
     public function edit(Person $person)
     {
-        return view('people.edit')->with('person', $person)
-                                  ->with('companies_data', $this->companiesDataToKeyValue());
+        return view('people.edit')->with('person', $person);
     }
 
     /**

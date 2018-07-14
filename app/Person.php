@@ -6,16 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Person extends Model
 {
+
+    public const DNI = 0;
+    public const PASSPORT = 1;
+
     public static function getValidationRules()
     {
         return [
-            'last_name' => ['string','max:50'],
-            'name' => ['string','max:50'],
-            'cuil' => ['string','min:10','max:15'],
-            'sex' => ['string','in:F,M,O'],
-            'company_id' => ['integer','exists:companies,id'],
-            'birthday' => ['string',"regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",'after:'.date('1900-01-01'),'before:'.date('Y-m-d')],
-            'picture' => ['image','mimes:jpeg,jpg,png']
+            'last_name' => ['string', 'max:50'],
+            'name' => ['string', 'max:50'],
+            'document_type' => ['string', 'in:dni,passport'],
+            'document_number' => ['string', 'min:7', 'max:12'],
+            'cuil' => ['string', 'min:10', 'max:15'],
+            'birthday' => ['string', "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", 'after:'.date('1900-01-01'), 'before:'.date('Y-m-d'), 'nullable'],
+            'sex' => ['string', 'in:F,M,O', 'nullable'],
+            'blood_type' => ['string', 'in:0-,0+,A-,A+,B-,B+,AB-,AB+', 'nullable'],
+            'picture' => ['image', 'mimes:jpeg,jpg,png']
         ];
     }
 
@@ -27,9 +33,19 @@ class Person extends Model
         return $this->hasMany('App\Card');
     }
 
+    public function companies()
+    {
+        return $this->belongsToMany('App\Company');
+    }
+
     public function company()
     {
-        return $this->belongsTo('App\Company');
+        return $this->companies()->first();
+    }
+
+    public function residency()
+    {
+        return $this->hasOne('App\Residency');
     }
 
     public function fullName() 

@@ -1,6 +1,6 @@
 Feature: Create a new person
     In order to track the people activity inside the system
-    The administrator should be able to create new people
+    The administration user should be able to create new people
 
     Background:
       Given   Im logged as an "administration" user
@@ -13,7 +13,7 @@ Feature: Create a new person
            | cuil      | 20366578959 |
            | sex       | M           |
            | birthday  | 2018-01-01  |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response shouldn't have errors
       And  I should be able to retrieve the same person I created from the database
@@ -27,8 +27,8 @@ Feature: Create a new person
            | cuil      | 20366578959 |
            | sex       | M           |
            | birthday  | 2018-01-01  |
-      And  I add a random company id to this person
-      And  I add a picture to this person with the "jpg" extension
+      And  I add a random company id to the request
+      And  I add a picture to the request with the "jpg" extension under the "picture" field
       And  I "post" this data using the "people.store" route
       Then the response shouldn't have errors
       And  I should be able to retrieve the same person I created from the database
@@ -42,8 +42,8 @@ Feature: Create a new person
            | cuil      | 20366578959 |
            | sex       | M           |
            | birthday  | 2018-01-01  |
-      And  I add a random company id to this person
-      And  I add a picture to this person with the "jpeg" extension
+      And  I add a random company id to the request
+      And  I add a picture to the request with the "jpeg" extension under the "picture" field
       And  I "post" this data using the "people.store" route
       Then the response shouldn't have errors
       And  I should be able to retrieve the same person I created from the database
@@ -57,8 +57,8 @@ Feature: Create a new person
            | cuil      | 20366578959 |
            | sex       | M           |
            | birthday  | 2018-01-01  |
-      And  I add a random company id to this person
-      And  I add a picture to this person with the "png" extension
+      And  I add a random company id to the request
+      And  I add a picture to the request with the "png" extension under the "picture" field
       And  I "post" this data using the "people.store" route
       Then the response shouldn't have errors
       And  I should be able to retrieve the same person I created from the database
@@ -72,8 +72,8 @@ Feature: Create a new person
            | cuil      | 20366578959 |
            | sex       | M           |
            | birthday  | 2018-01-01  |
-      And  I add a random company id to this person
-      And  I add a picture to this person with the "bmap" extension
+      And  I add a random company id to the request
+      And  I add a picture to the request with the "bmap" extension under the "picture" field
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field    |
@@ -86,7 +86,7 @@ Feature: Create a new person
            | cuil      | 20366578959 |
            | sex       | M           |
            | birthday  | 2018-01-01  |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field     |
@@ -100,7 +100,7 @@ Feature: Create a new person
            | cuil      | 20366578959                                         |
            | sex       | M                                                   |
            | birthday  | 2018-01-01                                          |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field     |
@@ -113,7 +113,7 @@ Feature: Create a new person
            | cuil      | 20366578959 |
            | sex       | M           |
            | birthday  | 2018-01-01  |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field |
@@ -127,7 +127,7 @@ Feature: Create a new person
            | cuil      | 20366578959                                         |
            | sex       | M                                                   |
            | birthday  | 2018-01-01                                          |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field |
@@ -140,7 +140,7 @@ Feature: Create a new person
            | name      | Name       |
            | sex       | M          |
            | birthday  | 2018-01-01 |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field |
@@ -154,7 +154,7 @@ Feature: Create a new person
            | cuil      | 2000       |
            | sex       | M          |
            | birthday  | 2018-01-01 |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field |
@@ -168,7 +168,7 @@ Feature: Create a new person
            | cuil      | 20366578959999999999 |
            | sex       | M                    |
            | birthday  | 2018-01-01           |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field |
@@ -181,7 +181,7 @@ Feature: Create a new person
            | name      | Name        |
            | cuil      | 20366578959 |
            | birthday  | 2018-01-01  |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field |
@@ -195,7 +195,7 @@ Feature: Create a new person
            | cuil      | 20366578959 |
            | sex       | Z           |
            | birthday  | 2018-01-01  |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field |
@@ -249,7 +249,7 @@ Feature: Create a new person
            | name       | Name        |
            | cuil       | 20366578959 |
            | sex        | M           |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field    |
@@ -263,7 +263,7 @@ Feature: Create a new person
            | cuil       | 20366578959 |
            | sex        | M           |
            | birthday   | 1950-01     |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field    |
@@ -277,7 +277,7 @@ Feature: Create a new person
            | cuil       | 20366578959 |
            | sex        | M           |
            | birthday   | 1850-01-01  |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field    |
@@ -291,7 +291,7 @@ Feature: Create a new person
            | cuil       | 20366578959 |
            | sex        | M           |
            | birthday   | 2900-01-01  |
-      And  I add a random company id to this person
+      And  I add a random company id to the request
       And  I "post" this data using the "people.store" route
       Then the response should have errors in:
            | field    |
