@@ -11,12 +11,12 @@ use Illuminate\Http\Request;
 use App\Http\Requests\People\CreatePersonRequest;
 use App\Http\Requests\People\UpdatePersonRequest;
 // Traits
-use App\Http\Traits\SaveCardTrait;
+use App\Http\Traits\{ SaveResidencyTrait };
 
 class PeopleController extends Controller
 {
     // As we are going to save cards associated with one or more persons, we need to use the correspondent Trait.
-    use SaveCardTrait;
+    use SaveResidencyTrait;
 
     /**
      * Given a Person and a Request, stores the new data sent on the request on the person attributes.
@@ -61,40 +61,6 @@ class PeopleController extends Controller
         ]);
     }
 
-    private function setResidency(Residency $residency, int $person_id, Request $request)
-    {
-        // Assigns the residency of a person
-        $residency->person_id = $person_id;
-        $residency->street = $request->street;
-        $residency->apartment = $request->apartment;
-        $residency->cp = $request->cp;
-        $residency->country = $request->country;
-        $residency->province = $request->province;
-        $residency->city = $request->city;
-    }
-
-    /**
-     * Creates a relational array with each company, where the key of each component is a company's id, and the value
-     * is the company's name. It's used to display the basic information about the stored companies on the system at some blade view.
-     * 
-     * @return Array
-     */
-    private function companiesDataToKeyValue()
-    {
-        // Gets all the companies of the system
-        $companies = Company::orderBy('name','asc')->get();
-        // Creates an empty array to send the companies data to the view
-        $companies_data = [];
-        // Adds each company to the data array as a key => value array
-        foreach($companies as $company) {
-            array_push($companies_data, [
-                'value' => $company->id,
-                'text' => $company->name
-            ]);
-        }
-        return $companies_data;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -126,15 +92,10 @@ class PeopleController extends Controller
         // Creates and stores the new person with the given data
         $person = new Person();
         $this->setPerson($person, $request);
+        $this->residency_id = SaveResidencyTrait::saveResidency($request);
         $person->save();
-        // Creates and stores the new person's residency with the given data
-        $residency = new Residency();
-        $this->setResidency($residency, $person->id, $request);
-        $residency->save();
-        // Creates the first card associated to this person
-        $this->saveCard($person->id);
         // Redirection
-        return redirect()->route('people.show', $person->id);
+        return redirect()->route('people.companies.create', $person->id);
     }
 
     /**

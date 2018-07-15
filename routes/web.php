@@ -21,6 +21,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::middleware('administration')->group(function() {
     Route::resource('/people', 'PeopleController');
+    Route::resource('/companies', 'CompaniesController');
+    Route::resource('/people/{person}/companies', 'CompaniesPeopleController', ['as' => 'people']);
     Route::resource('/cards', 'CardsController');
 });
 

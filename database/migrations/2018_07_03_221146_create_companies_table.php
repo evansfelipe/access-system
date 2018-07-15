@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+use App\Company;
+
 class CreateCompaniesTable extends Migration
 {
     /**
@@ -15,8 +17,12 @@ class CreateCompaniesTable extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('cuit', 15)->unique()->required();
-            $table->string('name', 50)->required();
+            $table->string('name', Company::LENGTHS['name']['max'])->required();
+            $table->string('area', Company::LENGTHS['area']['max'])->required();
+            $table->string('cuit', Company::LENGTHS['cuit']['max'])->unique()->required();
+            $table->integer('residency_id')->unsigned()->required();
+            $table->datetime('expiration')->required();
+            $table->json('contact')->required();
             $table->timestamps();
         });
     }

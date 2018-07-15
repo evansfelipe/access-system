@@ -1,3 +1,4 @@
+<hr>
 <button dusk="{{ $id or 'submitbutton'}}"
         id="{{ $id or 'submitbutton'}}"
         type="submit"

@@ -28,6 +28,7 @@ class CreatePeopleTable extends Migration
             $table->string('picture_name')->default('');
             $table->string('pna', Person::LENGTHS['pna']['max'])->nullable();
             $table->json('contact')->nullable();
+            $table->integer('residency_id')->unsigned()->nullable();
             $table->timestamps();
         });
     }

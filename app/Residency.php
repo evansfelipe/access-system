@@ -6,15 +6,44 @@ use Illuminate\Database\Eloquent\Model;
 
 class Residency extends Model
 {
+    public const LENGTHS = [
+        'cp' => ['max' => 10],
+        'apartment' => ['max' => 15]
+    ];
+
     public static function getValidationRules()
     {
         return [
-            'street' => ['string', 'max:256', 'nullable'],
-            'apartment' => ['string', 'max:15', 'nullable'],
-            'cp' => ['string', 'max:10', 'nullable'],
-            'country' => ['string', 'nullable'],
-            'province' => ['string', 'nullable'],
-            'city' => ['string', 'nullable'],
+            'street' => [
+                'string',
+                'max:256',
+                'nullable'
+            ],
+            'apartment' => [
+                'string', 
+                'max:'.Residency::LENGTHS['apartment']['max'], 
+                'nullable'
+            ],
+            'cp' => [
+                'string', 
+                'max:'.Residency::LENGTHS['cp']['max'], 
+                'nullable'
+            ],
+            'country' => [
+                'string', 
+                'max:256',
+                'nullable'
+            ],
+            'province' => [
+                'string', 
+                'max:256',
+                'nullable'
+            ],
+            'city' => [
+                'string', 
+                'max:256',
+                'nullable'
+            ],
         ];
     }
 
