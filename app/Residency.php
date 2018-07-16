@@ -72,15 +72,21 @@ class Residency extends Model
         return $this->belongsTo('App\Company');
     }
 
+
+    public function checkIfFirst($string)
+    {
+        return $string ? ', ' : '';
+    }
+
     public function toString()
     {
         $string = '';
-        $string .= $this->street    ? strval($this->street).' ' : '';
-        $string .= $this->apartment ? strval($this->apartment).' ' : '';
-        $string .= $this->city      ? strval($this->city).' ' : '';
-        $string .= $this->province  ? strval($this->province).' ' : '';
-        $string .= $this->country   ? strval($this->country).' ' : '';
-        $string .= $this->cp        ? strval($this->cp).' ' : '';
+        $string .= $this->street    ? strval($this->street) : '';
+        $string .= $this->apartment ? $this->checkIfFirst($string).strval($this->apartment) : '';
+        $string .= $this->city      ? $this->checkIfFirst($string).strval($this->city) : '';
+        $string .= $this->province  ? $this->checkIfFirst($string).strval($this->province) : '';
+        $string .= $this->country   ? $this->checkIfFirst($string).strval($this->country) : '';
+        $string .= $this->cp        ? $this->checkIfFirst($string).strval($this->cp) : '';
         return $string;
     }
 }

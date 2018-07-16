@@ -195,20 +195,21 @@ class Person extends Model
         $residency = \App\Residency::find($this->residency_id);
         return [
             'id' => $this->id,
+            'last_name' => $this->last_name,
+            'name' => $this->name,
             'full_name' => $this->fullName(),
             'document_type' => $this->documentTypeToString(),
             'document_number' => $this->document_number,
             'cuil' => $this->cuil,
-            'birthday' => date('d-m-Y', strtotime($this->birthday)),
-            'sex' => $this->sexToString(),
-            'blood_type' => $this->blood_type,
-            'url' => route('people.show', $this->id),
-            'pna' => $this->pna,
-            'email' => $contact->email ?? '',
-            'phone' => $contact->home_phone ?? '',
-            'mobile_phone' => $contact->mobile_phone ?? '',
-            'fax' => $contact->fax ?? '',
-            'residency' => $residency->toString(),
+            'birthday' => $this->birthday ? date('d-m-Y', strtotime($this->birthday)) : '-',
+            'sex' => $this->sexToString() ?? '-',
+            'blood_type' => $this->blood_type ?? '-',
+            'pna' => $this->pna ?? '-',
+            'email' => $contact->email ?? '-',
+            'phone' => $contact->home_phone ?? '-',
+            'mobile_phone' => $contact->mobile_phone ?? '-',
+            'fax' => $contact->fax ?? '-',
+            'residency' => !empty($residency->toString())? $residency->toString() : '-',
             'url' => route('people.show', $this->id)
         ];
     }

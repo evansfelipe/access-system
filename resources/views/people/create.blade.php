@@ -36,9 +36,10 @@
                                     @select([
                                         'name' => 'document_type',
                                         'required' => true,
+                                        'placeholder' => 'Tipo',
                                         'options' => [
-                                            ['value' => \App\Person::DNI, 'text' => 'DNI'],
-                                            ['value' => \App\Person::PASSPORT, 'text' => 'Pasaporte']
+                                            ['value' => strval(\App\Person::DNI), 'text' => 'DNI'],
+                                            ['value' => strval(\App\Person::PASSPORT), 'text' => 'Pasaporte']
                                         ]
                                     ])
                                     @endselect
@@ -67,6 +68,7 @@
                                 <div class="col">
                                     @select([
                                         'name' => 'sex',
+                                        'placeholder' => 'Seleccione género',
                                         'options' => [
                                             ['value' => 'F', 'text' => 'Femenino'],
                                             ['value' => 'M', 'text' => 'Masculino'],
@@ -81,6 +83,7 @@
                                 <div class="col">
                                     @select([
                                         'name' => 'blood_type',
+                                        'placeholder' => 'Seleccione grupo y factor',
                                         'options' => [
                                             ['value' => '0-', 'text' => '0-'],
                                             ['value' => '0+', 'text' => '0+'],

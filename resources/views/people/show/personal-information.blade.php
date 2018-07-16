@@ -23,13 +23,13 @@
                                 <tbody>
                                     {{-- Document --}}
                                     <tr>
-                                        <td>{{ $person['document_type'] }}</td>
+                                        <td style="width:35%">{{ $person['document_type'] }}</td>
                                         <td><strong>{{ $person['document_number'] }}</strong></td>
                                     </tr>
                                     {{-- Cuil/Cuit --}}
                                     <tr>
                                         <td>CUIL / CUIT</td>
-                                        <td>{{ $person['cuil'] }}</td>
+                                        <td><strong>{{ $person['cuil'] }}</strong></td>
                                     </tr>
                                     {{-- Birthday --}}
                                     <tr>

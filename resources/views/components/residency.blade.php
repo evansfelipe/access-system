@@ -26,7 +26,8 @@
         <div class="col">
             @select([
                 'name' => 'country',
-                'options' => [['value' => 'arg', 'text' => 'Argentina']]
+                'placeholder' => 'Seleccione país',
+                'options' => [['value' => 'Argentina', 'text' => 'Argentina']]
             ])
             @endselect
         </div>
@@ -36,7 +37,8 @@
         <div class="col">
             @select([
                 'name' => 'province',
-                'options' => [['value' => 'baires', 'text' => 'Buenos Aires']]
+                'placeholder' => 'Seleccione provincia / estado',
+                'options' => [['value' => 'Buenos Aires', 'text' => 'Buenos Aires']]
             ])
             @endselect
         </div>
@@ -46,7 +48,8 @@
         <div class="col">
             @select([
                 'name' => 'city',
-                'options' => [['value' => 'mdp', 'text' => 'Mar del Plata']]
+                'placeholder' => 'Seleccione ciudad',
+                'options' => [['value' => 'Mar del Plata', 'text' => 'Mar del Plata']]
             ])
             @endselect
         </div>
