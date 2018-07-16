@@ -16,6 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('people-index', require('./components/PeopleIndex.vue'));
+Vue.component('person-show', require('./components/PersonShow.vue'));
 
 const app = new Vue({
     el: '#app'

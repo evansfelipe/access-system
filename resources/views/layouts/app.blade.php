@@ -49,16 +49,6 @@
             color: white;
         }
 
-        .nav-tabs {
-            border: 0
-        }
-        .nav-tabs > .nav-item > a.active {
-            background-color: white;
-        }
-
-        .card {
-            border-radius: 0;
-        }
     </style>
 </head>
 <body>

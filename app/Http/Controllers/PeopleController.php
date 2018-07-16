@@ -101,21 +101,8 @@ class PeopleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, Person $person)
-    {
-        $tab = $request->tab;
-        switch($tab)
-        {
-            case 'personal-information':
-                $view = view('people.show.personal-information');
-                break;
-            case 'working-information':
-                $view = view('people.show.working-information');
-                break;
-            default:
-                $view = view('people.show.personal-information');
-                break;
-        }   
-        return $view->with('person', $person->toArray());
+    { 
+        return view('people.show')->with('person', $person->toJson());
     }
 
     /**
