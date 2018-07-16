@@ -11,7 +11,7 @@ class CompaniesPeopleController extends Controller
 
     /**
      * Creates a relational array with each company, where the key of each component is a company's id, and the value
-     * is the company's name. It's used to display the basic information about the stored companies on the system at some blade view.
+     * is the company's name. It's used to display the basic information about the stored companies on the system at some blade views.
      * 
      * @return Array
      */
@@ -62,7 +62,7 @@ class CompaniesPeopleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**

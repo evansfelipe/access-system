@@ -3,20 +3,20 @@
 @section('content')
     <div class="row">
         @panel(['size' => 'col offset-lg-1 col-lg-10'])
-                                
-            @slot('header')
-                Información personal
-            @endslot
+            @slot('header', 'Información personal')
             <form enctype="multipart/form-data" action="{{route('people.store')}}" method="POST" class="no-select">
                 @csrf
+                {{-- Photo upload & identification information --}}
                 <div class="form-row d-flex align-items-center">
+                    {{-- Photo loader section --}}
                     <div class="col-md-4 text-center">
                         <div class="offset-1 col-10">
                             <img src="{{ asset('/pictures/no-image.jpg') }}" class="img-fluid rounded-circle" alt="Cargar image">
                         </div>
                     </div>
+                    {{-- Identification information section --}}
                     <div class="col-md-8">
-                        <!-- Last name & name -->
+                        {{-- Last name & name --}}
                         <div class="form-row">
                             @formitem(['label' => 'Apellido', 'col' => 'col-12 col-md-6'])
                                 <div class="col">
@@ -29,8 +29,7 @@
                                 </div>
                             @endformitem
                         </div>
-
-                        <!-- Document & Cuil/Cuit -->
+                        {{-- Document & Cuil/Cuit --}}
                         <div class="form-row">
                             @formitem(['label' => 'Documento', 'col' => 'col-12 col-md-6'])
                                 <div class="col-12 col-md-5">
@@ -55,13 +54,15 @@
                             @endformitem
                         </div>
 
-                        <!-- Birthday, sex & blood type -->
+                        {{-- Birthday, sex & blood type  --}}
                         <div class="form-row">
+                            {{-- Birthday --}}
                             @formitem(['label' => 'Fecha de nacimiento', 'col' => 'col-12 col-md-6'])
                                 <div class="col">
                                     @input(['type' => 'date', 'name' => 'birthday'])@endinput
                                 </div>
                             @endformitem
+                            {{-- Sex --}}
                             @formitem(['label' => 'Género', 'col' => 'col-12 col-md-3'])
                                 <div class="col">
                                     @select([
@@ -75,6 +76,7 @@
                                     @endselect
                                 </div>
                             @endformitem
+                            {{-- Blood type --}}
                             @formitem(['label' => 'Grupo sanguíneo', 'col' => 'col-12 col-md-3'])
                                 <div class="col">
                                     @select([
@@ -94,7 +96,7 @@
                                 </div>
                             @endformitem
                         </div>
-
+                        {{-- PNA & email --}}
                         <div class="form-row">
                             @formitem(['label' => 'Prontuario PNA', 'col' => 'col-6'])
                                 <div class="col">
@@ -109,34 +111,34 @@
                         </div>
                     </div>
                 </div>
-
                 <hr>
-
+                {{-- Phone, mobile phone & fax --}}
                 <div class="form-row">
+                    {{-- Phone --}}
                     @formitem(['label' => 'Teléfono fijo', 'col' => 'col-md-4'])
                         <div class="col">
                             @input(['type' => 'text', 'name' => 'home_phone'])@endinput
                         </div>
                     @endformitem
+                    {{-- Mobile phone --}}
                     @formitem(['label' => 'Teléfono móvil', 'col' => 'col-md-4'])
                         <div class="col">
                          @input(['type' => 'text', 'name' => 'mobile_phone'])@endinput
                         </div>
                     @endformitem    
+                    {{-- Fax --}}
                     @formitem(['label' => 'FAX', 'col' => 'col-md-4'])
                         <div class="col">
                             @input(['type' => 'text', 'name' => 'fax'])@endinput
                         </div>
                     @endformitem    
                 </div>
-
-                <hr>
-
+                {{-- Residency component with necessaty inputs --}}
                 @residency()@endresidency
-                
-                {{-- @input(['type' => 'file', 'label' => 'Foto', 'name' => 'picture'])@endinput --}}
+                {{-- Submit --}}
                 @submitbutton(['id' => 'create-person-submit', 'color' => 'success']) Guardar @endsubmitbutton
             </form>
-        @endpanel
-    </div>
+            @endpanel
+        </div>
 @endsection
+{{-- @input(['type' => 'file', 'label' => 'Foto', 'name' => 'picture'])@endinput --}}

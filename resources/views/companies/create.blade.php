@@ -3,14 +3,10 @@
 @section('content')
     <div class="row">
         @panel(['size' => 'col offset-lg-1 col-lg-10'])
-            @slot('header')
-                Nueva empresa
-            @endslot
-           
+            @slot('header', 'Nueva empresa')
             <form action="{{route('companies.store')}}" method="POST" class="no-select">
                 @csrf
-               
-                <!-- Name, area, cuit & expiration date-->
+                {{-- Name & area --}}
                 <div class="form-row">
                     @formitem(['label' => 'Razón social', 'col' => 'col-md-6'])
                         <div class="col">
@@ -23,6 +19,7 @@
                         </div>
                     @endformitem
                 </div>
+                {{--  Cuit & expiration date --}}
                 <div class="form-row">
                     @formitem(['label' => 'CUIT', 'col' => 'col-md-6'])
                         <div class="col">
@@ -35,10 +32,8 @@
                         </div>
                     @endformitem
                 </div>
-
                 <hr>
-
-                <!-- Phone, fax, email & web -->
+                {{-- Phone & fax --}}
                 <div class="form-row">
                     @formitem(['label' => 'Teléfono', 'col' => 'col-md-6'])
                         <div class="col">
@@ -51,6 +46,7 @@
                         </div>
                     @endformitem
                 </div>
+                {{-- Email & web --}}
                 <div class="form-row">
                     @formitem(['label' => 'Mail', 'col' => 'col-md-6'])
                         <div class="col">
@@ -63,11 +59,9 @@
                         </div>
                     @endformitem
                 </div>
-
-                <hr>
-
+                {{-- Residency component with necessaty inputs --}}
                 @residency()@endresidency
-                
+                {{-- Submit --}}
                 @submitbutton(['id' => 'create-company-submit', 'color' => 'success']) Guardar @endsubmitbutton
             </form>
         @endpanel

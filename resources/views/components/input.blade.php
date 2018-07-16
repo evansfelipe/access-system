@@ -9,14 +9,7 @@
         class="form-control {{ $errors->has($name) ? 'is-invalid' : '' }}"
         {{-- The input is not required by default. If a "required" variable is sent, and its value is true, then adds the required attribute --}}
         {{ isset($required) && $required ? 'required' : '' }}
-        placeholder="{{ isset($placeholder) ? $placeholder : '' }}"
+        placeholder="{{ $placeholder or '' }}"
 >
-{{-- If the server validation returns an error under the name of this input, then adds a span with the text of the error
-    The dusk attribute on the span is used on tests to validate that the error had happened and the text is being displayed --}}
-@if($errors->has($name))
-    <div dusk="{{ $name }}-is-invalid" role="alert" class="invalid-feedback text-justify">
-        @foreach($errors->get($name) as $error)
-            <strong>{{ $error }}</strong> <br>
-        @endforeach
-    </div>
-@endif
+{{-- If the server validation returns an error under the name of this input, then shows them --}}
+@include('components/_partials/validation-errors', ['name' => $name])

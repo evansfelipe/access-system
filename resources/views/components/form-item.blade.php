@@ -1,4 +1,4 @@
-<div class="{{ isset($col) ? $col : 'col' }}">
+<div class="{{ $col or 'col' }}">
     <div class="form-group">
         <div class="form-row">
             <div class="col">

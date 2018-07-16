@@ -3,13 +3,10 @@
 @section('content')
     <div class="row">
         @panel(['size' => 'col offset-lg-1 col-lg-10'])
-            @slot('header')
-                Información laboral de {{ $person_name }}
-            @endslot
-
+            @slot('header', 'Información laboral de ' . $person_name )
             <form action="{{route('people.companies.store', $person_id)}}" method="POST" class="no-select">
                 @csrf
-
+                {{-- Company --}}
                 <div class="form-row">
                     @formitem(['label' => 'Empresa'])
                         <div class="col-md-6">
@@ -34,7 +31,7 @@
                         </div>
                     @endformitem                     
                 </div>
-               
+                {{-- Activity --}}
                 <div class="form-row">
                     @formitem(['label' => 'Actividad / Categoría'])
                         <div class="col-md-6">
@@ -56,7 +53,7 @@
                         </div>
                     @endformitem
                 </div>
-
+                {{-- ART --}}
                 <div class="form-row">
                     @formitem(['label' => 'ART', 'col' => 'col-md-6'])
                         <div class="col">
@@ -64,7 +61,7 @@
                         </div>
                     @endformitem                    
                 </div>
-
+                {{-- PBIP --}}
                 <div class="form-row">
                     @formitem(['label' => 'Vencimiento PBIP', 'col' => 'col-md-6'])
                         <div class="col">
@@ -72,7 +69,7 @@
                         </div>
                     @endformitem
                 </div>
-                
+                {{-- Submit --}}
                 @submitbutton(['id' => 'create-person-company-submit', 'color' => 'success']) Guardar @endsubmitbutton
             </form>
         @endpanel

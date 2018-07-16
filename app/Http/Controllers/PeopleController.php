@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers;
 // Models
-use App\Person;
-use App\Residency;
-use App\Company;
-use App\Card;
+use App\{ Person, Residency, Company, Card };
 // Requests
 use Illuminate\Http\Request;
-use App\Http\Requests\People\CreatePersonRequest;
+use App\Http\Requests\SavePersonRequest;
 use App\Http\Requests\People\UpdatePersonRequest;
 // Traits
 use App\Http\Traits\{ SaveResidencyTrait };
 
 class PeopleController extends Controller
 {
-    // As we are going to save cards associated with one or more persons, we need to use the correspondent Trait.
     use SaveResidencyTrait;
-
     /**
      * Given a Person and a Request, stores the new data sent on the request on the person attributes.
      * 
@@ -55,10 +50,11 @@ class PeopleController extends Controller
         $person->pna = $request->pna;
         $person->contact = json_encode([
             'fax' => $request->fax,
-            'mail' => $request->email,
+            'email' => $request->email,
             'home_phone' => $request->home_phone,
             'mobile_phone' => $request->mobile_phone
         ]);
+        $person->residency_id = SaveResidencyTrait::saveResidency($request);
     }
 
     /**
@@ -68,7 +64,8 @@ class PeopleController extends Controller
      */
     public function index()
     {
-        return view('people.index')->with('people', Person::orderBy('created_at','desc')->get()->toJson());
+        $people = Person::orderBy('created_at','desc')->get()->toJson();
+        return view('people.index')->with('people', $people);
     }
 
     /**
@@ -84,15 +81,14 @@ class PeopleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\People\CreatePersonRequest  $request
+     * @param  \App\Http\Requests\SavePersonRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreatePersonRequest $request)
+    public function store(SavePersonRequest $request)
     {
         // Creates and stores the new person with the given data
         $person = new Person();
         $this->setPerson($person, $request);
-        $this->residency_id = SaveResidencyTrait::saveResidency($request);
         $person->save();
         // Redirection
         return redirect()->route('people.companies.create', $person->id);
@@ -104,9 +100,22 @@ class PeopleController extends Controller
      * @param  \App\Person  $person
      * @return \Illuminate\Http\Response
      */
-    public function show(Person $person)
+    public function show(Request $request, Person $person)
     {
-        return view('people.show')->with('person', $person);
+        $tab = $request->tab;
+        switch($tab)
+        {
+            case 'personal-information':
+                $view = view('people.show.personal-information');
+                break;
+            case 'working-information':
+                $view = view('people.show.working-information');
+                break;
+            default:
+                $view = view('people.show.personal-information');
+                break;
+        }   
+        return $view->with('person', $person->toArray());
     }
 
     /**

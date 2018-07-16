@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests\Company\SaveCompanyRequest;
+use App\Http\Requests\SaveCompanyRequest;
 
 use App\{Company, Residency};
 
-use App\Http\Traits\{SaveCardTrait, SaveResidencyTrait};
+use App\Http\Traits\{ SaveResidencyTrait };
 
 
 class CompaniesController extends Controller
@@ -38,7 +38,7 @@ class CompaniesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Requests\Company\SaveCompanyRequest  $request
+     * @param  \App\Requests\SaveCompanyRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(SaveCompanyRequest $request)
@@ -50,10 +50,10 @@ class CompaniesController extends Controller
         $company->cuit = $request->cuit;
         $company->residency_id = SaveResidencyTrait::saveResidency($request);
         $company->contact = json_encode([
+            'web'   => $request->web,        
+            'fax'   => $request->fax,
             'phone' => $request->phone,
-            'fax' => $request->fax,
-            'email' => $request->email,
-            'web' => $request->web        
+            'email' => $request->email
         ]);
         $company->expiration = $request->expiration;
         $company->save();

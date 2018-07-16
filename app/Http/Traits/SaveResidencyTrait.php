@@ -5,6 +5,11 @@ use Illuminate\Http\Request;
 use App\Residency;
 
 trait SaveResidencyTrait {
+    /**
+     * Creates, assigns the data and saves to the database a new residency.
+     * 
+     * @return Integer $id: the id of the new residency.
+     */
     public static function saveResidency(Request $request)
     {
         $residency = new Residency();

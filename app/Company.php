@@ -6,12 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
+    /**
+     * Array with the length of each string column of the database associated with this model.
+     */
     public const LENGTHS = [
         'name' => ['max' => 50],
         'area' => ['max' => 50 ],
         'cuit' => ['max' => 15, 'min' => 10],
     ];
 
+    /**
+     * Creates and returns an array with the validation rules for each attribute that can be
+     * entered through an input (or other html component) by the user 
+     */
     public static function getValidationRules()
     {
         return [
@@ -54,6 +61,9 @@ class Company extends Model
         ];
     }
 
+    /**
+     * Gets each person associated with this company.
+     */
     public function people()
     {
         return $this->belongsToMany('App\Person');
