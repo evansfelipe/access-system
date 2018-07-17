@@ -102,14 +102,24 @@
             </div>
         </nav>
 
-        @if(count( $errors ) > 0)
-            @foreach ($errors->all() as $error)
-                <div>{{ $error }}</div>
-            @endforeach
-        @endif
 
         <main class="py-4">
             <div class="container">
+
+                @if(count( $errors ) > 0)
+                    @foreach ($errors->all() as $error)
+                        <div>{{ $error }}</div>
+                    @endforeach
+                @endif
+        
+                @if(Session::has('message_errors'))
+                    <div class="alert alert-danger no-select" role="alert">
+                        @foreach (Session::get('message_errors') as $error)
+                            <div>{{ $error }}</div>
+                        @endforeach
+                    </div>
+                @endif
+
                 @yield('content')
             </div>
         </main>

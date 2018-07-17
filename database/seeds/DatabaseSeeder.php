@@ -32,5 +32,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('secret'),
             'type' => \App\User::SECURITY
         ]);
+        DB::table('activities')->insert(['name' => 'Pesquero']);
+        DB::table('activities')->insert(['name' => 'Control de calidad']);
     }
 }

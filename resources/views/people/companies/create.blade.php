@@ -12,6 +12,7 @@
                         <div class="col-md-6">
                             @select([
                                 'name' => 'company_id',
+                                'placeholder' => 'Seleccione empresa',
                                 'required' => true,
                                 'options' => $companies_data
                             ])
@@ -21,7 +22,7 @@
                             <strong>o</strong>
                         </div>
                         <div class="col-md-5">
-                            @formbutton Crear nueva empresa @endformbutton
+                            @formbutton Cree nueva empresa @endformbutton
                         </div>
                         <div class="col">
                             <div class="form-check">
@@ -37,10 +38,11 @@
                         <div class="col-md-6">
                             @select([
                                 'name' => 'activity_id',
+                                'placeholder' => 'Seleccione actividad',
                                 'required' => true,
                                 'options' => [
-                                    ['value' => 'pesquero', 'text' => 'Pesquero'],
-                                    ['value' => 'calidad', 'text' => 'Control de calidad'],
+                                    ['value' => '1', 'text' => 'Pesquero'],
+                                    ['value' => '2', 'text' => 'Control de calidad'],
                                 ]
                             ])
                             @endselect
@@ -49,7 +51,7 @@
                             <strong>o</strong>
                         </div>
                         <div class="col-md-5">
-                            @formbutton Nueva actividad @endformbutton
+                            @formbutton Cree nueva actividad @endformbutton
                         </div>
                     @endformitem
                 </div>

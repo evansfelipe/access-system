@@ -115,7 +115,7 @@ class Person extends Model
      */
     public function companies()
     {
-        return $this->belongsToMany('App\Company');
+        return $this->belongsToMany('App\Company', 'company_people')->using('App\CompanyPerson');
     }
 
     /**
@@ -210,6 +210,7 @@ class Person extends Model
             'mobile_phone' => $contact->mobile_phone ?? '-',
             'fax' => $contact->fax ?? '-',
             'residency' => !empty($residency->toString())? $residency->toString() : '-',
+            'company_name' => $this->company()->name,
             'url' => route('people.show', $this->id)
         ];
     }

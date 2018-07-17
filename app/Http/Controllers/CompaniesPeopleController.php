@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\{Company, Person};
+use App\{Company, Person, CompanyPerson};
 
 class CompaniesPeopleController extends Controller
 {
@@ -60,9 +60,26 @@ class CompaniesPeopleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Person $person)
     {
-        dd($request);
+        $companyPerson = new CompanyPerson();
+        $companyPerson->person_id = $person->id;
+        $companyPerson->company_id = $request->company_id;
+        $companyPerson->activity_id = $request->activity_id;
+        $companyPerson->art = $request->art;
+        $companyPerson->pbip = $request->pbip;
+        try{
+            $companyPerson->save();
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            if($e->errorInfo[0] === "23000"){
+                session()->flash("message_errors", [
+                    "Esta persona ya se encuentra asociada a la empresa."
+                ]);
+            }
+            return redirect()->back()->withInput();
+        }
+        dd($person->companies);
     }
 
     /**

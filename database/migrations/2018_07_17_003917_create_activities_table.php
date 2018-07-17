@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCompanyPersonTable extends Migration
+use App\Activity;
+
+class CreateActivitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +15,9 @@ class CreateCompanyPersonTable extends Migration
      */
     public function up()
     {
-        Schema::create('company_person', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('person_id')->unsigned();
-            $table->integer('company_id')->unsigned();
+            $table->string('name',Activity::LENGTHS['name']['max'])->unique();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateCompanyPersonTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('company_person');
+        Schema::dropIfExists('activities');
     }
 }
