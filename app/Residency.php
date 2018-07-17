@@ -60,7 +60,7 @@ class Residency extends Model
      */
     public function person()
     {
-        return $this->belongsTo('App\Person');
+        return $this->hasOne('App\Person');
     }
 
     /**
@@ -69,7 +69,7 @@ class Residency extends Model
      */
     public function company()
     {
-        return $this->belongsTo('App\Company');
+        return $this->hasOne('App\Company');
     }
 
 

@@ -6,7 +6,6 @@ use App\{ Person, Residency, Company, Card };
 // Requests
 use Illuminate\Http\Request;
 use App\Http\Requests\SavePersonRequest;
-use App\Http\Requests\People\UpdatePersonRequest;
 // Traits
 use App\Http\Traits\{ SaveResidencyTrait };
 
@@ -113,17 +112,22 @@ class PeopleController extends Controller
      */
     public function edit(Person $person)
     {
+        $contact = json_decode($person->contact);
+        $person->email = $contact->email;
+        $person->home_phone = $contact->home_phone;
+        $person->mobile_phone = $contact->mobile_phone;
+        $person->fax = $contact->fax;
         return view('people.edit')->with('person', $person);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\People\UpdatePersonRequest  $request
+     * @param  \App\Http\Requests\SavePersonRequest  $request
      * @param  \App\Person  $person
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePersonRequest $request, Person $person)
+    public function update(SavePersonRequest $request, Person $person)
     {
         // If the cuil has changed, we need to rename the name of the picture stored on the server.
         // Done before set the new data because we need to use the old cuil.

@@ -26,8 +26,14 @@ class SavePersonRequest extends FormRequest
      */
     public function rules()
     {
+        $person_rules = Person::getValidationRules();
+        if($this->route()->getName() === 'people.update' && $this->cuil === $this->person->cuil) {
+            if (($key = array_search('unique:people', $person_rules['cuil'])) !== false) {
+                unset($person_rules['cuil'][$key]);
+            }
+        }
         return array_merge(
-            Person::getValidationRules(),
+            $person_rules,
             Residency::getValidationRules()
         );
     }

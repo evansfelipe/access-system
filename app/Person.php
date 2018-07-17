@@ -131,7 +131,7 @@ class Person extends Model
      */
     public function residency()
     {
-        return $this->hasOne('App\Residency');
+        return $this->belongsTo('App\Residency');
     }
 
     /**

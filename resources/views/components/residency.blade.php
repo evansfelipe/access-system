@@ -5,17 +5,17 @@
     @formitem(['label' => 'Domicilio', 'col' => 'col-md-8'])
         {{-- Street --}}
         <div class="col-6">
-            @input(['type' => 'text', 'name' => 'street', 'placeholder' => 'Dirección'])@endinput
+            @input(['type' => 'text', 'name' => 'street', 'placeholder' => 'Dirección', 'value' => $model->street ?? null])@endinput
         </div>
         {{-- Apartment --}}
         <div class="col-6">
-            @input(['type' => 'text', 'name' => 'apartment', 'placeholder' => 'Piso y departamento'])@endinput
+            @input(['type' => 'text', 'name' => 'apartment', 'placeholder' => 'Piso y departamento', 'value' => $model->apartment ?? null])@endinput
         </div>
     @endformitem
     {{-- CP --}}
     @formitem(['label' => 'Código Postal', 'col' => 'col-md-4'])
         <div class="col">
-            @input(['type' => 'text', 'name' => 'cp'])@endinput
+            @input(['type' => 'text', 'name' => 'cp', 'value' => $model->cp ?? null])@endinput
         </div>
     @endformitem
 </div>
@@ -27,6 +27,7 @@
             @select([
                 'name' => 'country',
                 'placeholder' => 'Seleccione país',
+                'value' => $model->country ?? null,
                 'options' => [['value' => 'Argentina', 'text' => 'Argentina']]
             ])
             @endselect
@@ -38,6 +39,7 @@
             @select([
                 'name' => 'province',
                 'placeholder' => 'Seleccione provincia / estado',
+                'value' => $model->province ?? null,
                 'options' => [['value' => 'Buenos Aires', 'text' => 'Buenos Aires']]
             ])
             @endselect
@@ -49,6 +51,7 @@
             @select([
                 'name' => 'city',
                 'placeholder' => 'Seleccione ciudad',
+                'value' => $model->city ?? null,
                 'options' => [['value' => 'Mar del Plata', 'text' => 'Mar del Plata']]
             ])
             @endselect
