@@ -68,32 +68,6 @@ class PeopleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('people.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\SavePersonRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(SavePersonRequest $request)
-    {
-        // Creates and stores the new person with the given data
-        $person = new Person();
-        $this->setPerson($person, $request);
-        $person->save();
-        // Redirection
-        return redirect()->route('people.companies.create', $person->id);
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Person  $person

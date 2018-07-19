@@ -2,10 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class CompanyPerson extends Pivot
+class PersonCompany extends Pivot
 {
     protected $table = 'company_people';
 

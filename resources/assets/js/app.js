@@ -17,6 +17,7 @@ window.Vue = require('vue');
 
 Vue.component('people-index', require('./components/PeopleIndex.vue'));
 Vue.component('person-show', require('./components/PersonShow.vue'));
+Vue.component('assign-person-vehicles', require('./components/AssignPersonVehicles.vue'));
 
 const app = new Vue({
     el: '#app'

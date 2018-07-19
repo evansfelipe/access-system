@@ -115,7 +115,7 @@ class Person extends Model
      */
     public function companies()
     {
-        return $this->belongsToMany('App\Company', 'company_people')->using('App\CompanyPerson');
+        return $this->belongsToMany('App\Company', 'company_people')->using('App\PersonCompany');
     }
 
     /**
@@ -140,6 +140,11 @@ class Person extends Model
     public function fullName() 
     {
         return $this->last_name . ', ' . $this->name;
+    }
+
+    public function vehicles()
+    {
+        return $this->belongsToMany('\App\Vehicle', 'person_vehicles')->using('\App\PersonVehicle');
     }
 
     /**

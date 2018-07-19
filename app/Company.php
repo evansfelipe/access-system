@@ -66,6 +66,6 @@ class Company extends Model
      */
     public function people()
     {
-        return $this->belongsToMany('App\Person', 'company_people')->using('App\CompanyPerson');
+        return $this->belongsToMany('App\Person', 'company_people')->using('App\PersonCompany');
     }
 }

@@ -23,8 +23,8 @@ class Activity extends Model
         ];
     }
 
-    public function companyPerson()
+    public function personCompany()
     {
-        return $this->belongsTo('App\CompanyPerson');
+        return $this->belongsTo('App\PersonCompany');
     }
 }

@@ -4,9 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-use App\PersonCompany;
-
-class CreateCompanyPeopleTable extends Migration
+class CreatePersonVehiclesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,14 +13,10 @@ class CreateCompanyPeopleTable extends Migration
      */
     public function up()
     {
-        Schema::create('company_people', function (Blueprint $table) {
+        Schema::create('person_vehicles', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('person_id')->unsigned()->required();
-            $table->integer('company_id')->unsigned();
-            $table->integer('activity_id')->unsigned()->required();
-            $table->string('art',PersonCompany::LENGTHS['art']['max'])->required();
-            $table->datetime('pbip')->nullable();
-            $table->unique(['person_id', 'company_id']);
+            $table->integer('vehicle_id')->unsigned()->required();
             $table->timestamps();
         });
     }
@@ -34,6 +28,6 @@ class CreateCompanyPeopleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('company_people');
+        Schema::dropIfExists('person_vehicles');
     }
 }

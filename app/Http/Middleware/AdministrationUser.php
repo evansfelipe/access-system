@@ -17,7 +17,7 @@ class AdministrationUser
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::guest() || !(Auth::user()->type === User::ADMINISTRATION || Auth::user()->type === User::ROOT)) {
+        if(!(Auth::user()->type === User::ADMINISTRATION || Auth::user()->type === User::ROOT)) {
             return redirect('/');
         }
         return $next($request);

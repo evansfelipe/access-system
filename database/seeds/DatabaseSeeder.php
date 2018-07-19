@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         // factory(App\Company::class, 15)->create();
         // factory(App\Person::class, 50)->create();
         factory(App\Company::class, 10)->create();
+        factory(App\Vehicle::class, 10)->create();
         DB::table('users')->insert([
             'name' => 'Root',
             'email' =>'root@example.com',

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\CreateCardRequest;
+use App\Http\Requests\SaveCardRequest;
 
 use App\Http\Traits\SaveCardTrait;
 
@@ -38,10 +38,10 @@ class CardsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\CreateCardRequest  $request
+     * @param  \App\Http\Requests\SaveCardRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateCardRequest $request)
+    public function store(SaveCardRequest $request)
     {
         $person_id = $request->person_id;
         // Gets the person associated with the card's person_id

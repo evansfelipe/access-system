@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Card;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateCardRequest extends FormRequest
+class SaveCardRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
