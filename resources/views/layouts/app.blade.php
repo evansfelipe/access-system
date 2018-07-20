@@ -122,6 +122,14 @@
                     </div>
                 @endif
 
+                @if(Session::has('success_messages'))
+                    <div class="alert alert-success no-select" role="alert">
+                        @foreach (Session::get('success_messages') as $error)
+                            <div>{{ $error }}</div>
+                        @endforeach
+                    </div>
+                @endif
+
                 @yield('content')
             </div>
         </main>

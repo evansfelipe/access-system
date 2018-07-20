@@ -82,7 +82,7 @@ trait Helpers {
             $person->picture_name = $filename;
         }
     }
-
+    
     /**
      * Creates a relational array with each company, where the key of each component is a company's id, and the value
      * is the company's name. It's used to display the basic information about the stored companies on the system at some blade views.
