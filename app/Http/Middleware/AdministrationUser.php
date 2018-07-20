@@ -18,7 +18,8 @@ class AdministrationUser
     public function handle($request, Closure $next)
     {
         if(!(Auth::user()->type === User::ADMINISTRATION || Auth::user()->type === User::ROOT)) {
-            return redirect('/');
+            session()->flash("message_errors", ["Acción no permitida utilizando este usuario."]);
+            return redirect()->route('home');
         }
         return $next($request);
     }

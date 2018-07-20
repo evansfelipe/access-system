@@ -1,7 +1,6 @@
 <style lang="scss" scoped>
     table {
         width: 100%;
-
         & > thead, tbody, tr, td, th { display: block }
 
         & tr {
@@ -13,7 +12,6 @@
                 clear: both;
             }
         }
-
         & > thead {
             width: 98.5%;
             & > tr {
@@ -21,7 +19,6 @@
             }
 
         }
-
         & > tbody {
             height: 45vh;
             overflow-y: auto;
@@ -37,13 +34,11 @@
         }
 
     }
-
     tbody td, thead th {
         width: 19.2%;
         float: left;
     }
 </style>
-
 
 <template>
     <div>
@@ -54,38 +49,35 @@
             </div>
         </div>
         <hr>
-        <!-- Vehicles list -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Patente</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Año</th>
-                    <th>Color</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(vehicle, key) in vehiclesList"
-                    :id="key" :key="key" 
-                    @click="toggleVehicle(key, vehicle)"
-                    :class="vehicle.picked ? 'vehicle-picked' : ''"
-                >
-                    <td>{{ vehicle.plate }}</td>
-                    <td>{{ vehicle.brand }}</td>
-                    <td>{{ vehicle.model }}</td>
-                    <td>{{ vehicle.year }}</td>
-                    <td>{{ vehicle.colour }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <hr>
-        <div class="form-row">
-            <div class="col-6">
-                <button type="button" class="btn btn-sm btn-outline-danger"><i class="fas fa-times"></i> Cancelar</button>
-            </div>
-            <div class="col-6 text-right">
-                <button type="button" class="btn btn-sm btn-outline-success" @click="submit">Siguiente <i class="fas fa-angle-double-right"></i></button>
+        <div class="row">
+            <!-- Vehicles list -->
+            <div class="col-12">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patente</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Año</th>
+                            <th>Color</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(vehicle, key) in vehiclesList" :key="key"
+                            @click="vehicle.picked = !vehicle.picked"
+                            :class="vehicle.picked ? 'vehicle-picked' : ''"
+                        >
+                            <td>{{ vehicle.plate  }}</td>
+                            <td>{{ vehicle.brand  }}</td>
+                            <td>{{ vehicle.model  }}</td>
+                            <td>{{ vehicle.year   }}</td>
+                            <td>{{ vehicle.colour }}</td>
+                            <input v-if="vehicle.picked" :value="vehicle.id"
+                                   type="hidden" name="vehicles_id[]" 
+                            >
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -93,20 +85,7 @@
 
 <script>
 export default {
-    props: {
-        vehicles: {
-            required: true
-        },
-        method: {
-            type: String,
-            required: false,
-            default: 'post'
-        },
-        path: {
-            type: String,
-            required: true
-        }
-    },
+    props: { vehicles: { required: true }},
     data: function() {
         let parsed = JSON.parse(this.vehicles);
         return {
@@ -114,36 +93,6 @@ export default {
             vehiclesList: parsed,
             search: "",
         };
-    },
-    methods: {
-        toggleVehicle: function(key, vehicle) {
-            vehicle.picked = vehicle.picked ? !vehicle.picked : true;
-            document.getElementById(key).classList.toggle('vehicle-picked');
-        },
-        submit: function() {
-            var form = document.createElement("form");
-            form.setAttribute("method", 'post');
-            form.setAttribute("action", this.path);
-
-            let csrfField = document.createElement('input');
-            csrfField.setAttribute("type", "hidden");
-            csrfField.setAttribute('name', '_token');
-            csrfField.setAttribute('value', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-            form.appendChild(csrfField);
-        
-            this.vehiclesList.filter(vehicle => {
-                return vehicle.picked;
-            }).forEach(vehicle => {
-                var hiddenField = document.createElement('input');
-                hiddenField.setAttribute("type", "hidden");
-                hiddenField.setAttribute('name', 'vehicles_id[]');
-                hiddenField.setAttribute('value', vehicle.id);
-                form.appendChild(hiddenField);
-            });
-
-            document.body.appendChild(form);
-            form.submit();
-        }
     },
     watch: {
         search: function() {

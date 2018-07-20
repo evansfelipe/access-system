@@ -16,7 +16,7 @@ class PersonCompany extends Pivot
     {
         return [
             'person_id' => [
-                'required',
+                //'required',
                 'exists:people,id'
             ],
             'company_id' => [

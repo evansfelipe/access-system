@@ -20,6 +20,8 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
     @yield('css')
     <style>
         input[type="date"], input[type="datetime-local"], input[type="time"], input[type="month"], input[type="week"] { height: 38px }

@@ -1,5 +1,5 @@
 <div class="{{ $size or 'col' }}">
-    <div class="card">
+    <div class="card {{ $classes or '' }}">
         @isset($header)
             <div class="card-header">
                 <big><b>{{ $header }}</b></big>

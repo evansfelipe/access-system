@@ -144,7 +144,7 @@ class Person extends Model
 
     public function vehicles()
     {
-        return $this->belongsToMany('\App\Vehicle', 'person_vehicles')->using('\App\PersonVehicle');
+        return $this->belongsToMany('\App\Vehicle', 'person_vehicle')->using('\App\PersonVehicle');
     }
 
     /**
@@ -192,11 +192,20 @@ class Person extends Model
     }
 
     /**
+     * Decodes and returns the json where the contact information of this person 
+     * is stored.
+     */
+    public function contactToObject()
+    {
+        return json_decode($this->contact);
+    }
+
+    /**
      * Returns an array (that can be encoded to a json) that contains the data needed to be shown on the views of the app.
      */
     public function toArray()
     {
-        $contact = json_decode($this->contact);
+        $contact = $this->contactToObject();
         $residency = \App\Residency::find($this->residency_id);
         return [
             'id' => $this->id,

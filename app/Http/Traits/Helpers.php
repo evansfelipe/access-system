@@ -1,14 +1,33 @@
 <?php
 namespace App\Http\Traits;
-
 use Illuminate\Http\Request;
-use App\{ Person, Company, Residency };
-
+use App\{ Person, Company, Residency, Card };
+/**
+ * A Trait that contains the most used helpers for setting and manipulating our models.
+ * Every method is static and does not save anything to the database.
+ */
 trait Helpers {
+
     /**
-     * Creates, assigns the data and saves to the database a new residency.
+     * Given a card and a request, transfers the data from the request to the card.
+     * The attributes from the request that don't match with a Card model are ignored.
      * 
-     * @return Integer $id: the id of the new residency.
+     * @return Void
+     */
+    public static function setCard(Card $card, Request $request)
+    {
+        $card->person_id = $request->person_id;
+        $card->risk      = $request->risk;
+        $card->active    = $request->active ?? true;
+        $card->from      = $request->from;
+        $card->until     = $request->until;
+    }
+
+    /**
+     * Given a residency and a request, transfers the data from the request to the residency.
+     * The attributes from the request that don't match with a Residency model are ignored.
+     * 
+     * @return Void
      */
     public static function setResidency(Residency $residency, Request $request)
     {
@@ -21,22 +40,30 @@ trait Helpers {
     }
 
     /**
-     * Given a Person and a Request, stores the new data sent on the request on the person attributes.
+     * Given a person and a request, transfers the data from the request to the person.
+     * The attributes from the request that don't match with a Person model are ignored.
      * 
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Person $person
+     * @return Void
      */
     public static function setPerson(Person $person, Request $request)
     {
-        // Assigns the basic person data
-        $person->last_name = $request->last_name;
-        $person->name = $request->name;
-        $person->document_type = $request->document_type;
+        // Assigns the basic columns
+        $person->name            = $request->name;
+        $person->last_name       = $request->last_name;
+        $person->document_type   = $request->document_type;
         $person->document_number = $request->document_number;
-        $person->cuil = $request->cuil;
-        $person->birthday = $request->birthday;
-        $person->sex = $request->sex;
-        $person->blood_type = $request->blood_type;
+        $person->sex             = $request->sex;
+        $person->pna             = $request->pna;
+        $person->cuil            = $request->cuil;
+        $person->birthday        = $request->birthday;
+        $person->blood_type      = $request->blood_type;
+        // Creates the json for the contact column.
+        $person->contact = json_encode([
+            'fax'          => $request->fax,
+            'email'        => $request->email,
+            'home_phone'   => $request->home_phone,
+            'mobile_phone' => $request->mobile_phone
+        ]);
         // If there is a picture, handles its storing
         if($request->hasFile('picture')) {
             // If we are updating a person, and the person has a picture name assigned, that means there already is a picture
@@ -54,13 +81,6 @@ trait Helpers {
             // Assigns the filename to the person data
             $person->picture_name = $filename;
         }
-        $person->pna = $request->pna;
-        $person->contact = json_encode([
-            'fax' => $request->fax,
-            'email' => $request->email,
-            'home_phone' => $request->home_phone,
-            'mobile_phone' => $request->mobile_phone
-        ]);
     }
 
     /**
@@ -79,7 +99,7 @@ trait Helpers {
         foreach($companies as $company) {
             array_push($companies_data, [
                 'value' => $company->id,
-                'text' => $company->name
+                'text'  => $company->name
             ]);
         }
         return $companies_data;
