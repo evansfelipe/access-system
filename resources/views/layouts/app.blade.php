@@ -114,9 +114,9 @@
                     @endforeach
                 @endif
         
-                @if(Session::has('message_errors'))
+                @if(Session::has('error_messages'))
                     <div class="alert alert-danger no-select" role="alert">
-                        @foreach (Session::get('message_errors') as $error)
+                        @foreach (Session::get('error_messages') as $error)
                             <div>{{ $error }}</div>
                         @endforeach
                     </div>

@@ -5,63 +5,38 @@
         <div class="col offset-lg-1 col-lg-10">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link no-select {{ $step == 0 ? 'active' : ($step <= 0 ? 'unrecheable' : '') }}" 
-                        @if($step > 0)
-                            href="{{ route('person-creation.personal-information.create') }}">
-                            <i class="fas fa-check-circle green-text"></i>
-                        @else
-                            >
-                            <i class="fas fa-user"></i>
-                        @endif
-                        Información personal
+                    <a class="nav-link no-select {{ $step == 0 ? 'active' : 'inactive' }}" 
+                    href="{{ route('person-creation.personal-information.create') }}">
+                    <i class="fas fa-user"></i>
+                    Información personal
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link no-select {{ $step == 1 ? 'active' : ($step <= 1 ? 'unrecheable' : '') }}"
-                        @if($step > 1)
-                            href="{{ route('person-creation.working-information.create') }}">
-                            <i class="fas fa-check-circle green-text"></i>
-                        @else
-                            >
-                            <i class="fas fa-briefcase"></i>
-                        @endif
-                        Información laboral
+                    <a class="nav-link no-select {{ $step == 1 ? 'active' : 'inactive' }}"
+                    href="{{ route('person-creation.working-information.create') }}">
+                    <i class="fas fa-briefcase"></i>
+                    Información laboral
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link no-select {{ $step == 2 ? 'active' : ($step <= 2 ? 'unrecheable' : '') }}"
-                        @if($step > 2)
-                            href="{{ route('person-creation.assign-vehicles.create') }}">
-                            <i class="fas fa-check-circle green-text"></i>
-                        @else
-                            >
-                            <i class="fas fa-car"></i> 
-                        @endif
-                        Vehículos
+                    <a class="nav-link no-select {{ $step == 2 ? 'active' : 'inactive' }}"
+                    href="{{ route('person-creation.assign-vehicles.create') }}">
+                    <i class="fas fa-car"></i> 
+                    Vehículos
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link no-select {{ $step == 3 ? 'active' : ($step <= 3 ? 'unrecheable' : '') }}"
-                        @if($step > 3)
-                            href="{{ route('person-creation.first-card.create') }}">
-                            <i class="fas fa-check-circle green-text"></i>
-                        @else
-                            >
-                            <i class="fas fa-id-card"></i>
-                        @endif
-                        Tarjeta
+                    <a class="nav-link no-select {{ $step == 3 ? 'active' : 'inactive' }}"
+                    href="{{ route('person-creation.first-card.create') }}">
+                    <i class="fas fa-id-card"></i>
+                    Tarjeta
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link no-select {{ $step == 4 ? 'active' : ($step <= 4 ? 'unrecheable' : '') }}"
-                        @if($step > 4)
-                            href="http://www.google.com">
-                            <i class="fas fa-check-circle green-text"></i>
-                        @else
-                            >
-                            <i class="fas fa-file-alt"></i>
-                        @endif
-                        Documentación
+                    <a class="nav-link no-select {{ $step == 4 ? 'active' : 'inactive' }}"
+                    href="{{ route('person-creation.documentation.create') }}">
+                    <i class="fas fa-file-alt"></i>
+                    Documentación
                     </a>
                 </li>
             </ul>
@@ -110,7 +85,7 @@
         border-bottom-color: white;
         cursor: auto;
         font-weight: bold;
-        color: black;
+        color: black  !important;
     }
 
     .nav-tabs > .nav-item > a.unrecheable {
@@ -128,12 +103,7 @@
         border-top-left-radius: 0;
     }
 
-    a {
-        color: black;
-    }
-
-    a.unrecheable {
-        cursor: not-allowed;
+    a.inactive {
         color: grey !important;
     }
 </style>

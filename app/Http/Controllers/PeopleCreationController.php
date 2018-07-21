@@ -16,47 +16,26 @@ class PeopleCreationController extends Controller
     use Helpers;
 
     /**
-     * Given a step name, removes from the Session the data of the subsequent steps.
-     */
-    private function forgetFollowingSteps($current_step)
-    {
-        switch($current_step) {
-            case 'personal_information':
-                Session::forget('new_person.working_information');
-                Session::forget('new_person.vehicles');
-                Session::forget('new_person.first_card');
-                break;
-            case 'working_information':
-                Session::forget('new_person.vehicles');
-                Session::forget('new_person.first_card');
-                break;
-            case 'vehicles':
-                Session::forget('new_person.first_card');
-                break;
-        }
-    }
-
-    /**
      * Given a step name, validates that all the previous required steps to this one has been done successfully.
      */
-    private function canPerformStep($step)
+    private function isStepCompleted($step)
     {
         $return = false;
         switch($step) {
             case 'personal-information':
-                $return = true;
+                $return = Session::has('new_person.personal_information') && Session::has('new_person.residency');
                 break;
             case 'working-information':
-                $return = $this->canPerformStep('personal-information') && Session::has('new_person.personal_information') && Session::has('new_person.residency');
+                $return = Session::has('new_person.working_information');
                 break;
             case 'assign-vehicles':
-                $return = $this->canPerformStep('working-information') && Session::has('new_person.working_information');
+                $return = Session::has('new_person.vehicles');
                 break;
             case 'first-card':
-                $return = $this->canPerformStep('assign-vehicles') && Session::has('new_person.vehicles');
+                $return = Session::has('new_person.first_card');
                 break;
             case 'documentation':
-                $return = $this->canPerformStep('first-card') && Session::has('new_person.first_card');
+                $return = Session::has('new_person.documentation');
                 break;
         }
         return $return;
@@ -129,10 +108,6 @@ class PeopleCreationController extends Controller
      */
     public function createWorkingInformation()
     {
-        // If the previous steps hasn't been completed successfully, then redirects the user to the previous step.
-        if(!$this->canPerformStep('working-information')) {
-            return redirect()->route('person-creation.personal-information.create');
-        }
         // Gets the current person's working information under creation. It can be null.
         $person = Session::get('new_person.personal_information');
         $people_companies = Session::get('new_person.working_information');
@@ -140,9 +115,7 @@ class PeopleCreationController extends Controller
         // show the working information of that person so the user can continue 
         // his work where he had left. Otherwise, the view will show empty inputs.
         return view('person-creation.working-information')->with('companies_data',   Helpers::companiesDataToKeyValue())
-                                                          ->with('people_companies', $people_companies)
-                                                          ->with('person_name',      $person->fullName());
-    }
+                                                          ->with('people_companies', $people_companies);    }
 
     /**
      * Store the new person's working information on the Session.
@@ -166,10 +139,6 @@ class PeopleCreationController extends Controller
      */
     public function createAssignVehicles()
     {
-        // If the previous steps hasn't been completed successfully, then redirects the user to the previous step.
-        if(!$this->canPerformStep('assign-vehicles')) {
-            return redirect()->route('person-creation.working-information.create');
-        }
         // Gets each vehicle stored on the system and those stored on the Session.
         $vehicles = Vehicle::all();
         $selectedVehicles = Session::get('new_person.vehicles') ?? [];
@@ -216,16 +185,14 @@ class PeopleCreationController extends Controller
      */
     public function createFirstCard()
     {
-        // If the previous steps hasn't been completed successfully, then redirects the user to the previous step.
-        if(!$this->canPerformStep('first-card')) {
-            return redirect()->route('person-creation.assign-vehicles.create');
-        }
         // Gets the data of the personal-information step. It's used to get the person's name.
         $person = Session::get('new_person.personal_information');
         // Gets the company associated with the working-information step. Its used to get the company's name.
         $company = Company::find(Session::get('new_person.working_information.company_id'));
-        return view('person-creation.first-card')->with('person_name', $person->fullName())
-                                                 ->with('company_name', $company->name);
+        $card = Session::get('new_person.first_card');
+        return view('person-creation.first-card')->with('card', $card)
+                                                 ->with('person_name', $person ? $person->fullName() : null)
+                                                 ->with('company_name', $company->name ?? null);
     }
 
     /**
@@ -249,10 +216,6 @@ class PeopleCreationController extends Controller
      */
     public function createDocumentation()
     {
-        // If the previous steps hasn't been completed successfully, then redirects the user to the previous step.
-        if(!$this->canPerformStep('documentation')) {
-            return redirect()->route('person-creation.first-card.create');
-        }
         return view('person-creation.documentation');
     }
 
@@ -276,6 +239,26 @@ class PeopleCreationController extends Controller
      */
     private function storeData()
     {
+        if(!$this->isStepCompleted('personal-information')){
+            Session::flash('error_messages',['Antes de finalizar debe completar este paso.']);
+            return redirect()->route('person-creation.personal-information.create');
+        }
+        if(!$this->isStepCompleted('working-information')){
+            Session::flash('error_messages',['Antes de finalizar debe completar este paso.']);
+            return redirect()->route('person-creation.working-information.create');
+        }
+        if(!$this->isStepCompleted('assign-vehicles')){
+            Session::flash('error_messages',['Antes de finalizar debe completar este paso.']);
+            return redirect()->route('person-creation.assign-vehicles.create');
+        }
+        if(!$this->isStepCompleted('first-card')){
+            Session::flash('error_messages',['Antes de finalizar debe completar este paso.']);
+            return redirect()->route('person-creation.first-card.create');
+        }
+        if(!$this->isStepCompleted('documentation')){
+            Session::flash('error_messages',['Antes de finalizar debe completar este paso.']);
+            return redirect()->route('person-creation.documentation.create');
+        }
         // Saves the person residency
         $residency = Session::get('new_person.residency');
         $residency->save();

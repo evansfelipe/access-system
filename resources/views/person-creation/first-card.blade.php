@@ -3,7 +3,7 @@
 @section('form')
     <div class="form-row d-flex align-items-center">
         <div class="offset-3 col-6 offset-lg-1 col-lg-4">
-            @input(['type' => 'text', 'name' => 'number', 'placeholder' => 'Ingrese el número de la tarjeta'])@endinput
+            @input(['type' => 'text', 'name' => 'number', 'placeholder' => 'Ingrese el número de la tarjeta', 'value' => $card->number ?? null])@endinput
             <br>
             <div class="active-card">
                 <div class="title">
@@ -12,9 +12,9 @@
                 <hr>
                 <div class="info">
                     <h3 id="display">xxxx-xxxx</h3>
-                    <small><b>{{ $person_name }}</b></small>
+                    <small><b>{{ $person_name ?? 'X' }}</b></small>
                     <br>
-                    <small><b>{{ $company_name }}</b></small>
+                    <small><b>{{ $company_name ?? 'X' }}</b></small>
                     <br>
                 </div>
             </div>
@@ -26,6 +26,7 @@
                         @select([
                             'name' => 'risk',
                             'placeholder' => 'Seleccione nivel de riesgo',
+                            'value' => $card->risk ?? null,
                             'options' => [
                                 ['value' => '1', 'text' => 'Nivel 1'],
                                 ['value' => '2', 'text' => 'Nivel 2']
@@ -39,11 +40,11 @@
                 @formitem(['label' => 'Validez'])
                     <div class="col-6">
                         <small>Desde:</small>
-                        @input(['type' => 'date', 'name' => 'from'])@endinput
+                        @input(['type' => 'date', 'name' => 'from', 'value' => $card->from ?? null])@endinput
                     </div>
                     <div class="col-6">
                         <small>Hasta:</small>
-                        @input(['type' => 'date', 'name' => 'until'])@endinput
+                        @input(['type' => 'date', 'name' => 'until', 'value' => $card->until ?? null])@endinput
                     </div>
                 @endformitem
             </div>
