@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Person extends Model
 {
+    protected $fillable = ['name', 'last_name', 'document_type', 'document_number', 'sex', 'pna', 'cuil', 'birthday', 'blood_type'];
 
     public const DNI = 0;
     public const PASSPORT = 1;
@@ -189,6 +190,16 @@ class Person extends Model
     public function getInactiveCards()
     {
         return $this->cards()->where('active','=',false)->orderBy('updated_at','desc')->get();
+    }
+
+    public function setContact(Array $request)
+    {
+        $this->contact = json_encode([
+            'fax'          => $request['fax'] ?? null,
+            'email'        => $request['email'] ?? null,
+            'home_phone'   => $request['home_phone'] ?? null,
+            'mobile_phone' => $request['mobile_phone'] ?? null
+        ]);
     }
 
     /**

@@ -39,6 +39,16 @@ trait Helpers {
         $residency->city      = $request->city;
     }
 
+    public static function setPersonContact(Person $person, Request $request)
+    {
+        $person->contact = json_encode([
+            'fax'          => $request->fax,
+            'email'        => $request->email,
+            'home_phone'   => $request->home_phone,
+            'mobile_phone' => $request->mobile_phone
+        ]);
+    }
+
     /**
      * Given a person and a request, transfers the data from the request to the person.
      * The attributes from the request that don't match with a Person model are ignored.
