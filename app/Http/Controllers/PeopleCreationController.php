@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 use Session;
 use Illuminate\Http\Request;
-use App\Http\Requests\SavePersonRequest;
+use App\Http\Requests\{ SavePersonRequest, SavePersonCompanyRequest, SavePersonVehicleRequest, SaveCardRequest };
 use App\Http\Traits\{ Helpers };
 use App\{ Person, Company, Vehicle, Residency, Card, PersonCompany, PersonVehicle };
 /**
@@ -89,11 +89,10 @@ class PeopleCreationController extends Controller
     public function storePersonalInformation(SavePersonRequest $request)
     {
         // Creates a new residency with the given data.
-        $residency = new Residency();
-        Helpers::setResidency($residency, $request);
+        $residency = new Residency($request->toArray());
         // Creates a new person with the given data.
-        $person = new Person();
-        Helpers::setPerson($person, $request);
+        $person = new Person($request->toArray());
+        $person->setContact($request->toArray());
         // Stores the residency and the person on the Session variable.
         Session::put('new_person.residency', $residency);
         Session::put('new_person.personal_information', $person);
@@ -120,10 +119,10 @@ class PeopleCreationController extends Controller
     /**
      * Store the new person's working information on the Session.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SavePersonCompanyRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function storeWorkingInformation(Request $request)
+    public function storeWorkingInformation(SavePersonCompanyRequest $request)
     {
         // Creates the association between the person and the selected company and stores it on the Session.
         $personCompany = new PersonCompany($request->toArray());
@@ -157,10 +156,10 @@ class PeopleCreationController extends Controller
     /**
      * Store the assignations of vehicles with the new person on Session.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SavePersonVehicleRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function storeAssignVehicles(Request $request)
+    public function storeAssignVehicles(SavePersonVehicleRequest $request)
     {
         // Creates an array for storing the vehicles assigned to the person on the Session.
         // If there are no vehicles assigned, the array will stay empty in memory.
@@ -198,13 +197,12 @@ class PeopleCreationController extends Controller
     /**
      * Store the first card of the new person on Session.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SaveCardRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function storeFirstCard(Request $request)
+    public function storeFirstCard(SaveCardRequest $request)
     {
-        $card = new Card();
-        Helpers::setCard($card, $request);
+        $card = new Card($request->toArray());
         Session::put('new_person.first_card', $card);
         return redirect()->route('person-creation.documentation.create');
     }

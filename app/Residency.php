@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Residency extends Model
 {
+    protected $fillable = ['street', 'apartment', 'cp', 'country', 'province', 'city'];
     /**
      * Array with the length of each string column of the database associated with this model.
      */

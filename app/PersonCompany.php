@@ -15,21 +15,20 @@ class PersonCompany extends Pivot
     public static function getValidationRules()
     {
         return [
-            'person_id' => [
-                //'required',
-                'exists:people,id'
-            ],
             'company_id' => [
                 'required',
+                'integer',
                 'exists:companies,id'
             ],
             'activity_id' => [
                 'required',
+                'integer',
                 'exists:activities,id'
             ],
             'art' => [
+                'required',
                 'string',
-                'max:'.CompanyPerson::LENGTHS['art']['max']
+                'max:'.PersonCompany::LENGTHS['art']['max']
             ],
             'pbip' => [
                 'nullable',
@@ -44,6 +43,4 @@ class PersonCompany extends Pivot
     {
         return $this->hasOne('App\Activity');
     }
-
-    
 }

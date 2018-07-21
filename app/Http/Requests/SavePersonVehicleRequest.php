@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Card;
 use Illuminate\Foundation\Http\FormRequest;
+use App\PersonVehicle;
+use Auth;
+use App\User;
 
-class SaveCardRequest extends FormRequest
+class SavePersonVehicleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +16,7 @@ class SaveCardRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return !Auth::guest() && (Auth::user()->type === User::ADMINISTRATION || Auth::user()->type === User::ROOT);;
     }
 
     /**
@@ -24,13 +26,6 @@ class SaveCardRequest extends FormRequest
      */
     public function rules()
     {
-        return Card::getValidationRules();
-    }
-
-    public function messages()
-    {
-        return [
-            'until.after_or_equal' => 'Está fecha debe ser posterior al campo Desde.'
-        ];
+        return PersonVehicle::getValidationRules();
     }
 }

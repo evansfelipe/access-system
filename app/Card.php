@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Card extends Model
 {
+    protected $fillable = ['number', 'risk', 'active', 'from', 'until'];
     /**
      * Creates and returns an array with the validation rules for each attribute that can be
      * entered through an input (or other html component) by the user 
@@ -13,7 +14,30 @@ class Card extends Model
     public static function getValidationRules()
     {
         return [
-            'person_id' => ['integer','exists:people,id']
+            'number' => [
+                'required',
+                'string',
+            ],
+            'person_id' => [
+                'integer',
+                'exists:people,id'
+            ],
+            'risk' => [
+                'required',
+                'integer',
+            ],
+            'from' => [
+                'required',
+                'date',
+                "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", 
+                'after_or_equal:'.date('Y-m-d'), 
+            ],
+            'until' => [
+                'required',
+                'date',
+                "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", 
+                'after_or_equal:from'
+            ],
         ];
     }
 
