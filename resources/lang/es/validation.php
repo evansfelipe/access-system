@@ -65,7 +65,7 @@ return [
         'array'   => 'Este campo debe contener al menos :min elementos.',
     ],
     'not_in'               => 'Este campo seleccionado es inválido.',
-    'not_regex'            => 'El formato dEste campo es inválido.',
+    'not_regex'            => 'El formato de este campo es inválido.',
 	'numeric'              => 'Este campo debe ser un número.',
     'present'              => 'Este campo debe estar presente.',
     'regex'                => 'El formato dEste campo es inválido.',

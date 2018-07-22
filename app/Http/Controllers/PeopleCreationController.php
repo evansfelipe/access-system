@@ -16,7 +16,7 @@ class PeopleCreationController extends Controller
     use Helpers;
 
     /**
-     * Given a step name, validates that all the previous required steps to this one has been done successfully.
+     * Validates that the data of a given step is stored on the Session.
      */
     private function isStepCompleted($step)
     {
@@ -138,6 +138,10 @@ class PeopleCreationController extends Controller
      */
     public function createAssignVehicles()
     {
+        if($this->isStepCompleted('working-information')) {
+            $company_id = Session::get('new_person.working_information')->company_id;
+            $company_name = Company::find($company_id)->name;
+        }
         // Gets each vehicle stored on the system and those stored on the Session.
         $vehicles = Vehicle::all();
         $selectedVehicles = Session::get('new_person.vehicles') ?? [];
@@ -150,7 +154,9 @@ class PeopleCreationController extends Controller
                                 }));
         }
         // Returns the view with the vehicles.
-        return view('person-creation.assign-vehicles')->with('vehicles', $vehicles);
+        return view('person-creation.assign-vehicles')->with('vehicles', $vehicles)
+                                                      ->with('company_id', $company_id ?? null)
+                                                      ->with('company_name', $company_name ?? null);
     }
 
     /**
@@ -190,8 +196,8 @@ class PeopleCreationController extends Controller
         $company = Company::find(Session::get('new_person.working_information.company_id'));
         $card = Session::get('new_person.first_card');
         return view('person-creation.first-card')->with('card', $card)
-                                                 ->with('person_name', $person ? $person->fullName() : null)
-                                                 ->with('company_name', $company->name ?? null);
+                                                 ->with('company_name', $company->name ?? null)
+                                                 ->with('person_name', $person ? $person->fullName() : null);
     }
 
     /**
@@ -208,7 +214,7 @@ class PeopleCreationController extends Controller
     }
 
     /**
-     * Show the form for upload the documentation of the new person.
+     * Show the form for upload the documentation of a new person.
      *
      * @return \Illuminate\Http\Response
      */

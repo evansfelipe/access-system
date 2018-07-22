@@ -17,7 +17,6 @@
             & > tr {
                 height: 30px;
             }
-
         }
         & > tbody {
             height: 45vh;
@@ -42,6 +41,18 @@
 
 <template>
     <div>
+        <div v-if="companyVehicles.length > 0" class="row text-center" style="margin-bottom: 10px">
+            <div class="col-6 offset-md-2 col-md-4">
+                <button type="button" class="btn btn-primary btn-block" @click="changeList('company')" id="companyButton">
+                    {{ this.companyname }} <span class="badge badge-light">{{ companyVehicles.length }}</span>
+                </button>
+            </div>
+            <div class="col-6 col-md-4">
+                <button type="button" class="btn btn-secondary btn-block" @click="changeList('others')" id="othersButton">
+                    Otros <span class="badge badge-light">{{ othersVehicles.length }}</span>
+                </button>
+            </div>
+        </div>
         <!-- Search bar -->
         <div class="row">
             <div class="col-12 offset-md-2 col-md-8">
@@ -72,12 +83,19 @@
                             <td>{{ vehicle.model  }}</td>
                             <td>{{ vehicle.year   }}</td>
                             <td>{{ vehicle.colour }}</td>
-                            <input v-if="vehicle.picked" :value="vehicle.id"
-                                   type="hidden" name="vehicles_id[]" 
-                            >
                         </tr>
                     </tbody>
                 </table>
+                <div v-for="(vehicle, key) in othersVehicles" :key="key">
+                    <input v-if="vehicle.picked" :value="vehicle.id"
+                            type="hidden" name="vehicles_id[]" 
+                    >
+                </div>
+                <div v-for="(vehicle, key) in companyVehicles" :key="key">
+                    <input v-if="vehicle.picked" :value="vehicle.id"
+                            type="hidden" name="vehicles_id[]" 
+                    >
+                </div>
             </div>
         </div>
     </div>
@@ -85,14 +103,47 @@
 
 <script>
 export default {
-    props: { vehicles: { required: true }},
+    props: { vehicles: { required: true }, companyid: { required: false }, companyname: { required: false }},
     data: function() {
         let parsed = JSON.parse(this.vehicles);
         return {
-            unfilteredVehiclesList: parsed,
-            vehiclesList: parsed,
+            unfilteredVehiclesList: [],
+            vehiclesList: [],
+            othersVehicles:  parsed.filter(vehicle => vehicle.company_id != this.companyid),
+            companyVehicles: parsed.filter(vehicle => vehicle.company_id == this.companyid),
             search: "",
         };
+    },
+    mounted() {
+        if(this.companyVehicles.length > 0) {
+            this.unfilteredVehiclesList = this.companyVehicles;
+            this.vehiclesList = this.companyVehicles;
+        }
+        else {
+            this.unfilteredVehiclesList = this.othersVehicles;
+            this.vehiclesList = this.othersVehicles;
+        }
+    },
+    methods: {
+        changeList: function(listName) {
+            let change = function(clicked, other) {
+                document.getElementById(clicked).classList.remove('btn-secondary');
+                document.getElementById(clicked).classList.add('btn-primary');
+
+                document.getElementById(other).classList.remove('btn-primary');
+                document.getElementById(other).classList.add('btn-secondary');
+            }
+            if(listName === 'company') {
+                change('companyButton', 'othersButton');
+                this.unfilteredVehiclesList = this.companyVehicles;
+            }
+            else {
+                change('othersButton', 'companyButton');
+                this.unfilteredVehiclesList = this.othersVehicles;
+            }
+            this.search = "";
+            this.vehiclesList = this.unfilteredVehiclesList;
+        }
     },
     watch: {
         search: function() {

@@ -48682,23 +48682,72 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: { vehicles: { required: true } },
+    props: { vehicles: { required: true }, companyid: { required: false }, companyname: { required: false } },
     data: function data() {
+        var _this = this;
+
         var parsed = JSON.parse(this.vehicles);
         return {
-            unfilteredVehiclesList: parsed,
-            vehiclesList: parsed,
+            unfilteredVehiclesList: [],
+            vehiclesList: [],
+            othersVehicles: parsed.filter(function (vehicle) {
+                return vehicle.company_id != _this.companyid;
+            }),
+            companyVehicles: parsed.filter(function (vehicle) {
+                return vehicle.company_id == _this.companyid;
+            }),
             search: ""
         };
     },
+    mounted: function mounted() {
+        if (this.companyVehicles.length > 0) {
+            this.unfilteredVehiclesList = this.companyVehicles;
+            this.vehiclesList = this.companyVehicles;
+        } else {
+            this.unfilteredVehiclesList = this.othersVehicles;
+            this.vehiclesList = this.othersVehicles;
+        }
+    },
+
+    methods: {
+        changeList: function changeList(listName) {
+            var change = function change(clicked, other) {
+                document.getElementById(clicked).classList.remove('btn-secondary');
+                document.getElementById(clicked).classList.add('btn-primary');
+
+                document.getElementById(other).classList.remove('btn-primary');
+                document.getElementById(other).classList.add('btn-secondary');
+            };
+            if (listName === 'company') {
+                change('companyButton', 'othersButton');
+                this.unfilteredVehiclesList = this.companyVehicles;
+            } else {
+                change('othersButton', 'companyButton');
+                this.unfilteredVehiclesList = this.othersVehicles;
+            }
+            this.search = "";
+            this.vehiclesList = this.unfilteredVehiclesList;
+        }
+    },
     watch: {
         search: function search() {
-            var _this = this;
+            var _this2 = this;
 
             this.vehiclesList = this.unfilteredVehiclesList.filter(function (vehicle) {
-                return vehicle.plate.toUpperCase().includes(_this.search.toUpperCase()) || vehicle.brand.toUpperCase().includes(_this.search.toUpperCase()) || vehicle.model.toUpperCase().includes(_this.search.toUpperCase()) || vehicle.year.toString().includes(_this.search.toUpperCase()) || vehicle.colour.toUpperCase().includes(_this.search.toUpperCase());
+                return vehicle.plate.toUpperCase().includes(_this2.search.toUpperCase()) || vehicle.brand.toUpperCase().includes(_this2.search.toUpperCase()) || vehicle.model.toUpperCase().includes(_this2.search.toUpperCase()) || vehicle.year.toString().includes(_this2.search.toUpperCase()) || vehicle.colour.toUpperCase().includes(_this2.search.toUpperCase());
             });
         }
     }
@@ -48713,6 +48762,59 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _vm.companyVehicles.length > 0
+      ? _c(
+          "div",
+          {
+            staticClass: "row text-center",
+            staticStyle: { "margin-bottom": "10px" }
+          },
+          [
+            _c("div", { staticClass: "col-6 offset-md-2 col-md-4" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary btn-block",
+                  attrs: { type: "button", id: "companyButton" },
+                  on: {
+                    click: function($event) {
+                      _vm.changeList("company")
+                    }
+                  }
+                },
+                [
+                  _vm._v("\n                " + _vm._s(this.companyname) + " "),
+                  _c("span", { staticClass: "badge badge-light" }, [
+                    _vm._v(_vm._s(_vm.companyVehicles.length))
+                  ])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-6 col-md-4" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary btn-block",
+                  attrs: { type: "button", id: "othersButton" },
+                  on: {
+                    click: function($event) {
+                      _vm.changeList("others")
+                    }
+                  }
+                },
+                [
+                  _vm._v("\n                Otros "),
+                  _c("span", { staticClass: "badge badge-light" }, [
+                    _vm._v(_vm._s(_vm.othersVehicles.length))
+                  ])
+                ]
+              )
+            ])
+          ]
+        )
+      : _vm._e(),
+    _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12 offset-md-2 col-md-8" }, [
         _c("input", {
@@ -48742,47 +48844,67 @@ var render = function() {
     _c("hr"),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12" }, [
-        _c("table", [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.vehiclesList, function(vehicle, key) {
-              return _c(
-                "tr",
-                {
-                  key: key,
-                  class: vehicle.picked ? "vehicle-picked" : "",
-                  on: {
-                    click: function($event) {
-                      vehicle.picked = !vehicle.picked
+      _c(
+        "div",
+        { staticClass: "col-12" },
+        [
+          _c("table", [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.vehiclesList, function(vehicle, key) {
+                return _c(
+                  "tr",
+                  {
+                    key: key,
+                    class: vehicle.picked ? "vehicle-picked" : "",
+                    on: {
+                      click: function($event) {
+                        vehicle.picked = !vehicle.picked
+                      }
                     }
-                  }
-                },
-                [
-                  _c("td", [_vm._v(_vm._s(vehicle.plate))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(vehicle.brand))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(vehicle.model))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(vehicle.year))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(vehicle.colour))]),
-                  _vm._v(" "),
-                  vehicle.picked
-                    ? _c("input", {
-                        attrs: { name: "vehicles_id[]", type: "hidden" },
-                        domProps: { value: vehicle.id }
-                      })
-                    : _vm._e()
-                ]
-              )
-            })
-          )
-        ])
-      ])
+                  },
+                  [
+                    _c("td", [_vm._v(_vm._s(vehicle.plate))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(vehicle.brand))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(vehicle.model))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(vehicle.year))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(vehicle.colour))])
+                  ]
+                )
+              })
+            )
+          ]),
+          _vm._v(" "),
+          _vm._l(_vm.othersVehicles, function(vehicle, key) {
+            return _c("div", { key: key }, [
+              vehicle.picked
+                ? _c("input", {
+                    attrs: { type: "hidden", name: "vehicles_id[]" },
+                    domProps: { value: vehicle.id }
+                  })
+                : _vm._e()
+            ])
+          }),
+          _vm._v(" "),
+          _vm._l(_vm.companyVehicles, function(vehicle, key) {
+            return _c("div", { key: key }, [
+              vehicle.picked
+                ? _c("input", {
+                    attrs: { type: "hidden", name: "vehicles_id[]" },
+                    domProps: { value: vehicle.id }
+                  })
+                : _vm._e()
+            ])
+          })
+        ],
+        2
+      )
     ])
   ])
 }
