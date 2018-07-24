@@ -17,44 +17,42 @@
         border-top-right-radius: 0;
         border-top-left-radius: 0;
     }
-
-    div.loading-panel {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: fixed;
-        top: 0; left: 0; bottom: 0; right: 0;
-        background-color: rgba(80,80,80,.75);
-        color: black;
-        z-index: 2;
-    }
 </style>
 
 <template>
     <div>
-        <div v-if="saving" class="loading-panel text-center">
-            <i class="fas fa-spinner fa-pulse fa-4x"></i>
-        </div>
         <!-- Tabs -->
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a :class="'nav-link ' + (active_tab === 0 ? 'active' : ' ')" @click="active_tab = 0">
-                    <i class="fas fa-user"></i> Información personal
+                    <i v-if="step_data.personal_information.saved === null" class="fas fa-user"></i>
+                    <i v-if="step_data.personal_information.saved === true" class="far fa-check-circle text-success"></i>
+                    <i v-if="step_data.personal_information.saved === false" class="far fa-times-circle text-danger"></i>
+                    Información personal
                 </a>
             </li>
             <li class="nav-item">
                 <a :class="'nav-link ' + (active_tab === 1 ? 'active' : '')" @click="active_tab = 1">
-                    <i class="fas fa-briefcase"></i> Información laboral
+                    <i v-if="step_data.working_information.saved === null" class="fas fa-briefcase"></i>
+                    <i v-if="step_data.working_information.saved === true" class="far fa-check-circle text-success"></i>
+                    <i v-if="step_data.working_information.saved === false" class="far fa-times-circle text-danger"></i>
+                    Información laboral
                 </a>
             </li>
             <li class="nav-item">
                 <a :class="'nav-link ' + (active_tab === 2 ? 'active' : '')" @click="active_tab = 2">
-                    <i class="fas fa-car"></i> Vehículos
+                    <i v-if="step_data.assign_vehicles.saved === null" class="fas fa-car"></i>
+                    <i v-if="step_data.assign_vehicles.saved === true" class="far fa-check-circle text-success"></i>
+                    <i v-if="step_data.assign_vehicles.saved === false" class="far fa-times-circle text-danger"></i>
+                    Vehículos
                 </a>
             </li>
             <li class="nav-item">
                 <a :class="'nav-link ' + (active_tab === 3 ? 'active' : '')" @click="active_tab = 3">
-                    <i class="fas fa-id-card"></i> Tarjeta
+                    <i v-if="step_data.first_card.saved === null" class="fas fa-id-card"></i>
+                    <i v-if="step_data.first_card.saved === true" class="far fa-check-circle text-success"></i>
+                    <i v-if="step_data.first_card.saved === false" class="far fa-times-circle text-danger"></i>
+                    Tarjeta
                 </a>
             </li>
             <li class="nav-item">
@@ -65,6 +63,8 @@
         </ul>
         <!-- Content -->
         <div class="card card-default">
+            <loading v-if="saving"/>
+
             <div class="card-body">
                 <!-- Personal information form -->
                 <pc-personal-information ref="personal_information" :class="active_tab === 0 ? '' : 'd-none'">
@@ -77,7 +77,7 @@
                 <!-- Assign vehicles form -->
                 <pc-assign-vehicles ref="assign_vehicles" :class="active_tab === 2 ? '' : 'd-none'"
                                     :vehicles="vehicles_list"
-                                    :companyid="shared_information.company_id"
+                                    :companyid="parseInt(shared_information.company_id)"
                                     :companyname="company_name">
                 </pc-assign-vehicles>
                 <!-- First card form -->
@@ -120,17 +120,23 @@
                     person_name: '',
                     company_id: '',
                 },
-                step_saving: {
-                    personal_information: false,
-                    working_information: false,
-                    assign_vehicles: false,
-                    first_card: false,
-                },
-                step_results: {
-                    personal_information: false,
-                    working_information: false,
-                    assign_vehicles: false,
-                    first_card: false,
+                step_data: {
+                    personal_information: {
+                        saved:     null,
+                        is_saving: false,
+                    },
+                    working_information: {
+                        saved:     null,
+                        is_saving: false,
+                    },
+                    assign_vehicles: {
+                        saved:     null,
+                        is_saving: false,
+                    },
+                    first_card: {
+                        saved:     null,
+                        is_saving: false,
+                    }
                 }
             };
         },
@@ -141,34 +147,51 @@
             this.$on('last-name-changed',  val => this.shared_information.person_last_name = val);
             // Listening each step save's result
             this.$on('personal-information-saved', val => {
-                this.step_results.personal_information = val;
-                this.step_saving.personal_information = false;
+                this.step_data.personal_information.is_saving = false;
+                this.step_data.personal_information.saved = val;
+                if(val) {
+                    this.step_data.working_information.is_saving = true;
+                    this.$refs.working_information.save();
+                }
+                else{
+                    this.active_tab = 0;
+                }
             });
             this.$on('working-information-saved', val => {
-                this.step_results.working_information = val;
-                this.step_saving.working_information = false;
+                this.step_data.working_information.is_saving = false;
+                this.step_data.working_information.saved = val;
+                if(val) {
+                    this.step_data.assign_vehicles.is_saving = true;
+                    this.$refs.assign_vehicles.save();
+                }
+                else{
+                    this.active_tab = 1;
+                }
             });
             this.$on('assign-vehicles-saved', val => {
-                this.step_results.assign_vehicles = val;
-                this.step_saving.assign_vehicles = false;
+                this.step_data.assign_vehicles.is_saving = false;
+                this.step_data.assign_vehicles.saved = val;
+                if(val) {
+                    this.step_data.first_card.is_saving = true;
+                    this.$refs.first_card.save();
+                }
+                else{
+                    this.active_tab = 2;
+                }
             });
             this.$on('first-card-saved', val => {
-                this.step_results.first_card = val;
-                this.step_saving.first_card = false;
+                this.step_data.first_card.is_saving = false;
+                this.step_data.first_card.saved = val;
+                if(!val) {
+                    this.active_tab = 3;
+                }
             });
         },
         methods: {
             save: function() {
                 window.scrollTo(0,0);
-                this.step_saving.personal_information = true;
-                this.step_saving.working_information = true;
-                this.step_saving.assign_vehicles = true;
-                this.step_saving.first_card = true;
-
+                this.step_data.personal_information.is_saving = true;
                 this.$refs.personal_information.save();
-                this.$refs.working_information.save();
-                this.$refs.assign_vehicles.save();
-                this.$refs.first_card.save();
             }
         },
         computed: {
@@ -179,13 +202,25 @@
                 return this.shared_information.company_id ? this.companies_list.filter(company => company.id == this.shared_information.company_id)[0].name : 'x';
             },
             saving: function() {
-                return this.step_saving.personal_information && this.step_saving.working_information && this.step_saving.assign_vehicles && this.step_saving.first_card;
+                return this.step_data.personal_information.is_saving || this.step_data.working_information.is_saving || this.step_data.assign_vehicles.is_saving || this.step_data.first_card.is_saving;
             },
-            store_completed: function() {
-                return this.step_results.personal_information && this.step_results.working_information && this.step_results.assign_vehicles && this.step_results.first_card;
-            }      
+            saved: function() {
+                return this.step_data.personal_information.saved && this.step_data.working_information.saved && this.step_data.assign_vehicles.saved && this.step_data.first_card.saved;
+            }
         },        
         watch: {
+            saved: function() {
+                if(this.saved) {
+                    console.log("Saved");
+                    axios.get('/person-creation/store')
+                        .then(response => {
+                            window.location.href = response.data;
+                        })
+                        .catch(response => {
+                            console.log(response);
+                        })
+                }
+            }
         }
     }
 </script>

@@ -30,8 +30,8 @@
                     <div class="col-5">
                         <select name="document_type" class="form-control" v-model="values.document_type">
                             <option value="" hidden>Tipo</option>
-                            <option value="1">DNI</option>
-                            <option value="2">Pasaporte</option>
+                            <option value="0">DNI</option>
+                            <option value="1">Pasaporte</option>
                         </select>
                     </div>
                     <div class="col-7">
@@ -68,14 +68,14 @@
                     <div class="col">
                         <select name="blood_type" class="form-control" v-model="values.blood_type">
                             <option value="" hidden>Grupo y factor</option>
-                            <option value="0">0-</option>
-                            <option value="0">0+</option>
-                            <option value="A">A-</option>
-                            <option value="A">A+</option>
-                            <option value="B">B-</option>
-                            <option value="B">B+</option>
-                            <option value="AB">AB-</option>
-                            <option value="AB">AB+</option>
+                            <option value="0-">0-</option>
+                            <option value="0+">0+</option>
+                            <option value="A-">A-</option>
+                            <option value="A+">A+</option>
+                            <option value="B-">B-</option>
+                            <option value="B+">B+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="AB+">AB+</option>
                         </select>
                     </div>
                 </form-item>

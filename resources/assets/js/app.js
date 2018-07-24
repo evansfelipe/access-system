@@ -26,6 +26,8 @@ Vue.component('pc-assign-vehicles', require('./components/person-creation/Assign
 Vue.component('pc-first-card', require('./components/person-creation/FirstCard.vue'));
 
 Vue.component('form-item', require('./components/forms/Item.vue'));
+Vue.component('loading', require('./components/Loading.vue'));
+Vue.component('abbreviation-text', require('./components/AbbreviationText.vue'));
 
 
 const app = new Vue({

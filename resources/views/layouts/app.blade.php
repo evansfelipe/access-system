@@ -36,8 +36,23 @@
                                         supported by Chrome and Opera */
         }
 
+        body > * {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Firefox */
+                -ms-user-select: none; /* Internet Explorer/Edge */
+                    user-select: none; /* Non-prefixed version, currently
+                                        supported by Chrome and Opera */
+        }
+
         .btn-circle {
             border-radius:100%;
+        }
+
+        .btn-unique {
+            color: white;
+            background-color: #3F729B;
         }
 
         .btn-outline-unique {
@@ -51,10 +66,39 @@
             color: white;
         }
 
+        .btn-outline-unique.btn-static {
+            border-color: #3F729B;
+            color: #3F729B;
+            background-color: transparent;
+        }
+
+        /* width */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: white; 
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 2px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+
     </style>
 </head>
 <body>
     <div id="app">
+        
+
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -129,7 +173,6 @@
                         @endforeach
                     </div>
                 @endif
-
                 @yield('content')
             </div>
         </main>

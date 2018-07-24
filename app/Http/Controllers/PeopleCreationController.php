@@ -144,8 +144,7 @@ class PeopleCreationController extends Controller
     {
         // dd($request);
         // return $this->storeData();
-        return response('Documentation stored successfully', 200)
-               ->header('Content-Type', 'text/plain');
+        return response('Documentation stored successfully', 200)->header('Content-Type', 'text/plain');
     }
 
     /**
@@ -198,10 +197,6 @@ class PeopleCreationController extends Controller
         // Forgets the person creation data stored on the Session.
         Session::forget('new_person');
         \Debugbar::info(Session::has('new_person'));
-        // Adds the flash message
-        // Session::flash('success_messages', ['La creación de la persona ha sido exitosa']);
-        // Redirects the user to the just created person's profile
-        // return redirect()->route('people.show', $person->id);
-        return response('Store success', 200)->header('Content-Type', 'text/plain');
+        return response(route('people.show', $person->id), 200)->header('Content-Type', 'text/plain');
     }
 }
