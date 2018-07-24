@@ -22,6 +22,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::middleware(['auth','administration'])->group(function() {
     // Routes for creating a new person from scratch.
     Route::prefix('/person-creation')->name('person-creation.')->group(function() {
+
+        Route::get('/', 'PeopleCreationController@index')->name('index');
+
         // Person's personal information
         Route::get( '/personal-information', 'PeopleCreationController@createPersonalInformation')->name('personal-information.create');
         Route::post('/personal-information', 'PeopleCreationController@storePersonalInformation')->name('personal-information.store');
@@ -39,6 +42,8 @@ Route::middleware(['auth','administration'])->group(function() {
         Route::post('/documentation',        'PeopleCreationController@storeDocumentation')->name('documentation.store');
         // Cancel the person creation
         Route::get( '/cancel',               'PeopleCreationController@cancel')->name('cancel');
+
+        Route::get( '/store',               'PeopleCreationController@storePerson')->name('store');
     });
 
     Route::resource('/people', 'PeopleController', ['except' => ['create', 'store']]);

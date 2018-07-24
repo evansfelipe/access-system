@@ -18,7 +18,7 @@ class CreateCardsTable extends Migration
             $table->string('number')->required();
             $table->integer('person_id')->unsigned()->required();
             $table->integer('risk')->unsigned()->required();
-            $table->boolean('active')->required();
+            $table->boolean('active')->required()->default(true);
             $table->datetime('from')->required();
             $table->datetime('until')->required();
             $table->timestamps();

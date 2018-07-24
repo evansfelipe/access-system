@@ -4,7 +4,7 @@ use Session;
 use Illuminate\Http\Request;
 use App\Http\Requests\{ SavePersonRequest, SavePersonCompanyRequest, SavePersonVehicleRequest, SaveCardRequest };
 use App\Http\Traits\{ Helpers };
-use App\{ Person, Company, Vehicle, Residency, Card, PersonCompany, PersonVehicle };
+use App\{ Person, Company, Vehicle, Residency, Card, PersonCompany, PersonVehicle, Activity };
 /**
  * Controller that handles the different steps of a person creation. It validates that 
  * a step can be performed and redirects the user if not. Also, its the responsible to
@@ -35,7 +35,8 @@ class PeopleCreationController extends Controller
                 $return = Session::has('new_person.first_card');
                 break;
             case 'documentation':
-                $return = Session::has('new_person.documentation');
+                // $return = Session::has('new_person.documentation');
+                $return = true;
                 break;
         }
         return $return;
@@ -54,30 +55,13 @@ class PeopleCreationController extends Controller
         return redirect()->route('home');
     }
 
-    /**
-     * Show the form for adding the new person's personal information.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createPersonalInformation()
+    public function index()
     {
-        // Gets the current person's personal information under creation. It can be null.
-        if($person = Session::get('new_person.personal_information')) {
-            // Decodes the contact Json and stores that data on some person's attributes.
-            $contact              = $person->contactToObject();
-            $person->fax          = $contact->fax;
-            $person->email        = $contact->email;
-            $person->home_phone   = $contact->home_phone;
-            $person->mobile_phone = $contact->mobile_phone;
-            // If there is a residency on the Session, stores it on the person object.
-            if($residency = Session::get('new_person.residency')) {
-                $person->residency = $residency;
-            }
-        }
-        // If there is one person under creation, then the view will 
-        // show the personal information of that person so the user can continue 
-        // his work where he had left. Otherwise, the view will show empty inputs.
-        return view('person-creation.personal-information')->with('person', $person);
+        $vehicles = Vehicle::all();
+        foreach($vehicles as $vehicle) { $vehicle->picked = false; }
+        return view('person-creation.index')->with('companies', Company::all(['id','name'])->toJson())
+                                            ->with('activities', Activity::all(['id','name'])->toJson())
+                                            ->with('vehicles', $vehicles);
     }
 
     /**
@@ -96,25 +80,8 @@ class PeopleCreationController extends Controller
         // Stores the residency and the person on the Session variable.
         Session::put('new_person.residency', $residency);
         Session::put('new_person.personal_information', $person);
-        // Redirects to the next step.
-        return redirect()->route('person-creation.working-information.create', $person->id);
+        return response('Personal Information stored successfully', 200)->header('Content-Type', 'text/plain');
     }
-
-    /**
-     * Show the form for adding the new person's working information.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createWorkingInformation()
-    {
-        // Gets the current person's working information under creation. It can be null.
-        $person = Session::get('new_person.personal_information');
-        $people_companies = Session::get('new_person.working_information');
-        // If there is one person under creation, then the view will 
-        // show the working information of that person so the user can continue 
-        // his work where he had left. Otherwise, the view will show empty inputs.
-        return view('person-creation.working-information')->with('companies_data',   Helpers::companiesDataToKeyValue())
-                                                          ->with('people_companies', $people_companies);    }
 
     /**
      * Store the new person's working information on the Session.
@@ -124,39 +91,11 @@ class PeopleCreationController extends Controller
      */
     public function storeWorkingInformation(SavePersonCompanyRequest $request)
     {
+        \Debugbar::info($request);
         // Creates the association between the person and the selected company and stores it on the Session.
         $personCompany = new PersonCompany($request->toArray());
         Session::put('new_person.working_information', $personCompany);
-        // Redirects to the next step.
-        return redirect()->route('person-creation.assign-vehicles.create');
-    }
-
-    /**
-     * Show the form for assigning vehicles to the new person.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createAssignVehicles()
-    {
-        if($this->isStepCompleted('working-information')) {
-            $company_id = Session::get('new_person.working_information')->company_id;
-            $company_name = Company::find($company_id)->name;
-        }
-        // Gets each vehicle stored on the system and those stored on the Session.
-        $vehicles = Vehicle::all();
-        $selectedVehicles = Session::get('new_person.vehicles') ?? [];
-        // If a vehicle is already inside the Session data, then adds the picked attribute
-        // as true. Otherwise, adds the picked attribute as false. Both (true and false) are 
-        // saved because the picked attribute is required on Vue.js for the conditional rendering.
-        foreach($vehicles as $vehicle) {
-            $vehicle->picked = !empty(array_filter($selectedVehicles, function ($selected) use ($vehicle) {
-                                    return $vehicle->id == $selected->vehicle_id;
-                                }));
-        }
-        // Returns the view with the vehicles.
-        return view('person-creation.assign-vehicles')->with('vehicles', $vehicles)
-                                                      ->with('company_id', $company_id ?? null)
-                                                      ->with('company_name', $company_name ?? null);
+        return response('Personal Working stored successfully', 200)->header('Content-Type', 'text/plain');
     }
 
     /**
@@ -179,25 +118,7 @@ class PeopleCreationController extends Controller
         }
         // Stores the array on the Session.
         Session::put('new_person.vehicles', $vehicles);
-        // Redirects to the next step.
-        return redirect()->route('person-creation.first-card.create');
-    }
-    
-    /**
-     * Show the form for assigning the fist card to the new person.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createFirstCard()
-    {
-        // Gets the data of the personal-information step. It's used to get the person's name.
-        $person = Session::get('new_person.personal_information');
-        // Gets the company associated with the working-information step. Its used to get the company's name.
-        $company = Company::find(Session::get('new_person.working_information.company_id'));
-        $card = Session::get('new_person.first_card');
-        return view('person-creation.first-card')->with('card', $card)
-                                                 ->with('company_name', $company->name ?? null)
-                                                 ->with('person_name', $person ? $person->fullName() : null);
+        return response('Assign Vehicles stored successfully', 200)->header('Content-Type', 'text/plain');
     }
 
     /**
@@ -210,17 +131,7 @@ class PeopleCreationController extends Controller
     {
         $card = new Card($request->toArray());
         Session::put('new_person.first_card', $card);
-        return redirect()->route('person-creation.documentation.create');
-    }
-
-    /**
-     * Show the form for upload the documentation of a new person.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createDocumentation()
-    {
-        return view('person-creation.documentation');
+        return response('First Card stored successfully', 200)->header('Content-Type', 'text/plain');
     }
 
     /**
@@ -232,7 +143,9 @@ class PeopleCreationController extends Controller
     public function storeDocumentation(Request $request)
     {
         // dd($request);
-        return $this->storeData();
+        // return $this->storeData();
+        return response('Documentation stored successfully', 200)
+               ->header('Content-Type', 'text/plain');
     }
 
     /**
@@ -241,27 +154,22 @@ class PeopleCreationController extends Controller
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function storeData()
+    public function storePerson()
     {
         if(!$this->isStepCompleted('personal-information')){
-            Session::flash('error_messages',['Antes de finalizar debe completar este paso.']);
-            return redirect()->route('person-creation.personal-information.create');
+            return response('Fail when storing', 422)->header('Content-Type', 'text/plain');
         }
         if(!$this->isStepCompleted('working-information')){
-            Session::flash('error_messages',['Antes de finalizar debe completar este paso.']);
-            return redirect()->route('person-creation.working-information.create');
+            return response('Fail when storing', 422)->header('Content-Type', 'text/plain');
         }
         if(!$this->isStepCompleted('assign-vehicles')){
-            Session::flash('error_messages',['Antes de finalizar debe completar este paso.']);
-            return redirect()->route('person-creation.assign-vehicles.create');
+            return response('Fail when storing', 422)->header('Content-Type', 'text/plain');
         }
         if(!$this->isStepCompleted('first-card')){
-            Session::flash('error_messages',['Antes de finalizar debe completar este paso.']);
-            return redirect()->route('person-creation.first-card.create');
+            return response('Fail when storing', 422)->header('Content-Type', 'text/plain');
         }
         if(!$this->isStepCompleted('documentation')){
-            Session::flash('error_messages',['Antes de finalizar debe completar este paso.']);
-            return redirect()->route('person-creation.documentation.create');
+            return response('Fail when storing', 422)->header('Content-Type', 'text/plain');
         }
         // Saves the person residency
         $residency = Session::get('new_person.residency');
@@ -289,9 +197,11 @@ class PeopleCreationController extends Controller
          */
         // Forgets the person creation data stored on the Session.
         Session::forget('new_person');
+        \Debugbar::info(Session::has('new_person'));
         // Adds the flash message
-        Session::flash('success_messages', ['La creación de la persona ha sido exitosa']);
+        // Session::flash('success_messages', ['La creación de la persona ha sido exitosa']);
         // Redirects the user to the just created person's profile
-        return redirect()->route('people.show', $person->id);
+        // return redirect()->route('people.show', $person->id);
+        return response('Store success', 200)->header('Content-Type', 'text/plain');
     }
 }
