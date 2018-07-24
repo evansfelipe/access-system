@@ -92,7 +92,7 @@ export default {
         save: function() {
             axios.post('person-creation/working-information', this.values)
             .then(response => {
-                console.log('Working Information:', response);
+                this.errors = {};
                 this.$parent.$emit('working-information-saved', true);
             })
             .catch(error => {

@@ -1,21 +1,15 @@
-<style scoped>
-    .nav-tabs > .nav-item {
+<style lang="scss" scoped>
+    ul.nav-tabs > .nav-item {
         cursor: pointer;
-    }
-
-    .nav-tabs > .nav-item > a.active {
-        background-color: white;
-        border-bottom-color: white;
-        cursor: auto;
-        color: black  !important;
-    }
-
-    a.inactive {
-        color: grey !important;
-    }
-
-    .nav-item + .nav-item {
-        margin-left: 1px;
+        & + & { margin-left: 1px }
+        & > a {
+            color: grey;
+            &.active {
+                color: black;
+                background-color: white;
+                border-bottom-color: white;
+            }
+        }
     }
 
     .card {
@@ -24,88 +18,86 @@
         border-top-left-radius: 0;
     }
 
-    table {
-        width: 100%;
-    }
-
-    .strong {
-        font-weight: bold;
+    div.loading-panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 0; left: 0; bottom: 0; right: 0;
+        background-color: rgba(80,80,80,.75);
+        color: black;
+        z-index: 2;
     }
 </style>
 
 <template>
     <div>
+        <div v-if="saving" class="loading-panel text-center">
+            <i class="fas fa-spinner fa-pulse fa-4x"></i>
+        </div>
         <!-- Tabs -->
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a :class="'nav-link ' + (tab_number === 0 ? 'active' : 'inactive')" @click="changeTab(0)">
-                    <i class="fas fa-user"></i>
-                    Información personal
+                <a :class="'nav-link ' + (active_tab === 0 ? 'active' : ' ')" @click="active_tab = 0">
+                    <i class="fas fa-user"></i> Información personal
                 </a>
             </li>
             <li class="nav-item">
-                <a :class="'nav-link ' + (tab_number === 1 ? 'active' : 'inactive')" @click="changeTab(1)">
-                    <i class="fas fa-briefcase"></i>
-                    Información laboral
+                <a :class="'nav-link ' + (active_tab === 1 ? 'active' : '')" @click="active_tab = 1">
+                    <i class="fas fa-briefcase"></i> Información laboral
                 </a>
             </li>
             <li class="nav-item">
-                <a :class="'nav-link ' + (tab_number === 2 ? 'active' : 'inactive')" @click="changeTab(2)">
-                    <i class="fas fa-car"></i> 
-                    Vehículos
+                <a :class="'nav-link ' + (active_tab === 2 ? 'active' : '')" @click="active_tab = 2">
+                    <i class="fas fa-car"></i> Vehículos
                 </a>
             </li>
             <li class="nav-item">
-                <a :class="'nav-link ' + (tab_number === 3 ? 'active' : 'inactive')" @click="changeTab(3)">
-                    <i class="fas fa-id-card"></i>
-                    Tarjeta
+                <a :class="'nav-link ' + (active_tab === 3 ? 'active' : '')" @click="active_tab = 3">
+                    <i class="fas fa-id-card"></i> Tarjeta
                 </a>
             </li>
             <li class="nav-item">
-                <a :class="'nav-link ' + (tab_number === 4 ? 'active' : 'inactive')" @click="changeTab(4)">
-                    <i class="fas fa-file-alt"></i>
-                    Documentación
+                <a :class="'nav-link ' + (active_tab === 4 ? 'active' : '')" @click="active_tab = 4">
+                    <i class="fas fa-file-alt"></i> Documentación
                 </a>
             </li>
         </ul>
         <!-- Content -->
         <div class="card card-default">
             <div class="card-body">
-                <!-- Content for the tab number 0 -->
-                <div :class="tab_number === 0 ? '' : 'd-none'">
-                    <pc-personal-information ref="personal_information"></pc-personal-information>
-                </div>
-                <!-- Content for the tab number 1 -->
-                <div :class="tab_number === 1 ? '' : 'd-none'">
-                    <pc-working-information ref="working_information"
-                                            :companies="companiesList"
-                                            :activities="activitiesList"
-                                            >
-                    </pc-working-information>
-                </div>
-                <!-- Content for the tab number 2 -->
-                <div :class="tab_number === 2 ? '' : 'd-none'">
-                    <pc-assign-vehicles ref="assign_vehicles"
-                                        :vehicles="vehiclesList"
-                                        :companyid="company_id"
-                                        :companyname="company_name">
-                    </pc-assign-vehicles>
-                </div>
-                <!-- Content for the tab number 3 -->
-                <div :class="tab_number === 3 ? '' : 'd-none'">
-                    <pc-first-card  ref="first_card"
-                                    :fullname="full_name"
+                <!-- Personal information form -->
+                <pc-personal-information ref="personal_information" :class="active_tab === 0 ? '' : 'd-none'">
+                </pc-personal-information>
+                <!-- Working information form -->
+                <pc-working-information ref="working_information" :class="active_tab === 1 ? '' : 'd-none'"
+                                        :companies="companies_list"
+                                        :activities="activities_list">
+                </pc-working-information>
+                <!-- Assign vehicles form -->
+                <pc-assign-vehicles ref="assign_vehicles" :class="active_tab === 2 ? '' : 'd-none'"
+                                    :vehicles="vehicles_list"
+                                    :companyid="shared_information.company_id"
                                     :companyname="company_name">
-                    </pc-first-card>
-                </div>
-                <!-- Content for the tab number 4 -->
-                <div :class="tab_number === 4 ? '' : 'd-none'">
+                </pc-assign-vehicles>
+                <!-- First card form -->
+                <pc-first-card  ref="first_card" :class="active_tab === 3 ? '' : 'd-none'"
+                                :fullname="full_name"
+                                :companyname="company_name">
+                </pc-first-card>
+                <!-- Documentation form -->
+                <div :class="active_tab === 4 ? '' : 'd-none'">
                     Documentación
                 </div>
 
                 <hr>
                 <div class="form-row">
-                    <button type="submit" class="btn btn-outline-success btn-sm" @click="save">Guardar</button>
+                    <div class="col-6">
+                        <a class="btn btn-outline-danger btn-sm" href="/person-creation/cancel">Cancelar</a>
+                    </div>
+                    <div class="col-6 text-right">
+                        <button class="btn btn-outline-success btn-sm" @click="save">Guardar</button>
+                    </div>
                 </div>
 
             </div>
@@ -119,86 +111,81 @@
         props: ['companies', 'activities', 'vehicles'],
         data: function() {
             return {
-                tab_number: 0,
-                companiesList: JSON.parse(this.companies),
-                activitiesList: JSON.parse(this.activities),
-                vehiclesList: JSON.parse(this.vehicles),
-                person_last_name: '',
-                person_name: '',
-                company_id: '',
+                active_tab: 0,
+                vehicles_list:   JSON.parse(this.vehicles),
+                companies_list:  JSON.parse(this.companies),
+                activities_list: JSON.parse(this.activities),
+                shared_information: {
+                    person_last_name: '',
+                    person_name: '',
+                    company_id: '',
+                },
+                step_saving: {
+                    personal_information: false,
+                    working_information: false,
+                    assign_vehicles: false,
+                    first_card: false,
+                },
+                step_results: {
+                    personal_information: false,
+                    working_information: false,
+                    assign_vehicles: false,
+                    first_card: false,
+                }
             };
         },
         mounted() {
-            this.$on('last-name-changed', val => {
-                this.person_last_name = val;
-            });
-            this.$on('name-changed', val => {
-                this.person_name = val;
-            });
-            this.$on('company-id-changed', val => {
-                this.company_id = val;
-            });
-
+            // Listening for shared information changes on children.
+            this.$on('company-id-changed', val => this.shared_information.company_id = val);
+            this.$on('name-changed',       val => this.shared_information.person_name = val);
+            this.$on('last-name-changed',  val => this.shared_information.person_last_name = val);
+            // Listening each step save's result
             this.$on('personal-information-saved', val => {
-                if(val) {
-                    this.$refs.working_information.save();
-                }
-                else {
-                    this.tab_number = 0;
-                }
+                this.step_results.personal_information = val;
+                this.step_saving.personal_information = false;
             });
             this.$on('working-information-saved', val => {
-                if(val) {
-                    this.$refs.assign_vehicles.save();
-                }
-                else {
-                    this.tab_number = 1;
-                }
+                this.step_results.working_information = val;
+                this.step_saving.working_information = false;
             });
             this.$on('assign-vehicles-saved', val => {
-                if(val) {
-                    this.$refs.first_card.save();
-                }
-                else {
-                    this.tab_number = 2;
-                }
+                this.step_results.assign_vehicles = val;
+                this.step_saving.assign_vehicles = false;
             });
             this.$on('first-card-saved', val => {
-                if(val) {
-                    axios.get('/person-creation/store')
-                    .then(response => {
-                        console.log(response);
-                    })
-                    .catch(response => {
-                        console.log(response);
-                    })
-                }
-                else {
-                    this.tab_number = 3;
-                }
+                this.step_results.first_card = val;
+                this.step_saving.first_card = false;
             });
         },
         methods: {
-            changeTab: function(tab_number) {
-                this.tab_number = tab_number;
-            },
             save: function() {
+                window.scrollTo(0,0);
+                this.step_saving.personal_information = true;
+                this.step_saving.working_information = true;
+                this.step_saving.assign_vehicles = true;
+                this.step_saving.first_card = true;
+
                 this.$refs.personal_information.save();
-                // this.$refs.working_information.save();
-                // this.$refs.assign_vehicles.save();
-                // this.$refs.first_card.save();
+                this.$refs.working_information.save();
+                this.$refs.assign_vehicles.save();
+                this.$refs.first_card.save();
             }
         },
         computed: {
             full_name: function() {
-                return this.person_last_name != '' && this.person_name != '' ? this.person_last_name + ', ' + this.person_name : 'x';
+                return (this.shared_information.person_last_name || 'x') + ', ' + (this.shared_information.person_name || 'x');
             },
             company_name: function() {
-                return this.company_id ? this.companiesList.filter(company => company.id == this.company_id)[0].name : 'x';
-            }         
+                return this.shared_information.company_id ? this.companies_list.filter(company => company.id == this.shared_information.company_id)[0].name : 'x';
+            },
+            saving: function() {
+                return this.step_saving.personal_information && this.step_saving.working_information && this.step_saving.assign_vehicles && this.step_saving.first_card;
+            },
+            store_completed: function() {
+                return this.step_results.personal_information && this.step_results.working_information && this.step_results.assign_vehicles && this.step_results.first_card;
+            }      
         },        
         watch: {
-            
         }
     }
 </script>

@@ -26,11 +26,4 @@ class SaveCardRequest extends FormRequest
     {
         return Card::getValidationRules();
     }
-
-    public function messages()
-    {
-        return [
-            'until.after_or_equal' => 'Está fecha debe ser posterior al campo Desde.'
-        ];
-    }
 }

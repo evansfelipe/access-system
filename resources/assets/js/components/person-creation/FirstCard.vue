@@ -43,7 +43,7 @@
                     </div>
                     <hr>
                     <div class="info">
-                        <h3 id="display">xxxx-xxxx</h3>
+                        <h3 id="display">{{ values.number !== '' ? values.number : 'xxx-xxx-xxx-xxx'}}</h3>
                         <small><b>{{ fullname }}</b></small>
                         <br>
                         <small><b>{{ companyname }}</b></small>
@@ -65,7 +65,7 @@
                 </form-item>
             </div>
             <div class="form-row">
-                <form-item label="Validez" :errors="errors.from.concat(errors.until)">
+                <form-item label="Validez" :errors="validity_errors">
                     <div class="col-6">
                         <small>Desde:</small>
                         <input type="date" name="from" class="form-control" v-model="values.from">
@@ -85,10 +85,12 @@
 export default {
     props: {
         fullname: {
+            type: String,
             required: false,
-            default: 'x'
+            default: 'x, x'
         },
         companyname: {
+            type: String,
             required: false,
             default: 'x'
         }
@@ -104,22 +106,11 @@ export default {
             }
         };
     },
-    beforeMount() {
-        this.setErrors({})
-    },
     methods: {
-        setErrors: function(new_errors) {
-            this.errors = {
-                number: new_errors.number ? new_errors.number : [],
-                risk: new_errors.risk ? new_errors.risk : [],
-                from: new_errors.from ? new_errors.from : [],
-                until: new_errors.until ? new_errors.until : [],
-            }
-        },
         save: function() {
             axios.post('person-creation/first-card', this.values)
             .then(response => {
-                console.log('First card:', response);
+                this.errors = {};
                 this.$parent.$emit('first-card-saved', true);
 
             })
@@ -130,5 +121,21 @@ export default {
             })
         }
     },
+    computed: {
+        validity_errors: function() {
+            if(this.errors.from && this.errors.until) {
+                return this.errors.from.concat(this.errors.until);
+            }
+            else if (this.errors.from) {
+                return this.errors.from;
+            }
+            else if (this.errors.until) {
+                return this.errors.until;
+            }
+            else {
+                return [];
+            }
+        }
+    }
 }
 </script>

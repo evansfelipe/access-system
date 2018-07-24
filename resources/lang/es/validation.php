@@ -118,8 +118,38 @@ return [
     */
 
     'attributes' => [
-        'last_name' => 'Apellido',
-        'name' => 'Nombre'
+        // Person's personal information
+        'last_name'       => 'Apellido',
+        'name'            => 'Nombre',
+        'document_type'   => 'Tipo de documento',
+        'document_number' => 'Número de documento',
+        'cuil'            => 'CUIL / CUIT',
+        'cuit'            => 'CUIL / CUIT',
+        'birthday'        => 'Fecha de nacimiento',
+        'sex'             => 'Género',
+        'blood_type'      => 'Grupo y factor sanguíneo',
+        'pna'             => 'Prontuario PNA',
+        'email'           => 'Email',
+        'phone'           => 'Teléfono',
+        'home_phone'      => 'Teléfono fijo',
+        'mobile_phone'    => 'Teléfono móvil',
+        'fax'             => 'FAX',
+        'street'          => 'Calle y número',
+        'apartment'       => 'Departamento',
+        'cp'              => 'Código postal',
+        'country'         => 'País',
+        'province'        => 'Provincia',
+        'city'            => 'Ciudad',
+        // Person's working information
+        'company_id'      => 'Empresa',
+        'activity_id'     => 'Actividad',
+        'art'             => 'ART',
+        'pbip'            => 'Vencimiento PBIP',
+        // Person's first card
+        'number'          => 'Número',
+        'risk'            => 'Riesgo',
+        'from'            => 'Desde',
+        'until'           => 'Hasta',
     ],
 
 ];

@@ -149,7 +149,7 @@ export default {
 
             axios.post('person-creation/assign-vehicles', {vehicles_id: data})
             .then(response => {
-                console.log("Assign Vehicles:", response);
+                this.errors = {};
                 this.$parent.$emit('assign-vehicles-saved', true);
             })
             .catch(error => {

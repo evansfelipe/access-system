@@ -4,7 +4,7 @@
         <!-- Photo loader section -->
         <div class="col-4 text-center">
             <div class="offset-1 col-10">
-                Foto
+                <img class="img-fluid rounded-circle" src="/pictures/no-image.jpg" alt="Subir imagen">
             </div>
         </div>
         <!-- Identification information section -->
@@ -26,7 +26,7 @@
             </div>
             <!-- Document & Cuil/Cuit -->
             <div class="form-row">
-                <form-item col="col-6" label="Documento" :errors="errors.document_type.concat(errors.document_number)">
+                <form-item col="col-6" label="Documento" :errors="document_errors">
                     <div class="col-5">
                         <select name="document_type" class="form-control" v-model="values.document_type">
                             <option value="" hidden>Tipo</option>
@@ -122,7 +122,7 @@
     <hr>
     <!-- Street, apartment & zip code -->
     <div class="form-row">
-        <form-item col="col-8" label="Domcilio" :errors="errors.street.concat(errors.apartment)">
+        <form-item col="col-8" label="Domicilio" :errors="direction_errors">
             <div class="col-6">
                 <input type="text" name="street" class="form-control"
                        placeholder="Calle y número" v-model="values.street">
@@ -197,61 +197,54 @@ export default {
             }
         };
     },
-    beforeMount() {
-        this.setErrors({})
-    },
     methods: {
-        setErrors: function(new_errors) {
-            this.errors = {
-                last_name: new_errors.last_name ? new_errors.last_name : [],
-                name: new_errors.name ? new_errors.name : [],
-                document_type: new_errors.document_type ? new_errors.document_type : [],
-                document_number: new_errors.document_number ? new_errors.document_number : [],
-                cuil: new_errors.cuil ? new_errors.cuil : [],
-                birthday: new_errors.birthday ? new_errors.birthday : [],
-                sex: new_errors.sex ? new_errors.sex : [],
-                blood_type: new_errors.blood_type ? new_errors.blood_type : [],
-                pna: new_errors.pna ? new_errors.pna : [],
-                email: new_errors.email ? new_errors.email : [],
-                home_phone: new_errors.home_phone ? new_errors.home_phone : [],
-                mobile_phone: new_errors.mobile_phone ? new_errors.mobile_phone : [],
-                fax: new_errors.fax ? new_errors.fax : [],
-                street: new_errors.street ? new_errors.street : [],
-                apartment: new_errors.apartment ? new_errors.apartment : [],
-                cp: new_errors.cp ? new_errors.cp : [],
-                country: new_errors.country ? new_errors.country : [],
-                province: new_errors.province ? new_errors.province : [],
-                city: new_errors.city ? new_errors.city : []
-            }
-        },
         save: function() {
             axios.post('person-creation/personal-information', this.values)
-            .then(response => {
-                console.log("PersonalInformation: ", response);
-                this.setErrors({});
-                this.$parent.$emit('personal-information-saved', true);
-            })
-            .catch(error => {
-                this.setErrors(error.response.data.errors);
-                this.$parent.$emit('personal-information-saved', false);
-            })
+                 .then(response => {
+                     this.errors = {};
+                     this.$parent.$emit('personal-information-saved', true);
+                 })
+                 .catch(response => {
+                     this.errors = response.response.data.errors;
+                     this.$parent.$emit('personal-information-saved', false);
+                 })
         }
     },
     computed: {
-        last_name: function() {
-            return this.values.last_name;
+        name:      function() { return this.values.name },
+        last_name: function() { return this.values.last_name },
+        document_errors: function() {
+            if(this.errors.document_type && this.errors.document_number) {
+                return this.errors.document_type.concat(this.errors.document_number);
+            }
+            else if(this.errors.document_type) {
+                return this.errors.document_type;
+            }
+            else if(this.errors.document_number) {
+                return this.errors.document_number
+            }
+            else {
+                return [];
+            }
         },
-        name: function() {
-            return this.values.name;
-        }
+        direction_errors: function() {
+            if(this.errors.street && this.errors.apartment) {
+                return this.errors.street.concat(this.errors.apartment);
+            }
+            else if(this.errors.street) {
+                return this.errors.street;
+            }
+            else if(this.errors.apartment) {
+                return this.errors.apartment
+            }
+            else {
+                return [];
+            }
+        },
     },
     watch: {
-        last_name: function() {
-            this.$parent.$emit('last-name-changed', this.last_name);
-        },
-        name: function() {
-            this.$parent.$emit('name-changed', this.name);
-        }
+        name:      function() { this.$parent.$emit('name-changed', this.name) },
+        last_name: function() { this.$parent.$emit('last-name-changed', this.last_name) },
     }
 }
 </script>

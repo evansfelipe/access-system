@@ -48961,7 +48961,7 @@ if (false) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(63)
+  __webpack_require__(101)
 }
 var normalizeComponent = __webpack_require__(5)
 /* script */
@@ -49006,46 +49006,8 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(64);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(4)("3358ea7b", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0a808bd9\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Layout.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0a808bd9\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Layout.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.nav-tabs > .nav-item[data-v-0a808bd9] {\n    cursor: pointer;\n}\n.nav-tabs > .nav-item > a.active[data-v-0a808bd9] {\n    background-color: white;\n    border-bottom-color: white;\n    cursor: auto;\n    color: black  !important;\n}\na.inactive[data-v-0a808bd9] {\n    color: grey !important;\n}\n.nav-item + .nav-item[data-v-0a808bd9] {\n    margin-left: 1px;\n}\n.card[data-v-0a808bd9] {\n    border-top: 0;\n    border-top-right-radius: 0;\n    border-top-left-radius: 0;\n}\ntable[data-v-0a808bd9] {\n    width: 100%;\n}\n.strong[data-v-0a808bd9] {\n    font-weight: bold;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 63 */,
+/* 64 */,
 /* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -49159,96 +49121,96 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['companies', 'activities', 'vehicles'],
     data: function data() {
         return {
-            tab_number: 0,
-            companiesList: JSON.parse(this.companies),
-            activitiesList: JSON.parse(this.activities),
-            vehiclesList: JSON.parse(this.vehicles),
-            person_last_name: '',
-            person_name: '',
-            company_id: ''
+            active_tab: 0,
+            vehicles_list: JSON.parse(this.vehicles),
+            companies_list: JSON.parse(this.companies),
+            activities_list: JSON.parse(this.activities),
+            shared_information: {
+                person_last_name: '',
+                person_name: '',
+                company_id: ''
+            },
+            step_saving: {
+                personal_information: false,
+                working_information: false,
+                assign_vehicles: false,
+                first_card: false
+            },
+            step_results: {
+                personal_information: false,
+                working_information: false,
+                assign_vehicles: false,
+                first_card: false
+            }
         };
     },
     mounted: function mounted() {
         var _this = this;
 
-        this.$on('last-name-changed', function (val) {
-            _this.person_last_name = val;
+        // Listening for shared information changes on children.
+        this.$on('company-id-changed', function (val) {
+            return _this.shared_information.company_id = val;
         });
         this.$on('name-changed', function (val) {
-            _this.person_name = val;
+            return _this.shared_information.person_name = val;
         });
-        this.$on('company-id-changed', function (val) {
-            _this.company_id = val;
+        this.$on('last-name-changed', function (val) {
+            return _this.shared_information.person_last_name = val;
         });
-
+        // Listening each step save's result
         this.$on('personal-information-saved', function (val) {
-            if (val) {
-                _this.$refs.working_information.save();
-            } else {
-                _this.tab_number = 0;
-            }
+            _this.step_results.personal_information = val;
+            _this.step_saving.personal_information = false;
         });
         this.$on('working-information-saved', function (val) {
-            if (val) {
-                _this.$refs.assign_vehicles.save();
-            } else {
-                _this.tab_number = 1;
-            }
+            _this.step_results.working_information = val;
+            _this.step_saving.working_information = false;
         });
         this.$on('assign-vehicles-saved', function (val) {
-            if (val) {
-                _this.$refs.first_card.save();
-            } else {
-                _this.tab_number = 2;
-            }
+            _this.step_results.assign_vehicles = val;
+            _this.step_saving.assign_vehicles = false;
         });
         this.$on('first-card-saved', function (val) {
-            if (val) {
-                axios.get('/person-creation/store').then(function (response) {
-                    console.log(response);
-                }).catch(function (response) {
-                    console.log(response);
-                });
-            } else {
-                _this.tab_number = 3;
-            }
+            _this.step_results.first_card = val;
+            _this.step_saving.first_card = false;
         });
     },
 
     methods: {
-        changeTab: function changeTab(tab_number) {
-            this.tab_number = tab_number;
-        },
         save: function save() {
+            window.scrollTo(0, 0);
+            this.step_saving.personal_information = true;
+            this.step_saving.working_information = true;
+            this.step_saving.assign_vehicles = true;
+            this.step_saving.first_card = true;
+
             this.$refs.personal_information.save();
-            // this.$refs.working_information.save();
-            // this.$refs.assign_vehicles.save();
-            // this.$refs.first_card.save();
+            this.$refs.working_information.save();
+            this.$refs.assign_vehicles.save();
+            this.$refs.first_card.save();
         }
     },
     computed: {
         full_name: function full_name() {
-            return this.person_last_name != '' && this.person_name != '' ? this.person_last_name + ', ' + this.person_name : 'x';
+            return (this.shared_information.person_last_name || 'x') + ', ' + (this.shared_information.person_name || 'x');
         },
         company_name: function company_name() {
             var _this2 = this;
 
-            return this.company_id ? this.companiesList.filter(function (company) {
-                return company.id == _this2.company_id;
+            return this.shared_information.company_id ? this.companies_list.filter(function (company) {
+                return company.id == _this2.shared_information.company_id;
             })[0].name : 'x';
+        },
+        saving: function saving() {
+            return this.step_saving.personal_information && this.step_saving.working_information && this.step_saving.assign_vehicles && this.step_saving.first_card;
+        },
+        store_completed: function store_completed() {
+            return this.step_results.personal_information && this.step_results.working_information && this.step_results.assign_vehicles && this.step_results.first_card;
         }
     },
     watch: {}
@@ -49263,21 +49225,27 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _vm.saving
+      ? _c("div", { staticClass: "loading-panel text-center" }, [
+          _c("i", { staticClass: "fas fa-spinner fa-pulse fa-4x" })
+        ])
+      : _vm._e(),
+    _vm._v(" "),
     _c("ul", { staticClass: "nav nav-tabs" }, [
       _c("li", { staticClass: "nav-item" }, [
         _c(
           "a",
           {
-            class: "nav-link " + (_vm.tab_number === 0 ? "active" : "inactive"),
+            class: "nav-link " + (_vm.active_tab === 0 ? "active" : " "),
             on: {
               click: function($event) {
-                _vm.changeTab(0)
+                _vm.active_tab = 0
               }
             }
           },
           [
             _c("i", { staticClass: "fas fa-user" }),
-            _vm._v("\n                Información personal\n            ")
+            _vm._v(" Información personal\n            ")
           ]
         )
       ]),
@@ -49286,16 +49254,16 @@ var render = function() {
         _c(
           "a",
           {
-            class: "nav-link " + (_vm.tab_number === 1 ? "active" : "inactive"),
+            class: "nav-link " + (_vm.active_tab === 1 ? "active" : ""),
             on: {
               click: function($event) {
-                _vm.changeTab(1)
+                _vm.active_tab = 1
               }
             }
           },
           [
             _c("i", { staticClass: "fas fa-briefcase" }),
-            _vm._v("\n                Información laboral\n            ")
+            _vm._v(" Información laboral\n            ")
           ]
         )
       ]),
@@ -49304,16 +49272,16 @@ var render = function() {
         _c(
           "a",
           {
-            class: "nav-link " + (_vm.tab_number === 2 ? "active" : "inactive"),
+            class: "nav-link " + (_vm.active_tab === 2 ? "active" : ""),
             on: {
               click: function($event) {
-                _vm.changeTab(2)
+                _vm.active_tab = 2
               }
             }
           },
           [
             _c("i", { staticClass: "fas fa-car" }),
-            _vm._v(" \n                Vehículos\n            ")
+            _vm._v(" Vehículos\n            ")
           ]
         )
       ]),
@@ -49322,16 +49290,16 @@ var render = function() {
         _c(
           "a",
           {
-            class: "nav-link " + (_vm.tab_number === 3 ? "active" : "inactive"),
+            class: "nav-link " + (_vm.active_tab === 3 ? "active" : ""),
             on: {
               click: function($event) {
-                _vm.changeTab(3)
+                _vm.active_tab = 3
               }
             }
           },
           [
             _c("i", { staticClass: "fas fa-id-card" }),
-            _vm._v("\n                Tarjeta\n            ")
+            _vm._v(" Tarjeta\n            ")
           ]
         )
       ]),
@@ -49340,95 +49308,99 @@ var render = function() {
         _c(
           "a",
           {
-            class: "nav-link " + (_vm.tab_number === 4 ? "active" : "inactive"),
+            class: "nav-link " + (_vm.active_tab === 4 ? "active" : ""),
             on: {
               click: function($event) {
-                _vm.changeTab(4)
+                _vm.active_tab = 4
               }
             }
           },
           [
             _c("i", { staticClass: "fas fa-file-alt" }),
-            _vm._v("\n                Documentación\n            ")
+            _vm._v(" Documentación\n            ")
           ]
         )
       ])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "card card-default" }, [
-      _c("div", { staticClass: "card-body" }, [
-        _c(
-          "div",
-          { class: _vm.tab_number === 0 ? "" : "d-none" },
-          [_c("pc-personal-information", { ref: "personal_information" })],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { class: _vm.tab_number === 1 ? "" : "d-none" },
-          [
-            _c("pc-working-information", {
-              ref: "working_information",
-              attrs: {
-                companies: _vm.companiesList,
-                activities: _vm.activitiesList
-              }
-            })
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { class: _vm.tab_number === 2 ? "" : "d-none" },
-          [
-            _c("pc-assign-vehicles", {
-              ref: "assign_vehicles",
-              attrs: {
-                vehicles: _vm.vehiclesList,
-                companyid: _vm.company_id,
-                companyname: _vm.company_name
-              }
-            })
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { class: _vm.tab_number === 3 ? "" : "d-none" },
-          [
-            _c("pc-first-card", {
-              ref: "first_card",
-              attrs: { fullname: _vm.full_name, companyname: _vm.company_name }
-            })
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c("div", { class: _vm.tab_number === 4 ? "" : "d-none" }, [
-          _vm._v("\n                Documentación\n            ")
-        ]),
-        _vm._v(" "),
-        _c("hr"),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-row" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-outline-success btn-sm",
-              attrs: { type: "submit" },
-              on: { click: _vm.save }
-            },
-            [_vm._v("Guardar")]
-          )
-        ])
-      ])
+      _c(
+        "div",
+        { staticClass: "card-body" },
+        [
+          _c("pc-personal-information", {
+            ref: "personal_information",
+            class: _vm.active_tab === 0 ? "" : "d-none"
+          }),
+          _vm._v(" "),
+          _c("pc-working-information", {
+            ref: "working_information",
+            class: _vm.active_tab === 1 ? "" : "d-none",
+            attrs: {
+              companies: _vm.companies_list,
+              activities: _vm.activities_list
+            }
+          }),
+          _vm._v(" "),
+          _c("pc-assign-vehicles", {
+            ref: "assign_vehicles",
+            class: _vm.active_tab === 2 ? "" : "d-none",
+            attrs: {
+              vehicles: _vm.vehicles_list,
+              companyid: _vm.shared_information.company_id,
+              companyname: _vm.company_name
+            }
+          }),
+          _vm._v(" "),
+          _c("pc-first-card", {
+            ref: "first_card",
+            class: _vm.active_tab === 3 ? "" : "d-none",
+            attrs: { fullname: _vm.full_name, companyname: _vm.company_name }
+          }),
+          _vm._v(" "),
+          _c("div", { class: _vm.active_tab === 4 ? "" : "d-none" }, [
+            _vm._v("\n                Documentación\n            ")
+          ]),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-row" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-6 text-right" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-success btn-sm",
+                  on: { click: _vm.save }
+                },
+                [_vm._v("Guardar")]
+              )
+            ])
+          ])
+        ],
+        1
+      )
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-6" }, [
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-outline-danger btn-sm",
+          attrs: { href: "/person-creation/cancel" }
+        },
+        [_vm._v("Cancelar")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -49587,9 +49559,7 @@ var render = function() {
                 attrs: {
                   col: "col-6",
                   label: "Documento",
-                  errors: _vm.errors.document_type.concat(
-                    _vm.errors.document_number
-                  )
+                  errors: _vm.document_errors
                 }
               },
               [
@@ -50090,8 +50060,8 @@ var render = function() {
           {
             attrs: {
               col: "col-8",
-              label: "Domcilio",
-              errors: _vm.errors.street.concat(_vm.errors.apartment)
+              label: "Domicilio",
+              errors: _vm.direction_errors
             }
           },
           [
@@ -50371,7 +50341,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-4 text-center" }, [
       _c("div", { staticClass: "offset-1 col-10" }, [
-        _vm._v("\n                Foto\n            ")
+        _c("img", {
+          staticClass: "img-fluid rounded-circle",
+          attrs: { src: "/pictures/no-image.jpg", alt: "Subir imagen" }
+        })
       ])
     ])
   }
@@ -50773,61 +50746,55 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         };
     },
-    beforeMount: function beforeMount() {
-        this.setErrors({});
-    },
-
     methods: {
-        setErrors: function setErrors(new_errors) {
-            this.errors = {
-                last_name: new_errors.last_name ? new_errors.last_name : [],
-                name: new_errors.name ? new_errors.name : [],
-                document_type: new_errors.document_type ? new_errors.document_type : [],
-                document_number: new_errors.document_number ? new_errors.document_number : [],
-                cuil: new_errors.cuil ? new_errors.cuil : [],
-                birthday: new_errors.birthday ? new_errors.birthday : [],
-                sex: new_errors.sex ? new_errors.sex : [],
-                blood_type: new_errors.blood_type ? new_errors.blood_type : [],
-                pna: new_errors.pna ? new_errors.pna : [],
-                email: new_errors.email ? new_errors.email : [],
-                home_phone: new_errors.home_phone ? new_errors.home_phone : [],
-                mobile_phone: new_errors.mobile_phone ? new_errors.mobile_phone : [],
-                fax: new_errors.fax ? new_errors.fax : [],
-                street: new_errors.street ? new_errors.street : [],
-                apartment: new_errors.apartment ? new_errors.apartment : [],
-                cp: new_errors.cp ? new_errors.cp : [],
-                country: new_errors.country ? new_errors.country : [],
-                province: new_errors.province ? new_errors.province : [],
-                city: new_errors.city ? new_errors.city : []
-            };
-        },
         save: function save() {
             var _this = this;
 
             axios.post('person-creation/personal-information', this.values).then(function (response) {
-                console.log("PersonalInformation: ", response);
-                _this.setErrors({});
+                _this.errors = {};
                 _this.$parent.$emit('personal-information-saved', true);
-            }).catch(function (error) {
-                _this.setErrors(error.response.data.errors);
+            }).catch(function (response) {
+                _this.errors = response.response.data.errors;
                 _this.$parent.$emit('personal-information-saved', false);
             });
         }
     },
     computed: {
+        name: function name() {
+            return this.values.name;
+        },
         last_name: function last_name() {
             return this.values.last_name;
         },
-        name: function name() {
-            return this.values.name;
+        document_errors: function document_errors() {
+            if (this.errors.document_type && this.errors.document_number) {
+                return this.errors.document_type.concat(this.errors.document_number);
+            } else if (this.errors.document_type) {
+                return this.errors.document_type;
+            } else if (this.errors.document_number) {
+                return this.errors.document_number;
+            } else {
+                return [];
+            }
+        },
+        direction_errors: function direction_errors() {
+            if (this.errors.street && this.errors.apartment) {
+                return this.errors.street.concat(this.errors.apartment);
+            } else if (this.errors.street) {
+                return this.errors.street;
+            } else if (this.errors.apartment) {
+                return this.errors.apartment;
+            } else {
+                return [];
+            }
         }
     },
     watch: {
-        last_name: function last_name() {
-            this.$parent.$emit('last-name-changed', this.last_name);
-        },
         name: function name() {
             this.$parent.$emit('name-changed', this.name);
+        },
+        last_name: function last_name() {
+            this.$parent.$emit('last-name-changed', this.last_name);
         }
     }
 });
@@ -51020,7 +50987,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             axios.post('person-creation/working-information', this.values).then(function (response) {
-                console.log('Working Information:', response);
+                _this.errors = {};
                 _this.$parent.$emit('working-information-saved', true);
             }).catch(function (error) {
                 _this.errors = error.response.data.errors;
@@ -51584,7 +51551,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
 
             axios.post('person-creation/assign-vehicles', { vehicles_id: data }).then(function (response) {
-                console.log("Assign Vehicles:", response);
+                _this2.errors = {};
                 _this2.$parent.$emit('assign-vehicles-saved', true);
             }).catch(function (error) {
                 console.log("Assign Vehicles", error.response.data.errors);
@@ -51961,10 +51928,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
         fullname: {
+            type: String,
             required: false,
-            default: 'x'
+            default: 'x, x'
         },
         companyname: {
+            type: String,
             required: false,
             default: 'x'
         }
@@ -51980,29 +51949,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         };
     },
-    beforeMount: function beforeMount() {
-        this.setErrors({});
-    },
-
     methods: {
-        setErrors: function setErrors(new_errors) {
-            this.errors = {
-                number: new_errors.number ? new_errors.number : [],
-                risk: new_errors.risk ? new_errors.risk : [],
-                from: new_errors.from ? new_errors.from : [],
-                until: new_errors.until ? new_errors.until : []
-            };
-        },
         save: function save() {
             var _this = this;
 
             axios.post('person-creation/first-card', this.values).then(function (response) {
-                console.log('First card:', response);
+                _this.errors = {};
                 _this.$parent.$emit('first-card-saved', true);
             }).catch(function (error) {
                 _this.errors = error.response.data.errors;
                 _this.$parent.$emit('first-card-saved', false);
             });
+        }
+    },
+    computed: {
+        validity_errors: function validity_errors() {
+            if (this.errors.from && this.errors.until) {
+                return this.errors.from.concat(this.errors.until);
+            } else if (this.errors.from) {
+                return this.errors.from;
+            } else if (this.errors.until) {
+                return this.errors.until;
+            } else {
+                return [];
+            }
         }
     }
 });
@@ -52055,7 +52025,15 @@ var render = function() {
             _c("hr"),
             _vm._v(" "),
             _c("div", { staticClass: "info" }, [
-              _c("h3", { attrs: { id: "display" } }, [_vm._v("xxxx-xxxx")]),
+              _c("h3", { attrs: { id: "display" } }, [
+                _vm._v(
+                  _vm._s(
+                    _vm.values.number !== ""
+                      ? _vm.values.number
+                      : "xxx-xxx-xxx-xxx"
+                  )
+                )
+              ]),
               _vm._v(" "),
               _c("small", [_c("b", [_vm._v(_vm._s(_vm.fullname))])]),
               _vm._v(" "),
@@ -52144,12 +52122,7 @@ var render = function() {
           [
             _c(
               "form-item",
-              {
-                attrs: {
-                  label: "Validez",
-                  errors: _vm.errors.from.concat(_vm.errors.until)
-                }
-              },
+              { attrs: { label: "Validez", errors: _vm.validity_errors } },
               [
                 _c("div", { staticClass: "col-6" }, [
                   _c("small", [_vm._v("Desde:")]),
@@ -52229,6 +52202,48 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-d3d083fe", module.exports)
   }
 }
+
+/***/ }),
+/* 99 */,
+/* 100 */,
+/* 101 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(102);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("3263c661", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0a808bd9\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Layout.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0a808bd9\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Layout.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 102 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nul.nav-tabs > .nav-item[data-v-0a808bd9] {\n  cursor: pointer;\n}\nul.nav-tabs > .nav-item + ul.nav-tabs > .nav-item[data-v-0a808bd9] {\n    margin-left: 1px;\n}\nul.nav-tabs > .nav-item > a[data-v-0a808bd9] {\n    color: grey;\n}\nul.nav-tabs > .nav-item > a.active[data-v-0a808bd9] {\n      color: black;\n      background-color: white;\n      border-bottom-color: white;\n}\n.card[data-v-0a808bd9] {\n  border-top: 0;\n  border-top-right-radius: 0;\n  border-top-left-radius: 0;\n}\ndiv.loading-panel[data-v-0a808bd9] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  position: fixed;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  background-color: rgba(80, 80, 80, 0.75);\n  color: black;\n  z-index: 2;\n}\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);
