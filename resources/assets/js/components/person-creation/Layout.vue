@@ -1,17 +1,4 @@
-<style lang="scss" scoped>
-    ul.nav-tabs > .nav-item {
-        cursor: pointer;
-        & + & { margin-left: 1px }
-        & > a {
-            color: grey;
-            &.active {
-                color: black;
-                background-color: white;
-                border-bottom-color: white;
-            }
-        }
-    }
-
+<style scoped>
     .card {
         border-top: 0;
         border-top-right-radius: 0;
@@ -23,86 +10,60 @@
     <div>
         <!-- Tabs -->
         <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a :class="'nav-link ' + (active_tab === 0 ? 'active' : ' ')" @click="active_tab = 0">
-                    <i v-if="step_data.personal_information.saved === null" class="fas fa-user"></i>
-                    <i v-if="step_data.personal_information.saved === true" class="far fa-check-circle text-success"></i>
-                    <i v-if="step_data.personal_information.saved === false" class="far fa-times-circle text-danger"></i>
-                    Información personal
-                </a>
-            </li>
-            <li class="nav-item">
-                <a :class="'nav-link ' + (active_tab === 1 ? 'active' : '')" @click="active_tab = 1">
-                    <i v-if="step_data.working_information.saved === null" class="fas fa-briefcase"></i>
-                    <i v-if="step_data.working_information.saved === true" class="far fa-check-circle text-success"></i>
-                    <i v-if="step_data.working_information.saved === false" class="far fa-times-circle text-danger"></i>
-                    Información laboral
-                </a>
-            </li>
-            <li class="nav-item">
-                <a :class="'nav-link ' + (active_tab === 2 ? 'active' : '')" @click="active_tab = 2">
-                    <i v-if="step_data.assign_vehicles.saved === null" class="fas fa-car"></i>
-                    <i v-if="step_data.assign_vehicles.saved === true" class="far fa-check-circle text-success"></i>
-                    <i v-if="step_data.assign_vehicles.saved === false" class="far fa-times-circle text-danger"></i>
-                    Vehículos
-                </a>
-            </li>
-            <li class="nav-item">
-                <a :class="'nav-link ' + (active_tab === 3 ? 'active' : '')" @click="active_tab = 3">
-                    <i v-if="step_data.first_card.saved === null" class="fas fa-id-card"></i>
-                    <i v-if="step_data.first_card.saved === true" class="far fa-check-circle text-success"></i>
-                    <i v-if="step_data.first_card.saved === false" class="far fa-times-circle text-danger"></i>
-                    Tarjeta
-                </a>
-            </li>
-            <li class="nav-item">
-                <a :class="'nav-link ' + (active_tab === 4 ? 'active' : '')" @click="active_tab = 4">
-                    <i class="fas fa-file-alt"></i> Documentación
-                </a>
-            </li>
+            <!-- Personal information tab -->
+            <tab-item :active="active_tab === 0" @click.native="active_tab = 0" :has-errors="steps.personal_information.saved" icon="fas fa-user">
+                Información personal
+            </tab-item>
+            <!-- Working information tab -->
+            <tab-item :active="active_tab === 1" @click.native="active_tab = 1" :has-errors="steps.working_information.saved" icon="fas fa-briefcase">
+                Información laboral
+            </tab-item>
+            <!-- Assign vehicles tab -->
+            <tab-item :active="active_tab === 2" @click.native="active_tab = 2" :has-errors="steps.assign_vehicles.saved" icon="fas fa-car">
+                Asignar vehículos
+            </tab-item>
+            <!-- First card tab -->
+            <tab-item :active="active_tab === 3" @click.native="active_tab = 3" :has-errors="steps.first_card.saved" icon="fas fa-id-card">
+                Tarjeta
+            </tab-item>
+            <!-- Documentation tab -->
+            <tab-item :active="active_tab === 4" @click.native="active_tab = 4" :has-errors="steps.documentation.saved" icon="fas fa-file-alt">
+                Documentación
+            </tab-item>
         </ul>
-        <!-- Content -->
+        <!-- /Tabs -->
+        <!-- Forms -->
         <div class="card card-default">
-            <loading v-if="saving"/>
-
             <div class="card-body">
+                <!-- Loading cover will be only be rendered when component is saving the data to the server -->
+                <loading-cover v-if="saving"/>
                 <!-- Personal information form -->
-                <pc-personal-information ref="personal_information" :class="active_tab === 0 ? '' : 'd-none'">
-                </pc-personal-information>
+                <pc-personal-information v-show="active_tab === 0" ref="personal_information"/>
                 <!-- Working information form -->
-                <pc-working-information ref="working_information" :class="active_tab === 1 ? '' : 'd-none'"
-                                        :companies="companies_list"
-                                        :activities="activities_list">
-                </pc-working-information>
+                <pc-working-information v-show="active_tab === 1" ref="working_information"
+                                        :companies="companies_list" :activities="activities_list"/>
                 <!-- Assign vehicles form -->
-                <pc-assign-vehicles ref="assign_vehicles" :class="active_tab === 2 ? '' : 'd-none'"
-                                    :vehicles="vehicles_list"
-                                    :companyid="parseInt(shared_information.company_id)"
-                                    :companyname="company_name">
-                </pc-assign-vehicles>
+                <pc-assign-vehicles v-show="active_tab === 2" ref="assign_vehicles" 
+                                    :vehicles="vehicles_list" :companyname="company_name"
+                                    :companyid="parseInt(shared_information.company.id)"/>
                 <!-- First card form -->
-                <pc-first-card  ref="first_card" :class="active_tab === 3 ? '' : 'd-none'"
-                                :fullname="full_name"
-                                :companyname="company_name">
-                </pc-first-card>
+                <pc-first-card  v-show="active_tab === 3" ref="first_card"
+                                :fullname="full_name" :companyname="company_name"/>
                 <!-- Documentation form -->
-                <div :class="active_tab === 4 ? '' : 'd-none'">
+                <div v-show="active_tab === 4">
                     Documentación
                 </div>
-
+                <!-- Buttons -->
                 <hr>
                 <div class="form-row">
-                    <div class="col-6">
+                    <div class="col">
                         <a class="btn btn-outline-danger btn-sm" href="/person-creation/cancel">Cancelar</a>
-                    </div>
-                    <div class="col-6 text-right">
-                        <button class="btn btn-outline-success btn-sm" @click="save">Guardar</button>
+                        <button class="btn btn-outline-success btn-sm float-right" @click="save">Guardar</button>
                     </div>
                 </div>
-
             </div>
         </div>
-
+        <!-- /Forms -->
     </div>
 </template>
 
@@ -116,11 +77,15 @@
                 companies_list:  JSON.parse(this.companies),
                 activities_list: JSON.parse(this.activities),
                 shared_information: {
-                    person_last_name: '',
-                    person_name: '',
-                    company_id: '',
+                    person: {
+                        name: '',
+                        last_name: ''
+                    },
+                    company: {
+                        id: ''
+                    },
                 },
-                step_data: {
+                steps: {
                     personal_information: {
                         saved:     null,
                         is_saving: false,
@@ -136,21 +101,25 @@
                     first_card: {
                         saved:     null,
                         is_saving: false,
+                    },
+                    documentation: {
+                        saved:     null,
+                        is_saving: false,
                     }
                 }
             };
         },
         mounted() {
             // Listening for shared information changes on children.
-            this.$on('company-id-changed', val => this.shared_information.company_id = val);
-            this.$on('name-changed',       val => this.shared_information.person_name = val);
-            this.$on('last-name-changed',  val => this.shared_information.person_last_name = val);
+            this.$on('company-id-changed', val => this.shared_information.company.id = val);
+            this.$on('name-changed',       val => this.shared_information.person.name = val);
+            this.$on('last-name-changed',  val => this.shared_information.person.last_name = val);
             // Listening each step save's result
             this.$on('personal-information-saved', val => {
-                this.step_data.personal_information.is_saving = false;
-                this.step_data.personal_information.saved = val;
+                this.steps.personal_information.is_saving = false;
+                this.steps.personal_information.saved = val;
                 if(val) {
-                    this.step_data.working_information.is_saving = true;
+                    this.steps.working_information.is_saving = true;
                     this.$refs.working_information.save();
                 }
                 else{
@@ -158,10 +127,10 @@
                 }
             });
             this.$on('working-information-saved', val => {
-                this.step_data.working_information.is_saving = false;
-                this.step_data.working_information.saved = val;
+                this.steps.working_information.is_saving = false;
+                this.steps.working_information.saved = val;
                 if(val) {
-                    this.step_data.assign_vehicles.is_saving = true;
+                    this.steps.assign_vehicles.is_saving = true;
                     this.$refs.assign_vehicles.save();
                 }
                 else{
@@ -169,10 +138,10 @@
                 }
             });
             this.$on('assign-vehicles-saved', val => {
-                this.step_data.assign_vehicles.is_saving = false;
-                this.step_data.assign_vehicles.saved = val;
+                this.steps.assign_vehicles.is_saving = false;
+                this.steps.assign_vehicles.saved = val;
                 if(val) {
-                    this.step_data.first_card.is_saving = true;
+                    this.steps.first_card.is_saving = true;
                     this.$refs.first_card.save();
                 }
                 else{
@@ -180,8 +149,8 @@
                 }
             });
             this.$on('first-card-saved', val => {
-                this.step_data.first_card.is_saving = false;
-                this.step_data.first_card.saved = val;
+                this.steps.first_card.is_saving = false;
+                this.steps.first_card.saved = val;
                 if(!val) {
                     this.active_tab = 3;
                 }
@@ -190,35 +159,48 @@
         methods: {
             save: function() {
                 window.scrollTo(0,0);
-                this.step_data.personal_information.is_saving = true;
+                this.steps.personal_information.is_saving = true;
                 this.$refs.personal_information.save();
             }
         },
         computed: {
+            /**
+             * Concatenates the person's last name with the person name. If some one of those values isn't seted, then puts an 'x'.
+             */
             full_name: function() {
-                return (this.shared_information.person_last_name || 'x') + ', ' + (this.shared_information.person_name || 'x');
+                return (this.shared_information.person.last_name || 'x') + ', ' + (this.shared_information.person.name || 'x');
             },
+            /**
+             * Company's name associated with the company id stored in the component data.
+             */
             company_name: function() {
-                return this.shared_information.company_id ? this.companies_list.filter(company => company.id == this.shared_information.company_id)[0].name : 'x';
+                return this.shared_information.company.id ? this.companies_list.filter(company => company.id == this.shared_information.company.id)[0].name : '-';
             },
+            /**
+             * True if at least one of the steps is still being saved.
+             */
             saving: function() {
-                return this.step_data.personal_information.is_saving || this.step_data.working_information.is_saving || this.step_data.assign_vehicles.is_saving || this.step_data.first_card.is_saving;
+                return this.steps.personal_information.is_saving || this.steps.working_information.is_saving || this.steps.assign_vehicles.is_saving || this.steps.first_card.is_saving;
             },
+            /**
+             * True if each step has been saved successfully.
+             */
             saved: function() {
-                return this.step_data.personal_information.saved && this.step_data.working_information.saved && this.step_data.assign_vehicles.saved && this.step_data.first_card.saved;
+                return this.steps.personal_information.saved && this.steps.working_information.saved && this.steps.assign_vehicles.saved && this.steps.first_card.saved;
             }
         },        
         watch: {
             saved: function() {
                 if(this.saved) {
-                    console.log("Saved");
-                    axios.get('/person-creation/store')
-                        .then(response => {
-                            window.location.href = response.data;
-                        })
-                        .catch(response => {
-                            console.log(response);
-                        })
+                    alert("Guardando")
+                // console.log("Saved");
+                // axios.get('/person-creation/store')
+                //     .then(response => {
+                //         window.location.href = response.data;
+                //     })
+                //     .catch(response => {
+                //         console.log(response);
+                //     })
                 }
             }
         }

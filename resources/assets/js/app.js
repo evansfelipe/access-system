@@ -5,30 +5,30 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
-
+import './bootstrap';
+import './prototypes';
 window.Vue = require('vue');
 
 /**
- * Next, we will create a fresh Vue application instance and attach it to
+ * Finally, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('people-index', require('./components/PeopleIndex.vue'));
-Vue.component('person-show', require('./components/PersonShow.vue'));
-Vue.component('assign-person-vehicles', require('./components/AssignPersonVehicles.vue'));
-
+// Common components that are re-usable across all components
+Vue.component('tab-item', require('./components/TabItem.vue'));
+Vue.component('form-item', require('./components/FormItem.vue'));
+Vue.component('loading-cover', require('./components/LoadingCover.vue'));
+Vue.component('abbreviation-text', require('./components/AbbreviationText.vue'));
+// Person creation component and its child.
 Vue.component('person-creation', require('./components/person-creation/Layout.vue'));
 Vue.component('pc-personal-information', require('./components/person-creation/PersonalInformation.vue'));
 Vue.component('pc-working-information', require('./components/person-creation/WorkingInformation.vue'));
 Vue.component('pc-assign-vehicles', require('./components/person-creation/AssignVehicles.vue'));
 Vue.component('pc-first-card', require('./components/person-creation/FirstCard.vue'));
-
-Vue.component('form-item', require('./components/forms/Item.vue'));
-Vue.component('loading', require('./components/Loading.vue'));
-Vue.component('abbreviation-text', require('./components/AbbreviationText.vue'));
-
+// Other components
+Vue.component('people-index', require('./components/PeopleIndex.vue'));
+Vue.component('person-show', require('./components/PersonShow.vue'));
 
 const app = new Vue({
     el: '#app'

@@ -211,8 +211,6 @@ export default {
         }
     },
     computed: {
-        name:      function() { return this.values.name },
-        last_name: function() { return this.values.last_name },
         document_errors: function() {
             if(this.errors.document_type && this.errors.document_number) {
                 return this.errors.document_type.concat(this.errors.document_number);
@@ -243,8 +241,8 @@ export default {
         },
     },
     watch: {
-        name:      function() { this.$parent.$emit('name-changed', this.name) },
-        last_name: function() { this.$parent.$emit('last-name-changed', this.last_name) },
+        'values.name': function() { this.$parent.$emit('name-changed', this.values.name) },
+        'values.last_name': function() { this.$parent.$emit('last-name-changed', this.values.last_name) },
     }
 }
 </script>
