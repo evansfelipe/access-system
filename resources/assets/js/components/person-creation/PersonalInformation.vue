@@ -13,14 +13,12 @@
             <div class="form-row">
                 <form-item col="col-6" label="Apellido" :errors="errors.last_name">
                     <div class="col">
-                        <input type="text" name="last_name" class="form-control"
-                               v-model="values.last_name">
+                        <input type="text" name="last_name" class="form-control" :value="values.last_name" @input="updateValues" ref="last_name">
                     </div>
                 </form-item>
                 <form-item col="col-6" label="Nombre" :errors="errors.name">
                     <div class="col">
-                        <input type="text" name="name" class="form-control"
-                               v-model="values.name">
+                        <input type="text" name="name" class="form-control" :value="values.name" @input="updateValues" ref="name">
                     </div>
                 </form-item>
             </div>
@@ -28,21 +26,19 @@
             <div class="form-row">
                 <form-item col="col-6" label="Documento" :errors="document_errors">
                     <div class="col-5">
-                        <select name="document_type" class="form-control" v-model="values.document_type">
+                        <select name="document_type" class="form-control" :value="values.document_type" @input="updateValues" ref="document_type">
                             <option value="" hidden>Tipo</option>
                             <option value="0">DNI</option>
                             <option value="1">Pasaporte</option>
                         </select>
                     </div>
                     <div class="col-7">
-                        <input  type="text" name="document_number" class="form-control"
-                                placeholder="Número" v-model="values.document_number">                                                                        
+                        <input  type="text" name="document_number" class="form-control" placeholder="Número" :value="values.document_number" @input="updateValues" ref="document_number">                                                                        
                     </div>
                 </form-item>
                 <form-item col="col-6" label="CUIL / CUIT" :errors="errors.cuil">
                     <div class="col">
-                        <input  type="text" name="cuil" class="form-control"
-                                v-model="values.cuil">
+                        <input  type="text" name="cuil" class="form-control" :value="values.cuil" @input="updateValues" ref="cuil">
                     </div>
                 </form-item>
             </div>
@@ -50,13 +46,12 @@
             <div class="form-row">
                 <form-item col="col-6" label="Fecha de nacimiento" :errors="errors.birthday">
                     <div class="col">
-                        <input type="date" name="birthday" class="form-control"
-                               v-model="values.birthday">
+                        <input type="date" name="birthday" class="form-control" :value="values.birthday" @input="updateValues" ref="birthday">
                     </div>
                 </form-item>
                 <form-item col="col-3" label="Género" :errors="errors.sex">
                     <div class="col">
-                        <select name="sex" class="form-control" v-model="values.sex">
+                        <select name="sex" class="form-control" :value="values.sex" @input="updateValues" ref="sex">
                             <option value="" hidden>Género</option>
                             <option value="F">Femenino</option>
                             <option value="M">Masculino</option>
@@ -66,7 +61,7 @@
                 </form-item>
                 <form-item col="col-3" label="Grupo Sanguíneo" :errors="errors.blood_type">
                     <div class="col">
-                        <select name="blood_type" class="form-control" v-model="values.blood_type">
+                        <select name="blood_type" class="form-control" :value="values.blood_type" @input="updateValues" ref="blood_type">
                             <option value="" hidden>Grupo y factor</option>
                             <option value="0-">0-</option>
                             <option value="0+">0+</option>
@@ -84,14 +79,12 @@
             <div class="form-row">
                 <form-item col="col-6" label="Prontuario PNA" :errors="errors.pna">
                     <div class="col">
-                        <input type="text" name="pna" class="form-control"
-                               v-model="values.pna">
+                        <input type="text" name="pna" class="form-control" :value="values.pna" @input="updateValues" ref="pna">
                     </div>
                 </form-item>
                 <form-item col="col-6" label="Email" :errors="errors.email">
                     <div class="col">
-                        <input  type="email" name="email" class="form-control"
-                                v-model="values.email">
+                        <input  type="email" name="email" class="form-control" :value="values.email" @input="updateValues" ref="email">
                     </div>                    
                 </form-item>
             </div>
@@ -102,20 +95,17 @@
     <div class="form-row">
         <form-item col="col-4" label="Teléfono fijo" :errors="errors.home_phone">
             <div class="col">
-                <input type="text" name="home_phone" class="form-control"
-                       v-model="values.home_phone">
+                <input type="text" name="home_phone" class="form-control" :value="values.home_phone" @input="updateValues" ref="home_phone">
             </div>
         </form-item>
         <form-item col="col-4" label="Teléfono móvil" :errors="errors.mobile_phone">
             <div class="col">
-                <input type="text" name="mobile_phone" class="form-control"
-                       v-model="values.mobile_phone">                                
+                <input type="text" name="mobile_phone" class="form-control" :value="values.mobile_phone" @input="updateValues" ref="mobile_phone">                                
             </div>            
         </form-item>
         <form-item col="col-4" label="FAX" :errors="errors.fax">
             <div class="col">
-                <input type="text" name="fax" class="form-control"
-                       v-model="values.fax">
+                <input type="text" name="fax" class="form-control" :value="values.fax" @input="updateValues" ref="fax">
             </div>
         </form-item>   
     </div>
@@ -124,18 +114,15 @@
     <div class="form-row">
         <form-item col="col-8" label="Domicilio" :errors="direction_errors">
             <div class="col-6">
-                <input type="text" name="street" class="form-control"
-                       placeholder="Calle y número" v-model="values.street">
+                <input type="text" name="street" class="form-control" placeholder="Calle y número" :value="values.street" @input="updateValues" ref="street">
             </div>
             <div class="col-6">
-                <input type="text" name="apartment" class="form-control"
-                       placeholder="Departamento" v-model="values.apartment">
+                <input type="text" name="apartment" class="form-control" placeholder="Departamento" :value="values.apartment" @input="updateValues" ref="apartment">
             </div>
         </form-item>
         <form-item col="col-4" label="Código Postal" :errors="errors.cp">
             <div class="col">
-                <input type="text" name="cp" class="form-control"
-                       v-model="values.cp">                                                                    
+                <input type="text" name="cp" class="form-control" :value="values.cp" @input="updateValues" ref="cp">                                                                    
             </div>
         </form-item>           
     </div>
@@ -143,7 +130,7 @@
     <div class="form-row">
         <form-item col="col-4" label="País" :errors="errors.country">
             <div class="col">
-                <select name="country" class="form-control" v-model="values.country">
+                <select name="country" class="form-control" :value="values.country" @input="updateValues" ref="country">
                     <option value="" hidden>Seleccione país</option>
                     <option value="Argentina">Argentina</option>
                 </select>
@@ -151,7 +138,7 @@
         </form-item>
         <form-item col="col-4" label="Provincia / Estado" :errors="errors.province">
             <div class="col">
-                <select name="province" class="form-control" v-model="values.province">
+                <select name="province" class="form-control" :value="values.province" @input="updateValues" ref="province">
                     <option value="" hidden>Seleccione provincia / estado</option>
                     <option value="Buenos Aires">Buenos Aires</option>
                 </select>
@@ -159,7 +146,7 @@
         </form-item>
         <form-item col="col-4" label="Ciudad" :errors="errors.city">
             <div class="col">
-                <select name="city" class="form-control" v-model="values.city">
+                <select name="city" class="form-control" :value="values.city" @input="updateValues" ref="city">
                     <option value="" hidden>Seleccione ciudad</option>
                     <option value="Mar del Plata">Mar del Plata</option>
                 </select>
@@ -171,43 +158,24 @@
 
 <script>
 export default {
-    data: () => {
-        return {
-            errors: {},
-            values: {
-                last_name: '',
-                name: '',
-                document_type: '',
-                document_number: '',                
-                cuil: '',
-                birthday: '',
-                sex: '',
-                blood_type: '',
-                pna: '',
-                email: '',
-                home_phone: '',
-                mobile_phone: '',
-                fax: '',
-                street: '',
-                apartment: '',
-                cp: '',
-                country: '',
-                province: '',
-                city: '',
-            }
-        };
+    props: {
+        values: {
+            required: true,
+            type: Object,
+        },
+        errors: {
+            required: true,
+            type: Object,
+        }
     },
     methods: {
-        save: function() {
-            axios.post('person-creation/personal-information', this.values)
-                 .then(response => {
-                     this.errors = {};
-                     this.$parent.$emit('personal-information-saved', true);
-                 })
-                 .catch(response => {
-                     this.errors = response.response.data.errors;
-                     this.$parent.$emit('personal-information-saved', false);
-                 })
+        updateValues: function() {
+            let data = {};
+            let keys = Object.keys(this.values);
+            keys.forEach(key => {
+                data[key] = this.$refs[key].value;
+            })
+            this.$parent.$emit('personal-information-values', data);
         }
     },
     computed: {
@@ -239,10 +207,6 @@ export default {
                 return [];
             }
         },
-    },
-    watch: {
-        'values.name': function() { this.$parent.$emit('name-changed', this.values.name) },
-        'values.last_name': function() { this.$parent.$emit('last-name-changed', this.values.last_name) },
     }
 }
 </script>

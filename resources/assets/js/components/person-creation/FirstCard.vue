@@ -35,7 +35,7 @@
             <div class="offset-1 col-4">
                 <form-item :errors="errors.number">
                     <input  type="text" name="number" class="form-control"
-                            placeholder="Número de tarjeta" v-model="values.number">
+                            placeholder="Número de tarjeta" :value="values.number" @input="updateValues" ref="number">
                 </form-item>
                 <div class="active-card">
                     <div class="title">
@@ -55,7 +55,7 @@
             <div class="form-row">
                 <form-item label="Riesgo" :errors="errors.risk">
                     <div class="col">
-                        <select name="risk" class="form-control" v-model="values.risk">
+                        <select name="risk" class="form-control" :value="values.risk" @input="updateValues" ref="risk">
                             <option value="" hidden>Seleccione riesgo</option>
                             <option value="1">Nivel 1</option>
                             <option value="2">Nivel 2</option>
@@ -68,11 +68,11 @@
                 <form-item label="Validez" :errors="validity_errors">
                     <div class="col-6">
                         <small>Desde:</small>
-                        <input type="date" name="from" class="form-control" v-model="values.from">
+                        <input type="date" name="from" class="form-control" :value="values.from" @input="updateValues" ref="from">
                     </div>
                     <div class="col-6">
                         <small>Hasta:</small>
-                        <input type="date" name="until" class="form-control" v-model="values.until">
+                        <input type="date" name="until" class="form-control" :value="values.until" @input="updateValues" ref="until">
                     </div>
                 </form-item>
             </div>
@@ -93,32 +93,24 @@ export default {
             type: String,
             required: false,
             default: 'x'
+        },
+        values: {
+            required: true,
+            type: Object
+        },
+        errors: {
+            required: true,
+            type: Object
         }
     },
-    data: () => {
-        return {
-            errors: {},
-            values: {
-                number: '',
-                risk: '',
-                from: '',
-                until: '',
-            }
-        };
-    },
     methods: {
-        save: function() {
-            axios.post('person-creation/first-card', this.values)
-            .then(response => {
-                this.errors = {};
-                this.$parent.$emit('first-card-saved', true);
-
+        updateValues: function() {
+            let data = {};
+            let keys = Object.keys(this.values);
+            keys.forEach(key => {
+                data[key] = this.$refs[key].value;
             })
-            .catch(error => {
-                this.errors = error.response.data.errors;
-                this.$parent.$emit('first-card-saved', false);
-
-            })
+            this.$parent.$emit('first-card-values', data);
         }
     },
     computed: {

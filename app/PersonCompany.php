@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class PersonCompany extends Pivot
 {
     protected $table = 'company_people';
+    protected $fillable = ['company_id','activity_id','art','pbip'];
+
 
     public const LENGTHS = [
         'art' => ['max' => 50]

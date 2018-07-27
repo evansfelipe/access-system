@@ -195,25 +195,6 @@ export default {
             if(confirm('Está seguro?')) {
                 this.lists_combined.forEach(element => element.picked = false);
             }
-        },
-        save: function() {
-            // Creates the object to send to the server.
-            let data = { vehicles_id: [] }
-            // Adds each vehicle id that has been picked.
-            this.lists_combined.forEach(element => {
-                if(element.picked) 
-                    data.vehicles_id.push(element.id);
-            });
-            // Posts the data to the server and waits for the response.
-            axios.post('person-creation/assign-vehicles', data)
-            .then(response => {
-                this.errors = {};
-                this.$parent.$emit('assign-vehicles-saved', true);
-            })
-            .catch(error => {
-                console.log("Assign Vehicles", error.response.data.errors);
-                this.$parent.$emit('assign-vehicles-saved', false);
-            });
         }
     },
     computed: {
@@ -242,6 +223,17 @@ export default {
             this.unfiltered_vehicles = this.company_vehicles;
             this.vehicles_list = this.unfiltered_vehicles;
             this.search = "";
+        },
+        lists_combined: {
+            handler: function() {
+                let data = []
+                this.lists_combined.forEach(element => {
+                    if(element.picked) 
+                        data.push(element.id);
+                });
+                this.$parent.$emit('assign-vehicles-values', {vehicles_id: data});
+            },
+            deep: true
         }
     }
 }

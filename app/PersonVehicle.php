@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class PersonVehicle extends Pivot
 {
     public const LENGTHS = [];
+    protected $fillable = ['vehicle_id'];
 
     public static function getValidationRules()
     {

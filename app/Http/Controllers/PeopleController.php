@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 // Models
-use App\{ Person, Residency, Company, Card };
+use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle };
 // Requests
 use Illuminate\Http\Request;
 use App\Http\Requests\SavePersonRequest;
@@ -65,6 +65,58 @@ class PeopleController extends Controller
     {
         $people = Person::orderBy('created_at','desc')->get()->toJson();
         return view('people.index')->with('people', $people);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $vehicles = Vehicle::all();
+        foreach($vehicles as $vehicle) { $vehicle->picked = false; }
+        return view('person-creation.index')->with('companies', Company::all(['id','name'])->toJson())
+                                            ->with('activities', Activity::all(['id','name'])->toJson())
+                                            ->with('vehicles', $vehicles);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \App\Http\Requests\SavePersonRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(SavePersonRequest $request)
+    {
+        // Saves the residency
+        $residency = new Residency($request->toArray());
+        $residency->save();
+        // Saves the person
+        $person = new Person($request->toArray());
+        $person->setContact($request->toArray());
+        $person->residency_id = $residency->id;
+        $person->save();
+        // Saves the person-company relationship
+        $person_company = new PersonCompany($request->toArray());
+        $person_company->person_id = $person->id;
+        $person_company->save();
+        // Saves each person-vehicle relationship.
+        if(isset($request->vehicles_id)) {
+           foreach($request->vehicles_id as $vehicle_id) {
+               $person_vehicle = new PersonVehicle($request->toArray());
+               $person_vehicle->person_id = $person->id;
+               $person_vehicle->save();
+           } 
+        }
+        // Saves the card
+        $card = new Card($request->toArray());
+        $card->person_id = $person->id;
+        $card->save();
+        /**
+         * TODO: store the documentation.
+         */
+        return response(route('people.show', $person->id), 200)->header('Content-Type', 'text/plain');
     }
 
     /**
