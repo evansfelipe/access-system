@@ -104,7 +104,7 @@ class PeopleController extends Controller
         // Saves each person-vehicle relationship.
         if(isset($request->vehicles_id)) {
            foreach($request->vehicles_id as $vehicle_id) {
-               $person_vehicle = new PersonVehicle($request->toArray());
+               $person_vehicle = new PersonVehicle(['vehicle_id' => $vehicle_id]);
                $person_vehicle->person_id = $person->id;
                $person_vehicle->save();
            } 
