@@ -48,4 +48,14 @@ class Card extends Model
     {
         return $this->belongsTo('App\Person');
     }
+
+    public function toArray()
+    {
+        return [
+            'number' => $this->number,
+            'risk' => 'Nivel ' . $this->risk,
+            'from' => date('d-m-Y', strtotime($this->from)),
+            'until' => date('d-m-Y', strtotime($this->until))
+        ];
+    }
 }

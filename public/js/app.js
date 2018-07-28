@@ -14335,7 +14335,7 @@ Vue.component('ps-vehicles', __webpack_require__(94));
 Vue.component('ps-cards', __webpack_require__(97));
 Vue.component('ps-documentation', __webpack_require__(99));
 // Companies components
-Vue.component('company-creation', __webpack_require__(115));
+Vue.component('company-creation', __webpack_require__(122));
 // Other components
 Vue.component('people-index', __webpack_require__(101));
 
@@ -31550,7 +31550,7 @@ module.exports = function(module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap v4.1.1 (https://getbootstrap.com/)
+  * Bootstrap v4.1.2 (https://getbootstrap.com/)
   * Copyright 2011-2018 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
@@ -31621,7 +31621,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): util.js
+   * Bootstrap (v4.1.2): util.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31698,8 +31698,7 @@ module.exports = function(module) {
         }
 
         try {
-          var $selector = $$$1(document).find(selector);
-          return $selector.length > 0 ? selector : null;
+          return document.querySelector(selector) ? selector : null;
         } catch (err) {
           return null;
         }
@@ -31754,7 +31753,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): alert.js
+   * Bootstrap (v4.1.2): alert.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31766,7 +31765,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'alert';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.alert';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -31829,7 +31828,7 @@ module.exports = function(module) {
         var parent = false;
 
         if (selector) {
-          parent = $$$1(selector)[0];
+          parent = document.querySelector(selector);
         }
 
         if (!parent) {
@@ -31929,7 +31928,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): button.js
+   * Bootstrap (v4.1.2): button.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31941,7 +31940,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'button';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.button';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -31986,14 +31985,14 @@ module.exports = function(module) {
         var rootElement = $$$1(this._element).closest(Selector.DATA_TOGGLE)[0];
 
         if (rootElement) {
-          var input = $$$1(this._element).find(Selector.INPUT)[0];
+          var input = this._element.querySelector(Selector.INPUT);
 
           if (input) {
             if (input.type === 'radio') {
-              if (input.checked && $$$1(this._element).hasClass(ClassName.ACTIVE)) {
+              if (input.checked && this._element.classList.contains(ClassName.ACTIVE)) {
                 triggerChangeEvent = false;
               } else {
-                var activeElement = $$$1(rootElement).find(Selector.ACTIVE)[0];
+                var activeElement = rootElement.querySelector(Selector.ACTIVE);
 
                 if (activeElement) {
                   $$$1(activeElement).removeClass(ClassName.ACTIVE);
@@ -32006,7 +32005,7 @@ module.exports = function(module) {
                 return;
               }
 
-              input.checked = !$$$1(this._element).hasClass(ClassName.ACTIVE);
+              input.checked = !this._element.classList.contains(ClassName.ACTIVE);
               $$$1(input).trigger('change');
             }
 
@@ -32016,7 +32015,7 @@ module.exports = function(module) {
         }
 
         if (addAriaPressed) {
-          this._element.setAttribute('aria-pressed', !$$$1(this._element).hasClass(ClassName.ACTIVE));
+          this._element.setAttribute('aria-pressed', !this._element.classList.contains(ClassName.ACTIVE));
         }
 
         if (triggerChangeEvent) {
@@ -32093,7 +32092,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): carousel.js
+   * Bootstrap (v4.1.2): carousel.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32105,7 +32104,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'carousel';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.carousel';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32184,7 +32183,7 @@ module.exports = function(module) {
         this.touchTimeout = null;
         this._config = this._getConfig(config);
         this._element = $$$1(element)[0];
-        this._indicatorsElement = $$$1(this._element).find(Selector.INDICATORS)[0];
+        this._indicatorsElement = this._element.querySelector(Selector.INDICATORS);
 
         this._addEventListeners();
       } // Getters
@@ -32218,7 +32217,7 @@ module.exports = function(module) {
           this._isPaused = true;
         }
 
-        if ($$$1(this._element).find(Selector.NEXT_PREV)[0]) {
+        if (this._element.querySelector(Selector.NEXT_PREV)) {
           Util.triggerTransitionEnd(this._element);
           this.cycle(true);
         }
@@ -32245,7 +32244,7 @@ module.exports = function(module) {
       _proto.to = function to(index) {
         var _this = this;
 
-        this._activeElement = $$$1(this._element).find(Selector.ACTIVE_ITEM)[0];
+        this._activeElement = this._element.querySelector(Selector.ACTIVE_ITEM);
 
         var activeIndex = this._getItemIndex(this._activeElement);
 
@@ -32351,7 +32350,7 @@ module.exports = function(module) {
       };
 
       _proto._getItemIndex = function _getItemIndex(element) {
-        this._items = $$$1.makeArray($$$1(element).parent().find(Selector.ITEM));
+        this._items = element && element.parentNode ? [].slice.call(element.parentNode.querySelectorAll(Selector.ITEM)) : [];
         return this._items.indexOf(element);
       };
 
@@ -32376,7 +32375,7 @@ module.exports = function(module) {
       _proto._triggerSlideEvent = function _triggerSlideEvent(relatedTarget, eventDirectionName) {
         var targetIndex = this._getItemIndex(relatedTarget);
 
-        var fromIndex = this._getItemIndex($$$1(this._element).find(Selector.ACTIVE_ITEM)[0]);
+        var fromIndex = this._getItemIndex(this._element.querySelector(Selector.ACTIVE_ITEM));
 
         var slideEvent = $$$1.Event(Event.SLIDE, {
           relatedTarget: relatedTarget,
@@ -32390,7 +32389,8 @@ module.exports = function(module) {
 
       _proto._setActiveIndicatorElement = function _setActiveIndicatorElement(element) {
         if (this._indicatorsElement) {
-          $$$1(this._indicatorsElement).find(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
+          var indicators = [].slice.call(this._indicatorsElement.querySelectorAll(Selector.ACTIVE));
+          $$$1(indicators).removeClass(ClassName.ACTIVE);
 
           var nextIndicator = this._indicatorsElement.children[this._getItemIndex(element)];
 
@@ -32403,7 +32403,7 @@ module.exports = function(module) {
       _proto._slide = function _slide(direction, element) {
         var _this3 = this;
 
-        var activeElement = $$$1(this._element).find(Selector.ACTIVE_ITEM)[0];
+        var activeElement = this._element.querySelector(Selector.ACTIVE_ITEM);
 
         var activeElementIndex = this._getItemIndex(activeElement);
 
@@ -32569,11 +32569,13 @@ module.exports = function(module) {
 
     $$$1(document).on(Event.CLICK_DATA_API, Selector.DATA_SLIDE, Carousel._dataApiClickHandler);
     $$$1(window).on(Event.LOAD_DATA_API, function () {
-      $$$1(Selector.DATA_RIDE).each(function () {
-        var $carousel = $$$1(this);
+      var carousels = [].slice.call(document.querySelectorAll(Selector.DATA_RIDE));
+
+      for (var i = 0, len = carousels.length; i < len; i++) {
+        var $carousel = $$$1(carousels[i]);
 
         Carousel._jQueryInterface.call($carousel, $carousel.data());
-      });
+      }
     });
     /**
      * ------------------------------------------------------------------------
@@ -32594,7 +32596,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): collapse.js
+   * Bootstrap (v4.1.2): collapse.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32606,7 +32608,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'collapse';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.collapse';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32654,14 +32656,17 @@ module.exports = function(module) {
         this._isTransitioning = false;
         this._element = element;
         this._config = this._getConfig(config);
-        this._triggerArray = $$$1.makeArray($$$1("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
-        var tabToggles = $$$1(Selector.DATA_TOGGLE);
+        this._triggerArray = $$$1.makeArray(document.querySelectorAll("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
+        var toggleList = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE));
 
-        for (var i = 0; i < tabToggles.length; i++) {
-          var elem = tabToggles[i];
+        for (var i = 0, len = toggleList.length; i < len; i++) {
+          var elem = toggleList[i];
           var selector = Util.getSelectorFromElement(elem);
+          var filterElement = [].slice.call(document.querySelectorAll(selector)).filter(function (foundElem) {
+            return foundElem === element;
+          });
 
-          if (selector !== null && $$$1(selector).filter(element).length > 0) {
+          if (selector !== null && filterElement.length > 0) {
             this._selector = selector;
 
             this._triggerArray.push(elem);
@@ -32702,7 +32707,9 @@ module.exports = function(module) {
         var activesData;
 
         if (this._parent) {
-          actives = $$$1.makeArray($$$1(this._parent).find(Selector.ACTIVES).filter("[data-parent=\"" + this._config.parent + "\"]"));
+          actives = [].slice.call(this._parent.querySelectorAll(Selector.ACTIVES)).filter(function (elem) {
+            return elem.getAttribute('data-parent') === _this._config.parent;
+          });
 
           if (actives.length === 0) {
             actives = null;
@@ -32737,7 +32744,7 @@ module.exports = function(module) {
         $$$1(this._element).removeClass(ClassName.COLLAPSE).addClass(ClassName.COLLAPSING);
         this._element.style[dimension] = 0;
 
-        if (this._triggerArray.length > 0) {
+        if (this._triggerArray.length) {
           $$$1(this._triggerArray).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
         }
 
@@ -32778,14 +32785,15 @@ module.exports = function(module) {
         this._element.style[dimension] = this._element.getBoundingClientRect()[dimension] + "px";
         Util.reflow(this._element);
         $$$1(this._element).addClass(ClassName.COLLAPSING).removeClass(ClassName.COLLAPSE).removeClass(ClassName.SHOW);
+        var triggerArrayLength = this._triggerArray.length;
 
-        if (this._triggerArray.length > 0) {
-          for (var i = 0; i < this._triggerArray.length; i++) {
+        if (triggerArrayLength > 0) {
+          for (var i = 0; i < triggerArrayLength; i++) {
             var trigger = this._triggerArray[i];
             var selector = Util.getSelectorFromElement(trigger);
 
             if (selector !== null) {
-              var $elem = $$$1(selector);
+              var $elem = $$$1([].slice.call(document.querySelectorAll(selector)));
 
               if (!$elem.hasClass(ClassName.SHOW)) {
                 $$$1(trigger).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
@@ -32846,11 +32854,12 @@ module.exports = function(module) {
             parent = this._config.parent[0];
           }
         } else {
-          parent = $$$1(this._config.parent)[0];
+          parent = document.querySelector(this._config.parent);
         }
 
         var selector = "[data-toggle=\"collapse\"][data-parent=\"" + this._config.parent + "\"]";
-        $$$1(parent).find(selector).each(function (i, element) {
+        var children = [].slice.call(parent.querySelectorAll(selector));
+        $$$1(children).each(function (i, element) {
           _this3._addAriaAndCollapsedClass(Collapse._getTargetFromElement(element), [element]);
         });
         return parent;
@@ -32860,7 +32869,7 @@ module.exports = function(module) {
         if (element) {
           var isOpen = $$$1(element).hasClass(ClassName.SHOW);
 
-          if (triggerArray.length > 0) {
+          if (triggerArray.length) {
             $$$1(triggerArray).toggleClass(ClassName.COLLAPSED, !isOpen).attr('aria-expanded', isOpen);
           }
         }
@@ -32869,7 +32878,7 @@ module.exports = function(module) {
 
       Collapse._getTargetFromElement = function _getTargetFromElement(element) {
         var selector = Util.getSelectorFromElement(element);
-        return selector ? $$$1(selector)[0] : null;
+        return selector ? document.querySelector(selector) : null;
       };
 
       Collapse._jQueryInterface = function _jQueryInterface(config) {
@@ -32927,7 +32936,8 @@ module.exports = function(module) {
 
       var $trigger = $$$1(this);
       var selector = Util.getSelectorFromElement(this);
-      $$$1(selector).each(function () {
+      var selectors = [].slice.call(document.querySelectorAll(selector));
+      $$$1(selectors).each(function () {
         var $target = $$$1(this);
         var data = $target.data(DATA_KEY);
         var config = data ? 'toggle' : $trigger.data();
@@ -32954,7 +32964,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): dropdown.js
+   * Bootstrap (v4.1.2): dropdown.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32966,7 +32976,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'dropdown';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.dropdown';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -33175,14 +33185,16 @@ module.exports = function(module) {
         if (!this._menu) {
           var parent = Dropdown._getParentFromElement(this._element);
 
-          this._menu = $$$1(parent).find(Selector.MENU)[0];
+          if (parent) {
+            this._menu = parent.querySelector(Selector.MENU);
+          }
         }
 
         return this._menu;
       };
 
       _proto._getPlacement = function _getPlacement() {
-        var $parentDropdown = $$$1(this._element).parent();
+        var $parentDropdown = $$$1(this._element.parentNode);
         var placement = AttachmentMap.BOTTOM; // Handle dropup
 
         if ($parentDropdown.hasClass(ClassName.DROPUP)) {
@@ -33270,15 +33282,19 @@ module.exports = function(module) {
           return;
         }
 
-        var toggles = $$$1.makeArray($$$1(Selector.DATA_TOGGLE));
+        var toggles = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE));
 
-        for (var i = 0; i < toggles.length; i++) {
+        for (var i = 0, len = toggles.length; i < len; i++) {
           var parent = Dropdown._getParentFromElement(toggles[i]);
 
           var context = $$$1(toggles[i]).data(DATA_KEY);
           var relatedTarget = {
             relatedTarget: toggles[i]
           };
+
+          if (event && event.type === 'click') {
+            relatedTarget.clickEvent = event;
+          }
 
           if (!context) {
             continue;
@@ -33318,7 +33334,7 @@ module.exports = function(module) {
         var selector = Util.getSelectorFromElement(element);
 
         if (selector) {
-          parent = $$$1(selector)[0];
+          parent = document.querySelector(selector);
         }
 
         return parent || element.parentNode;
@@ -33350,7 +33366,7 @@ module.exports = function(module) {
 
         if (!isActive && (event.which !== ESCAPE_KEYCODE || event.which !== SPACE_KEYCODE) || isActive && (event.which === ESCAPE_KEYCODE || event.which === SPACE_KEYCODE)) {
           if (event.which === ESCAPE_KEYCODE) {
-            var toggle = $$$1(parent).find(Selector.DATA_TOGGLE)[0];
+            var toggle = parent.querySelector(Selector.DATA_TOGGLE);
             $$$1(toggle).trigger('focus');
           }
 
@@ -33358,7 +33374,7 @@ module.exports = function(module) {
           return;
         }
 
-        var items = $$$1(parent).find(Selector.VISIBLE_ITEMS).get();
+        var items = [].slice.call(parent.querySelectorAll(Selector.VISIBLE_ITEMS));
 
         if (items.length === 0) {
           return;
@@ -33436,7 +33452,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): modal.js
+   * Bootstrap (v4.1.2): modal.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -33448,7 +33464,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'modal';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.modal';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -33492,8 +33508,7 @@ module.exports = function(module) {
       DATA_TOGGLE: '[data-toggle="modal"]',
       DATA_DISMISS: '[data-dismiss="modal"]',
       FIXED_CONTENT: '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top',
-      STICKY_CONTENT: '.sticky-top',
-      NAVBAR_TOGGLER: '.navbar-toggler'
+      STICKY_CONTENT: '.sticky-top'
       /**
        * ------------------------------------------------------------------------
        * Class Definition
@@ -33508,7 +33523,7 @@ module.exports = function(module) {
       function Modal(element, config) {
         this._config = this._getConfig(config);
         this._element = element;
-        this._dialog = $$$1(element).find(Selector.DIALOG)[0];
+        this._dialog = element.querySelector(Selector.DIALOG);
         this._backdrop = null;
         this._isShown = false;
         this._isBodyOverflowing = false;
@@ -33765,7 +33780,7 @@ module.exports = function(module) {
           this._backdrop.className = ClassName.BACKDROP;
 
           if (animate) {
-            $$$1(this._backdrop).addClass(animate);
+            this._backdrop.classList.add(animate);
           }
 
           $$$1(this._backdrop).appendTo(document.body);
@@ -33859,23 +33874,19 @@ module.exports = function(module) {
         if (this._isBodyOverflowing) {
           // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
           //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
-          // Adjust fixed content padding
-          $$$1(Selector.FIXED_CONTENT).each(function (index, element) {
-            var actualPadding = $$$1(element)[0].style.paddingRight;
+          var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
+          var stickyContent = [].slice.call(document.querySelectorAll(Selector.STICKY_CONTENT)); // Adjust fixed content padding
+
+          $$$1(fixedContent).each(function (index, element) {
+            var actualPadding = element.style.paddingRight;
             var calculatedPadding = $$$1(element).css('padding-right');
             $$$1(element).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + _this9._scrollbarWidth + "px");
           }); // Adjust sticky content margin
 
-          $$$1(Selector.STICKY_CONTENT).each(function (index, element) {
-            var actualMargin = $$$1(element)[0].style.marginRight;
+          $$$1(stickyContent).each(function (index, element) {
+            var actualMargin = element.style.marginRight;
             var calculatedMargin = $$$1(element).css('margin-right');
             $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) - _this9._scrollbarWidth + "px");
-          }); // Adjust navbar-toggler margin
-
-          $$$1(Selector.NAVBAR_TOGGLER).each(function (index, element) {
-            var actualMargin = $$$1(element)[0].style.marginRight;
-            var calculatedMargin = $$$1(element).css('margin-right');
-            $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) + _this9._scrollbarWidth + "px");
           }); // Adjust body padding
 
           var actualPadding = document.body.style.paddingRight;
@@ -33886,15 +33897,15 @@ module.exports = function(module) {
 
       _proto._resetScrollbar = function _resetScrollbar() {
         // Restore fixed content padding
-        $$$1(Selector.FIXED_CONTENT).each(function (index, element) {
+        var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
+        $$$1(fixedContent).each(function (index, element) {
           var padding = $$$1(element).data('padding-right');
+          $$$1(element).removeData('padding-right');
+          element.style.paddingRight = padding ? padding : '';
+        }); // Restore sticky content
 
-          if (typeof padding !== 'undefined') {
-            $$$1(element).css('padding-right', padding).removeData('padding-right');
-          }
-        }); // Restore sticky content and navbar-toggler margin
-
-        $$$1(Selector.STICKY_CONTENT + ", " + Selector.NAVBAR_TOGGLER).each(function (index, element) {
+        var elements = [].slice.call(document.querySelectorAll("" + Selector.STICKY_CONTENT));
+        $$$1(elements).each(function (index, element) {
           var margin = $$$1(element).data('margin-right');
 
           if (typeof margin !== 'undefined') {
@@ -33903,10 +33914,8 @@ module.exports = function(module) {
         }); // Restore body padding
 
         var padding = $$$1(document.body).data('padding-right');
-
-        if (typeof padding !== 'undefined') {
-          $$$1(document.body).css('padding-right', padding).removeData('padding-right');
-        }
+        $$$1(document.body).removeData('padding-right');
+        document.body.style.paddingRight = padding ? padding : '';
       };
 
       _proto._getScrollbarWidth = function _getScrollbarWidth() {
@@ -33971,7 +33980,7 @@ module.exports = function(module) {
       var selector = Util.getSelectorFromElement(this);
 
       if (selector) {
-        target = $$$1(selector)[0];
+        target = document.querySelector(selector);
       }
 
       var config = $$$1(target).data(DATA_KEY) ? 'toggle' : _objectSpread({}, $$$1(target).data(), $$$1(this).data());
@@ -34014,7 +34023,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): tooltip.js
+   * Bootstrap (v4.1.2): tooltip.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34026,7 +34035,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'tooltip';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.tooltip';
     var EVENT_KEY = "." + DATA_KEY;
     var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -34236,7 +34245,7 @@ module.exports = function(module) {
           var attachment = this._getAttachment(placement);
 
           this.addAttachmentClass(attachment);
-          var container = this.config.container === false ? document.body : $$$1(this.config.container);
+          var container = this.config.container === false ? document.body : $$$1(document).find(this.config.container);
           $$$1(tip).data(this.constructor.DATA_KEY, this);
 
           if (!$$$1.contains(this.element.ownerDocument.documentElement, this.tip)) {
@@ -34375,9 +34384,9 @@ module.exports = function(module) {
       };
 
       _proto.setContent = function setContent() {
-        var $tip = $$$1(this.getTipElement());
-        this.setElementContent($tip.find(Selector.TOOLTIP_INNER), this.getTitle());
-        $tip.removeClass(ClassName.FADE + " " + ClassName.SHOW);
+        var tip = this.getTipElement();
+        this.setElementContent($$$1(tip.querySelectorAll(Selector.TOOLTIP_INNER)), this.getTitle());
+        $$$1(tip).removeClass(ClassName.FADE + " " + ClassName.SHOW);
       };
 
       _proto.setElementContent = function setElementContent($element, content) {
@@ -34570,15 +34579,18 @@ module.exports = function(module) {
         var $tip = $$$1(this.getTipElement());
         var tabClass = $tip.attr('class').match(BSCLS_PREFIX_REGEX);
 
-        if (tabClass !== null && tabClass.length > 0) {
+        if (tabClass !== null && tabClass.length) {
           $tip.removeClass(tabClass.join(''));
         }
       };
 
-      _proto._handlePopperPlacementChange = function _handlePopperPlacementChange(data) {
+      _proto._handlePopperPlacementChange = function _handlePopperPlacementChange(popperData) {
+        var popperInstance = popperData.instance;
+        this.tip = popperInstance.popper;
+
         this._cleanTipClass();
 
-        this.addAttachmentClass(this._getAttachment(data.placement));
+        this.addAttachmentClass(this._getAttachment(popperData.placement));
       };
 
       _proto._fixTransition = function _fixTransition() {
@@ -34681,7 +34693,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): popover.js
+   * Bootstrap (v4.1.2): popover.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34693,7 +34705,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'popover';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.popover';
     var EVENT_KEY = "." + DATA_KEY;
     var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -34878,7 +34890,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): scrollspy.js
+   * Bootstrap (v4.1.2): scrollspy.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34890,7 +34902,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'scrollspy';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.scrollspy';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -34972,13 +34984,13 @@ module.exports = function(module) {
         this._offsets = [];
         this._targets = [];
         this._scrollHeight = this._getScrollHeight();
-        var targets = $$$1.makeArray($$$1(this._selector));
+        var targets = [].slice.call(document.querySelectorAll(this._selector));
         targets.map(function (element) {
           var target;
           var targetSelector = Util.getSelectorFromElement(element);
 
           if (targetSelector) {
-            target = $$$1(targetSelector)[0];
+            target = document.querySelector(targetSelector);
           }
 
           if (target) {
@@ -35075,7 +35087,9 @@ module.exports = function(module) {
           return;
         }
 
-        for (var i = this._offsets.length; i--;) {
+        var offsetLength = this._offsets.length;
+
+        for (var i = offsetLength; i--;) {
           var isActiveTarget = this._activeTarget !== this._targets[i] && scrollTop >= this._offsets[i] && (typeof this._offsets[i + 1] === 'undefined' || scrollTop < this._offsets[i + 1]);
 
           if (isActiveTarget) {
@@ -35095,7 +35109,7 @@ module.exports = function(module) {
         queries = queries.map(function (selector) {
           return selector + "[data-target=\"" + target + "\"]," + (selector + "[href=\"" + target + "\"]");
         });
-        var $link = $$$1(queries.join(','));
+        var $link = $$$1([].slice.call(document.querySelectorAll(queries.join(','))));
 
         if ($link.hasClass(ClassName.DROPDOWN_ITEM)) {
           $link.closest(Selector.DROPDOWN).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
@@ -35116,7 +35130,8 @@ module.exports = function(module) {
       };
 
       _proto._clear = function _clear() {
-        $$$1(this._selector).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
+        var nodes = [].slice.call(document.querySelectorAll(this._selector));
+        $$$1(nodes).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
       }; // Static
 
 
@@ -35163,9 +35178,10 @@ module.exports = function(module) {
 
 
     $$$1(window).on(Event.LOAD_DATA_API, function () {
-      var scrollSpys = $$$1.makeArray($$$1(Selector.DATA_SPY));
+      var scrollSpys = [].slice.call(document.querySelectorAll(Selector.DATA_SPY));
+      var scrollSpysLength = scrollSpys.length;
 
-      for (var i = scrollSpys.length; i--;) {
+      for (var i = scrollSpysLength; i--;) {
         var $spy = $$$1(scrollSpys[i]);
 
         ScrollSpy._jQueryInterface.call($spy, $spy.data());
@@ -35190,7 +35206,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): tab.js
+   * Bootstrap (v4.1.2): tab.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -35202,7 +35218,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'tab';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.tab';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -35284,7 +35300,7 @@ module.exports = function(module) {
         }
 
         if (selector) {
-          target = $$$1(selector)[0];
+          target = document.querySelector(selector);
         }
 
         this._activate(this._element, listElement);
@@ -35366,7 +35382,8 @@ module.exports = function(module) {
           var dropdownElement = $$$1(element).closest(Selector.DROPDOWN)[0];
 
           if (dropdownElement) {
-            $$$1(dropdownElement).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
+            var dropdownToggleList = [].slice.call(dropdownElement.querySelectorAll(Selector.DROPDOWN_TOGGLE));
+            $$$1(dropdownToggleList).addClass(ClassName.ACTIVE);
           }
 
           element.setAttribute('aria-expanded', true);
@@ -35438,7 +35455,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): index.js
+   * Bootstrap (v4.1.2): index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -50148,7 +50165,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\ntable[data-v-a2d69ef6] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-flow: column;\n          flex-flow: column;\n  height: 100%;\n  width: 100%;\n}\ntable > thead[data-v-a2d69ef6] {\n    -webkit-box-flex: 0;\n        -ms-flex: 0 0 auto;\n            flex: 0 0 auto;\n    width: calc(100% - 5px);\n}\ntable > thead > tr[data-v-a2d69ef6] {\n      border: 0;\n      border-bottom: 1px solid grey;\n}\ntable > thead > tr > th[data-v-a2d69ef6] {\n        border: 0;\n}\ntable > thead > tr > th[data-v-a2d69ef6]:first-of-type, table > tbody > tr > td[data-v-a2d69ef6]:first-of-type {\n    width: 5%;\n    text-align: center;\n}\ntable > thead[data-v-a2d69ef6], table > tbody > tr[data-v-a2d69ef6] {\n    display: table;\n    table-layout: fixed;\n}\ntable > tbody[data-v-a2d69ef6] {\n    -webkit-box-flex: 1;\n        -ms-flex: 1 1 auto;\n            flex: 1 1 auto;\n    display: block;\n    overflow-y: scroll;\n}\ntable > tbody > tr[data-v-a2d69ef6] {\n      width: 100%;\n}\ntable > tbody > tr > td > i.selected-item[data-v-a2d69ef6] {\n      color: #3F729B;\n}\ntable > tbody > tr[data-v-a2d69ef6]:hover {\n      cursor: pointer;\n      background-color: #fafafa;\n}\ntable > tbody > tr > td[data-v-a2d69ef6] {\n      border: 0;\n      border-bottom: 1px solid whitesmoke;\n      padding: 8px;\n}\ndiv.table-container[data-v-a2d69ef6] {\n  height: 50vh;\n}\n.dropdown-toggle[data-v-a2d69ef6]::after {\n  display: none;\n}\n.btn-link[data-v-a2d69ef6] {\n  color: grey;\n}\n.btn-link[data-v-a2d69ef6]:hover {\n    text-decoration: none;\n}\n", ""]);
+exports.push([module.i, "\ntable > thead > tr > th[data-v-a2d69ef6]:first-of-type, table > tbody > tr > td[data-v-a2d69ef6]:first-of-type {\n  width: 5%;\n  text-align: center;\n}\ndiv.table-container[data-v-a2d69ef6] {\n  height: 50vh;\n}\n.dropdown-toggle[data-v-a2d69ef6]::after {\n  display: none;\n}\n.btn-link[data-v-a2d69ef6] {\n  color: grey;\n}\n.btn-link[data-v-a2d69ef6]:hover {\n    text-decoration: none;\n}\n", ""]);
 
 // exports
 
@@ -50159,44 +50176,6 @@ exports.push([module.i, "\ntable[data-v-a2d69ef6] {\n  display: -webkit-box;\n  
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -50556,7 +50535,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12 table-container" }, [
-        _c("table", { staticClass: "table" }, [
+        _c("table", { staticClass: "table tbl-show3" }, [
           _vm._m(2),
           _vm._v(" "),
           _c(
@@ -51065,7 +51044,7 @@ if (false) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(84)
+  __webpack_require__(117)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -51110,51 +51089,42 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 84 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(85);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("0f6de6f7", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-724c070a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Layout.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-724c070a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Layout.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 85 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.card[data-v-724c070a] {\n    border-top: 0;\n    border-top-right-radius: 0;\n    border-top-left-radius: 0;\n}\n.btn-edit[data-v-724c070a] {\n    position: absolute;\n    top: 0.5em;\n    right: 0.5em; \n    z-index: 2;\n    text-align: center;\n    background-color: transparent;\n    color: rgb(168, 168, 168);\n    border-radius: 100%;\n    height: 3.5em;\n    width: 3.5em;\n}\n.btn-edit[data-v-724c070a]:hover {\n    background-color: whitesmoke;\n    color: grey;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 84 */,
+/* 85 */,
 /* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -51239,7 +51209,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             tab: 0,
             edit_route: person_info.edit_url,
             personal_information: person_info.personal_information,
-            working_information: person_info.working_information
+            working_information: person_info.working_information,
+            vehicles: person_info.vehicles,
+            active_card: person_info.active_card,
+            inactive_cards: person_info.inactive_cards
         };
     }
 });
@@ -51368,7 +51341,8 @@ var render = function() {
                 value: _vm.tab === 2,
                 expression: "tab === 2"
               }
-            ]
+            ],
+            attrs: { vehicles: _vm.vehicles }
           }),
           _vm._v(" "),
           _c("ps-cards", {
@@ -51379,7 +51353,13 @@ var render = function() {
                 value: _vm.tab === 3,
                 expression: "tab === 3"
               }
-            ]
+            ],
+            attrs: {
+              activeCard: _vm.active_card,
+              inactiveCards: _vm.inactive_cards,
+              person: _vm.personal_information.full_name,
+              company: _vm.working_information.company_name
+            }
           }),
           _vm._v(" "),
           _c("ps-documentation", {
@@ -51809,17 +51789,21 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(119)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(92)
 /* template */
-var __vue_template__ = __webpack_require__(93)
+var __vue_template__ = __webpack_require__(121)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-3a5a7c8c"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -51907,6 +51891,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -51918,114 +51922,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 93 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c(
-      "div",
-      {
-        staticClass: "offset-1 col-5",
-        staticStyle: { "border-right": "1px solid grey" }
-      },
-      [
-        _c("h4", [_vm._v(_vm._s(_vm.personCompany.company_name))]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-6" }, [
-            _c("small", [_vm._v("CUIT")]),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c("strong", [_vm._v(_vm._s(_vm.personCompany.company_cuit))])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-6" }, [
-            _c("small", [_vm._v("Sector")]),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c("strong", [_vm._v(_vm._s(_vm.personCompany.company_area))])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("br"),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-6" }, [
-            _c("small", [_vm._v("Actividad / Categoría")]),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c("strong", [_vm._v(_vm._s(_vm.personCompany.activity))])
-          ])
-        ])
-      ]
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "col-5" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-6" }, [
-          _c("small", [_vm._v("ART")]),
-          _vm._v(" "),
-          _c("br"),
-          _vm._v(" "),
-          _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_company))])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-6" }, [
-          _c("small", [_vm._v("Vencimiento")]),
-          _vm._v(" "),
-          _c("br"),
-          _vm._v(" "),
-          _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_expiration))])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("br"),
-      _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-6" }, [
-          _c("small", [_vm._v("Vencimiento curso PBIP")]),
-          _vm._v(" "),
-          _c("br"),
-          _vm._v(" "),
-          _c("strong", [_vm._v(_vm._s(_vm.personCompany.pbip))])
-        ])
-      ])
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-3a5a7c8c", module.exports)
-  }
-}
-
-/***/ }),
+/* 93 */,
 /* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(110)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(95)
 /* template */
-var __vue_template__ = __webpack_require__(96)
+var __vue_template__ = __webpack_require__(112)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-62439150"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -52076,66 +51992,65 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
         vehicles: {
             requires: false,
-            default: []
+            default: function _default() {
+                return [];
+            }
         }
     }
 });
 
 /***/ }),
-/* 96 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col" }, [
-      _vm.vehicles.length == 0
-        ? _c("div", { staticStyle: { "text-align": "center" } }, [
-            _c("h4", [_vm._v("No hay vehículos asignados")])
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.vehicles.length > 0
-        ? _c("div", { staticStyle: { "text-align": "center" } }, [
-            _c("h4", [_vm._v("No hay vehículos asignados")])
-          ])
-        : _vm._e()
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-62439150", module.exports)
-  }
-}
-
-/***/ }),
+/* 96 */,
 /* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(113)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__(116)
 /* template */
-var __vue_template__ = __webpack_require__(98)
+var __vue_template__ = __webpack_require__(115)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-62513cbc"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -52168,26 +52083,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 98 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n    Tarjetas\n")])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-62513cbc", module.exports)
-  }
-}
-
-/***/ }),
+/* 98 */,
 /* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -52757,24 +52653,677 @@ if (false) {
 /* 107 */,
 /* 108 */,
 /* 109 */,
-/* 110 */,
-/* 111 */,
-/* 112 */,
-/* 113 */,
-/* 114 */,
+/* 110 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(111);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("18893b43", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-62439150\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Vehicles.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-62439150\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Vehicles.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\ndiv.table-container[data-v-62439150] {\n  height: 65vh;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 112 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col" }, [
+      _vm.vehicles.length == 0
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "table-container d-flex align-items-center justify-content-center"
+            },
+            [_c("h4", [_vm._v("No hay vehículos asignados")])]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.vehicles.length > 0
+        ? _c("div", { staticClass: "table-container" }, [
+            _c("table", { staticClass: "table tbl-show" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.vehicles, function(vehicle, key) {
+                  return _c("tr", { key: key }, [
+                    _c("td", [_vm._v(_vm._s(vehicle.plate))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(vehicle.brand))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(vehicle.model))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(vehicle.year))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(vehicle.colour))])
+                  ])
+                })
+              )
+            ])
+          ])
+        : _vm._e()
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Patente")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Marca")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Modelo")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Año")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Color")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-62439150", module.exports)
+  }
+}
+
+/***/ }),
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(114);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("50520040", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-62513cbc\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Cards.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-62513cbc\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Cards.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 114 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\ndiv.active-card[data-v-62513cbc] {\n    display: inline-block;\n    width: 100%;\n    border-radius: 5px;\n    color: white;\n    background: -webkit-gradient(linear, left top, right top, from(#0d47a1) , to(#4285F4));\n    background: linear-gradient(to right, #0d47a1 , #4285F4);\n}\ndiv.active-card > hr[data-v-62513cbc] {\n    height: 12px;\n    border: 0;\n    -webkit-box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);\n            box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);\n    margin: 0;\n}\ndiv.active-card > div.title[data-v-62513cbc] {\n    padding: 5%;\n    padding-bottom: 5px;\n}\ndiv.active-card > div.title > h4[data-v-62513cbc] {\n    display: inline-block;\n}\ndiv.active-card > div.info[data-v-62513cbc] {\n    padding: 5%;\n    padding-top: 0;\n}\ndiv.table-container[data-v-62513cbc] {\n    height: 30vh;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
 /* 115 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col" }, [
+      _c("div", { staticClass: "row d-flex align-items-center" }, [
+        _c("div", { staticClass: "offset-1 col-4" }, [
+          _c("br"),
+          _vm._v(" "),
+          _c("div", { staticClass: "active-card" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("div", { staticClass: "info" }, [
+              _c("h3", { attrs: { id: "display" } }, [
+                _vm._v(_vm._s(_vm.activeCard.number))
+              ]),
+              _vm._v(" "),
+              _c("small", [_c("b", [_vm._v(_vm._s(_vm.person))])]),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("small", [_c("b", [_vm._v(_vm._s(_vm.company))])]),
+              _vm._v(" "),
+              _c("br")
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "offset-1 col-6" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col" }, [
+              _c("small", [_vm._v("Nivel de riesgo")]),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("strong", [_vm._v(_vm._s(_vm.activeCard.risk))])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("br"),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-6" }, [
+                  _c("small", [_vm._v("Desde: ")]),
+                  _vm._v(" "),
+                  _c("strong", [_vm._v(_vm._s(_vm.activeCard.from))])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-6" }, [
+                  _c("small", [_vm._v("Hasta: ")]),
+                  _vm._v(" "),
+                  _c("strong", [_vm._v(_vm._s(_vm.activeCard.until))])
+                ])
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("hr"),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col" }, [
+          _vm.inactiveCards.length == 0
+            ? _c(
+                "div",
+                {
+                  staticClass:
+                    "table-container d-flex align-items-center justify-content-center"
+                },
+                [_c("h4", [_vm._v("No hay tarjetas inactivas")])]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.inactiveCards.length > 0
+            ? _c("div", { staticClass: "table-container" }, [
+                _c("h5", [_vm._v("Tarjetas inactivas")]),
+                _vm._v(" "),
+                _c("table", { staticClass: "table tbl-show" }, [
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.inactiveCards, function(card, key) {
+                      return _c("tr", { key: key }, [
+                        _c("td", [_vm._v(_vm._s(card.number))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(card.from))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(card.until))])
+                      ])
+                    })
+                  )
+                ])
+              ])
+            : _vm._e()
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "title" }, [
+      _c("h4", [_vm._v("Tarjeta de acceso")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col" }, [_vm._v("Validez")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Número")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Desde")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Hasta")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-62513cbc", module.exports)
+  }
+}
+
+/***/ }),
+/* 116 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        activeCard: {
+            required: true,
+            type: Object
+        },
+        inactiveCards: {
+            required: false,
+            type: Array,
+            default: function _default() {
+                return [];
+            }
+        },
+        person: {
+            required: true,
+            type: String
+        },
+        company: {
+            required: true,
+            type: String
+        }
+    }
+});
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(118);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("759bbe5d", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-724c070a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Layout.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-724c070a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Layout.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.nav-tabs > .nav-item[data-v-724c070a] {\n  cursor: pointer;\n}\n.nav-tabs > .nav-item > a.active[data-v-724c070a] {\n  background-color: white;\n  border-bottom-color: white;\n  cursor: auto;\n  color: black  !important;\n}\na.inactive[data-v-724c070a] {\n  color: grey !important;\n}\n.nav-item + .nav-item[data-v-724c070a] {\n  margin-left: 1px;\n}\n.card[data-v-724c070a] {\n  border-top: 0;\n  border-top-right-radius: 0;\n  border-top-left-radius: 0;\n}\n.btn-edit[data-v-724c070a] {\n  position: absolute;\n  top: 0.5em;\n  right: 0.5em;\n  z-index: 2;\n  text-align: center;\n  background-color: transparent;\n  color: #a8a8a8;\n  border-radius: 100%;\n  height: 3.5em;\n  width: 3.5em;\n}\n.btn-edit[data-v-724c070a]:hover {\n  background-color: whitesmoke;\n  color: grey;\n}\ndiv.card-body[data-v-724c070a] {\n  min-height: 77vh;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\ndiv.card-body > div.row[data-v-724c070a] {\n    width: 100%;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 119 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(120);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("5fee138e", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a5a7c8c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./WorkingInformation.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a5a7c8c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./WorkingInformation.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 120 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\na[data-v-3a5a7c8c] {\n  color: black;\n}\na[data-v-3a5a7c8c]:hover {\n    color: #3F729B;\n    text-decoration: none;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 121 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row" }, [
+    _c(
+      "div",
+      {
+        staticClass: "offset-1 col-5",
+        staticStyle: { "border-right": "1px solid grey" }
+      },
+      [
+        _c(
+          "a",
+          {
+            attrs: {
+              href: _vm.personCompany.company_url,
+              title: "Ver detalles"
+            }
+          },
+          [_c("h4", [_vm._v(_vm._s(_vm.personCompany.company_name))])]
+        ),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-6" }, [
+            _c("small", [_vm._v("CUIT")]),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c("strong", [_vm._v(_vm._s(_vm.personCompany.company_cuit))])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-6" }, [
+            _c("small", [_vm._v("Sector")]),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c("strong", [_vm._v(_vm._s(_vm.personCompany.company_area))])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-6" }, [
+            _c("small", [_vm._v("Actividad / Categoría")]),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c("strong", [_vm._v(_vm._s(_vm.personCompany.activity))])
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "offset-1 col-5" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-4" }, [
+          _c("small", [_vm._v("Aseguradora")]),
+          _vm._v(" "),
+          _c("br"),
+          _vm._v(" "),
+          _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_company))])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-4" }, [
+          _c("small", [_vm._v("Número")]),
+          _vm._v(" "),
+          _c("br"),
+          _vm._v(" "),
+          _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_number))])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-4" }, [
+          _c("small", [_vm._v("Vencimiento")]),
+          _vm._v(" "),
+          _c("br"),
+          _vm._v(" "),
+          _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_expiration))])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col" }, [
+          _vm._v("\n                Vencimiento curso PBIP\n                "),
+          _c("br"),
+          _vm._v(" "),
+          _c("strong", [_vm._v(_vm._s(_vm.personCompany.pbip))])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col" }, [_vm._v("ART")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3a5a7c8c", module.exports)
+  }
+}
+
+/***/ }),
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(116)
+  __webpack_require__(123)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(118)
+var __vue_script__ = __webpack_require__(125)
 /* template */
-var __vue_template__ = __webpack_require__(119)
+var __vue_template__ = __webpack_require__(129)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -52813,13 +53362,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 116 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(117);
+var content = __webpack_require__(124);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -52839,7 +53388,7 @@ if(false) {
 }
 
 /***/ }),
-/* 117 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(false);
@@ -52853,7 +53402,7 @@ exports.push([module.i, "\n.card {\n    border-top: 0;\n    border-top-right-rad
 
 
 /***/ }),
-/* 118 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -52896,7 +53445,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
-        'general-information': __webpack_require__(120)
+        'general-information': __webpack_require__(126)
     },
     data: function data() {
         return {
@@ -52959,111 +53508,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 });
 
 /***/ }),
-/* 119 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "ul",
-      { staticClass: "nav nav-tabs" },
-      [
-        _c(
-          "tab-item",
-          {
-            attrs: {
-              active: _vm.tab === 0,
-              "has-errors": _vm.step_validated.general_information,
-              icon: "fas fa-building"
-            },
-            nativeOn: {
-              click: function($event) {
-                _vm.tab = 0
-              }
-            }
-          },
-          [_vm._v("\n            Información general\n        ")]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "card card-default" }, [
-      _c(
-        "div",
-        { staticClass: "card-body" },
-        [
-          _vm.saving.status
-            ? _c("loading-cover", { attrs: { message: _vm.saving.message } })
-            : _vm._e(),
-          _vm._v(" "),
-          _c("general-information", {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.tab === 0,
-                expression: "tab === 0"
-              }
-            ],
-            attrs: {
-              values: _vm.values.general_information,
-              errors: _vm.errors
-            }
-          }),
-          _vm._v(" "),
-          _c("hr"),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col" }, [
-              _c(
-                "a",
-                {
-                  staticClass: "btn btn-outline-danger btn-sm",
-                  attrs: { href: "/home" }
-                },
-                [_vm._v("Cancelar")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-outline-success btn-sm float-right",
-                  on: { click: _vm.save }
-                },
-                [_vm._v("Guardar")]
-              )
-            ])
-          ])
-        ],
-        1
-      )
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-ce887f3a", module.exports)
-  }
-}
-
-/***/ }),
-/* 120 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(122)
+var __vue_script__ = __webpack_require__(127)
 /* template */
-var __vue_template__ = __webpack_require__(121)
+var __vue_template__ = __webpack_require__(128)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -53102,7 +53555,154 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 121 */
+/* 127 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        values: {
+            required: true,
+            type: Object
+        },
+        errors: {
+            required: true,
+            type: Object
+        }
+    },
+    computed: {
+        direction_errors: function direction_errors() {
+            if (this.errors.street && this.errors.apartment) {
+                return this.errors.street.concat(this.errors.apartment);
+            } else if (this.errors.street) {
+                return this.errors.street;
+            } else if (this.errors.apartment) {
+                return this.errors.apartment;
+            } else {
+                return [];
+            }
+        }
+    },
+    methods: {
+        updateValues: function updateValues() {
+            var _this = this;
+
+            var data = {};
+            var keys = Object.keys(this.values);
+            keys.forEach(function (key) {
+                data[key] = _this.$refs[key].value;
+            });
+            this.$parent.$emit('general-information-values', data);
+        }
+    }
+});
+
+/***/ }),
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -53466,151 +54066,100 @@ if (false) {
 }
 
 /***/ }),
-/* 122 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 129 */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        values: {
-            required: true,
-            type: Object
-        },
-        errors: {
-            required: true,
-            type: Object
-        }
-    },
-    computed: {
-        direction_errors: function direction_errors() {
-            if (this.errors.street && this.errors.apartment) {
-                return this.errors.street.concat(this.errors.apartment);
-            } else if (this.errors.street) {
-                return this.errors.street;
-            } else if (this.errors.apartment) {
-                return this.errors.apartment;
-            } else {
-                return [];
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "ul",
+      { staticClass: "nav nav-tabs" },
+      [
+        _c(
+          "tab-item",
+          {
+            attrs: {
+              active: _vm.tab === 0,
+              "has-errors": _vm.step_validated.general_information,
+              icon: "fas fa-building"
+            },
+            nativeOn: {
+              click: function($event) {
+                _vm.tab = 0
+              }
             }
-        }
-    },
-    methods: {
-        updateValues: function updateValues() {
-            var _this = this;
-
-            var data = {};
-            var keys = Object.keys(this.values);
-            keys.forEach(function (key) {
-                data[key] = _this.$refs[key].value;
-            });
-            this.$parent.$emit('general-information-values', data);
-        }
-    }
-});
+          },
+          [_vm._v("\n            Información general\n        ")]
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "card card-default" }, [
+      _c(
+        "div",
+        { staticClass: "card-body" },
+        [
+          _vm.saving.status
+            ? _c("loading-cover", { attrs: { message: _vm.saving.message } })
+            : _vm._e(),
+          _vm._v(" "),
+          _c("general-information", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.tab === 0,
+                expression: "tab === 0"
+              }
+            ],
+            attrs: {
+              values: _vm.values.general_information,
+              errors: _vm.errors
+            }
+          }),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "btn btn-outline-danger btn-sm",
+                  attrs: { href: "/home" }
+                },
+                [_vm._v("Cancelar")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-success btn-sm float-right",
+                  on: { click: _vm.save }
+                },
+                [_vm._v("Guardar")]
+              )
+            ])
+          ])
+        ],
+        1
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-ce887f3a", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

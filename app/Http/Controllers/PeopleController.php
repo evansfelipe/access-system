@@ -63,8 +63,11 @@ class PeopleController extends Controller
      */
     public function index()
     {
-        $people = Person::orderBy('created_at','desc')->get()->toJson();
-        return view('people.index')->with('people', $people);
+        $people = Person::orderBy('created_at','desc')->get()->toArray();
+        foreach($people as $key => $value){
+            $people[$key] = $value['index'];
+        }
+        return view('people.index')->with('people', json_encode($people));
     }
 
     /**

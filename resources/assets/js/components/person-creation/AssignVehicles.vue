@@ -1,46 +1,8 @@
 <style lang="scss" scoped>
     table {
-        display: flex;
-        flex-flow: column;
-        height: 100%; width: 100%;
-        & > thead {
-            flex: 0 0 auto;
-            width: calc(100% - 5px);
-            & > tr {
-                border: 0;
-                border-bottom: 1px solid grey;
-                & > th { border: 0 }
-            }
-        }
         & > thead > tr > th:first-of-type, & > tbody > tr > td:first-of-type {
             width: 5%;
             text-align: center;
-        }
-
-        & > thead, & > tbody > tr {
-            display: table;
-            table-layout: fixed;
-        }
-
-        & > tbody {
-            flex: 1 1 auto;
-            display: block;
-            overflow-y: scroll;
-            & > tr {
-                width: 100%;
-            }
-            & > tr > td > i.selected-item {
-                color: #3F729B;
-            }
-            & > tr:hover {
-                cursor: pointer;
-                background-color: rgb(250, 250, 250);
-            }
-            & > tr > td {
-                border: 0;
-                border-bottom: 1px solid whitesmoke;
-                padding: 8px;
-            } 
         }
     }
 
@@ -117,7 +79,7 @@
         <!-- Vehicles list -->
         <div class="row">
             <div class="col-12 table-container">
-                <table class="table">
+                <table class="table tbl-show3">
                     <thead>
                         <tr>
                             <th></th>

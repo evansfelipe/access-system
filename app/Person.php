@@ -255,6 +255,7 @@ class Person extends Model
                 'country' => $residency->country ?? '-',
             ],
             'working_information' => [
+                'company_url' => route('companies.show', $company->id),
                 'company_name' => $company->name,
                 'company_area' => $company->area,
                 'company_cuit' => $company->cuit,
@@ -263,15 +264,18 @@ class Person extends Model
                 'pbip' => $person_company->pbip ? date('d-m-Y', strtotime($person_company->pbip)) : '-',
             ],
             'vehicles' => $this->vehicles->toArray(),
+            'active_card' => $this->getActiveCard(),
+            'inactive_cards' => $this->getInactiveCards(),
             
             //Index info
-            'last_name' => $this->last_name,
-            'name' => $this->name,
-            'cuil' => $this->cuil,
-            'company_name' => $this->company()->name,
-            
+            'index' => [
+                'last_name' => $this->last_name,
+                'name' => $this->name,
+                'cuil' => $this->cuil,
+                'company_name' => $this->company()->name,
+                'show_url' => route('people.show', $this->id),
+            ],
             //Routes
-            'show_url' => route('people.show', $this->id),
             'edit_url' => route('people.edit', $this->id)
 
         ];

@@ -1,4 +1,23 @@
-<style scoped>
+<style lang="scss" scoped>
+    .nav-tabs > .nav-item {
+        cursor: pointer;
+    }
+
+    .nav-tabs > .nav-item > a.active {
+        background-color: white;
+        border-bottom-color: white;
+        cursor: auto;
+        color: black  !important;
+    }
+
+    a.inactive {
+        color: grey !important;
+    }
+
+    .nav-item + .nav-item {
+        margin-left: 1px;
+    }
+
     .card {
         border-top: 0;
         border-top-right-radius: 0;
@@ -21,6 +40,15 @@
     .btn-edit:hover {
         background-color: whitesmoke;
         color: grey;
+    }
+    
+    div.card-body {
+        min-height: 77vh;
+        display: flex;
+        align-items: center;
+        & > div.row {
+            width: 100%;
+        }
     }
 </style>
 
@@ -59,9 +87,10 @@
                 <!-- Content for the tab number 1 -->
                 <ps-working-information v-show="tab === 1" :personCompany="working_information"/>
                 <!-- Content for the tab number 2 -->
-                <ps-vehicles v-show="tab === 2"/>
+                <ps-vehicles v-show="tab === 2" :vehicles="vehicles"/>
                 <!-- Content for the tab number 3 -->
-                <ps-cards v-show="tab === 3"/>
+                <ps-cards   v-show="tab === 3" :activeCard="active_card" :inactiveCards="inactive_cards"
+                            :person="personal_information.full_name" :company="working_information.company_name"/>
                 <!-- Content for the tab number 4 -->
                 <ps-documentation v-show="tab === 4"/>
             </div>
@@ -82,7 +111,10 @@
                 tab: 0,
                 edit_route: person_info.edit_url,
                 personal_information: person_info.personal_information,
-                working_information: person_info.working_information
+                working_information: person_info.working_information,
+                vehicles: person_info.vehicles,
+                active_card: person_info.active_card,
+                inactive_cards: person_info.inactive_cards
             };
         }
     }
