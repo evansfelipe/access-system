@@ -6,6 +6,16 @@
     .nav-tabs > .nav-item > a.active {
         background-color: white;
         border-bottom-color: white;
+        cursor: auto;
+        color: black  !important;
+    }
+
+    a.inactive {
+        color: grey !important;
+    }
+
+    .nav-item + .nav-item {
+        margin-left: 1px;
     }
 
     .card {
@@ -28,10 +38,35 @@
         <!-- Tabs -->
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a :class="'nav-link ' + (tab_number === 0 ? 'active' : '')" @click="changeTab(0)">Información personal</a>
+                <a :class="'nav-link ' + (tab_number === 0 ? 'active' : 'inactive')" @click="changeTab(0)">
+                    <i class="fas fa-user"></i>
+                    Información personal
+                </a>
             </li>
             <li class="nav-item">
-                <a :class="'nav-link ' + (tab_number === 1 ? 'active' : '')" @click="changeTab(1)">Información laboral</a>
+                <a :class="'nav-link ' + (tab_number === 1 ? 'active' : 'inactive')" @click="changeTab(1)">
+                    <i class="fas fa-briefcase"></i>
+                    Información laboral
+                </a>
+            </li>
+            <li class="nav-item">
+                <a :class="'nav-link ' + (tab_number === 2 ? 'active' : 'inactive')" @click="changeTab(2)">
+                    <i class="fas fa-car"></i> 
+                    Vehículos
+                </a>
+            </li>
+            <li class="nav-item">
+                <a :class="'nav-link ' + (tab_number === 3 ? 'active' : 'inactive')" @click="changeTab(3)">
+                    <i class="fas fa-id-card"></i>
+                    Tarjeta
+                </a>
+            </li>
+            <li class="nav-item">
+                <a :class="'nav-link ' + (tab_number === 4 ? 'active' : 'inactive')" @click="changeTab(4)">
+                    <i class="fas fa-file-alt"></i>
+                    Documentación
+                </a>
+
             </li>
         </ul>
         <!-- Content -->
@@ -40,7 +75,7 @@
                 <!-- Content for the tab number 0 -->
                 <div v-if="tab_number === 0" class="row d-flex align-items-center">
                     <div class="col-md-4 text-center">
-                        FOTO
+                        <img class="img-fluid rounded-circle" src="/pictures/no-image.jpg" alt="Subir imagen">
                     </div>
                     <div class="col-md-8">
                         <h3>{{ person.full_name }}</h3>
@@ -105,7 +140,36 @@
                 </div>
                 <!-- Content for the tab number 1 -->
                 <div v-if="tab_number === 1">
-                    Información laboral
+                    <div class="row">
+                        <div class="offset-1 col-5">
+                            <h4>{{ company.name }}</h4>
+                            <table>
+                                <tr>
+                                    <td>CUIT</td>
+                                    <td class="strong">{{ company.cuit }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Sector</td>
+                                    <td class="strong">{{ company.area }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-5">
+                            ART
+                        </div>
+                    </div>
+                </div>
+                <!-- Content for the tab number 2 -->
+                <div v-if="tab_number === 2">
+                    Vehículos
+                </div>
+                <!-- Content for the tab number 3 -->
+                <div v-if="tab_number === 3">
+                    Tarjetas
+                </div>
+                <!-- Content for the tab number 4 -->
+                <div v-if="tab_number === 4">
+                    Documentación
                 </div>
             </div>
         </div>
@@ -117,12 +181,16 @@
         props: {
             personjson: {
                 required: true
+            },
+            companyjson: {
+                required: true
             }
         },
         data: function() {
             return {
                 tab_number: 0,
-                person: JSON.parse(this.personjson)
+                person: JSON.parse(this.personjson),
+                company: JSON.parse(this.companyjson)
             };
         },
         methods: {

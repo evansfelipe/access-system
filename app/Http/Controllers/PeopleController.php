@@ -126,8 +126,10 @@ class PeopleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, Person $person)
-    { 
-        return view('people.show')->with('person', $person->toJson());
+    {
+        $person_info = $person->toArray();
+        unset($person_info['index']);
+        return view('people.show')->with('person', json_encode($person_info));
     }
 
     /**

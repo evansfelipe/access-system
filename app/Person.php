@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\{ Residency, Activity, Vehicle};
+
 class Person extends Model
 {
     protected $fillable = ['name', 'last_name', 'document_type', 'document_number', 'sex', 'pna', 'cuil', 'birthday', 'blood_type'];
@@ -128,6 +130,14 @@ class Person extends Model
     }
 
     /**
+     * Gets the most recently company associated with this person.
+     */
+    public function workingInformation()
+    {
+        return $this->company()->pivot->first();
+    }
+
+    /**
      * Gets the residency associated with this person.
      */
     public function residency()
@@ -217,26 +227,53 @@ class Person extends Model
     public function toArray()
     {
         $contact = $this->contactToObject();
-        $residency = \App\Residency::find($this->residency_id);
+        $residency = Residency::find($this->residency_id);
+        $company = $this->company();
+        $person_company = $this->workingInformation();
+        $activity = Activity::find($person_company->activity_id)->name;
+        $vehicles = [];
+        
         return [
-            'id' => $this->id,
+            'personal_information' => [
+                'full_name' => $this->fullName(),
+                'document_type' => $this->documentTypeToString(),
+                'document_number' => $this->document_number,
+                'cuil' => $this->cuil,
+                'birthday' => $this->birthday ? date('d-m-Y', strtotime($this->birthday)) : '-',
+                'sex' => $this->sexToString() ?? '-',
+                'blood_type' => $this->blood_type ?? '-',
+                'pna' => $this->pna ?? '-',
+                'email' => $contact->email ?? '-',
+                'phone' => $contact->home_phone ?? '-',
+                'mobile_phone' => $contact->mobile_phone ?? '-',
+                'fax' => $contact->fax ?? '-',
+                'address' => $residency->street ?? '-',
+                'apartment' => $residency->apartment ?? '-',
+                'cp' => $residency->cp ?? '-',
+                'city' => $residency->city ?? '-',
+                'province' => $residency->province ?? '-',
+                'country' => $residency->country ?? '-',
+            ],
+            'working_information' => [
+                'company_name' => $company->name,
+                'company_area' => $company->area,
+                'company_cuit' => $company->cuit,
+                'activity' => $activity,
+                'art_company' => $person_company->art,
+                'pbip' => $person_company->pbip ? date('d-m-Y', strtotime($person_company->pbip)) : '-',
+            ],
+            'vehicles' => $this->vehicles->toArray(),
+            
+            //Index info
             'last_name' => $this->last_name,
             'name' => $this->name,
-            'full_name' => $this->fullName(),
-            'document_type' => $this->documentTypeToString(),
-            'document_number' => $this->document_number,
             'cuil' => $this->cuil,
-            'birthday' => $this->birthday ? date('d-m-Y', strtotime($this->birthday)) : '-',
-            'sex' => $this->sexToString() ?? '-',
-            'blood_type' => $this->blood_type ?? '-',
-            'pna' => $this->pna ?? '-',
-            'email' => $contact->email ?? '-',
-            'phone' => $contact->home_phone ?? '-',
-            'mobile_phone' => $contact->mobile_phone ?? '-',
-            'fax' => $contact->fax ?? '-',
-            'residency' => !empty($residency->toString())? $residency->toString() : '-',
             'company_name' => $this->company()->name,
-            'url' => route('people.show', $this->id)
+            
+            //Routes
+            'show_url' => route('people.show', $this->id),
+            'edit_url' => route('people.edit', $this->id)
+
         ];
     }
 }

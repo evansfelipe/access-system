@@ -26,9 +26,15 @@ Vue.component('pc-personal-information', require('./components/person-creation/P
 Vue.component('pc-working-information', require('./components/person-creation/WorkingInformation.vue'));
 Vue.component('pc-assign-vehicles', require('./components/person-creation/AssignVehicles.vue'));
 Vue.component('pc-first-card', require('./components/person-creation/FirstCard.vue'));
+// Person show component and its child.
+Vue.component('person-show', require('./components/person-show/Layout.vue'));
+Vue.component('ps-personal-information', require('./components/person-show/PersonalInformation.vue'));
+Vue.component('ps-working-information', require('./components/person-show/WorkingInformation.vue'));
+Vue.component('ps-vehicles', require('./components/person-show/Vehicles.vue'));
+Vue.component('ps-cards', require('./components/person-show/Cards.vue'));
+Vue.component('ps-documentation', require('./components/person-show/Documentation.vue'));
 // Other components
 Vue.component('people-index', require('./components/PeopleIndex.vue'));
-Vue.component('person-show', require('./components/PersonShow.vue'));
 
 const app = new Vue({
     el: '#app'

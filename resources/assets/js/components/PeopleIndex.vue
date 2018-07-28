@@ -58,7 +58,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(person, key) in people" @click="showProfile(person.url)" v-bind:key="key">
+                        <tr v-for="(person, key) in people" @click="showProfile(person.show_url)" v-bind:key="key">
                             <td dusk="td_last_name">{{ person.last_name }}</td>
                             <td>{{ person.name }}</td>
                             <td>{{ person.cuil }}</td>

@@ -62,10 +62,20 @@ class Company extends Model
     }
 
     /**
+     * Decodes and returns the json where the contact information of this person 
+     * is stored.
+     */
+    public function contactToObject()
+    {
+        return json_decode($this->contact);
+    }
+
+    /**
      * Gets each person associated with this company.
      */
     public function people()
     {
         return $this->belongsToMany('App\Person', 'company_people')->using('App\PersonCompany');
     }
+
 }
