@@ -1,35 +1,8 @@
 <style scoped>
-    .nav-tabs > .nav-item {
-        cursor: pointer;
-    }
-
-    .nav-tabs > .nav-item > a.active {
-        background-color: white;
-        border-bottom-color: white;
-        cursor: auto;
-        color: black  !important;
-    }
-
-    a.inactive {
-        color: grey !important;
-    }
-
-    .nav-item + .nav-item {
-        margin-left: 1px;
-    }
-
     .card {
         border-top: 0;
         border-top-right-radius: 0;
         border-top-left-radius: 0;
-    }
-
-    table {
-        width: 100%;
-    }
-
-    .strong {
-        font-weight: bold;
     }
 
     .btn-edit {
@@ -48,7 +21,6 @@
     .btn-edit:hover {
         background-color: whitesmoke;
         color: grey;
-        
     }
 </style>
 
@@ -56,53 +28,42 @@
     <div>
         <!-- Tabs -->
         <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a :class="'nav-link ' + (tab_number === 0 ? 'active' : 'inactive')" @click="changeTab(0)">
-                    <i class="fas fa-user"></i>
-                    Información personal
-                </a>
-            </li>
-            <li class="nav-item">
-                <a :class="'nav-link ' + (tab_number === 1 ? 'active' : 'inactive')" @click="changeTab(1)">
-                    <i class="fas fa-briefcase"></i>
-                    Información laboral
-                </a>
-            </li>
-            <li class="nav-item">
-                <a :class="'nav-link ' + (tab_number === 2 ? 'active' : 'inactive')" @click="changeTab(2)">
-                    <i class="fas fa-car"></i> 
-                    Vehículos
-                </a>
-            </li>
-            <li class="nav-item">
-                <a :class="'nav-link ' + (tab_number === 3 ? 'active' : 'inactive')" @click="changeTab(3)">
-                    <i class="fas fa-id-card"></i>
-                    Tarjeta
-                </a>
-            </li>
-            <li class="nav-item">
-                <a :class="'nav-link ' + (tab_number === 4 ? 'active' : 'inactive')" @click="changeTab(4)">
-                    <i class="fas fa-file-alt"></i>
-                    Documentación
-                </a>
-
-            </li>
+            <!-- Personal information tab -->
+            <tab-item :active="tab === 0" @click.native="tab = 0" icon="fas fa-user">
+                Información personal
+            </tab-item>
+            <!-- Working information tab -->
+            <tab-item :active="tab === 1" @click.native="tab = 1" icon="fas fa-briefcase">
+                Información laboral
+            </tab-item>
+            <!-- Vehicles tab -->
+            <tab-item :active="tab === 2" @click.native="tab = 2" icon="fas fa-car">
+                Vehículos
+            </tab-item>
+            <!-- Card tab -->
+            <tab-item :active="tab === 3" @click.native="tab = 3" icon="fas fa-id-card">
+                Tarjeta
+            </tab-item>
+            <!-- Documentation tab -->
+            <tab-item :active="tab === 4" @click.native="tab = 4" icon="fas fa-file-alt">
+                Documentación
+            </tab-item>
         </ul>
         <!-- Content -->
         <div class="card card-default">
             <div class="card-body">
                 <!-- Edit button -->
-                <button class="btn btn-edit" title="Editar" @click="editProfile(edit_route)"><i class="fas fa-user-edit fa-lg"></i></button>
+                <a :href="edit_route" class="btn btn-edit"><i class="fas fa-user-edit fa-lg"></i></a>
                 <!-- Content for the tab number 0 -->
-                <ps-personal-information v-if="tab_number === 0" :person="personal_information"/>
+                <ps-personal-information v-show="tab === 0" :person="personal_information"/>
                 <!-- Content for the tab number 1 -->
-                <ps-working-information v-if="tab_number === 1" :personCompany="working_information"/>
+                <ps-working-information v-show="tab === 1" :personCompany="working_information"/>
                 <!-- Content for the tab number 2 -->
-                <ps-vehicles v-if="tab_number === 2"/>
+                <ps-vehicles v-show="tab === 2"/>
                 <!-- Content for the tab number 3 -->
-                <ps-cards v-if="tab_number === 3"/>
+                <ps-cards v-show="tab === 3"/>
                 <!-- Content for the tab number 4 -->
-                <ps-documentation v-if="tab_number === 4"/>
+                <ps-documentation v-show="tab === 4"/>
             </div>
         </div>
     </div>
@@ -118,19 +79,11 @@
         data: function() {
             let person_info = JSON.parse(this.personjson);
             return {
-                tab_number: 0,
+                tab: 0,
                 edit_route: person_info.edit_url,
                 personal_information: person_info.personal_information,
                 working_information: person_info.working_information
             };
-        },
-        methods: {
-            changeTab: function(tab_number) {
-                this.tab_number = tab_number;
-            },
-            editProfile: function(url) {
-                window.location.href = url;
-            }
         }
     }
 </script>

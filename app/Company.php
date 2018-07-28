@@ -23,20 +23,20 @@ class Company extends Model
     {
         return [
             'name' => [
+                'required',
                 'string',
                 'max:'.Company::LENGTHS['name']['max'],
-                'required'
             ],
             'area' => [
+                'required',
                 'string',
                 'max:'.Company::LENGTHS['area']['max'],
-                'required'
             ],
             'cuit' => [
+                'required',
                 'string',
                 'min:'.Company::LENGTHS['cuit']['min'],
                 'max:'.Company::LENGTHS['cuit']['max'],
-                'required'
             ],
             'expiration' => [
                 'required',
@@ -45,18 +45,20 @@ class Company extends Model
                 'after:'.date('Y-m-d'), 
             ],
             'phone' => [
+                'required',
                 'string',
             ],
             'fax' => [
+                'nullable',            
                 'string',
-                'nullable'             
             ],
             'email' => [
+                'required',
                 'string',
             ],
             'web' => [
+                'nullable',
                 'string',
-                'nullable'
             ]                                                                       
         ];
     }

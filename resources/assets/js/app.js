@@ -33,6 +33,8 @@ Vue.component('ps-working-information', require('./components/person-show/Workin
 Vue.component('ps-vehicles', require('./components/person-show/Vehicles.vue'));
 Vue.component('ps-cards', require('./components/person-show/Cards.vue'));
 Vue.component('ps-documentation', require('./components/person-show/Documentation.vue'));
+// Companies components
+Vue.component('company-creation', require('./components/company-creation/Layout.vue'));
 // Other components
 Vue.component('people-index', require('./components/PeopleIndex.vue'));
 

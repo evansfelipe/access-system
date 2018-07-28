@@ -43,12 +43,15 @@ class CompaniesController extends Controller
      */
     public function store(SaveCompanyRequest $request)
     {
+        // Saves the residency
+        $residency = new Residency($request->toArray());
+        $residency->save();
         // Sets the new company data
         $company = new Company();
         $company->name = $request->name;
         $company->area = $request->area;
         $company->cuit = $request->cuit;
-        $company->residency_id = SaveResidencyTrait::saveResidency($request);
+        $company->residency_id = $residency->id;
         $company->contact = json_encode([
             'web'   => $request->web,        
             'fax'   => $request->fax,
@@ -57,8 +60,7 @@ class CompaniesController extends Controller
         ]);
         $company->expiration = $request->expiration;
         $company->save();
-        // Redirects the user to the recently created company page
-        return redirect()->route('companies.show', $company->id);
+        return response(route('companies.show', $company->id), 200)->header('Content-Type', 'text/plain');
     }
 
     /**
