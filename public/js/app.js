@@ -48480,7 +48480,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['companies', 'activities', 'vehicles'],
+    props: ['person', 'companies', 'activities', 'vehicles'],
     data: function data() {
         return {
             tab: 0,
@@ -48498,43 +48498,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 first_card: null,
                 documentation: null
             },
-            values: {
-                personal_information: {
-                    last_name: 'Example Last Name',
-                    name: 'Example Name',
-                    document_type: '0',
-                    document_number: '11111111',
-                    cuil: '11111111111',
-                    birthday: '1995-01-01',
-                    sex: 'M',
-                    blood_type: '0+',
-                    pna: '123456789123',
-                    email: 'example@gmail.com',
-                    home_phone: '4800000',
-                    mobile_phone: '15555555',
-                    fax: '480000',
-                    street: 'Example Street',
-                    apartment: '',
-                    cp: '7600',
-                    country: '',
-                    province: '',
-                    city: ''
-                },
-                working_information: {
-                    company_id: '1',
-                    activity_id: '1',
-                    art: '123456789',
-                    pbip: '2020-03-03'
-                },
-                assign_vehicles: {},
-                first_card: {
-                    number: '123987654',
-                    risk: '1',
-                    from: '2020-01-01',
-                    until: '2020-02-02'
-                },
-                documentation: {}
-            },
+            values: {},
             errors: {
                 personal_information: {},
                 working_information: {},
@@ -48543,6 +48507,56 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 documentation: {}
             }
         };
+    },
+    beforeMount: function beforeMount() {
+        if (this.person != null) {
+            var person_info = JSON.parse(this.person);
+            this.values = {
+                personal_information: JSON.parse(person_info.personal_information),
+                working_information: JSON.parse(person_info.working_information),
+                assign_vehicles: JSON.parse(person_info.assign_vehicles),
+                first_card: JSON.parse(person_info.first_card),
+                documentation: JSON.parse(person_info.documentation)
+            };
+        } else {
+            this.values = {
+                personal_information: {
+                    last_name: '',
+                    name: '',
+                    document_type: '',
+                    document_number: '',
+                    cuil: '',
+                    birthday: '',
+                    sex: '',
+                    blood_type: '',
+                    pna: '',
+                    email: '',
+                    home_phone: '',
+                    mobile_phone: '',
+                    fax: '',
+                    street: '',
+                    apartment: '',
+                    cp: '',
+                    country: '',
+                    province: '',
+                    city: ''
+                },
+                working_information: {
+                    company_id: '',
+                    activity_id: '',
+                    art: '',
+                    pbip: ''
+                },
+                assign_vehicles: {},
+                first_card: {
+                    number: '',
+                    risk: '',
+                    from: '',
+                    until: ''
+                },
+                documentation: {}
+            };
+        }
     },
     mounted: function mounted() {
         var _this = this;
@@ -48595,14 +48609,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             // Until the axios request is performed, then the view will be locked and showing a loading message.
             this.saving = { status: true, message: "Guardando..."
                 // Performs the request whit the merged data of each steps.
-            };axios.post('/people', _extends({}, this.values.personal_information, this.values.working_information, this.values.assign_vehicles, this.values.first_card))
-            // If the request is success, then changes the loading message and redirects the user.
-            .then(function (response) {
+            };var thenCallback = function thenCallback(response) {
                 _this3.saving.message = "Redirigiendo...";
                 window.location.href = response.data;
-            })
-            // Otherwise, adds each error to the correspondent error object.
-            .catch(function (response) {
+            };
+            var catchCallback = function catchCallback(response) {
                 // Resets the errors of each component.
                 _this3.errors = {
                     personal_information: {},
@@ -48638,7 +48649,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 });
                 // Ends the loading status.
                 _this3.saving.status = false;
-            });
+            };
+            var data = _extends({}, this.values.personal_information, this.values.working_information, this.values.assign_vehicles, this.values.first_card);
+            if (this.person == null) {
+                axios.post('/people', data).then(function (response) {
+                    return thenCallback(response);
+                }).catch(function (response) {
+                    return catchCallback(response);
+                });
+            } else {
+                axios.put(JSON.parse(this.person).update_url, data).then(function (response) {
+                    return thenCallback(response);
+                }).catch(function (response) {
+                    return catchCallback(response);
+                });
+            }
         }
     }
 });
@@ -50535,7 +50560,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12 table-container" }, [
-        _c("table", { staticClass: "table tbl-show3" }, [
+        _c("table", { staticClass: "table tbl-show" }, [
           _vm._m(2),
           _vm._v(" "),
           _c(
@@ -51096,6 +51121,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -53143,7 +53169,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n.nav-tabs > .nav-item[data-v-724c070a] {\n  cursor: pointer;\n}\n.nav-tabs > .nav-item > a.active[data-v-724c070a] {\n  background-color: white;\n  border-bottom-color: white;\n  cursor: auto;\n  color: black  !important;\n}\na.inactive[data-v-724c070a] {\n  color: grey !important;\n}\n.nav-item + .nav-item[data-v-724c070a] {\n  margin-left: 1px;\n}\n.card[data-v-724c070a] {\n  border-top: 0;\n  border-top-right-radius: 0;\n  border-top-left-radius: 0;\n}\n.btn-edit[data-v-724c070a] {\n  position: absolute;\n  top: 0.5em;\n  right: 0.5em;\n  z-index: 2;\n  text-align: center;\n  background-color: transparent;\n  color: #a8a8a8;\n  border-radius: 100%;\n  height: 3.5em;\n  width: 3.5em;\n}\n.btn-edit[data-v-724c070a]:hover {\n  background-color: whitesmoke;\n  color: grey;\n}\ndiv.card-body[data-v-724c070a] {\n  min-height: 77vh;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\ndiv.card-body > div.row[data-v-724c070a] {\n    width: 100%;\n}\n", ""]);
+exports.push([module.i, "\n.nav-tabs > .nav-item[data-v-724c070a] {\n  cursor: pointer;\n}\n.nav-tabs > .nav-item > a.active[data-v-724c070a] {\n  background-color: white;\n  border-bottom-color: white;\n  cursor: auto;\n  color: black  !important;\n}\na.inactive[data-v-724c070a] {\n  color: grey !important;\n}\n.nav-item + .nav-item[data-v-724c070a] {\n  margin-left: 1px;\n}\n.card[data-v-724c070a] {\n  border-top: 0;\n  border-top-right-radius: 0;\n  border-top-left-radius: 0;\n}\n.btn-edit[data-v-724c070a] {\n  position: absolute;\n  padding: 1em;\n  top: 0.5em;\n  right: 0.5em;\n  z-index: 2;\n  text-align: center;\n  background-color: transparent;\n  color: #a8a8a8;\n  border-radius: 100%;\n  height: 3.5em;\n  width: 3.5em;\n}\n.btn-edit[data-v-724c070a]:hover {\n  background-color: whitesmoke;\n  color: grey;\n}\ndiv.card-body[data-v-724c070a] {\n  min-height: 77vh;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\ndiv.card-body > div.row[data-v-724c070a] {\n    width: 100%;\n}\n", ""]);
 
 // exports
 

@@ -118,7 +118,7 @@ class Person extends Model
      */
     public function companies()
     {
-        return $this->belongsToMany('App\Company', 'company_people')->using('App\PersonCompany');
+        return $this->belongsToMany('App\Company', 'company_people')->using('App\PersonCompany')->withPivot('activity_id','art','pbip');
     }
 
     /**
@@ -134,7 +134,7 @@ class Person extends Model
      */
     public function workingInformation()
     {
-        return $this->company()->pivot->first();
+        return $this->company()->pivot;
     }
 
     /**

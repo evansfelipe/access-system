@@ -79,7 +79,7 @@
         <!-- Vehicles list -->
         <div class="row">
             <div class="col-12 table-container">
-                <table class="table tbl-show3">
+                <table class="table tbl-show">
                     <thead>
                         <tr>
                             <th></th>

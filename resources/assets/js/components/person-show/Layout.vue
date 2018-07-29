@@ -26,6 +26,7 @@
 
     .btn-edit {
         position: absolute;
+        padding: 1em;
         top: 0.5em;
         right: 0.5em; 
         z-index: 2;

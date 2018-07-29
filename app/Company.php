@@ -77,7 +77,7 @@ class Company extends Model
      */
     public function people()
     {
-        return $this->belongsToMany('App\Person', 'company_people')->using('App\PersonCompany');
+        return $this->belongsToMany('App\Person', 'company_people')->using('App\PersonCompany')->withPivot('activity_id','art','pbip');
     }
 
 }

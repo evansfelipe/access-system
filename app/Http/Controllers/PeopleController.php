@@ -143,12 +143,61 @@ class PeopleController extends Controller
      */
     public function edit(Person $person)
     {
-        $contact = json_decode($person->contact);
-        $person->email = $contact->email;
-        $person->home_phone = $contact->home_phone;
-        $person->mobile_phone = $contact->mobile_phone;
-        $person->fax = $contact->fax;
-        return view('people.edit')->with('person', $person);
+        $person_vehicles = [];
+        foreach($person->vehicles as $vehicle) { array_push($person_vehicles, $vehicle->id); }
+        $vehicles = Vehicle::all();
+        foreach($vehicles as $vehicle) {
+            if(in_array($vehicle->id, $person_vehicles)){
+                $vehicle->picked = true;
+            }
+            else{
+                $vehicle->picked = false;
+            }
+        }
+
+        $contact = $person->contactToObject();
+        $person_company = $person->workingInformation();
+
+        return view('people.edit')->with('person', json_encode([
+            'update_url' => route('people.update', $person->id),
+            'personal_information' => json_encode([
+                'last_name' => $person->last_name,
+                'name' => $person->name,
+                'document_type' => $person->document_type,
+                'document_number' => $person->document_number,
+                'cuil' => $person->cuil,
+                'birthday' => date('Y-m-d', strtotime($person->birthday)),
+                'sex' => $person->sex,
+                'blood_type' => $person->blood_type,
+                'pna' => $person->pna,
+                'email' => $contact->email,
+                'home_phone' => $contact->home_phone,
+                'mobile_phone' => $contact->mobile_phone,
+                'fax' => $contact->fax,
+                'street' => $person->residency->street,
+                'apartment' => $person->residency->apartment,
+                'cp' => $person->residency->cp,
+                'country' => $person->residency->country,
+                'province' => $person->residency->province,
+                'city' => $person->residency->city
+            ]),
+            'working_information' => json_encode([
+                'company_id' => $person->company()->id,
+                'activity_id' => $person_company->activity_id,
+                'art' => $person_company->art,
+                'pbip' => date('Y-m-d', strtotime($person_company->pbip))
+            ]),
+            'assign_vehicles' => json_encode([]),
+            'first_card' => json_encode([
+                'number' => $person->getActiveCard()->number,
+                'risk' => $person->getActiveCard()->risk,
+                'from' => date('Y-m-d', strtotime($person->getActiveCard()->from)),
+                'until' => date('Y-m-d', strtotime($person->getActiveCard()->until))
+            ]),
+            'documentation' => json_encode([]),
+        ])) ->with('companies', Company::all(['id','name'])->toJson())
+            ->with('activities', Activity::all(['id','name'])->toJson())
+            ->with('vehicles', $vehicles);;
     }
 
     /**
@@ -160,6 +209,39 @@ class PeopleController extends Controller
      */
     public function update(SavePersonRequest $request, Person $person)
     {
+        $person->fill($request->toArray());
+        $person->setContact($request->toArray());
+        $person->save();
+
+        $person->residency->fill($request->toArray());
+        $person->residency->save();
+
+        $person_company = $person->company()->pivot;
+        $person_company->activity_id = $request->activity_id;
+        $person_company->art = $request->art;
+        $person_company->pbip = $request->pbip;
+        $person_company->save();
+
+        $person_vehicles = [];
+        foreach($person->vehicles as $vehicle) { array_push($person_vehicles, $vehicle->id); }
+        if(isset($request->vehicles_id)) {
+            $new_vehicles = array_diff($request->vehicles_id, $person_vehicles);
+            $removed_vehicles = array_diff($person_vehicles, $request->vehicles_id);
+            foreach($new_vehicles as $vehicle_id){
+                $person_vehicle = new PersonVehicle(['vehicle_id' => $vehicle_id]);
+                $person_vehicle->person_id = $person->id;
+                $person_vehicle->save();
+            }
+            foreach($removed_vehicles as $vehicle_id){
+                $person->vehicles()->detach($vehicle_id);
+            }
+        }
+
+        $card = $person->getActiveCard();
+        $card->fill($request->toArray());
+        $card->save();
+
+        return response(route('people.show', $person->id), 200)->header('Content-Type', 'text/plain');
         // If the cuil has changed, we need to rename the name of the picture stored on the server.
         // Done before set the new data because we need to use the old cuil.
         if(($request->cuil != $person->cuil) && !empty($person->picture_name)) {

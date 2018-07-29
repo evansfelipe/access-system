@@ -69,7 +69,7 @@
 
 <script>
     export default {
-        props: ['companies', 'activities', 'vehicles'],
+        props: ['person', 'companies', 'activities', 'vehicles'],
         data: function() {
             return {
                 tab: 0,
@@ -88,43 +88,7 @@
                     documentation:        null
                 },
                 values: {
-                    personal_information: {
-                        last_name: 'Example Last Name',
-                        name: 'Example Name',
-                        document_type: '0',
-                        document_number: '11111111',                
-                        cuil: '11111111111',
-                        birthday: '1995-01-01',
-                        sex: 'M',
-                        blood_type: '0+',
-                        pna: '123456789123',
-                        email: 'example@gmail.com',
-                        home_phone: '4800000',
-                        mobile_phone: '15555555',
-                        fax: '480000',
-                        street: 'Example Street',
-                        apartment: '',
-                        cp: '7600',
-                        country: '',
-                        province: '',
-                        city: ''
-                    },
-                    working_information: {
-                        company_id: '1',
-                        activity_id: '1',
-                        art: '123456789',
-                        pbip: '2020-03-03'
-                    },
-                    assign_vehicles: {
-                    },
-                    first_card: {
-                        number: '123987654',
-                        risk: '1',
-                        from: '2020-01-01',
-                        until: '2020-02-02'
-                    },
-                    documentation: {
-                    }
+                    
                 },
                 errors: {
                     personal_information: {},
@@ -134,6 +98,60 @@
                     documentation: {}
                 }
             };
+        },
+        beforeMount() {
+            if(this.person != null){
+                let person_info = JSON.parse(this.person);
+                this.values = {
+                    personal_information: JSON.parse(person_info.personal_information),
+                    working_information: JSON.parse(person_info.working_information),
+                    assign_vehicles: JSON.parse(person_info.assign_vehicles),
+                    first_card: JSON.parse(person_info.first_card),
+                    documentation: JSON.parse(person_info.documentation),
+                }
+            }
+            else{
+                this.values = {
+                    personal_information: {
+                        last_name: '',
+                        name: '',
+                        document_type: '',
+                        document_number: '',                
+                        cuil: '',
+                        birthday: '',
+                        sex: '',
+                        blood_type: '',
+                        pna: '',
+                        email: '',
+                        home_phone: '',
+                        mobile_phone: '',
+                        fax: '',
+                        street: '',
+                        apartment: '',
+                        cp: '',
+                        country: '',
+                        province: '',
+                        city: ''
+                    },
+                    working_information: {
+                        company_id: '',
+                        activity_id: '',
+                        art: '',
+                        pbip: ''
+                    },
+                    assign_vehicles: {
+                    },
+                    first_card: {
+                        number: '',
+                        risk: '',
+                        from: '',
+                        until: ''
+                    },
+                    documentation: {
+                    }
+                }
+            }
+            
         },
         mounted() {
             // Listens to the children component values changes.
@@ -167,19 +185,11 @@
                 // Until the axios request is performed, then the view will be locked and showing a loading message.
                 this.saving = { status: true, message: "Guardando..." }
                 // Performs the request whit the merged data of each steps.
-                axios.post('/people', { 
-                    ...this.values.personal_information,
-                    ...this.values.working_information,
-                    ...this.values.assign_vehicles,
-                    ...this.values.first_card
-                })
-                // If the request is success, then changes the loading message and redirects the user.
-                .then(response => {
+                let thenCallback = response => {
                     this.saving.message = "Redirigiendo...";
                     window.location.href = response.data;
-                })
-                // Otherwise, adds each error to the correspondent error object.
-                .catch(response => {
+                };
+                let catchCallback = response => {
                     // Resets the errors of each component.
                     this.errors = {
                         personal_information: {},
@@ -215,7 +225,23 @@
                     });
                     // Ends the loading status.
                     this.saving.status = false;
-                });
+                };
+                let data = { 
+                    ...this.values.personal_information,
+                    ...this.values.working_information,
+                    ...this.values.assign_vehicles,
+                    ...this.values.first_card
+                };
+                if(this.person == null){
+                    axios.post('/people', data) 
+                        .then(response => thenCallback(response))
+                        .catch(response => catchCallback(response));
+                }
+                else{
+                    axios.put(JSON.parse(this.person).update_url, data)
+                        .then(response => thenCallback(response))
+                        .catch(response => catchCallback(response));
+                }
             }
         }
     }
