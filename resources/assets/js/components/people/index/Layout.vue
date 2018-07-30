@@ -5,13 +5,7 @@
     table.table-hover > thead > tr > th {
         border-top: 0px;
         cursor: pointer;
-        width: 25%;
-        -webkit-touch-callout: none; /* iOS Safari */
-        -moz-user-select: none; /* Firefox */
-        -webkit-user-select: none; /* Safari */
-        -khtml-user-select: none; /* Konqueror HTML */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-                user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+        width: 25%; 
     }
     table.table-hover > tbody > tr:hover {
         cursor: pointer;
@@ -74,19 +68,30 @@
 
 <script>
     export default {
-        props: { initialpeople: { type: String, required: true } },
         data: function() {
-            let parsedPeople = JSON.parse(this.initialpeople);
             return {
                 last_name: "",
                 name: "",
                 cuil: "",
                 company_name: "",
-                unfilteredPeople: parsedPeople,
-                people: parsedPeople,
+                unfilteredPeople: [],
+                people: [],
                 currentSortedColumn: "company_name",
                 currentSortingOrder: 1
             }
+        },
+        beforeMount() {
+            this.$parent.$emit('loading-status', { status: true, message: "Cargando lista..." })
+            axios.get('/people')
+            .then(response => {
+                let data = response.data;
+                this.unfilteredPeople = data;
+                this.people = data;
+                this.$parent.$emit('loading-status', { status: false, message: "" })
+            })
+            .catch(error => {
+                console.log(error);
+            })
         },
         watch: {
             last_name: function() {

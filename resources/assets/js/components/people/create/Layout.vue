@@ -4,10 +4,13 @@
         border-top-right-radius: 0;
         border-top-left-radius: 0;
     }
+    .card-body {
+        min-height: 30vh;
+    }
 </style>
 
 <template>
-    <div>
+    <div v-if="axios_finished">
         <!-- Tabs -->
         <ul class="nav nav-tabs">
             <!-- Personal information tab -->
@@ -35,8 +38,6 @@
         <!-- Forms -->
         <div class="card card-default">
             <div class="card-body">
-                <!-- Loading cover will be only be rendered when component is saving the data to the server -->
-                <loading-cover v-if="saving.status" :message="saving.message"/>
                 <!-- Personal information form -->
                 <pc-personal-information v-show="tab === 0" ref="personal_information" :errors="errors.personal_information" :values="values.personal_information"/>
                 <!-- Working information form -->
@@ -69,17 +70,20 @@
 
 <script>
     export default {
-        props: ['person', 'companies', 'activities', 'vehicles'],
+        components: {
+            'pc-personal-information': require('./partials/PersonalInformation.vue'),
+            'pc-working-information': require('./partials/WorkingInformation.vue'),
+            'pc-assign-vehicles': require('./partials/AssignVehicles.vue'),
+            'pc-first-card': require('./partials/FirstCard.vue'),
+        },
         data: function() {
             return {
+                axios_finished: false,
                 tab: 0,
-                vehicles_list:   JSON.parse(this.vehicles),
-                companies_list:  JSON.parse(this.companies),
-                activities_list: JSON.parse(this.activities),
-                saving: {
-                    status: false,
-                    message: ''
-                },
+                vehicles_list:   [],
+                companies_list:  [],
+                activities_list: [],
+                person: {},
                 step_validated: {
                     personal_information: null,
                     working_information:  null,
@@ -88,30 +92,6 @@
                     documentation:        null
                 },
                 values: {
-                    
-                },
-                errors: {
-                    personal_information: {},
-                    working_information: {},
-                    assign_vehicles: {},
-                    first_card: {},
-                    documentation: {}
-                }
-            };
-        },
-        beforeMount() {
-            if(this.person != null){
-                let person_info = JSON.parse(this.person);
-                this.values = {
-                    personal_information: JSON.parse(person_info.personal_information),
-                    working_information: JSON.parse(person_info.working_information),
-                    assign_vehicles: JSON.parse(person_info.assign_vehicles),
-                    first_card: JSON.parse(person_info.first_card),
-                    documentation: JSON.parse(person_info.documentation),
-                }
-            }
-            else{
-                this.values = {
                     personal_information: {
                         last_name: '',
                         name: '',
@@ -149,9 +129,39 @@
                     },
                     documentation: {
                     }
+                },
+                errors: {
+                    personal_information: {},
+                    working_information: {},
+                    assign_vehicles: {},
+                    first_card: {},
+                    documentation: {}
+                }
+            };
+        },
+        beforeMount() {
+            this.$parent.$emit('loading-status', { status: true, message: "Cargando..." })
+            axios.get('/people/create')
+            .then(response => {
+                this.$parent.$emit('loading-status', { status: false, message: "" })
+                this.axios_finished = true;
+                let json = response.data;
+                this.vehicles_list = JSON.parse(json.vehicles);
+                this.companies_list = JSON.parse(json.companies);
+                this.activities_list = JSON.parse(json.activities);
+                this.person = JSON.parse(json.person);
+                if(this.person != null){
+                    let person_info = this.person;
+                    this.values = {
+                        personal_information: JSON.parse(person_info.personal_information),
+                        working_information: JSON.parse(person_info.working_information),
+                        assign_vehicles: JSON.parse(person_info.assign_vehicles),
+                        first_card: JSON.parse(person_info.first_card),
+                        documentation: JSON.parse(person_info.documentation),
                 }
             }
-            
+            })
+            .catch(error => this.$parent.$emit('fatal-error', error));
         },
         mounted() {
             // Listens to the children component values changes.
@@ -181,13 +191,11 @@
              * Otherwise, shows the validation errors.
              */
             save: function() {
-                window.scrollTo(0,0);
                 // Until the axios request is performed, then the view will be locked and showing a loading message.
-                this.saving = { status: true, message: "Guardando..." }
+                this.$parent.$emit('loading-status', { status: true, message: "Guardando..." })
                 // Performs the request whit the merged data of each steps.
                 let thenCallback = response => {
-                    this.saving.message = "Redirigiendo...";
-                    window.location.href = response.data;
+                    this.$parent.$emit('loading-status', { status: true, message: "Guardando..." })
                 };
                 let catchCallback = response => {
                     // Resets the errors of each component.
@@ -224,7 +232,7 @@
                         addError(key, errors, 'documentation');
                     });
                     // Ends the loading status.
-                    this.saving.status = false;
+                    this.$parent.$emit('loading-status', { status: false, message: "" })
                 };
                 let data = { 
                     ...this.values.personal_information,

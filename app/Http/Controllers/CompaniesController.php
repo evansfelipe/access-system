@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use View;
 use Illuminate\Http\Request;
 
 use App\Http\Requests\SaveCompanyRequest;
@@ -32,7 +33,7 @@ class CompaniesController extends Controller
      */
     public function create()
     {
-        return view('companies.create');
+        return View::make('companies.create')->render();
     }
 
     /**

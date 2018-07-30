@@ -18,12 +18,6 @@
         margin-left: 1px;
     }
 
-    .card {
-        border-top: 0;
-        border-top-right-radius: 0;
-        border-top-left-radius: 0;
-    }
-
     .btn-edit {
         position: absolute;
         padding: 1em;
@@ -101,6 +95,13 @@
 
 <script>
     export default {
+        components: {
+            'ps-personal-information': require('./partials/PersonalInformation.vue'),
+            'ps-working-information': require('./partials/WorkingInformation.vue'),
+            'ps-vehicles': require('./partials/Vehicles.vue'),
+            'ps-cards': require('./partials/Cards.vue'),
+            'ps-documentation': require('./partials/Documentation.vue'),
+        },
         props: {
             personjson: {
                 required: true

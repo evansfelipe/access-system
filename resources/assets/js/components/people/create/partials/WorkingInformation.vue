@@ -1,5 +1,6 @@
 <template>
     <div>
+        <span ref="modal-panel"></span>
         <!-- Company -->
         <div class="form-row">
             <form-item label="Empresa" :errors="errors.company_id">
@@ -16,7 +17,9 @@
                     <strong>o</strong>
                 </div>
                 <div class="col-5">
-                    <button type="button" class="btn btn-block btn-outline-unique">Cree una nueva empresa</button>
+                    <button type="button" class="btn btn-block btn-outline-unique" @click="openCompanyModal">
+                        Cree una nueva empresa
+                    </button>
                 </div>
                 <div class="col">
                     <div class="form-check">
@@ -42,7 +45,9 @@
                     <strong>o</strong>
                 </div>
                 <div class="col-5">
-                    <button type="button" class="btn btn-block btn-outline-unique">Cree una nueva actividad</button>                    
+                    <button type="button" class="btn btn-block btn-outline-unique">
+                        Cree una nueva actividad
+                    </button>                    
                 </div>
             </form-item>
         </div>
@@ -84,6 +89,16 @@ export default {
         }
     },
     methods: {
+        openCompanyModal() {
+            axios.get('/companies/create')
+            .then(response => {
+                console.log(response);
+                this.$refs['modal-panel'].innerHTML = response.data;
+            })
+            .catch(response => {
+
+            });
+        },
         updateValues: function() {
             let data = {};
             let keys = Object.keys(this.values);

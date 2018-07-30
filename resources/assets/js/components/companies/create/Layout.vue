@@ -15,8 +15,6 @@
         </ul>
         <div class="card card-default">
             <div class="card-body">
-                <!-- Loading cover will be only be rendered when component is saving the data to the server -->
-                <loading-cover v-if="saving.status" :message="saving.message"/>
                 <general-information v-show="tab === 0" :values="values.general_information" :errors="errors"></general-information>
                 <!-- Buttons -->
                 <hr>
@@ -34,7 +32,7 @@
 <script>
 export default {
     components: {
-        'general-information': require('./GeneralInformation'),
+        'general-information': require('./partials/GeneralInformation'),
     },
     data: function() {
         return {
@@ -72,12 +70,11 @@ export default {
     },
     methods: {
         save: function() {
-            window.scrollTo(0,0);
-            this.saving = { status: true, message: "Guardando..." };
+            // Until the axios request is performed, then the view will be locked and showing a loading message.
+            this.$parent.$emit('loading-status', { status: true, message: "Guardando..." })
             axios.post('/companies', { ...this.values.general_information })
             .then(response => {
-                this.saving.message = "Redirigiendo...";
-                window.location.href = response.data;
+                this.$parent.$emit('loading-status', { status: true, message: "Guardando..." })
             })
             .catch(error => {
                 if(error.response.status === 422) {
@@ -87,6 +84,8 @@ export default {
                 else {
                     console.log(error.response);
                 }
+                // Ends the loading status.
+                this.$parent.$emit('loading-status', { status: false, message: "" })
             })
         }
     }

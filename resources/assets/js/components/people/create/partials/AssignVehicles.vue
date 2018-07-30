@@ -59,16 +59,16 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="more-options">
                         <!-- New vehicle -->
                         <span class="dropdown-item">
-                            <i class="fas fa-plus"></i> Agregar nuevo vehículo
+                            <i class="fas centered fa-plus"></i> Agregar nuevo vehículo
                         </span>
                         <!-- Show or hide outdated vehicles -->
                         <span class="dropdown-item" @click="show_outdated = !show_outdated">
-                            <i :class="'far fa-eye' + (show_outdated ? '-slash':'')"></i>
+                            <i :class="'far centered fa-eye' + (show_outdated ? '-slash':'')"></i>
                             {{ show_outdated ? 'Ocultar' : 'Mostrar' }} vehículos vencidos
                         </span>
                         <!-- Unpick all vehicles -->
                         <span class="dropdown-item" @click="unpickAll">
-                            <i class="fas fa-ban"></i> Deseleccionar todos
+                            <i class="fas centered fa-ban"></i> Deseleccionar todos
                         </span>
                     </div>
                 </div>

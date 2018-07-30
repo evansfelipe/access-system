@@ -12,7 +12,6 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
@@ -71,38 +70,16 @@
             color: #3F729B;
             background-color: transparent;
         }
-
-        /* width */
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        /* Track */
-        ::-webkit-scrollbar-track {
-            background: white; 
-        }
-
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 2px;
-        }
-
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555; 
-        }
-
     </style>
 </head>
-<body>
+<body style="position: fixed; top:0; bottom: 0; left: 0; right: 0">
     <div id="app">
         
 
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-            <div class="container">
+        <nav class="navbar navbar-expand-md navbar-light navbar-laravel" style="height: 55px; z-index: 10">
+            <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{-- {{ config('app.name', 'Laravel') }} --}} Labarol
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -149,32 +126,29 @@
         </nav>
 
 
-        <main class="py-4">
-            <div class="container">
-
-                @if(count( $errors ) > 0)
-                    @foreach ($errors->all() as $error)
+        <main style="position: absolute; top: 55px; bottom: 0; left: 0; right: 0;">
+            @if(count( $errors ) > 0)
+                @foreach ($errors->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
+            @endif
+    
+            @if(Session::has('error_messages'))
+                <div class="alert alert-danger no-select" role="alert">
+                    @foreach (Session::get('error_messages') as $error)
                         <div>{{ $error }}</div>
                     @endforeach
-                @endif
-        
-                @if(Session::has('error_messages'))
-                    <div class="alert alert-danger no-select" role="alert">
-                        @foreach (Session::get('error_messages') as $error)
-                            <div>{{ $error }}</div>
-                        @endforeach
-                    </div>
-                @endif
+                </div>
+            @endif
 
-                @if(Session::has('success_messages'))
-                    <div class="alert alert-success no-select" role="alert">
-                        @foreach (Session::get('success_messages') as $error)
-                            <div>{{ $error }}</div>
-                        @endforeach
-                    </div>
-                @endif
-                @yield('content')
-            </div>
+            @if(Session::has('success_messages'))
+                <div class="alert alert-success no-select" role="alert">
+                    @foreach (Session::get('success_messages') as $error)
+                        <div>{{ $error }}</div>
+                    @endforeach
+                </div>
+            @endif
+            @yield('content')
         </main>
     </div>
     @yield('js')
