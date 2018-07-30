@@ -10,7 +10,13 @@
 
 .navbar-laravel {
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.borderless-top-card {
+    border-top: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
 }
 
 body {
@@ -86,3 +92,11 @@ table.tbl-show {
       } 
   }
 }
+
+// Notifications transitions
+.notifications-enter-active { transition: all .3s ease }
+.notifications-leave-active { transition: all .4s cubic-bezier(1.0, 0.5, 0.8, 1.0) }
+.notifications-enter, .notifications-leave-to { transform: translateX(10px); opacity: 0; }
+// Sidebar transitions
+.sidebar-enter, .sidebar-leave-to { transform: translateX(-15vw) }
+.sidebar-enter-active, .sidebar-leave-active  { transition: all .5s }

@@ -36,19 +36,10 @@
         background-color: whitesmoke;
         color: grey;
     }
-    
-    div.card-body {
-        min-height: 77vh;
-        display: flex;
-        align-items: center;
-        & > div.row {
-            width: 100%;
-        }
-    }
 </style>
 
 <template>
-    <div>
+    <div v-if="axios_finished">
         <!-- Tabs -->
         <ul class="nav nav-tabs">
             <!-- Personal information tab -->
@@ -71,9 +62,13 @@
             <tab-item :active="tab === 4" @click.native="tab = 4" icon="fas fa-file-alt">
                 Documentación
             </tab-item>
+            <!-- Observations tab -->
+            <tab-item :active="tab === 5" @click.native="tab = 5" icon="fas fa-file-alt">
+                Observaciones
+            </tab-item>
         </ul>
         <!-- Content -->
-        <div class="card card-default">
+        <div class="card card-default borderless-top-card ">
             <div class="card-body">
                 <!-- Edit button -->
                 <a :href="edit_route" class="btn btn-edit"><i class="fas fa-user-edit fa-lg"></i></a>
@@ -102,22 +97,36 @@
             'ps-cards': require('./partials/Cards.vue'),
             'ps-documentation': require('./partials/Documentation.vue'),
         },
-        props: {
-            personjson: {
-                required: true
-            }
-        },
         data: function() {
-            let person_info = JSON.parse(this.personjson);
             return {
+                axios_finished: false,
                 tab: 0,
-                edit_route: person_info.edit_url,
-                personal_information: person_info.personal_information,
-                working_information: person_info.working_information,
-                vehicles: person_info.vehicles,
-                active_card: person_info.active_card,
-                inactive_cards: person_info.inactive_cards
+                edit_route: "",
+                personal_information: [],
+                working_information: [],
+                vehicles: [],
+                active_card: [],
+                inactive_cards: []
             };
+        },
+        beforeMount() {
+            this.$parent.$emit('loading-status', { status: true, message: "Cargando..." });
+            axios.get(`/people/${this.$route.params.id}`)
+            .then(response => {
+                this.axios_finished = true;
+                let person_info = response.data;
+                this.edit_route = person_info.edit_url;
+                this.personal_information = person_info.personal_information;
+                this.working_information = person_info.working_information;
+                this.vehicles = person_info.vehicles;
+                this.active_card = person_info.active_card;
+                this.inactive_cards = person_info.inactive_cards;
+                this.$parent.$emit('loading-status', { status: false, message: "" });
+            })
+            .catch(error => {
+                console.log(error);
+            })
+
         }
     }
 </script>

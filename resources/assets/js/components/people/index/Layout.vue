@@ -52,7 +52,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(person, key) in people" @click="showProfile(person.show_url)" v-bind:key="key">
+                        <tr v-for="(person, key) in people" @click="showProfile(person.id)" v-bind:key="key">
                             <td dusk="td_last_name">{{ person.last_name }}</td>
                             <td>{{ person.name }}</td>
                             <td>{{ person.cuil }}</td>
@@ -81,7 +81,7 @@
             }
         },
         beforeMount() {
-            this.$parent.$emit('loading-status', { status: true, message: "Cargando lista..." })
+            this.$parent.$emit('loading-status', { status: true, message: "Cargando..." })
             axios.get('/people')
             .then(response => {
                 let data = response.data;
@@ -112,8 +112,8 @@
                 return person.last_name.toUpperCase().includes(this.last_name.toUpperCase()) && person.name.toUpperCase().includes(this.name.toUpperCase())
                        && person.cuil.toUpperCase().includes(this.cuil.toUpperCase()) && person.company_name.toUpperCase().includes(this.company_name.toUpperCase());
             },
-            showProfile: function(url) {
-                window.location.href = url;
+            showProfile: function(id) {
+                this.$router.push(`/people/show/${id}`);
             },
             sortColumn: function(colID) {
                 if(this.people.length > 0) {

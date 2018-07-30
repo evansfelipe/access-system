@@ -15,9 +15,6 @@ class PeopleController extends Controller
         $people = Person::orderBy('created_at','desc')->get()->toArray();
         foreach($people as $key => $value){ $people[$key] = $value['index']; }
         return response(json_encode($people))->header('Content-Type', 'application/json');
-
-
-        return view('people.index')->with('people', json_encode($people));
     }
 
     /**
@@ -40,11 +37,6 @@ class PeopleController extends Controller
                 'activities' => Activity::all(['id','name'])->toJson()
             ])
         )->header('Content-Type', 'application/json');
-
-
-        return view('person-creation.index')->with('vehicles', $vehicles)
-                                            ->with('companies', Company::all(['id','name'])->toJson())
-                                            ->with('activities', Activity::all(['id','name'])->toJson());
     }
 
     /**
@@ -94,7 +86,7 @@ class PeopleController extends Controller
     {
         $person_info = $person->toArray();
         unset($person_info['index']);
-        return view('people.show')->with('person', json_encode($person_info));
+        return response(json_encode($person_info))->header('Content-Type', 'application/json');
     }
 
     /**

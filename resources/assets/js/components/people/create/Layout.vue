@@ -1,9 +1,4 @@
 <style scoped>
-    .card {
-        border-top: 0;
-        border-top-right-radius: 0;
-        border-top-left-radius: 0;
-    }
     .card-body {
         min-height: 30vh;
     }
@@ -36,7 +31,7 @@
         </ul>
         <!-- /Tabs -->
         <!-- Forms -->
-        <div class="card card-default">
+        <div class="card card-default borderless-top-card ">
             <div class="card-body">
                 <!-- Personal information form -->
                 <pc-personal-information v-show="tab === 0" ref="personal_information" :errors="errors.personal_information" :values="values.personal_information"/>
@@ -195,7 +190,8 @@
                 this.$parent.$emit('loading-status', { status: true, message: "Guardando..." })
                 // Performs the request whit the merged data of each steps.
                 let thenCallback = response => {
-                    this.$parent.$emit('loading-status', { status: true, message: "Guardando..." })
+                    this.$parent.$emit('loading-status', { status: false, message: "" });
+                    this.$parent.$emit('new-notification', {type: 'success', text: 'Persona creada exitosamente.'})
                 };
                 let catchCallback = response => {
                     // Resets the errors of each component.
@@ -232,6 +228,7 @@
                         addError(key, errors, 'documentation');
                     });
                     // Ends the loading status.
+                    this.$parent.$emit('new-notification', {type: 'danger', text: 'Corrija los errores antes de continuar.'})
                     this.$parent.$emit('loading-status', { status: false, message: "" })
                 };
                 let data = { 

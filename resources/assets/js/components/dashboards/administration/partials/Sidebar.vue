@@ -5,14 +5,14 @@
         text-decoration: none;
         padding: .5em 0 .5em 1em;
         &:hover {
-            background-color: #e3eaf0;
+            background-color: rgba(28, 35, 49, .3);
             cursor: pointer;
         }
         &.router-link-exact-active {
-            background-color: #dce3e7;
-            color: black;
+            background-color: rgba(28, 35, 49, .6);
             cursor: default;
-            font-weight: bold;
+            border-left: 5px solid white;
+            padding-left: calc(1em + 50px - 5px);
         }
     }
 
@@ -20,25 +20,25 @@
         // Puts the sidebar over eveithing but the navbar
         z-index: 9;
         // Right shadow
-        box-shadow: 3px 0 5px -2px rgba(0,0,0,.175);
         // Position
         position: absolute;
         top: 0; bottom: 0; left: 0; right: 85vw;
         // Colors and padding
-        padding: 1em 0;
-        & * { color: grey }
-        background-color: #ebf0f3;
+        padding: 2em 0;
+        & * { color: rgba(255, 255, 255, 0.9) }
+        background-color: rgba(28, 35, 49, 0.8);
         // Overflow
         overflow-x: auto;
+        font-weight: bold;
 
         & > div.sidebar-group {
+
             & > a.sidebar-toggle {
                 @extend %btn-basic;
                 font-weight: bold;
             }
 
             & > a.btn-sidebar.sidebar-toggle { 
-                color: black;
                 & > i.toggle-icon {
                     float: right;
                     padding-top: .4em;
@@ -46,16 +46,10 @@
             }
 
             & > div.items {
-                visibility: visible;
                 & > a.btn-sidebar {
                     @extend %btn-basic;
                     padding-left: calc(1em + 50px);
                 }
-            }
-
-            &.closed  > div.items {
-                visibility: hidden;
-                max-height: 0;
             }
         }
     }
@@ -64,12 +58,12 @@
 <template>
     <div class="sidebar">
         <!-- People -->
-        <div :class="'sidebar-group ' + (!group_active.people ? 'closed' : '')">
+        <div class="sidebar-group">
             <a class="btn-sidebar sidebar-toggle" @click="group_active.people = !group_active.people">
                 <i class="fas centered fa-users fa-lg"></i> Personas
                 <i :class="'toggle-icon fas centered fa-caret-' + (group_active.people ? 'up' : 'down')"></i>
             </a>
-            <div class="items">
+            <div class="items" v-if="group_active.people">
                 <!-- People Index -->
                 <router-link to="/people" class="btn-sidebar">Listado</router-link>
                 <!-- People creation -->
@@ -77,23 +71,23 @@
             </div>
         </div>
         <!-- Companies -->
-        <div :class="'sidebar-group ' + (!group_active.companies ? 'closed' : '')">
+        <div class="sidebar-group">
             <a class="btn-sidebar sidebar-toggle" @click="group_active.companies = !group_active.companies">
                 <i class="fas centered fa-building fa-lg"></i> Empresas
                 <i :class="'toggle-icon fas centered fa-caret-' + (group_active.companies ? 'up' : 'down')"></i>
             </a>
-            <div class="items">
+            <div class="items" v-if="group_active.companies">
                 <!-- Companies creation -->
                 <router-link to="/companies/create" class="btn-sidebar">Crear</router-link>
             </div>
         </div>
         <!-- Vehicles -->
-        <div :class="'sidebar-group ' + (!group_active.vehicles ? 'closed' : '')">
+        <div class="sidebar-group">
             <a class="btn-sidebar sidebar-toggle" @click="group_active.vehicles = !group_active.vehicles">
                 <i class="fas centered fa-car fa-lg"></i> Vehículos
                 <i :class="'toggle-icon fas centered fa-caret-' + (group_active.vehicles ? 'up' : 'down')"></i>
             </a>
-            <div class="items">
+            <div class="items" v-if="group_active.vehicles">
                 <router-link to="/bar" class="btn-sidebar">Go to Bar</router-link>
             </div>
         </div>
@@ -101,12 +95,12 @@
         <hr>
 
         <!-- Expiration -->
-        <div :class="'sidebar-group ' + (!group_active.expiration ? 'closed' : '')">
+        <div class="sidebar-group">
             <a class="btn-sidebar sidebar-toggle" @click="group_active.expiration = !group_active.expiration">
                 <i class="fas centered fa-clock fa-lg"></i> Vencimientos
                 <i :class="'toggle-icon fas centered fa-caret-' + (group_active.expiration ? 'up' : 'down')"></i>
             </a>
-            <div class="items">
+            <div class="items" v-if="group_active.expiration">
                 <router-link to="/bar" class="btn-sidebar">Go to Bar</router-link>
             </div>
         </div>

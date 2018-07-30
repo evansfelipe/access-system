@@ -269,6 +269,7 @@ class Person extends Model
             
             //Index info
             'index' => [
+                'id' => $this->id,
                 'last_name' => $this->last_name,
                 'name' => $this->name,
                 'cuil' => $this->cuil,

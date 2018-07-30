@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -25,16 +24,12 @@ Vue.component('abbreviation-text', require('./components/_common/AbbreviationTex
 // Dashboards
 Vue.component('administration-dashboard', require('./components/dashboards/administration/Layout.vue'));
 
-// Must be translated to routes
-Vue.component('person-show', require('./components/people/show/Layout.vue'));
-
-
-
 const router = new VueRouter({
     routes: [
         // People
-        { path: '/people', component: require('./components/people/index/Layout.vue') },
-        { path: '/people/create', component: require('./components/people/create/Layout.vue') },
+        { path: '/people',          component: require('./components/people/index/Layout.vue')  },
+        { path: '/people/create',   component: require('./components/people/create/Layout.vue') },
+        { path: '/people/show/:id', component: require('./components/people/show/Layout.vue')   },
         // Companies
         { path: '/companies/create', component: require('./components/companies/create/Layout.vue') },
         // Extra

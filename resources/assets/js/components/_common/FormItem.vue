@@ -30,7 +30,6 @@
                 <div class="col">
                     <div v-if="errors.length > 0" class="has-errors text-justify" role="alert">
                         <strong class="error-message" v-for="(error, key) in errors" :key="key">{{ error }}</strong>
-                        
                     </div>
                 </div>
             </div>

@@ -1,11 +1,3 @@
-<style>
-    .card {
-        border-top: 0;
-        border-top-right-radius: 0;
-        border-top-left-radius: 0;
-    }
-</style>
-
 <template>
     <div>
         <ul class="nav nav-tabs">
@@ -13,7 +5,7 @@
                 Información general
             </tab-item>
         </ul>
-        <div class="card card-default">
+        <div class="card card-default borderless-top-card ">
             <div class="card-body">
                 <general-information v-show="tab === 0" :values="values.general_information" :errors="errors"></general-information>
                 <!-- Buttons -->
