@@ -36,11 +36,9 @@
                 <!-- Personal information form -->
                 <pc-personal-information v-show="tab === 0" ref="personal_information" :errors="errors.personal_information" :values="values.personal_information"/>
                 <!-- Working information form -->
-                <pc-working-information v-show="tab === 1" ref="working_information" :errors="errors.working_information" :values="values.working_information"
-                                        :companies="companies_list" :activities="activities_list"/>
+                <pc-working-information v-show="tab === 1" ref="working_information" :errors="errors.working_information" :values="values.working_information"/>
                 <!-- Assign vehicles form -->
-                <pc-assign-vehicles v-show="tab === 2" ref="assign_vehicles" 
-                                    :vehicles="vehicles_list" :companyname="company_name"
+                <pc-assign-vehicles v-show="tab === 2" ref="assign_vehicles" :companyname="company_name"
                                     :companyid="parseInt(values.working_information.company_id)"/>
                 <!-- First card form -->
                 <pc-first-card  v-show="tab === 3" ref="first_card" :errors="errors.first_card" :values="values.first_card"
@@ -75,9 +73,6 @@
             return {
                 axios_finished: false,
                 tab: 0,
-                vehicles_list:   [],
-                companies_list:  [],
-                activities_list: [],
                 person: {},
                 step_validated: {
                     personal_information: null,
@@ -135,15 +130,11 @@
             };
         },
         beforeMount() {
-            this.$parent.$emit('loading-status', { status: true, message: "Cargando..." })
             axios.get('/people/create')
             .then(response => {
                 this.$parent.$emit('loading-status', { status: false, message: "" })
                 this.axios_finished = true;
                 let json = response.data;
-                this.vehicles_list = JSON.parse(json.vehicles);
-                this.companies_list = JSON.parse(json.companies);
-                this.activities_list = JSON.parse(json.activities);
                 this.person = JSON.parse(json.person);
                 if(this.person != null){
                     let person_info = this.person;
@@ -177,7 +168,7 @@
              * Company's name associated with the company id stored in the component data.
              */
             company_name: function() {
-                return this.values.working_information.company_id ? this.companies_list.filter(company => company.id == this.values.working_information.company_id)[0].name : '-';
+                return this.values.working_information.company_id ? this.$store.state.companies.list.filter(company => company.id == this.values.working_information.company_id)[0].name : '-';
             }
         },
         methods: {

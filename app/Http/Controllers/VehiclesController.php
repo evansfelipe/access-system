@@ -7,6 +7,21 @@ use Illuminate\Http\Request;
 
 class VehiclesController extends Controller
 {
+
+    public function updated_at()
+    {
+        return Vehicle::select(['updated_at'])->orderBy('updated_at','desc')->first();        
+    }
+
+    public function list()
+    {
+        $vehicles = Vehicle::all(['id','plate','brand','model','year','colour','company_id'])->map(function ($vehicle) {
+            $vehicle['picked'] = false;
+            return $vehicle;
+        });
+        return response(json_encode($vehicles))->header('Content-Type', 'application/json');        
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -89,11 +89,13 @@ export default {
             this.loading = loading;
         });
         this.$on('fatal-error', error => console.log("Fatal error: ", error));
-        this.$on('new-notification', notification => { 
-            this.notifications.push({
+        this.$on('new-notification', notification => {
+            let ob = {
                 id: this.next_notification++,
                 ...notification
-            });
+            };
+            this.notifications.push(ob);
+            setTimeout(() => this.closeNotification(ob), 5000);
         });
     },
     methods: {

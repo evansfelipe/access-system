@@ -7,8 +7,14 @@
 import './bootstrap';
 import './prototypes';
 window.Vue = require('vue');
+
 import VueRouter from 'vue-router';
-window.Vue.use(VueRouter)
+window.Vue.use(VueRouter);
+
+import Vuex from 'vuex';
+window.Vue.use(Vuex);
+
+import store from './store.js';
 
 /**
  * Finally, we will create a fresh Vue application instance and attach it to
@@ -39,5 +45,6 @@ const router = new VueRouter({
 
 const app = new Vue({
     el: '#app',
+    store: new Vuex.Store(store),
     router
 });

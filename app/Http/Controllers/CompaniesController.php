@@ -16,6 +16,16 @@ class CompaniesController extends Controller
 {
     use SaveResidencyTrait;
 
+    public function updated_at()
+    {
+        return Company::select(['updated_at'])->orderBy('updated_at','desc')->first();        
+    }
+
+    public function list()
+    {
+        return response(json_encode(Company::all(['id','name'])))->header('Content-Type', 'application/json');        
+    }
+
     /**
      * Display a listing of the resource.
      *

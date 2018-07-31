@@ -1,6 +1,6 @@
 <template>
     <div>
-        <span ref="modal-panel"></span>
+        <loading-cover v-if="this.$store.state.companies.updating || this.$store.state.activities.updating" message="Cargando..."/>
         <!-- Company -->
         <div class="form-row">
             <form-item label="Empresa" :errors="errors.company_id">
@@ -17,7 +17,7 @@
                     <strong>o</strong>
                 </div>
                 <div class="col-5">
-                    <button type="button" class="btn btn-block btn-outline-unique" @click="openCompanyModal">
+                    <button type="button" class="btn btn-block btn-outline-unique">
                         Cree una nueva empresa
                     </button>
                 </div>
@@ -73,12 +73,6 @@
 <script>
 export default {
     props: {
-        companies: {
-            required: true
-        },
-        activities: {
-            required: true
-        },
         values: {
             required: true,
             type: Object
@@ -88,17 +82,11 @@ export default {
             type: Object
         }
     },
+    beforeMount() {
+        this.$store.dispatch('fetch','companies');
+        this.$store.dispatch('fetch','activities');
+    },
     methods: {
-        openCompanyModal() {
-            axios.get('/companies/create')
-            .then(response => {
-                console.log(response);
-                this.$refs['modal-panel'].innerHTML = response.data;
-            })
-            .catch(response => {
-
-            });
-        },
         updateValues: function() {
             let data = {};
             let keys = Object.keys(this.values);
@@ -112,6 +100,12 @@ export default {
         company_id: function() {
             return this.values.company_id;
         },
+        companies: function() {
+            return this.$store.state.companies.list;
+        },
+        activities: function() {
+            return this.$store.state.activities.list;
+        }
     }
 }
 </script>

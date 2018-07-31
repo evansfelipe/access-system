@@ -21,10 +21,19 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::middleware(['auth','administration'])->group(function() {
     Route::resource('/people', 'PeopleController');
+    Route::get('/companies/updated_at', 'CompaniesController@updated_at');
+    Route::get('/companies/list', 'CompaniesController@list');
     Route::resource('/companies', 'CompaniesController');
     // Route::resource('/people/companies', 'PeopleCompaniesController', ['except' => ['create', 'store']], ['as' => 'people']);
     // Route::resource('/people/vehicles', 'PeopleVehiclesController', ['except' => ['create', 'store']], ['as' => 'people']);
     Route::resource('/cards', 'CardsController');
+    Route::get('/vehicles/updated_at', 'VehiclesController@updated_at');
+    Route::get('/vehicles/list', 'VehiclesController@list');
     Route::resource('/vehicles', 'VehiclesController');
+    Route::get('/activities/updated_at', 'ActivitiesController@updated_at');
+    Route::get('/activities/list', 'ActivitiesController@list');
+    Route::resource('/activities', 'ActivitiesController');
 });
+
+
 

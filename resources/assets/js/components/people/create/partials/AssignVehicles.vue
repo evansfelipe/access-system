@@ -24,6 +24,7 @@
 
 <template>
     <div>
+        <loading-cover v-if="this.$store.state.vehicles.updating" message="Cargando..."/>
         <!-- Options buttons -->
         <div class="row text-center mb-3">
             <!-- Company vehicles list button -->
@@ -117,11 +118,7 @@
 
 <script>
 export default {
-    props: { 
-        vehicles: { 
-            required: true,
-            type: Array 
-        },
+    props: {
         companyid: { 
             required: false,
             type: Number,
@@ -144,14 +141,17 @@ export default {
             show_outdated: false
         };
     },
-    mounted() {
+    beforeMount() {
+        this.$store.dispatch('fetch', 'vehicles');
         this.splitLists(this.company_id);
     },
     methods: {
         splitLists(company_id) {
             this.others_vehicles  = this.vehicles.filter(vehicle => vehicle.company_id !== company_id);
             this.company_vehicles = this.vehicles.filter(vehicle => vehicle.company_id === company_id);
-            this.selected_list    = this.company_vehicles.length > 0 ? "company" : "others";
+            if(this.company_vehicles.length > 0 || this.others_vehicles.length > 0)
+                this.selected_list    = this.company_vehicles.length > 0 ? "company" : "others";
+            
         },
         unpickAll() {
             if(confirm('Está seguro?')) {
@@ -167,9 +167,15 @@ export default {
         },
         lists_combined: function() {
             return this.company_vehicles.concat(this.others_vehicles);
+        },
+        vehicles: function() {
+            return this.$store.state.vehicles.list;
         }
     },
     watch: {
+        vehicles: function() {
+            this.splitLists(this.company_id);
+        },
         search: function(search) {
             this.vehicles_list = this.unfiltered_vehicles.filter(({plate, brand, model, year, colour}) => {
                 return colour.matches(search) || plate.matches(search) || brand.matches(search) || model.matches(search)  || year.toString().matches(search);
