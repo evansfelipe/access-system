@@ -71,7 +71,7 @@
         <div class="card card-default borderless-top-card ">
             <div class="card-body">
                 <!-- Edit button -->
-                <a :href="edit_route" class="btn btn-edit"><i class="fas fa-user-edit fa-lg"></i></a>
+                <a @click="edit" class="btn btn-edit"><i class="fas fa-user-edit fa-lg"></i></a>
                 <!-- Content for the tab number 0 -->
                 <ps-personal-information v-show="tab === 0" :person="personal_information"/>
                 <!-- Content for the tab number 1 -->
@@ -127,6 +127,12 @@
                 console.log(error);
             })
 
+        },
+        methods: {
+            edit: function() {
+                this.$store.dispatch('fetchPerson', this.$route.params.id);
+                this.$router.push(`/people/create`);
+            }
         }
     }
 </script>

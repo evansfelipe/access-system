@@ -18,28 +18,6 @@ class PeopleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $vehicles = Vehicle::all()->map(function ($vehicle) {
-            $vehicle['picked'] = false;
-            return $vehicle;
-        });
-
-        return response(
-            json_encode([
-                'person' => json_encode(null),
-                'vehicles' => json_encode($vehicles),
-                'companies' => Company::all(['id','name'])->toJson(),
-                'activities' => Activity::all(['id','name'])->toJson()
-            ])
-        )->header('Content-Type', 'application/json');
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\SavePersonRequest  $request
@@ -73,7 +51,7 @@ class PeopleController extends Controller
         /**
          * TODO: store the documentation.
          */
-        return response(route('people.show', $person->id), 200)->header('Content-Type', 'text/plain');
+        return response(json_encode(['id' => $person->id]), 200)->header('Content-Type', 'application/json');
     }
 
     /**
@@ -108,9 +86,9 @@ class PeopleController extends Controller
         $contact = $person->contactToObject();
         $person_company = $person->workingInformation();
         // Generates the json with the actual information of the person to send to the view.
-        $person_json = json_encode([
-            'update_url' => route('people.update', $person->id),
-            'personal_information'  => json_encode([
+        $person_json = [
+            'id' => $person->id,
+            'personal_information'  => [
                 // Basic information
                 'last_name'         => $person->last_name,
                 'name'              => $person->name,
@@ -133,30 +111,28 @@ class PeopleController extends Controller
                 'country'           => $person->residency->country,
                 'province'          => $person->residency->province,
                 'city'              => $person->residency->city
-            ]),
-            'working_information'   => json_encode([
+            ],
+            'working_information'   => [
                 'company_id'        => $person->company()->id,
                 'activity_id'       => $person_company->activity_id,
                 'art'               => $person_company->art,
                 'pbip'              => date('Y-m-d', strtotime($person_company->pbip))
-            ]),
-            'assign_vehicles'   => json_encode([
+            ],
+            'assign_vehicles'   => [
 
-            ]),
-            'first_card'    => json_encode([
+            ],
+            'first_card'    => [
                 'number'    => $card->number,
                 'risk'      => $card->risk,
                 'from'      => date('Y-m-d', strtotime($card->from)),
                 'until'     => date('Y-m-d', strtotime($card->until))
-            ]),
-            'documentation' => json_encode([
+            ],
+            'documentation' => [
 
-            ]),
-        ]);
-        return view('people.edit')  ->with('vehicles', $vehicles)
-                                    ->with('person', $person_json)
-                                    ->with('companies', Company::all(['id','name'])->toJson())
-                                    ->with('activities', Activity::all(['id','name'])->toJson());
+            ],
+        ];
+
+        return response(json_encode($person_json))->header('Content-Type', 'application/json');
     }
 
     /**
@@ -200,7 +176,7 @@ class PeopleController extends Controller
         $card->fill($request->toArray());
         $card->save();
 
-        return response(route('people.show', $person->id), 200)->header('Content-Type', 'text/plain');
+        return response(json_encode(['id' => $person->id]), 200)->header('Content-Type', 'application/json');
     }
 
     /**

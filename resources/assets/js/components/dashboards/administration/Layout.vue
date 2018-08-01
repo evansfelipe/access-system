@@ -7,22 +7,7 @@
         overflow: auto;
         transition: left .5s;
     }
-    div.notifications {
-        position: absolute;
-        z-index: 2;
-        right: 1em;
-        top: 1em;
-        & .alert {
-            width: 20vw;
-            & > i {
-                position: absolute;
-                right: 0;
-                top: 0;
-                padding: 1em .8em;
-                &:hover { cursor: pointer }
-            }
-        }
-    }
+
     a.btn-sidebar-alter {
         position: fixed;
         left: 1em; top: 1em;
@@ -36,14 +21,7 @@
 <template>
     <div style="height: 100%">
 
-        <div class="notifications">
-            <transition-group name="notifications">
-                <div v-for="notification in notifications" :key="notification.id" :class="'alert alert-' + notification.type">
-                    <i class="fas fa-times" @click="closeNotification(notification)"></i>
-                    {{ notification.text }}
-                </div>
-            </transition-group>
-        </div>
+        <notifications-panel></notifications-panel>
 
         <a class="btn-sidebar-alter" @click="sidebar_opened = !sidebar_opened">
             <i class="fas fa-bars centered fa-2x"></i>
@@ -55,7 +33,7 @@
 
         <div class="content" :style="(loading.status ? 'overflow: hidden; ' : '') + (sidebar_opened ? 'left: 15vw': 'left: 0vw')" ref="contentDiv">
             <loading-cover v-if="loading.status" :message="loading.message"/>
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="offset-1 col-10">
                         <router-view></router-view>
@@ -71,6 +49,7 @@
 export default {
     components: {
         'sidebar': require('./partials/Sidebar.vue'),
+        'notifications-panel': require('./partials/NotificationsPanel'),
     },
     data() {
         return {
@@ -78,8 +57,6 @@ export default {
                 status: false,
                 message: ''
             },
-            next_notification: 0,
-            notifications: [],
             sidebar_opened: true
         };
     },
@@ -89,22 +66,6 @@ export default {
             this.loading = loading;
         });
         this.$on('fatal-error', error => console.log("Fatal error: ", error));
-        this.$on('new-notification', notification => {
-            let ob = {
-                id: this.next_notification++,
-                ...notification
-            };
-            this.notifications.push(ob);
-            setTimeout(() => this.closeNotification(ob), 5000);
-        });
     },
-    methods: {
-        closeNotification: function(notification) {
-            let index = this.notifications.indexOf(notification);
-            if(index !== -1) {
-                this.notifications.splice(index, 1);
-            }
-        }
-    }
 }
 </script>

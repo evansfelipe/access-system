@@ -14,9 +14,9 @@
 
 <template>
     <div class="loading-panel">
-        <i class="fas fa-spinner fa-spin fa-5x text-unique"></i>
+        <i class="fas fa-spinner fa-spin fa-4x text-unique"></i>
         <br>
-        <h3>{{ message }}</h3>
+        <h4>{{ message }}</h4>
     </div>
 </template>
 

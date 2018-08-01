@@ -25,94 +25,99 @@
 <template>
     <div>
         <loading-cover v-if="this.$store.state.vehicles.updating" message="Cargando..."/>
-        <!-- Options buttons -->
-        <div class="row text-center mb-3">
-            <!-- Company vehicles list button -->
-            <div class="col-4">
-                <button type="button" :class="'font-weight-bold btn btn-block btn-' + (selected_list === 'company' ? 'outline-unique btn-static':'link')"
-                        @click="selected_list = 'company'"
-                        :disabled="company_vehicles.length <= 0">
-                    <abbreviation-text :text="companyname"/> <span class="badge badge-dark ml-1">{{ company_vehicles.length }}</span>
-                </button>
-            </div>
-            <!-- Others vehicles list button -->
-            <div class="col-4">
-                <button type="button" :class="'font-weight-bold btn btn-block btn-' + (selected_list === 'others' ? 'outline-unique btn-static':'link')"
-                        @click="selected_list = 'others'"
-                        :disabled="others_vehicles.length <= 0">
-                    Otras empresas <span class="badge badge-dark ml-1">{{ others_vehicles.length }}</span>
-                </button>
-            </div>
-            <!-- Search input -->
-            <div class="col-3">
-                <input type="text" class="form-control" v-model="search" placeholder="Búsqueda">
-            </div>
-            <!-- Extra options dropdown -->
-            <div class="col-1 pl-0">
-                <div class="dropdown show">
-                    <!-- Open/Close button -->
-                    <a class="btn btn-link btn-block dropdown-toggle" role="button" id="more-options" 
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                       title="Más opciones">
-                        <i class="fas fa-bars fa-lg"></i>
-                    </a>
-                    <!-- Options -->
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="more-options">
-                        <!-- New vehicle -->
-                        <span class="dropdown-item">
-                            <i class="fas centered fa-plus"></i> Agregar nuevo vehículo
-                        </span>
-                        <!-- Show or hide outdated vehicles -->
-                        <span class="dropdown-item" @click="show_outdated = !show_outdated">
-                            <i :class="'far centered fa-eye' + (show_outdated ? '-slash':'')"></i>
-                            {{ show_outdated ? 'Ocultar' : 'Mostrar' }} vehículos vencidos
-                        </span>
-                        <!-- Unpick all vehicles -->
-                        <span class="dropdown-item" @click="unpickAll">
-                            <i class="fas centered fa-ban"></i> Deseleccionar todos
-                        </span>
+        <template v-else>
+            <!-- Options buttons -->
+            <div class="row text-center mb-3">
+                <!-- Company vehicles list button -->
+                <div class="col-4">
+                    <button type="button" :class="'font-weight-bold btn btn-block btn-' + (selected_list === 'company' ? 'outline-unique btn-static':'link')"
+                            @click="selected_list = 'company'"
+                            :disabled="company_vehicles.length <= 0">
+                        <abbreviation-text :text="companyname"/> <span class="badge badge-dark ml-1">{{ company_vehicles.length }}</span>
+                    </button>
+                </div>
+                <!-- Others vehicles list button -->
+                <div class="col-4">
+                    <button type="button" :class="'font-weight-bold btn btn-block btn-' + (selected_list === 'others' ? 'outline-unique btn-static':'link')"
+                            @click="selected_list = 'others'"
+                            :disabled="others_vehicles.length <= 0">
+                        Otras empresas <span class="badge badge-dark ml-1">{{ others_vehicles.length }}</span>
+                    </button>
+                </div>
+                <!-- Search input -->
+                <div class="col-3">
+                    <input type="text" class="form-control" v-model="search" placeholder="Búsqueda">
+                </div>
+                <!-- Extra options dropdown -->
+                <div class="col-1 pl-0">
+                    <div class="dropdown show">
+                        <!-- Open/Close button -->
+                        <a class="btn btn-link btn-block dropdown-toggle" role="button" id="more-options" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        title="Más opciones">
+                            <i class="fas fa-bars fa-lg"></i>
+                        </a>
+                        <!-- Options -->
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="more-options">
+                            <!-- New vehicle -->
+                            <span class="dropdown-item">
+                                <i class="fas centered fa-plus"></i> Agregar nuevo vehículo
+                            </span>
+                            <!-- Show or hide outdated vehicles -->
+                            <span class="dropdown-item" @click="show_outdated = !show_outdated">
+                                <i :class="'far centered fa-eye' + (show_outdated ? '-slash':'')"></i>
+                                {{ show_outdated ? 'Ocultar' : 'Mostrar' }} vehículos vencidos
+                            </span>
+                            <!-- Unpick all vehicles -->
+                            <span class="dropdown-item" @click="unpickAll">
+                                <i class="fas centered fa-ban"></i> Deseleccionar todos
+                            </span>
+                        </div>
                     </div>
                 </div>
+                <!-- /Extra options dropdown -->
             </div>
-            <!-- /Extra options dropdown -->
-        </div>
-        <!-- /Options buttons -->
-        <!-- Vehicles list -->
-        <div class="row">
-            <div class="col-12 table-container">
-                <table class="table tbl-show">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Patente</th>
-                            <th>Marca</th>
-                            <th>Modelo</th>
-                            <th>Año</th>
-                            <th>Color</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(vehicle, key) in vehicles_list" :key="key" @click="vehicle.picked = !vehicle.picked">
-                            <td><i v-if="vehicle.picked" class="fas fa-check-square selected-item"></i></td>
-                            <td>{{ vehicle.plate  }}</td>
-                            <td>{{ vehicle.brand  }}</td>
-                            <td>{{ vehicle.model  }}</td>
-                            <td>{{ vehicle.year   }}</td>
-                            <td>{{ vehicle.colour }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- /Options buttons -->
+            <!-- Vehicles list -->
+            <div class="row">
+                <div class="col-12 table-container">
+                    <table class="table tbl-show">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Patente</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Año</th>
+                                <th>Color</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(vehicle, key) in vehicles_list" :key="key" @click="vehicle.picked = !vehicle.picked">
+                                <td>
+                                    <i v-if="vehicle.picked" class="fas fa-check-square selected-item"></i>
+                                    <i v-else class="far fa-square" style="color: rgb(220, 220, 220)"></i>
+                                </td>
+                                <td>{{ vehicle.plate  }}</td>
+                                <td>{{ vehicle.brand  }}</td>
+                                <td>{{ vehicle.model  }}</td>
+                                <td>{{ vehicle.year   }}</td>
+                                <td>{{ vehicle.colour }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-        <!-- /Vehicles list -->
-        <!-- Selected vehicles count -->
-        <div class="row">
-            <div class="col text-center">
-                <br>
-                <span class="badge badge-light font-italic">{{ selected_vehicles_count }} seleccionados</span>
+            <!-- /Vehicles list -->
+            <!-- Selected vehicles count -->
+            <div class="row">
+                <div class="col text-center">
+                    <br>
+                    <span class="badge badge-light font-italic">{{ selected_vehicles_count }} seleccionados</span>
+                </div>
             </div>
-        </div>
-        <!-- /Selected vehicles count -->
+            <!-- /Selected vehicles count -->
+        </template>
     </div>
 </template>
 

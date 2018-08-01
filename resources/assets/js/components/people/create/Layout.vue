@@ -5,7 +5,7 @@
 </style>
 
 <template>
-    <div v-if="axios_finished">
+    <div>
         <!-- Tabs -->
         <ul class="nav nav-tabs">
             <!-- Personal information tab -->
@@ -33,25 +33,28 @@
         <!-- Forms -->
         <div class="card card-default borderless-top-card ">
             <div class="card-body">
-                <!-- Personal information form -->
-                <pc-personal-information v-show="tab === 0" ref="personal_information" :errors="errors.personal_information" :values="values.personal_information"/>
-                <!-- Working information form -->
-                <pc-working-information v-show="tab === 1" ref="working_information" :errors="errors.working_information" :values="values.working_information"/>
-                <!-- Assign vehicles form -->
-                <pc-assign-vehicles v-show="tab === 2" ref="assign_vehicles" :companyname="company_name"
-                                    :companyid="parseInt(values.working_information.company_id)"/>
-                <!-- First card form -->
-                <pc-first-card  v-show="tab === 3" ref="first_card" :errors="errors.first_card" :values="values.first_card"
-                                :fullname="full_name" :companyname="company_name"/>
-                <!-- Documentation form -->
-                <div v-show="tab === 4">
-                    Documentación
-                </div>
+                <loading-cover v-if="this.$store.state.models.person.updating" message="Cargando..."/>
+                <template v-else>
+                    <!-- Personal information form -->
+                    <pc-personal-information v-show="tab === 0" ref="personal_information" :errors="errors.personal_information" :values="values.personal_information"/>
+                    <!-- Working information form -->
+                    <pc-working-information v-show="tab === 1" ref="working_information" :errors="errors.working_information" :values="values.working_information"/>
+                    <!-- Assign vehicles form -->
+                    <pc-assign-vehicles v-show="tab === 2" ref="assign_vehicles" :companyname="company_name"
+                                        :companyid="parseInt(values.working_information.company_id)"/>
+                    <!-- First card form -->
+                    <pc-first-card  v-show="tab === 3" ref="first_card" :errors="errors.first_card" :values="values.first_card"
+                                    :fullname="full_name" :companyname="company_name"/>
+                    <!-- Documentation form -->
+                    <div v-show="tab === 4">
+                        Documentación
+                    </div>
+                </template>
                 <!-- Buttons -->
                 <hr>
                 <div class="row">
                     <div class="col">
-                        <a class="btn btn-outline-danger btn-sm" href="/people">Cancelar</a>
+                        <button class="btn btn-outline-danger btn-sm" @click="cancel">Cancelar</button>
                         <button class="btn btn-outline-success btn-sm float-right" @click="save">Guardar</button>
                     </div>
                 </div>
@@ -71,7 +74,6 @@
         },
         data: function() {
             return {
-                axios_finished: false,
                 tab: 0,
                 person: {},
                 step_validated: {
@@ -80,45 +82,6 @@
                     assign_vehicles:      null,
                     first_card:           null,
                     documentation:        null
-                },
-                values: {
-                    personal_information: {
-                        last_name: '',
-                        name: '',
-                        document_type: '',
-                        document_number: '',                
-                        cuil: '',
-                        birthday: '',
-                        sex: '',
-                        blood_type: '',
-                        pna: '',
-                        email: '',
-                        home_phone: '',
-                        mobile_phone: '',
-                        fax: '',
-                        street: '',
-                        apartment: '',
-                        cp: '',
-                        country: '',
-                        province: '',
-                        city: ''
-                    },
-                    working_information: {
-                        company_id: '',
-                        activity_id: '',
-                        art: '',
-                        pbip: ''
-                    },
-                    assign_vehicles: {
-                    },
-                    first_card: {
-                        number: '',
-                        risk: '',
-                        from: '',
-                        until: ''
-                    },
-                    documentation: {
-                    }
                 },
                 errors: {
                     personal_information: {},
@@ -129,33 +92,16 @@
                 }
             };
         },
-        beforeMount() {
-            axios.get('/people/create')
-            .then(response => {
-                this.$parent.$emit('loading-status', { status: false, message: "" })
-                this.axios_finished = true;
-                let json = response.data;
-                this.person = JSON.parse(json.person);
-                if(this.person != null){
-                    let person_info = this.person;
-                    this.values = {
-                        personal_information: JSON.parse(person_info.personal_information),
-                        working_information: JSON.parse(person_info.working_information),
-                        assign_vehicles: JSON.parse(person_info.assign_vehicles),
-                        first_card: JSON.parse(person_info.first_card),
-                        documentation: JSON.parse(person_info.documentation),
-                }
-            }
-            })
-            .catch(error => this.$parent.$emit('fatal-error', error));
-        },
         mounted() {
+            let callback = (values, properties_path) => {
+                this.$store.commit('updateModel', { which: 'person', properties_path: properties_path, value: values });
+            }
             // Listens to the children component values changes.
-            this.$on('personal-information-values', values => this.values.personal_information = values);
-            this.$on('working-information-values',  values => this.values.working_information  = values);
-            this.$on('assign-vehicles-values',      values => this.values.assign_vehicles      = values);
-            this.$on('first-card-values',           values => this.values.first_card           = values);
-            this.$on('documentation-values',        values => this.values.documentation        = values);
+            this.$on('personal-information-values', values => callback(values, 'personal_information'));
+            this.$on('working-information-values',  values => callback(values, 'working_information'));
+            this.$on('assign-vehicles-values',      values => callback(values, 'assign_vehicles'));
+            this.$on('first-card-values',           values => callback(values, 'first_card'));
+            this.$on('documentation-values',        values => callback(values, 'documentation'));
         },
         computed: {
             /**
@@ -168,10 +114,24 @@
              * Company's name associated with the company id stored in the component data.
              */
             company_name: function() {
-                return this.values.working_information.company_id ? this.$store.state.companies.list.filter(company => company.id == this.values.working_information.company_id)[0].name : '-';
+                let ret = '';
+                if(this.values.working_information.company_id && !this.$store.state.companies.updating) {
+                    let val = this.$store.state.companies.list.filter(company => company.id == this.values.working_information.company_id);
+                    return val.length > 0 ? val[0].name : '-';
+                }
+                return ret;
+            },
+            values: function() {
+                return this.$store.state.models.person.values;
             }
         },
         methods: {
+            cancel: function() {
+                if(confirm('Esta seguro?')) {
+                    this.$store.commit('resetModel', 'person');
+                    this.$router.go(-1);
+                }
+            },
             /**
              * Tries to save the new person on the server. If the saving is successful, then redirects the user.
              * Otherwise, shows the validation errors.
@@ -180,9 +140,12 @@
                 // Until the axios request is performed, then the view will be locked and showing a loading message.
                 this.$parent.$emit('loading-status', { status: true, message: "Guardando..." })
                 // Performs the request whit the merged data of each steps.
-                let thenCallback = response => {
+                let thenCallback = (response, text) => {
+                    if(this.$store.state.debug) console.log('Person saved successfully');
                     this.$parent.$emit('loading-status', { status: false, message: "" });
-                    this.$parent.$emit('new-notification', {type: 'success', text: 'Persona creada exitosamente.'})
+                    this.$store.commit('notification', {type: 'success', message: `Persona ${text} exitosamente.`});
+                    this.$router.push(`/people/show/${response.data.id}`);
+                    this.$store.commit('resetModel', 'person');
                 };
                 let catchCallback = response => {
                     // Resets the errors of each component.
@@ -219,7 +182,7 @@
                         addError(key, errors, 'documentation');
                     });
                     // Ends the loading status.
-                    this.$parent.$emit('new-notification', {type: 'danger', text: 'Corrija los errores antes de continuar.'})
+                    this.$store.commit('notification', {type: 'danger', message: 'Corrija los errores antes de continuar.'});
                     this.$parent.$emit('loading-status', { status: false, message: "" })
                 };
                 let data = { 
@@ -228,14 +191,16 @@
                     ...this.values.assign_vehicles,
                     ...this.values.first_card
                 };
-                if(this.person == null){
+                if(!this.values.id) {
+                    if(this.$store.state.debug) console.log('Saving person on people.store');
                     axios.post('/people', data) 
-                        .then(response => thenCallback(response))
+                        .then(response => thenCallback(response, 'creada'))
                         .catch(response => catchCallback(response));
                 }
-                else{
-                    axios.put(JSON.parse(this.person).update_url, data)
-                        .then(response => thenCallback(response))
+                else {
+                    if(this.$store.state.debug) console.log('Saving person on people.update');
+                    axios.put(`/people/${this.values.id}`, data) 
+                        .then(response => thenCallback(response, 'editada'))
                         .catch(response => catchCallback(response));
                 }
             }

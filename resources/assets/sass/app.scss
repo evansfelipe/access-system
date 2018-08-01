@@ -94,9 +94,7 @@ table.tbl-show {
 }
 
 // Notifications transitions
-.notifications-enter-active { transition: all .3s ease }
-.notifications-leave-active { transition: all .4s cubic-bezier(1.0, 0.5, 0.8, 1.0) }
-.notifications-enter, .notifications-leave-to { transform: translateX(10px); opacity: 0; }
+
 // Sidebar transitions
 .sidebar-enter, .sidebar-leave-to { transform: translateX(-15vw) }
 .sidebar-enter-active, .sidebar-leave-active  { transition: all .5s }
