@@ -133,7 +133,8 @@ export default {
     data: function() {
         return {
             vehicles_list: [],
-            unfiltered_vehicles: [],
+            unfiltered_company_vehicles: [],
+            unfiltered_others_vehicles: [],
             others_vehicles: [],
             company_vehicles: [],
             search: "",
@@ -147,16 +148,25 @@ export default {
     },
     methods: {
         splitLists(company_id) {
-            this.others_vehicles  = this.vehicles.filter(vehicle => vehicle.company_id !== company_id);
-            this.company_vehicles = this.vehicles.filter(vehicle => vehicle.company_id === company_id);
-            if(this.company_vehicles.length > 0 || this.others_vehicles.length > 0)
-                this.selected_list    = this.company_vehicles.length > 0 ? "company" : "others";
-            
+            this.unfiltered_others_vehicles  = this.vehicles.filter(vehicle => vehicle.company_id !== company_id);
+            this.unfiltered_company_vehicles = this.vehicles.filter(vehicle => vehicle.company_id === company_id);
+            this.company_vehicles = this.unfiltered_company_vehicles;
+            this.others_vehicles = this.unfiltered_others_vehicles;
+            if(this.unfiltered_company_vehicles.length > 0 || this.unfiltered_others_vehicles.length > 0)
+                this.selected_list    = this.unfiltered_company_vehicles.length > 0 ? "company" : "others";
         },
         unpickAll() {
             if(confirm('Está seguro?')) {
                 this.lists_combined.forEach(element => element.picked = false);
             }
+        },
+        filter(search) {
+            let matcher = ({plate, brand, model, year, colour}) => {
+                return colour.matches(search) || plate.matches(search) || brand.matches(search) || model.matches(search)  || year.toString().matches(search);
+            }
+            this.company_vehicles = this.unfiltered_company_vehicles.filter(matcher);
+            this.others_vehicles = this.unfiltered_others_vehicles.filter(matcher);
+            this.vehicles_list = this.selected_list === 'company' ? this.company_vehicles : this.others_vehicles;
         }
     },
     computed: {
@@ -166,7 +176,7 @@ export default {
             return count;
         },
         lists_combined: function() {
-            return this.company_vehicles.concat(this.others_vehicles);
+            return this.unfiltered_company_vehicles.concat(this.unfiltered_others_vehicles);
         },
         vehicles: function() {
             return this.$store.state.vehicles.list;
@@ -177,20 +187,14 @@ export default {
             this.splitLists(this.company_id);
         },
         search: function(search) {
-            this.vehicles_list = this.unfiltered_vehicles.filter(({plate, brand, model, year, colour}) => {
-                return colour.matches(search) || plate.matches(search) || brand.matches(search) || model.matches(search)  || year.toString().matches(search);
-            });
+            this.filter(search);
         },
         selected_list: function(value) {
-            this.unfiltered_vehicles = value === 'company' ? this.company_vehicles : this.others_vehicles;
-            this.vehicles_list = this.unfiltered_vehicles;
-            this.search = "";
+            this.vehicles_list = value === 'company' ? this.company_vehicles : this.others_vehicles;
         },
         companyid: function(value) {
             this.splitLists(value);
-            this.unfiltered_vehicles = this.company_vehicles;
-            this.vehicles_list = this.unfiltered_vehicles;
-            this.search = "";
+            this.filter(this.search);
         },
         lists_combined: {
             handler: function() {
