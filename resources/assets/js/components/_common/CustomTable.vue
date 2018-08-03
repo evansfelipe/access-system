@@ -42,14 +42,21 @@
                 padding: 8px;
             } 
         }
+
+        & > thead > tr > th, & > tbody > tr > td {
+            &.pickable {
+                width: 3em;
+            }
+        }
     }
 </style>
 
 <template>
-    <div>
+    <div class="d-flex align-items-center justify-content-center" :style="'min-height:40vh; height:' + maxHeight">
         <table v-if="shown_rows.length > 0">
             <thead>
                 <tr>
+                    <th v-if="pickable" class="pickable"></th>
                     <th v-for="(column,key) in columns" :key="key" @click="sortColumn(key)">
                         {{ column.text }}
                         <i v-if="sort.column === key && sort.order !== 'none'" :class="'float-right centered fas fa-sort-' + (sort.order === 'asc' ? 'up' :  'down' )"></i>
@@ -58,6 +65,10 @@
             </thead>
             <tbody>
                 <tr v-for="(row,key) in shown_rows" :key="key" @click="click(row)">
+                    <td v-if="pickable" class="pickable text-center">
+                        <i v-if="row.picked" class="far fa-check-square text-unique"></i>
+                        <i v-else class="far fa-square" style="color: rgba(0,0,0,0.3)"></i>
+                    </td>
                     <td v-for="(column,column_key) in columns" :key="column_key">
                         {{ row[column.name] }}
                     </td>
@@ -86,6 +97,16 @@ export default {
                 strict: false,
                 conditions: {}
             }
+        },
+        maxHeight: {
+            type: String,
+            required: false,
+            default: '100%'
+        },
+        pickable: {
+            type: Boolean,
+            required: false,
+            default: false,
         }
     },
     data() {

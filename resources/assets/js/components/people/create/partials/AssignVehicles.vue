@@ -95,33 +95,10 @@
                                 all: this.search,
                             }
                         }"
+                        maxHeight="53vh"
+                        :pickable=true
                         @rowclicked="toggleVehicle"
                     />
-                    <!-- <table class="table tbl-show">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Patente</th>
-                                <th>Marca</th>
-                                <th>Modelo</th>
-                                <th>Año</th>
-                                <th>Color</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(vehicle, key) in vehicles_list" :key="key" @click="vehicle.picked = !vehicle.picked">
-                                <td>
-                                    <i v-if="vehicle.picked" class="fas fa-check-square selected-item"></i>
-                                    <i v-else class="far fa-square" style="color: rgb(220, 220, 220)"></i>
-                                </td>
-                                <td>{{ vehicle.plate  }}</td>
-                                <td>{{ vehicle.brand  }}</td>
-                                <td>{{ vehicle.model  }}</td>
-                                <td>{{ vehicle.year   }}</td>
-                                <td>{{ vehicle.colour }}</td>
-                            </tr>
-                        </tbody>
-                    </table> -->
                 </div>
             </div>
             <!-- /Vehicles list -->
@@ -173,8 +150,8 @@ export default {
             this.unfiltered_company_vehicles = this.vehicles.filter(vehicle => vehicle.company_id === company_id);
             this.company_vehicles = this.unfiltered_company_vehicles;
             this.others_vehicles = this.unfiltered_others_vehicles;
-            if(this.unfiltered_company_vehicles.length > 0 || this.unfiltered_others_vehicles.length > 0)
-                this.selected_list    = this.unfiltered_company_vehicles.length > 0 ? "company" : "others";
+            if(this.company_vehicles.length > 0 || this.others_vehicles.length > 0)
+                this.selected_list = this.company_vehicles.length > 0 ? "company" : "others";
         },
         unpickAll() {
             this.lists_combined.forEach(element => element.picked = false);
@@ -190,7 +167,7 @@ export default {
             return count;
         },
         lists_combined: function() {
-            return this.unfiltered_company_vehicles.concat(this.unfiltered_others_vehicles);
+            return this.company_vehicles.concat(this.others_vehicles);
         },
         vehicles: function() {
             return this.$store.state.vehicles.list;
@@ -208,7 +185,7 @@ export default {
             this.splitLists(value);
         },
         lists_combined: {
-            handler: function() {
+            handler: function() {                
                 let data = []
                 this.lists_combined.forEach(element => {
                     if(element.picked) 
