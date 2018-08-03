@@ -171,6 +171,7 @@ class PeopleController extends Controller
         $person->residency->save();
         // Updates the person-company relationship
         $person_company = $person->company()->pivot;
+        $person_company->company_id = $request->company_id;
         $person_company->activity_id = $request->activity_id;
         $person_company->art = $request->art;
         $person_company->pbip = $request->pbip;

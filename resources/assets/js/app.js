@@ -28,6 +28,7 @@ Vue.component('form-item',         require('./components/_common/FormItem.vue'))
 Vue.component('loading-cover',     require('./components/_common/LoadingCover.vue'));
 Vue.component('abbreviation-text', require('./components/_common/AbbreviationText.vue'));
 Vue.component('custom-table', require('./components/_common/CustomTable.vue'));
+Vue.component('confirmable-button', require('./components/_common/ConfirmableButton.vue'));
 // Dashboards
 Vue.component('administration-dashboard', require('./components/dashboards/administration/Layout.vue'));
 

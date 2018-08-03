@@ -54,7 +54,7 @@
                 <hr>
                 <div class="row">
                     <div class="col">
-                        <button class="btn btn-outline-danger btn-sm" @click="cancel">Cancelar</button>
+                        <confirmable-button btnclass="btn btn-outline-danger btn-sm" @confirmed="cancel">Cancelar</confirmable-button>
                         <button class="btn btn-outline-success btn-sm float-right" @click="save">Guardar</button>
                     </div>
                 </div>
@@ -127,10 +127,8 @@
         },
         methods: {
             cancel: function() {
-                if(confirm('Esta seguro?')) {
-                    this.$store.commit('resetModel', 'person');
-                    this.$router.go(-1);
-                }
+                this.$store.commit('resetModel', 'person');
+                this.$router.go(-1);
             },
             /**
              * Tries to save the new person on the server. If the saving is successful, then redirects the user.

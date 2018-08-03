@@ -68,7 +68,6 @@
                                 <i :class="'far centered fa-eye' + (show_outdated ? '-slash':'')"></i>
                                 {{ show_outdated ? 'Ocultar' : 'Mostrar' }} vehículos vencidos
                             </span>
-                            <!-- Unpick all vehicles -->
                             <span class="dropdown-item" @click="unpickAll">
                                 <i class="fas centered fa-ban"></i> Deseleccionar todos
                             </span>
@@ -178,9 +177,7 @@ export default {
                 this.selected_list    = this.unfiltered_company_vehicles.length > 0 ? "company" : "others";
         },
         unpickAll() {
-            if(confirm('Está seguro?')) {
-                this.lists_combined.forEach(element => element.picked = false);
-            }
+            this.lists_combined.forEach(element => element.picked = false);
         },
         toggleVehicle(vehicle) {
             vehicle.picked = !vehicle.picked;
