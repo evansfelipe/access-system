@@ -1,71 +1,27 @@
-<style scoped>
-    .table-wrapper {
-        min-height: 60vh;
-        position:relative;
-        overflow-x: auto;
-    }
-    table.table-hover > thead > tr > th {
-        border-top: 0px;
-        cursor: pointer;
-        width: 25%; 
-    }
-    table.table-hover > tbody > tr:hover {
-        cursor: pointer;
-        background-color: #f1f7fc;
-    }
-    div.searcher {
-        background: #fafafa;
-    }
-    input {
-        margin-bottom: 5px;
-    }
-</style>
-
 <template>
     <div>
-        <div  v-if="!this.$store.state.people.updating" class="card searcher">
-            <div class="card-body">
+        <div class="card">
+            <div class="card-body" style="background: #fafafa">
                 <div class="row">
                     <div class="col-12 col-md-3">
-                        <input placeholder="Apellido" dusk="last_name" name="last_name" v-model="last_name" type="text" class="form-control">
+                        <input v-model="filter.conditions.last_name" type="text" class="form-control" :disabled="updating" placeholder="Apellido">
                     </div>
                     <div class="col-12 col-md-3">
-                        <input placeholder="Nombre" dusk="name" name="name" v-model="name" type="text" class="form-control">
+                        <input v-model="filter.conditions.name" type="text" class="form-control" :disabled="updating" placeholder="Nombre">
                     </div>
                     <div class="col-12 col-md-3">
-                        <input placeholder="CUIL" dusk="cuil" name="cuil" v-model="cuil" type="text" class="form-control">
+                        <input v-model="filter.conditions.cuil" type="text" class="form-control" :disabled="updating" placeholder="CUIL">
                     </div>
                     <div class="col-12 col-md-3">
-                        <input placeholder="Nombre de la empresa" dusk="company_name" name="company" v-model="company_name" type="text" class="form-control">
+                        <input v-model="filter.conditions.company_name" type="text" class="form-control" :disabled="updating" placeholder="Nombre de la empresa">
                     </div>
                 </div>
             </div>
         </div>
-        <br>
         <div class="card">
-            <div class="card-body table-wrapper">
-                <loading-cover v-if="this.$store.state.people.updating" message="Cargando..."/>
-                <template v-else>
-                    <custom-table
-                        :columns="[ 
-                            {name: 'last_name', text: 'Apellido'},
-                            {name: 'name', text: 'Nombre'},
-                            {name: 'cuil', text: 'CUIL / CUIT'},
-                            {name: 'company_name', text: 'Empresa'},
-                        ]"
-                        :rows="people"
-                        :filter="{
-                            strict: true,
-                            conditions: {
-                                last_name: this.last_name,
-                                name: this.name,
-                                cuil: this.cuil,
-                                company_name: this.company_name 
-                            }
-                        }"
-                        @rowclicked="showProfile"
-                    />
-                </template>
+            <div class="card-body" :style="updating ? 'min-height: 60vh' : ''">
+                <loading-cover v-if="updating" message="Cargando..."/>
+                <custom-table  v-else :columns="columns" :rows="people" :filter="filter" @rowclicked="showProfile"/>
             </div>
         </div>
     </div>
@@ -75,28 +31,54 @@
     export default {
         data: function() {
             return {
-                last_name: "",
-                name: "",
-                cuil: "",
-                company_name: "",
-                people: [],
-                currentSortedColumn: "company_name",
-                currentSortingOrder: 1
+                columns: [
+                    { name: 'last_name',    text: 'Apellido'    },
+                    { name: 'name',         text: 'Nombre'      },
+                    { name: 'cuil',         text: 'CUIL / CUIT' },
+                    { name: 'company_name', text: 'Empresa'     }
+                ],
+                filter: {
+                    strict: true,
+                    conditions: {
+                        last_name:    "",
+                        name:         "",
+                        cuil:         "",
+                        company_name: ""
+                    }
+                },
+                people: []
             }
         },
         beforeMount() {
             this.$store.dispatch('fetch', 'people');
-            this.people = this.unfilteredPeople;
+            this.people = this.$store.state.people.list;
         },
         computed: {
+            /**
+             * Returns whether the list of people is being updated or not.
+             */
+            updating: function() { return this.$store.state.people.updating },
+            /**
+             * Returns the list of people from the store.
+             */
             unfilteredPeople: function() { return this.$store.state.people.list }
         },
         watch: {
-            unfilteredPeople: function() {
+            /**
+             * When the unfiltered list of people changes, resets the people list and the filters.
+             */
+            unfilteredPeople: function() { 
                 this.people = this.unfilteredPeople;
-            }
+                this.filter = {
+                    strict: true,
+                    conditions: { last_name: "", name: "", cuil: "", company_name: "" }
+                }
+            },
         },
         methods: {
+            /**
+             * Redirects to the profile of the clicked person.
+             */
             showProfile: function(person) {
                 this.$router.push(`/people/show/${person.id}`);
             },

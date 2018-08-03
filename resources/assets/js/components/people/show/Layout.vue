@@ -39,7 +39,7 @@
 </style>
 
 <template>
-    <div v-if="axios_finished">
+    <div>
         <!-- Tabs -->
         <ul class="nav nav-tabs">
             <!-- Personal information tab -->
@@ -70,6 +70,7 @@
         <!-- Content -->
         <div class="card card-default borderless-top-card ">
             <div class="card-body">
+                <loading-cover v-if="!axios_finished" message="Cargando..."/>
                 <!-- Edit button -->
                 <a @click="edit" class="btn btn-edit"><i class="fas fa-user-edit fa-lg"></i></a>
                 <!-- Content for the tab number 0 -->
@@ -80,7 +81,7 @@
                 <ps-vehicles v-show="tab === 2" :vehicles="vehicles"/>
                 <!-- Content for the tab number 3 -->
                 <ps-cards   v-show="tab === 3" :activeCard="active_card" :inactiveCards="inactive_cards"
-                            :person="personal_information.full_name" :company="working_information.company_name"/>
+                            :person="personal_information.full_name || ''" :company="working_information.company_name || ''"/>
                 <!-- Content for the tab number 4 -->
                 <ps-documentation v-show="tab === 4"/>
             </div>
@@ -102,15 +103,14 @@
                 axios_finished: false,
                 tab: 0,
                 edit_route: "",
-                personal_information: [],
-                working_information: [],
-                vehicles: [],
-                active_card: [],
+                personal_information: {},
+                working_information: {},
+                vehicles: {},
+                active_card: {},
                 inactive_cards: []
             };
         },
         beforeMount() {
-            this.$parent.$emit('loading-status', { status: true, message: "Cargando..." });
             axios.get(`/people/${this.$route.params.id}`)
             .then(response => {
                 this.axios_finished = true;
@@ -121,12 +121,10 @@
                 this.vehicles = person_info.vehicles;
                 this.active_card = person_info.active_card;
                 this.inactive_cards = person_info.inactive_cards;
-                this.$parent.$emit('loading-status', { status: false, message: "" });
             })
             .catch(error => {
                 console.log(error);
             })
-
         },
         methods: {
             edit: function() {

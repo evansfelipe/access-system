@@ -2,40 +2,26 @@
     div.content {
         position: absolute;
         right: 0; top: 0; bottom: 0;
-        padding-top: 2em;
+        left: 15vw;
+        &.expanded { left: 0vw }
+        padding-top: 1em;
         padding-bottom: 1em;
         overflow: auto;
         transition: left .5s;
     }
-
-    a.btn-sidebar-alter {
-        position: fixed;
-        left: 1em; top: 1em;
-        z-index: 11;
-        color: white;
-        cursor: pointer;
-        &:hover { color: white }
-    }
 </style>
 
 <template>
-    <div style="height: 100%">
+    <div>
+        <notifications-panel/>
 
-        <notifications-panel></notifications-panel>
+        <sidebar v-show="sidebar_opened"/>
 
-        <a class="btn-sidebar-alter" @click="sidebar_opened = !sidebar_opened">
-            <i class="fas fa-bars centered fa-2x"></i>
-        </a>
-
-        <transition name="sidebar">
-            <sidebar v-show="sidebar_opened"/>
-        </transition>
-
-        <div class="content" :style="(loading.status ? 'overflow: hidden; ' : '') + (sidebar_opened ? 'left: 15vw': 'left: 0vw')" ref="contentDiv">
-            <loading-cover v-if="loading.status" :message="loading.message"/>
-            <div class="container-fluid">
+        <div :class="'content ' + (!sidebar_opened ? 'expanded' : '')" :style="(loading.state ? 'overflow: hidden; ' : '')" ref="contentDiv">
+            <loading-cover v-if="loading.state" :message="loading.message"/>
+            <div class="container">
                 <div class="row">
-                    <div class="offset-1 col-10">
+                    <div class="offset-lg-1 col-lg-10">
                         <router-view></router-view>
                     </div>
                 </div>
@@ -51,21 +37,29 @@ export default {
         'sidebar': require('./partials/Sidebar.vue'),
         'notifications-panel': require('./partials/NotificationsPanel'),
     },
-    data() {
-        return {
-            loading: {
-                status: false,
-                message: ''
+    computed: {
+        loading: function() {
+            return {
+                state: this.$store.state.ui.loading.state,
+                message: this.$store.state.ui.loading.message
+            };
+        },
+        sidebar_opened: {
+            get: function() {
+                return this.$store.state.ui.sidebar.opened;
             },
-            sidebar_opened: true
-        };
+            set: function(newVal) {
+                this.$store.commit('toggleSidebar', newVal);
+            }
+        }
     },
     mounted() {
-        this.$on('loading-status', loading => {
+        document.addEventListener('navbar-button-clicked', () => this.sidebar_opened = !this.sidebar_opened);
+    },
+    watch: {
+        'loading.state': function() {
             this.$refs.contentDiv.scrollTo(0,0);
-            this.loading = loading;
-        });
-        this.$on('fatal-error', error => console.log("Fatal error: ", error));
+        }
     }
 }
 </script>

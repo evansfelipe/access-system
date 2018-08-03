@@ -82,7 +82,7 @@ class PeopleController extends Controller
     {
         $person_info = $person->toShowArray();
         unset($person_info['index']);
-        return response(json_encode($person_info))->header('Content-Type', 'application/json');
+        return response($person_info, 200)->header('Content-Type', 'application/json');
     }
 
     /**
@@ -93,13 +93,10 @@ class PeopleController extends Controller
      */
     public function edit(Person $person)
     {
-        $person_vehicles = [];
-        foreach($person->vehicles as $vehicle) { array_push($person_vehicles, $vehicle->id); }
-        $vehicles = Vehicle::all()->map(function ($vehicle) use($person_vehicles) {
-            $vehicle->picked = in_array($vehicle->id, $person_vehicles);
-            return $vehicle;
-        });
-
+        $vehicles_id = [];
+        foreach($person->vehicles as $vehicle) { 
+            array_push($vehicles_id, $vehicle->id); 
+        }
         $card = $person->getActiveCard();
         $contact = $person->contactToObject();
         $person_company = $person->workingInformation();
@@ -137,7 +134,7 @@ class PeopleController extends Controller
                 'pbip'              => date('Y-m-d', strtotime($person_company->pbip))
             ],
             'assign_vehicles'   => [
-
+                'vehicles_id' => $vehicles_id
             ],
             'first_card'    => [
                 'number'    => $card->number,

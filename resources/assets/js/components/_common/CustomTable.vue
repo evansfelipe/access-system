@@ -43,10 +43,8 @@
             } 
         }
 
-        & > thead > tr > th, & > tbody > tr > td {
-            &.pickable {
-                width: 3em;
-            }
+        & > thead > tr > th.pickable, & > tbody > tr > td.pickable {
+            width: 3em;
         }
     }
 </style>
@@ -56,17 +54,17 @@
         <table v-if="shown_rows.length > 0">
             <thead>
                 <tr>
-                    <th v-if="pickable" class="pickable"></th>
+                    <th v-if="pickable.active" class="pickable"></th>
                     <th v-for="(column,key) in columns" :key="key" @click="sortColumn(key)">
                         {{ column.text }}
-                        <i v-if="sort.column === key && sort.order !== 'none'" :class="'float-right centered fas fa-sort-' + (sort.order === 'asc' ? 'up' :  'down' )"></i>
+                        <i v-if="sort.column === key && sort.order !== 0" :class="'float-right centered fas fa-sort-' + (sort.order === 1 ? 'up' :  'down' )"></i>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(row,key) in shown_rows" :key="key" @click="click(row)">
-                    <td v-if="pickable" class="pickable text-center">
-                        <i v-if="row.picked" class="far fa-check-square text-unique"></i>
+                    <td v-if="pickable.active" class="pickable text-center" :key="key + '-pickable'">
+                        <i v-if="pickable.list.includes(row.id)" class="far fa-check-square text-unique"></i>
                         <i v-else class="far fa-square" style="color: rgba(0,0,0,0.3)"></i>
                     </td>
                     <td v-for="(column,column_key) in columns" :key="column_key">
@@ -93,9 +91,11 @@ export default {
         filter: {
             type: Object,
             required: false,
-            default: {
-                strict: false,
-                conditions: {}
+            default: () => {
+                return {
+                    strict: false,
+                    conditions: {}
+                };
             }
         },
         maxHeight: {
@@ -104,9 +104,14 @@ export default {
             default: '100%'
         },
         pickable: {
-            type: Boolean,
+            type: Object,
             required: false,
-            default: false,
+            default: () => {
+                return {
+                    active: false,
+                    list: []
+                }
+            },
         }
     },
     data() {
@@ -114,28 +119,28 @@ export default {
             shown_rows: JSON.parse(JSON.stringify(this.rows)),
             sort: {
                 column: 0,
-                order: 'none',
+                order: 0,
             }
         }
     },
     watch: {
-        rows: function() {
-            this.shown_rows = JSON.parse(JSON.stringify(this.rows));
+        rows: {
+            handler: function() {
+                this.shown_rows = JSON.parse(JSON.stringify(this.rows));
+            },
+            deep: true
         },
         filter: {
             handler: function() {
-                
-                this.shown_rows = this.rows.filter(row => {
-                    let ret;
+                this.shown_rows = JSON.parse(JSON.stringify(this.rows)).filter(row => {
+                    let ret = this.filter.strict ? true : false;
                     if(this.filter.strict) {
-                        ret = true;
                         this.columns.forEach(column => {
                             if(this.filter.conditions[column.name])
                                 ret = ret && row[column.name].matches(this.filter.conditions[column.name]);
                         });
                     }
                     else {
-                        ret = false;
                         this.columns.forEach(column => {
                             if(this.filter.conditions['all'] !== undefined) {
                                 let aux = typeof row[column.name] === 'String' ? row[column.name] : row[column.name].toString();
@@ -145,41 +150,43 @@ export default {
                     }
                     return ret;
                 });
+                this.sortColumn(this.sort.column, true);
             },
-            deep: true
+            deep: false
         }
     },
     methods: {
         click: function(row) {
             this.$emit('rowclicked', row);
         },
-        sortColumn: function(key) {
+        sortColumn: function(key, skipOrder) {
             if(this.shown_rows.length > 0) {
-                if(this.sort.column === key) {
-                    switch(this.sort.order) {
-                        case 'none': this.sort.order = 'asc'; break;
-                        case 'asc': this.sort.order = 'desc'; break;
-                        case 'desc': this.sort.order = 'none'; break;
+                if(!skipOrder) {
+                    if(this.sort.column === key) {
+                        switch(this.sort.order) {
+                            case 0:
+                                this.sort.order = 1;
+                                break;
+                            case 1:
+                                this.sort.order = -1;
+                                break;
+                            case -1:
+                                this.sort.order = 0;
+                                break;
+                        }    
                     }
+                    else {
+                        this.sort.column = key;
+                        this.sort.order = 1;
+                    }
+                }
+                if(this.sort.order === 0 && !skipOrder) {
+                    this.shown_rows = JSON.parse(JSON.stringify(this.rows));
                 }
                 else {
-                    this.sort = {
-                        column: key,
-                        order: 'asc'
-                    }
+                    let col_name = this.columns[key].name;
+                    this.shown_rows.sort((a, b) => this.sort.order * a[col_name].toString().localeCompare(b[col_name].toString()));   
                 }
-                let mult = 0;
-                switch(this.sort.order) {
-                    case 'none': this.shown_rows =  JSON.parse(JSON.stringify(this.rows)); break;
-                    case 'asc': mult = 1; break;
-                    case 'desc': mult = -1; break;
-                }
-                
-                if(mult) this.shown_rows.sort((a, b) => {
-                    let aux1 = typeof a[this.columns[key].name] === 'String' ? a[this.columns[key].name] : a[this.columns[key].name].toString();
-                    let aux2 = typeof b[this.columns[key].name] === 'String' ? b[this.columns[key].name] : b[this.columns[key].name].toString();
-                    return mult * aux1.localeCompare(aux2);
-                });                
             }
         }
     }

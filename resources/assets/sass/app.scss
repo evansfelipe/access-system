@@ -8,9 +8,33 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-.navbar-laravel {
-  background-color: #fff;
-//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+.card + .card {
+    margin-top: 10px;
+}
+
+$navbar-height: 55px;
+
+nav.navbar {
+    height: $navbar-height; 
+    z-index: 10; 
+    background-color: #263238; 
+    color: white;
+    & > div > a > .navbar-button {
+        margin-right: 5px;
+        &:hover {
+            cursor: pointer;
+            opacity: .7;
+        }
+    }
+}
+
+main {
+    position: absolute; 
+    top: $navbar-height; 
+    bottom: 0; 
+    left: 0; 
+    right: 0;
+    padding-top: 2em;
 }
 
 .borderless-top-card {
@@ -21,6 +45,14 @@
 
 body {
     min-height: 100vh;
+    & > * {
+        -webkit-touch-callout: none;
+        -webkit-user-select:   none;
+        -khtml-user-select:    none;
+        -moz-user-select:      none;
+        -ms-user-select:       none;
+        user-select:           none;
+    }
 }
 
 i.fas.centered, i.far.centered {
@@ -52,10 +84,30 @@ i.fas.centered, i.far.centered {
 
 .text-unique { color: $unique-color }
 
+input[type="date"], input[type="datetime-local"], input[type="time"], input[type="month"], input[type="week"] { height: 38px }
 
+.btn-circle {
+    border-radius:100%;
+}
 
-// Notifications transitions
+.btn-unique {
+    color: white;
+    background-color: #3F729B;
+}
 
-// Sidebar transitions
-.sidebar-enter, .sidebar-leave-to { transform: translateX(-15vw) }
-.sidebar-enter-active, .sidebar-leave-active  { transition: all .5s }
+.btn-outline-unique {
+    border-color: #3F729B;
+    color: #3F729B;
+    background-color: transparent;
+}
+
+.btn-outline-unique:hover {
+    background-color: #3F729B;
+    color: white;
+}
+
+.btn-outline-unique.btn-static {
+    border-color: #3F729B;
+    color: #3F729B;
+    background-color: transparent;
+}

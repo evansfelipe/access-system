@@ -30,6 +30,7 @@ export default {
                 pbip:            !debug ? '' : '2020-01-01'
             },
             assign_vehicles: {
+                vehicles_id: []
             },
             first_card: {
                 number:          !debug ? '' : '918273645',

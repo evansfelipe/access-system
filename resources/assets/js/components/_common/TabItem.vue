@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
     li.nav-item {
-        & + &   { margin-left: 3px }
+        & + &   { margin-left: 2px }
         &:hover { 
             cursor: pointer;
             background-color: rgba(0, 0, 0, 0.04);
@@ -46,7 +46,8 @@ export default {
         },
         icon: {
             type: String,
-            required: false
+            required: false,
+            default: ''
         }
     }
 }

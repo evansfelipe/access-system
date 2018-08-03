@@ -12,7 +12,7 @@
                 <hr>
                 <div class="row">
                     <div class="col">
-                        <a class="btn btn-outline-danger btn-sm" href="/home">Cancelar</a>
+                        <confirmable-button btnclass="btn btn-outline-danger btn-sm" @confirmed="cancel">Cancelar</confirmable-button>
                         <button class="btn btn-outline-success btn-sm float-right" @click="save">Guardar</button>
                     </div>
                 </div>
@@ -29,56 +29,43 @@ export default {
     data: function() {
         return {
             tab: 0,
-            saving: {
-                status: false,
-                message: ''
-            },
             step_validated: {
                 general_information: null,
-            },
-            values: {
-                general_information: {
-                    name: '',
-                    area: '',
-                    cuit: '',
-                    expiration: '',
-                    phone: '',
-                    fax: '',
-                    email: '',
-                    web: '',
-                    street: '',
-                    apartment: '',
-                    cp: '',
-                    country: '',
-                    province: '',
-                    city: ''
-                }
             },
             errors: {}
         };
     },
+    computed: {
+        values: function() {
+            return this.$store.state.models.company.values;
+        }
+    },
     mounted() {
-        this.$on('general-information-values', values => this.values.general_information = values);
+        let callback = (values, properties_path) => this.$store.commit('updateModel', { which: 'company', properties_path: properties_path, value: values });
+        this.$on('general-information-values', values => callback(values, 'values.general_information'));
     },
     methods: {
+        cancel: function() {
+            this.$store.commit('resetModel', 'company');
+            this.$router.go(-1);
+        },
         save: function() {
-            // Until the axios request is performed, then the view will be locked and showing a loading message.
-            this.$parent.$emit('loading-status', { status: true, message: "Guardando..." })
+            this.$store.commit('loading', { state: true, message: "Guardando..." });
+            this.step_validated = {
+                general_information: true,
+            }
             axios.post('/companies', { ...this.values.general_information })
             .then(response => {
-                this.$parent.$emit('loading-status', { status: true, message: "Guardando..." })
+                this.$store.dispatch('addNotification', {type: 'success', message: `Empresa creada exitosamente.`});
             })
             .catch(error => {
+                this.step_validated.general_information = false;
                 if(error.response.status === 422) {
                     this.errors = error.response.data.errors;
-                    this.saving.status = false;
+                    this.$store.dispatch('addNotification', {type: 'danger', message: 'Corrija los errores antes de continuar.'});
                 }
-                else {
-                    console.log(error.response);
-                }
-                // Ends the loading status.
-                this.$parent.$emit('loading-status', { status: false, message: "" })
             })
+            .finally(() => this.$store.commit('loading', { state: false, message: "" }));
         }
     }
 }

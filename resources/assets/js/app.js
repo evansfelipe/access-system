@@ -48,5 +48,5 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#app',
     store: new Vuex.Store(store),
-    router
+    router,
 });

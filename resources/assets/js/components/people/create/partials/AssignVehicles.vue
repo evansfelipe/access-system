@@ -91,12 +91,13 @@
                         :rows="vehicles_list"
                         :filter="{
                             strict: false,
-                            conditions: {
-                                all: this.search,
-                            }
+                            conditions: { all: this.search }
                         }"
                         maxHeight="53vh"
-                        :pickable=true
+                        :pickable="{
+                            active: true,
+                            list: vehicles_picked
+                        }"
                         @rowclicked="toggleVehicle"
                     />
                 </div>
@@ -106,7 +107,7 @@
             <div class="row">
                 <div class="col text-center">
                     <br>
-                    <span class="badge badge-light font-italic">{{ selected_vehicles_count }} seleccionados</span>
+                    <span class="badge badge-light font-italic">{{ vehicles_picked.length }} seleccionados</span>
                 </div>
             </div>
             <!-- /Selected vehicles count -->
@@ -131,8 +132,6 @@ export default {
     data: function() {
         return {
             vehicles_list: [],
-            unfiltered_company_vehicles: [],
-            unfiltered_others_vehicles: [],
             others_vehicles: [],
             company_vehicles: [],
             search: "",
@@ -144,56 +143,38 @@ export default {
         this.$store.dispatch('fetch', 'vehicles');
         this.splitLists(this.companyid);
     },
-    methods: {
-        splitLists(company_id) {
-            this.unfiltered_others_vehicles  = this.vehicles.filter(vehicle => vehicle.company_id !== company_id);
-            this.unfiltered_company_vehicles = this.vehicles.filter(vehicle => vehicle.company_id === company_id);
-            this.company_vehicles = this.unfiltered_company_vehicles;
-            this.others_vehicles = this.unfiltered_others_vehicles;
-            if(this.company_vehicles.length > 0 || this.others_vehicles.length > 0)
-                this.selected_list = this.company_vehicles.length > 0 ? "company" : "others";
-        },
-        unpickAll() {
-            this.lists_combined.forEach(element => element.picked = false);
-        },
-        toggleVehicle(vehicle) {
-            vehicle.picked = !vehicle.picked;
-        }
-    },
     computed: {
-        selected_vehicles_count: function() {
-            let count = 0;
-            this.lists_combined.forEach(element => count += element.picked ? 1 : 0);
-            return count;
-        },
-        lists_combined: function() {
-            return this.company_vehicles.concat(this.others_vehicles);
-        },
         vehicles: function() {
             return this.$store.state.vehicles.list;
+        },
+        vehicles_picked: function() {
+            return this.$store.state.models.person.values.assign_vehicles.vehicles_id;
+        }
+    }, 
+    methods: {
+        splitLists(company_id) {
+            this.others_vehicles  = this.vehicles.filter(vehicle => vehicle.company_id !== company_id);
+            this.company_vehicles = this.vehicles.filter(vehicle => vehicle.company_id === company_id);
+            if(this.vehicles.length > 0) {
+                this.selected_list = this.company_vehicles.length > 0 ? 'company' : 'others';
+            }
+        },
+        unpickAll() {
+            this.$store.state.vehicles.list.forEach(vehicle => this.$store.commit('pickVehicle', { id: vehicle.id, value: false }));
+        },
+        toggleVehicle(vehicle) {
+            this.$store.commit('pickVehicle', vehicle.id);
         }
     },
     watch: {
         vehicles: function() {
             this.splitLists(this.companyid);
         },
-        selected_list: function(value) {
-            this.vehicles_list = value === 'company' ? this.company_vehicles : this.others_vehicles;
-        },
         companyid: function(value) {
-            
             this.splitLists(value);
         },
-        lists_combined: {
-            handler: function() {                
-                let data = []
-                this.lists_combined.forEach(element => {
-                    if(element.picked) 
-                        data.push(element.id);
-                });
-                this.$parent.$emit('assign-vehicles-values', {vehicles_id: data});
-            },
-            deep: true
+        selected_list: function(value) {
+            this.vehicles_list = value === 'company' ? this.company_vehicles : this.others_vehicles;
         }
     }
 }

@@ -97,11 +97,11 @@
                 this.$store.commit('updateModel', { which: 'person', properties_path: properties_path, value: values });
             }
             // Listens to the children component values changes.
-            this.$on('personal-information-values', values => callback(values, 'personal_information'));
-            this.$on('working-information-values',  values => callback(values, 'working_information'));
-            this.$on('assign-vehicles-values',      values => callback(values, 'assign_vehicles'));
-            this.$on('first-card-values',           values => callback(values, 'first_card'));
-            this.$on('documentation-values',        values => callback(values, 'documentation'));
+            this.$on('personal-information-values', values => callback(values, 'values.personal_information'));
+            this.$on('working-information-values',  values => callback(values, 'values.working_information'));
+            this.$on('assign-vehicles-values',      values => callback(values, 'values.assign_vehicles'));
+            this.$on('first-card-values',           values => callback(values, 'values.first_card'));
+            this.$on('documentation-values',        values => callback(values, 'values.documentation'));
         },
         computed: {
             /**
@@ -136,12 +136,12 @@
              */
             save: function() {
                 // Until the axios request is performed, then the view will be locked and showing a loading message.
-                this.$parent.$emit('loading-status', { status: true, message: "Guardando..." })
+                this.$store.commit('loading', { state: true, message: "Guardando..." })
                 // Performs the request whit the merged data of each steps.
                 let thenCallback = (response, text) => {
                     if(this.$store.state.debug) console.log('Person saved successfully');
-                    this.$parent.$emit('loading-status', { status: false, message: "" });
-                    this.$store.commit('notification', {type: 'success', message: `Persona ${text} exitosamente.`});
+                    this.$store.commit('loading', { state: false, message: "" });
+                    this.$store.dispatch('addNotification', {type: 'success', message: `Persona ${text} exitosamente.`});
                     this.$router.push(`/people/show/${response.data.id}`);
                     this.$store.commit('resetModel', 'person');
                 };
@@ -180,8 +180,8 @@
                         addError(key, errors, 'documentation');
                     });
                     // Ends the loading status.
-                    this.$store.commit('notification', {type: 'danger', message: 'Corrija los errores antes de continuar.'});
-                    this.$parent.$emit('loading-status', { status: false, message: "" })
+                    this.$store.dispatch('addNotification', {type: 'danger', message: 'Corrija los errores antes de continuar.'});
+                    this.$store.commit('loading', { state: false, message: "" })
                 };
                 let data = { 
                     ...this.values.personal_information,

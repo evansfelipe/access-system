@@ -24,7 +24,9 @@
 <template>
     <div class="notifications">
         <transition-group name="notifications">
-            <div v-for="notification in this.$store.state.notifications.list" :key="notification.id" :class="'alert alert-' + notification.type">
+            <div v-for="notification in this.$store.getters.notifications"
+                 :key="notification.id" :class="'alert alert-' + notification.type"
+            >
                 <i class="fas fa-times" @click="closeNotification(notification)"></i>
                 {{ notification.message }}
             </div>

@@ -9,7 +9,6 @@
         background-color: rgba(0, 0, 0, .7);
         & > .confirmation-modal {
             min-width: 30vw;
-            min-height: 15vh;
             background-color: white;
             padding: 1.5em;
             border-radius: 5px;
