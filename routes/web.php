@@ -20,6 +20,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::middleware(['auth','administration'])->group(function() {
+    Route::get('/people/updated_at', 'PeopleController@updated_at');
+    Route::get('/people/list', 'PeopleController@list');
     Route::resource('/people', 'PeopleController');
     Route::get('/companies/updated_at', 'CompaniesController@updated_at');
     Route::get('/companies/list', 'CompaniesController@list');

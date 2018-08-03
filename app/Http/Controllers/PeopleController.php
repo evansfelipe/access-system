@@ -5,6 +5,24 @@ use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, Pe
 
 class PeopleController extends Controller
 {
+
+    public function updated_at()
+    {
+        return Person::select(['updated_at'])->orderBy('updated_at','desc')->first(); 
+    }
+
+    public function list()
+    {
+        $people = Person::select(['id','last_name','name','cuil'])->orderBy('created_at','desc')
+            ->with('companies:name')->get()->map( function($person) {
+                $person->company_name = $person->companies[0]->name;
+                unset($person->companies);
+                return $person;
+            });
+        
+        return response(json_encode($people))->header('Content-Type', 'application/json');        
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -62,7 +80,7 @@ class PeopleController extends Controller
      */
     public function show(Person $person)
     {
-        $person_info = $person->toArray();
+        $person_info = $person->toShowArray();
         unset($person_info['index']);
         return response(json_encode($person_info))->header('Content-Type', 'application/json');
     }

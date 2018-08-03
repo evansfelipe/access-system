@@ -81,7 +81,24 @@
             <!-- Vehicles list -->
             <div class="row">
                 <div class="col-12 table-container">
-                    <table class="table tbl-show">
+                    <custom-table
+                        :columns="[ 
+                            {name: 'plate', text: 'Patente'},
+                            {name: 'brand', text: 'Marca'},
+                            {name: 'model', text: 'Modelo'},
+                            {name: 'year', text: 'Año'},
+                            {name: 'colour', text: 'Color'},
+                        ]"
+                        :rows="vehicles_list"
+                        :filter="{
+                            strict: false,
+                            conditions: {
+                                all: this.search,
+                            }
+                        }"
+                        @rowclicked="toggleVehicle"
+                    />
+                    <!-- <table class="table tbl-show">
                         <thead>
                             <tr>
                                 <th></th>
@@ -105,7 +122,7 @@
                                 <td>{{ vehicle.colour }}</td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> -->
                 </div>
             </div>
             <!-- /Vehicles list -->
@@ -149,7 +166,7 @@ export default {
     },
     beforeMount() {
         this.$store.dispatch('fetch', 'vehicles');
-        this.splitLists(this.company_id);
+        this.splitLists(this.companyid);
     },
     methods: {
         splitLists(company_id) {
@@ -165,13 +182,8 @@ export default {
                 this.lists_combined.forEach(element => element.picked = false);
             }
         },
-        filter(search) {
-            let matcher = ({plate, brand, model, year, colour}) => {
-                return colour.matches(search) || plate.matches(search) || brand.matches(search) || model.matches(search)  || year.toString().matches(search);
-            }
-            this.company_vehicles = this.unfiltered_company_vehicles.filter(matcher);
-            this.others_vehicles = this.unfiltered_others_vehicles.filter(matcher);
-            this.vehicles_list = this.selected_list === 'company' ? this.company_vehicles : this.others_vehicles;
+        toggleVehicle(vehicle) {
+            vehicle.picked = !vehicle.picked;
         }
     },
     computed: {
@@ -189,17 +201,14 @@ export default {
     },
     watch: {
         vehicles: function() {
-            this.splitLists(this.company_id);
-        },
-        search: function(search) {
-            this.filter(search);
+            this.splitLists(this.companyid);
         },
         selected_list: function(value) {
             this.vehicles_list = value === 'company' ? this.company_vehicles : this.others_vehicles;
         },
         companyid: function(value) {
+            
             this.splitLists(value);
-            this.filter(this.search);
         },
         lists_combined: {
             handler: function() {

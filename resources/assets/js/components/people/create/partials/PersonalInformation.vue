@@ -38,7 +38,7 @@
                 </form-item>
                 <form-item col="col-6" label="CUIL / CUIT" :errors="errors.cuil">
                     <div class="col">
-                        <input  type="text" name="cuil" class="form-control" :value="values.cuil" @input="updateValues" ref="cuil">
+                        <input  type="text" name="cuil" class="form-control" placeholder="xx-xxxxxxxx-x" :value="values.cuil" @input="updateValues" ref="cuil">
                     </div>
                 </form-item>
             </div>

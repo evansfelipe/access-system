@@ -1,5 +1,7 @@
 <style scoped>
     .table-wrapper {
+        min-height: 60vh;
+        position:relative;
         overflow-x: auto;
     }
     table.table-hover > thead > tr > th {
@@ -21,7 +23,7 @@
 
 <template>
     <div>
-        <div class="card searcher">
+        <div  v-if="!this.$store.state.people.updating" class="card searcher">
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-md-3">
@@ -42,25 +44,28 @@
         <br>
         <div class="card">
             <div class="card-body table-wrapper">
-                <table class="table table-hover" v-if="people.length > 0">
-                    <thead>
-                        <tr>
-                            <th id="last_name" @click="sortColumn('last_name')">Apellido</th>
-                            <th id="name" @click="sortColumn('name')">Nombre</th>
-                            <th id="cuil" @click="sortColumn('cuil')">Cuil</th>
-                            <th id="company_name" @click="sortColumn('company_name')">Empresa</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(person, key) in people" @click="showProfile(person.id)" v-bind:key="key">
-                            <td dusk="td_last_name">{{ person.last_name }}</td>
-                            <td>{{ person.name }}</td>
-                            <td>{{ person.cuil }}</td>
-                            <td>{{ person.company_name }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <h3 class="text-center" v-else>No se encontraron coincidencias</h3>
+                <loading-cover v-if="this.$store.state.people.updating" message="Cargando..."/>
+                <template v-else>
+                    <custom-table
+                        :columns="[ 
+                            {name: 'last_name', text: 'Apellido'},
+                            {name: 'name', text: 'Nombre'},
+                            {name: 'cuil', text: 'CUIL / CUIT'},
+                            {name: 'company_name', text: 'Empresa'},
+                        ]"
+                        :rows="people"
+                        :filter="{
+                            strict: true,
+                            conditions: {
+                                last_name: this.last_name,
+                                name: this.name,
+                                cuil: this.cuil,
+                                company_name: this.company_name 
+                            }
+                        }"
+                        @rowclicked="showProfile"
+                    />
+                </template>
             </div>
         </div>
     </div>
@@ -74,70 +79,27 @@
                 name: "",
                 cuil: "",
                 company_name: "",
-                unfilteredPeople: [],
                 people: [],
                 currentSortedColumn: "company_name",
                 currentSortingOrder: 1
             }
         },
         beforeMount() {
-            this.$parent.$emit('loading-status', { status: true, message: "Cargando..." })
-            axios.get('/people')
-            .then(response => {
-                let data = response.data;
-                this.unfilteredPeople = data;
-                this.people = data;
-                this.$parent.$emit('loading-status', { status: false, message: "" })
-            })
-            .catch(error => {
-                console.log(error);
-            })
+            this.$store.dispatch('fetch', 'people');
+            this.people = this.unfilteredPeople;
+        },
+        computed: {
+            unfilteredPeople: function() { return this.$store.state.people.list }
         },
         watch: {
-            last_name: function() {
-                this.people = this.unfilteredPeople.filter(person => this.applyFiltersConditions(person));
-            },
-            name: function() {
-                this.people = this.unfilteredPeople.filter(person => this.applyFiltersConditions(person));
-            },
-            cuil: function() {
-                this.people = this.unfilteredPeople.filter(person => this.applyFiltersConditions(person));
-            },
-            company_name: function() {
-                this.people = this.unfilteredPeople.filter(person => this.applyFiltersConditions(person));
+            unfilteredPeople: function() {
+                this.people = this.unfilteredPeople;
             }
         },
         methods: {
-            applyFiltersConditions(person) {
-                return person.last_name.toUpperCase().includes(this.last_name.toUpperCase()) && person.name.toUpperCase().includes(this.name.toUpperCase())
-                       && person.cuil.toUpperCase().includes(this.cuil.toUpperCase()) && person.company_name.toUpperCase().includes(this.company_name.toUpperCase());
+            showProfile: function(person) {
+                this.$router.push(`/people/show/${person.id}`);
             },
-            showProfile: function(id) {
-                this.$router.push(`/people/show/${id}`);
-            },
-            sortColumn: function(colID) {
-                if(this.people.length > 0) {
-                    // If the column that is being sorted hasn't changed since the last time, then reverse the sorting order.
-                    // Otherwise, resets the sorting order to the default.
-                    this.currentSortingOrder = colID === this.currentSortedColumn ? -this.currentSortingOrder : 1;
-                    // Sorts the people array using the target column and the sorting order.
-                    this.people.sort((a, b) => this.currentSortingOrder * a[colID].localeCompare(b[colID]));
-                    // Tries to get the fontawesome icon from the target column.
-                    let targetColumn = document.getElementById(this.currentSortedColumn);
-                    let icon = targetColumn.getElementsByTagName('i')[0];
-                    // If the icon exists, then removes the icon.
-                    if(icon) targetColumn.removeChild(icon);
-                    // Updates the current sorted column and gets the reference to this document element.
-                    this.currentSortedColumn = colID;
-                    targetColumn = document.getElementById(colID);
-                    // Creates a new i element that will be used to place the new fontawesome icon.
-                    icon = document.createElement("i");
-                    // Add the correspondent class to the icon based on the current sorting order.
-                    icon.classList.add('float-right', 'fas', this.currentSortingOrder > 0 ? 'fa-sort-up' : 'fa-sort-down');
-                    // Appends the icon as a child of the current sorted column.
-                    targetColumn.appendChild(icon);
-                }
-            }
         }
     }
 </script>

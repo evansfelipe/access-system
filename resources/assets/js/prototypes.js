@@ -1,4 +1,5 @@
 String.prototype.matches = function(other) { 
+    other = typeof other === 'String' ? other : other.toString();
     return this.toUpperCase().includes(other.toUpperCase())
 };
 

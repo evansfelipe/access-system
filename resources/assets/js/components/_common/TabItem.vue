@@ -1,12 +1,21 @@
 <style lang="scss" scoped>
     li.nav-item {
-        & + &   { margin-left: 1px }
-        &:hover { cursor: pointer  }
+        & + &   { margin-left: 3px }
+        &:hover { 
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.06);
+            border-bottom-color: transparent;
+        }
         & > a.nav-link {
             color: grey;
-            &.active {
+            background-color: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.03);
+            border-bottom-color: transparent;
+            &.active, &.active:hover {
                 color: black;
                 background-color: white;
+                border-color: rgb(222,222,222);
                 border-bottom-color: white;
             }
         }

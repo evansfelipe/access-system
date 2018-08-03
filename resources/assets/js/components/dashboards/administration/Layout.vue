@@ -66,6 +66,6 @@ export default {
             this.loading = loading;
         });
         this.$on('fatal-error', error => console.log("Fatal error: ", error));
-    },
+    }
 }
 </script>

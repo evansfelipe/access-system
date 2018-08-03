@@ -2,12 +2,17 @@ const debug = true;
 export default {
     state: {
         debug: debug,
-        vehicles: {
+        people: {
             timestamp: null,
             updating: false,
             list: []
         },
         companies: {
+            timestamp: null,
+            updating: false,
+            list: []
+        },
+        vehicles: {
             timestamp: null,
             updating: false,
             list: []

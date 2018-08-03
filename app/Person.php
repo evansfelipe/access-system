@@ -224,7 +224,7 @@ class Person extends Model
     /**
      * Returns an array (that can be encoded to a json) that contains the data needed to be shown on the views of the app.
      */
-    public function toArray()
+    public function toShowArray()
     {
         $contact = $this->contactToObject();
         $residency = Residency::find($this->residency_id);
