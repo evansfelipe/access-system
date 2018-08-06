@@ -27,7 +27,6 @@
         padding: 5%;
         padding-top: 0;
     }
-
         
     div.table-container {
         height: 30vh;
@@ -88,24 +87,13 @@
                     <div v-if="inactiveCards.length==0" class="table-container d-flex align-items-center justify-content-center">
                         <h4>No hay tarjetas inactivas</h4>
                     </div>
-                    <div v-if="inactiveCards.length>0" class="table-container">
-                        <h5>Tarjetas inactivas</h5>
-                        <table class="table tbl-show">
-                            <thead>
-                                <tr>
-                                    <th>Número</th>
-                                    <th>Desde</th>
-                                    <th>Hasta</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(card, key) in inactiveCards" :key="key">
-                                    <td>{{ card.number  }}</td>
-                                    <td>{{ card.from  }}</td>
-                                    <td>{{ card.until  }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div v-else>
+                        <h4>Tarjetas inactivas</h4>
+                        <custom-table
+                            :columns="columns"
+                            :rows="inactiveCards"
+                            maxHeight="30vh"
+                        />
                     </div>
                 </div>
             </div>   
@@ -133,7 +121,16 @@ export default {
             required:true,
             type: String
         }
-    }
+    },
+    data: function() {
+        return {
+            columns: [ 
+                {name: 'number', text: 'Número'},
+                {name: 'from', text: 'Desde'},
+                {name: 'until', text: 'Hasta'},
+            ],
+        }
+    },
 }
 </script>
 

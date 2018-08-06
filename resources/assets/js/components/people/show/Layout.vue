@@ -1,40 +1,9 @@
 <style lang="scss" scoped>
-    .nav-tabs > .nav-item {
-        cursor: pointer;
-    }
-
-    .nav-tabs > .nav-item > a.active {
-        background-color: white;
-        border-bottom-color: white;
-        cursor: auto;
-        color: black  !important;
-    }
-
-    a.inactive {
-        color: grey !important;
-    }
-
-    .nav-item + .nav-item {
-        margin-left: 1px;
-    }
-
-    .btn-edit {
-        position: absolute;
-        padding: 1em;
-        top: 0.5em;
-        right: 0.5em; 
-        z-index: 2;
-        text-align: center;
-        background-color: transparent;
-        color: rgb(168, 168, 168);
+    .btn-circle {
+        margin-bottom: 0.5em;
         border-radius: 100%;
-        height: 3.5em;
-        width: 3.5em;
-    }
-
-    .btn-edit:hover {
-        background-color: whitesmoke;
-        color: grey;
+        height: 3em;
+        width: 3em;
     }
 </style>
 
@@ -70,20 +39,29 @@
         <!-- Content -->
         <div class="card card-default borderless-top-card ">
             <div class="card-body">
-                <loading-cover v-if="!axios_finished" message="Cargando..."/>
-                <!-- Edit button -->
-                <a @click="edit" class="btn btn-edit"><i class="fas fa-user-edit fa-lg"></i></a>
-                <!-- Content for the tab number 0 -->
-                <ps-personal-information v-show="tab === 0" :person="personal_information"/>
-                <!-- Content for the tab number 1 -->
-                <ps-working-information v-show="tab === 1" :personCompany="working_information"/>
-                <!-- Content for the tab number 2 -->
-                <ps-vehicles v-show="tab === 2" :vehicles="vehicles"/>
-                <!-- Content for the tab number 3 -->
-                <ps-cards   v-show="tab === 3" :activeCard="active_card" :inactiveCards="inactive_cards"
-                            :person="personal_information.full_name || ''" :company="working_information.company_name || ''"/>
-                <!-- Content for the tab number 4 -->
-                <ps-documentation v-show="tab === 4"/>
+                <div class="row">
+                    <div class="col-11">
+                        <loading-cover v-if="!axios_finished" message="Cargando..."/>
+                        <!-- Content for the tab number 0 -->
+                        <ps-personal-information v-show="tab === 0" :person="personal_information"/>
+                        <!-- Content for the tab number 1 -->
+                        <ps-working-information v-show="tab === 1" :personCompany="working_information"/>
+                        <!-- Content for the tab number 2 -->
+                        <ps-vehicles v-show="tab === 2" :vehicles="vehicles"/>
+                        <!-- Content for the tab number 3 -->
+                        <ps-cards   v-show="tab === 3" :activeCard="active_card" :inactiveCards="inactive_cards"
+                                    :person="personal_information.full_name || ''" :company="working_information.company_name || ''"/>
+                        <!-- Content for the tab number 4 -->
+                        <ps-documentation v-show="tab === 4"/>
+                    </div>
+                    <div class="col-1 text-right">
+                        <!-- Edit button -->
+                        <button @click="edit" class="btn btn-sm btn-outline-unique btn-circle" title="Editar perfil"><i class="fas fa-user-edit fa-lg"></i></button>
+                        <!-- PDF button -->
+                        <button class="btn btn-sm btn-outline-unique btn-circle" title="Exportar como PDF"><i class="fas fa-file-pdf fa-lg"></i></button>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -105,7 +83,7 @@
                 edit_route: "",
                 personal_information: {},
                 working_information: {},
-                vehicles: {},
+                vehicles: [],
                 active_card: {},
                 inactive_cards: []
             };

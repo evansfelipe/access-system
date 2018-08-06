@@ -10,7 +10,7 @@
                 border: 0;
                 border-bottom: 1px solid grey;
                 & > th {
-                    padding-left: 1em;
+                    padding: 0.5em;
                     cursor: pointer; 
                     border: 0;
                 }
@@ -46,11 +46,16 @@
         & > thead > tr > th.pickable, & > tbody > tr > td.pickable {
             width: 3em;
         }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
     }
 </style>
 
 <template>
-    <div class="d-flex align-items-center justify-content-center" :style="'min-height:40vh; height:' + maxHeight">
+    <div :style="'min-height:40vh; height:' + maxHeight">
         <table v-if="shown_rows.length > 0">
             <thead>
                 <tr>
@@ -73,7 +78,9 @@
                 </tr>
             </tbody>
         </table>
-        <h3 v-else class="text-center justified-center">No se encontraron coincidencias</h3>
+        <div v-else class="d-flex align-items-center justify-content-center" style="min-height:40vh">
+            <h3>No se encontraron coincidencias</h3>
+        </div>
     </div>
 </template>
 
@@ -118,7 +125,7 @@ export default {
         return {
             shown_rows: JSON.parse(JSON.stringify(this.rows)),
             sort: {
-                column: 0,
+                column: -1,
                 order: 0,
             }
         }
@@ -152,7 +159,7 @@ export default {
                 });
                 this.sortColumn(this.sort.column, true);
             },
-            deep: false
+            deep: true
         }
     },
     methods: {
@@ -160,7 +167,7 @@ export default {
             this.$emit('rowclicked', row);
         },
         sortColumn: function(key, skipOrder) {
-            if(this.shown_rows.length > 0) {
+            if(this.shown_rows.length > 0 && key !== -1) {
                 if(!skipOrder) {
                     if(this.sort.column === key) {
                         switch(this.sort.order) {

@@ -1,15 +1,4 @@
-<style lang="scss" scoped>
-    table {
-        & > thead > tr > th:first-of-type, & > tbody > tr > td:first-of-type {
-            width: 5%;
-            text-align: center;
-        }
-    }
-
-    div.table-container {
-        height: 50vh;
-    }
-    
+<style lang="scss" scoped>    
     .dropdown-toggle::after {
         display:none;
     }
@@ -46,7 +35,7 @@
                 </div>
                 <!-- Search input -->
                 <div class="col-3">
-                    <input type="text" class="form-control" v-model="search" placeholder="Búsqueda">
+                    <input type="text" class="form-control" v-model="filter.conditions.all" placeholder="Búsqueda">
                 </div>
                 <!-- Extra options dropdown -->
                 <div class="col-1 pl-0">
@@ -81,18 +70,9 @@
             <div class="row">
                 <div class="col-12 table-container">
                     <custom-table
-                        :columns="[ 
-                            {name: 'plate', text: 'Patente'},
-                            {name: 'brand', text: 'Marca'},
-                            {name: 'model', text: 'Modelo'},
-                            {name: 'year', text: 'Año'},
-                            {name: 'colour', text: 'Color'},
-                        ]"
+                        :columns="columns"
                         :rows="vehicles_list"
-                        :filter="{
-                            strict: false,
-                            conditions: { all: this.search }
-                        }"
+                        :filter="filter"
                         maxHeight="53vh"
                         :pickable="{
                             active: true,
@@ -134,9 +114,19 @@ export default {
             vehicles_list: [],
             others_vehicles: [],
             company_vehicles: [],
-            search: "",
             selected_list: "",
-            show_outdated: false
+            show_outdated: false,
+            columns: [ 
+                {name: 'plate', text: 'Patente'},
+                {name: 'brand', text: 'Marca'},
+                {name: 'model', text: 'Modelo'},
+                {name: 'year', text: 'Año'},
+                {name: 'colour', text: 'Color'},
+            ],
+            filter: {
+                strict: false,
+                conditions: { all: "" }
+            }
         };
     },
     beforeMount() {

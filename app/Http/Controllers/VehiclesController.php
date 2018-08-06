@@ -15,10 +15,7 @@ class VehiclesController extends Controller
 
     public function list()
     {
-        $vehicles = Vehicle::all(['id','plate','brand','model','year','colour','company_id'])->map(function ($vehicle) {
-            $vehicle['picked'] = false;
-            return $vehicle;
-        });
+        $vehicles = Vehicle::all(['id','plate','brand','model','year','colour','company_id']);
         return response(json_encode($vehicles))->header('Content-Type', 'application/json');        
     }
 
