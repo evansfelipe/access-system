@@ -37,7 +37,7 @@ export default {
     },
     computed: {
         values: function() {
-            return this.$store.state.models.company.values;
+            return this.$store.getters.company.values;
         }
     },
     mounted() {

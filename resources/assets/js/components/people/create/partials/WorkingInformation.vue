@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loading-cover v-if="this.$store.state.companies.updating || this.$store.state.activities.updating" message="Cargando..."/>
+        <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.activities.updating" message="Cargando..."/>
         <template v-else>
             <!-- Company -->
             <div class="form-row">
@@ -85,8 +85,8 @@ export default {
         }
     },
     beforeMount() {
-        this.$store.dispatch('fetch','companies');
-        this.$store.dispatch('fetch','activities');
+        this.$store.dispatch('fetchList','companies');
+        this.$store.dispatch('fetchList','activities');
     },
     methods: {
         updateValues: function() {
@@ -103,10 +103,10 @@ export default {
             return this.values.company_id;
         },
         companies: function() {
-            return this.$store.state.companies.list;
+            return this.$store.getters.companies.list;
         },
         activities: function() {
-            return this.$store.state.activities.list;
+            return this.$store.getters.activities.list;
         }
     }
 }

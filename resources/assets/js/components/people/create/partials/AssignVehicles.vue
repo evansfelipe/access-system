@@ -24,7 +24,7 @@
 
 <template>
     <div>
-        <loading-cover v-if="this.$store.state.vehicles.updating" message="Cargando..."/>
+        <loading-cover v-if="this.$store.getters.vehicles.updating" message="Cargando..."/>
         <template v-else>
             <!-- Options buttons -->
             <div class="row text-center mb-3">
@@ -140,15 +140,15 @@ export default {
         };
     },
     beforeMount() {
-        this.$store.dispatch('fetch', 'vehicles');
+        this.$store.dispatch('fetchList', 'vehicles');
         this.splitLists(this.companyid);
     },
     computed: {
         vehicles: function() {
-            return this.$store.state.vehicles.list;
+            return this.$store.getters.vehicles.list;
         },
         vehicles_picked: function() {
-            return this.$store.state.models.person.values.assign_vehicles.vehicles_id;
+            return this.$store.getters.person.values.assign_vehicles.vehicles_id;
         }
     }, 
     methods: {
@@ -160,7 +160,7 @@ export default {
             }
         },
         unpickAll() {
-            this.$store.state.vehicles.list.forEach(vehicle => this.$store.commit('pickVehicle', { id: vehicle.id, value: false }));
+            this.$store.getters.vehicles.list.forEach(vehicle => this.$store.commit('pickVehicle', { id: vehicle.id, value: false }));
         },
         toggleVehicle(vehicle) {
             this.$store.commit('pickVehicle', vehicle.id);

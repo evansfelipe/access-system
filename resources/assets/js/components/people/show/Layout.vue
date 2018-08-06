@@ -128,7 +128,7 @@
         },
         methods: {
             edit: function() {
-                this.$store.dispatch('fetchPerson', this.$route.params.id);
+                this.$store.dispatch('fetchModel', { which: 'person', id: this.$route.params.id });
                 this.$router.push(`/people/create`);
             }
         }

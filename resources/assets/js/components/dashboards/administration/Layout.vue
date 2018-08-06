@@ -46,7 +46,7 @@ export default {
         },
         sidebar_opened: {
             get: function() {
-                return this.$store.state.ui.sidebar.opened;
+                return this.$store.getters.sidebar_opened;
             },
             set: function(newVal) {
                 this.$store.commit('toggleSidebar', newVal);

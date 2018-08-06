@@ -33,7 +33,7 @@
         <!-- Forms -->
         <div class="card card-default borderless-top-card ">
             <div class="card-body">
-                <loading-cover v-if="this.$store.state.models.person.updating" message="Cargando..."/>
+                <loading-cover v-if="this.$store.getters.person.updating" message="Cargando..."/>
                 <template v-else>
                     <!-- Personal information form -->
                     <pc-personal-information v-show="tab === 0" ref="personal_information" :errors="errors.personal_information" :values="values.personal_information"/>
@@ -115,14 +115,14 @@
              */
             company_name: function() {
                 let ret = '';
-                if(this.values.working_information.company_id && !this.$store.state.companies.updating) {
-                    let val = this.$store.state.companies.list.filter(company => company.id == this.values.working_information.company_id);
+                if(this.values.working_information.company_id && !this.$store.getters.companies.updating) {
+                    let val = this.$store.getters.companies.list.filter(company => company.id == this.values.working_information.company_id);
                     return val.length > 0 ? val[0].name : '-';
                 }
                 return ret;
             },
             values: function() {
-                return this.$store.state.models.person.values;
+                return this.$store.getters.person.values;
             }
         },
         methods: {

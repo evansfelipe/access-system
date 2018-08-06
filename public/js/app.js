@@ -51318,7 +51318,41 @@ var index_esm = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var debug = true;
+
+var List = function List() {
+    _classCallCheck(this, List);
+
+    this.timestamp = null;
+    this.updating = false;
+    this.list = [];
+};
+
+var Model = function () {
+    function Model(name, plural) {
+        _classCallCheck(this, Model);
+
+        this.plural = plural;
+        this.name = name;
+        this.updating = false;
+        this.values = __webpack_require__(48)("./" + this.name + '.js').default.default(debug);
+    }
+
+    _createClass(Model, [{
+        key: 'restart',
+        value: function restart() {
+            this.updating = false;
+            this.values = __webpack_require__(48)("./" + this.name + '.js').default.default(false);
+        }
+    }]);
+
+    return Model;
+}();
+
 /* harmony default export */ __webpack_exports__["a"] = ({
     strict: true,
     state: {
@@ -51332,58 +51366,69 @@ var debug = true;
                 id: 0,
                 list: []
             },
-            sidebar: {
-                opened: true
-            }
+            sidebar_opened: true
         },
-        people: {
-            timestamp: null,
-            updating: false,
-            list: []
-        },
-        companies: {
-            timestamp: null,
-            updating: false,
-            list: []
-        },
-        vehicles: {
-            timestamp: null,
-            updating: false,
-            list: []
-        },
-        activities: {
-            timestamp: null,
-            updating: false,
-            list: []
+        lists: {
+            people: new List(),
+            vehicles: new List(),
+            companies: new List(),
+            activities: new List()
         },
         models: {
-            person: {
-                updating: false,
-                values: __webpack_require__(14).default.default(false)
-            },
-            company: {
-                updating: false,
-                values: __webpack_require__(15).default.default(debug)
-            }
+            person: new Model('person', 'people'),
+            company: new Model('company', 'companies')
         }
     },
     getters: {
+        /**
+         * UI getters
+         */
         notifications: function notifications(state) {
             return state.ui.notifications.list;
+        },
+        sidebar_opened: function sidebar_opened(state) {
+            return state.ui.sidebar_opened;
+        },
+        /**
+         * Lists getters
+         */
+        people: function people(state) {
+            return state.lists.people;
+        },
+        vehicles: function vehicles(state) {
+            return state.lists.vehicles;
+        },
+        companies: function companies(state) {
+            return state.lists.companies;
+        },
+        activities: function activities(state) {
+            return state.lists.activities;
+        },
+        /**
+         * Models getters
+         */
+        person: function person(state) {
+            return state.models.person;
+        },
+        company: function company(state) {
+            return state.models.company;
         }
     },
     mutations: {
-        loading: function loading(state, values) {
-            if (state.debug) console.log('UI loading:', values.state, 'Message:', values.message);
-            state.ui.loading.state = values.state;
-            state.ui.loading.message = values.message;
+        loading: function loading(_ref, values) {
+            var debug = _ref.debug,
+                ui = _ref.ui;
+
+            if (debug) console.log('UI loading:', values.state, 'Message:', values.message);
+            ui.loading.state = values.state;
+            ui.loading.message = values.message;
         },
         /**
          * Changes the status of sidebar to the given value.
          */
         toggleSidebar: function toggleSidebar(state, value) {
             if (state.debug) console.log('Toggling sidebar');
-            state.ui.sidebar.opened = value;
+            state.ui.sidebar_opened = value;
         },
         /**
          * Given a type and a message, creates and adds a new notification with an unique id
@@ -51407,24 +51452,24 @@ var debug = true;
                 state.ui.notifications.list.splice(index, 1);
             }
         },
-        updating: function updating(state, _ref) {
-            var what = _ref.what,
-                value = _ref.value;
-
-            state[what].updating = value;
-        },
-        set: function set(state, _ref2) {
+        updatingList: function updatingList(state, _ref2) {
             var what = _ref2.what,
-                data = _ref2.data,
-                timestamp = _ref2.timestamp;
+                value = _ref2.value;
 
-            state[what].list = data;
-            state[what].timestamp = timestamp;
+            state.lists[what].updating = value;
         },
-        updateModel: function updateModel(state, _ref3) {
-            var which = _ref3.which,
-                properties_path = _ref3.properties_path,
-                value = _ref3.value;
+        set: function set(state, _ref3) {
+            var what = _ref3.what,
+                data = _ref3.data,
+                timestamp = _ref3.timestamp;
+
+            state.lists[what].list = data;
+            state.lists[what].timestamp = timestamp;
+        },
+        updateModel: function updateModel(state, _ref4) {
+            var which = _ref4.which,
+                properties_path = _ref4.properties_path,
+                value = _ref4.value;
 
             if (state.debug) console.log('Updating model: ', which, properties_path, value);
             if (properties_path.trim().length < 1) {
@@ -51442,15 +51487,15 @@ var debug = true;
          * Given a model name, resets this model to the default value.
          */
         resetModel: function resetModel(state, which) {
-            if (state.debug) console.log('Restarting model: ', which);
-            state.models[which].values = __webpack_require__(48)("./" + which + '.js').default.default();
+            if (state.debug) console.log('Restarting model:', which);
+            state.models[which].restart();
         },
         /**
          * Given a vehicle id, puts in the picked attribute the given value.
          * If there isn't a vehicle with the given id, then does nothing.
          */
         pickVehicle: function pickVehicle(state, id) {
-            if (state.vehicles.list.getById(id) !== undefined) {
+            if (state.lists.vehicles.list.getById(id) !== undefined) {
                 var pos = state.models.person.values.assign_vehicles.vehicles_id.indexOf(id);
                 if (pos !== -1) {
                     state.models.person.values.assign_vehicles.vehicles_id.splice(pos, 1);
@@ -51464,40 +51509,13 @@ var debug = true;
          * Unpicks each vehicle from the list of vehicles.
          */
         unpickAllVehicles: function unpickAllVehicles(state) {
-            state.vehicles.list.forEach(function (vehicle) {
-                return vehicle.picked = false;
-            });
+            state.models.person.values.assign_vehicles.vehicles_id = [];
         }
     },
     actions: {
-        fetch: function fetch(_ref4, what) {
-            var commit = _ref4.commit,
-                state = _ref4.state;
-
-            if (state.debug) console.log('Validating timestamps: ', what);
-            commit('updating', { what: what, value: true });
-            axios.get('/' + what + '/updated_at').then(function (response) {
-                var new_timestamp = new Date(response.data.updated_at);
-                if (state[what].timestamp === null || state[what].timestamp < new_timestamp) {
-                    if (state.debug) console.log('Fetching: ', what);
-                    axios.get('/' + what + '/list').then(function (response) {
-                        if (state.debug) console.log('Fetch success: ', what);
-                        commit('set', { what: what, data: response.data, timestamp: new_timestamp });
-                    }).catch(function (error) {
-                        if (state.debug) console.log('Fetch failed: ', what);
-                        console.log(error);
-                    }).finally(function () {
-                        return commit('updating', { what: what, value: false });
-                    });
-                } else {
-                    if (state.debug) console.log('Fetch not needed: ', what);
-                    commit('updating', { what: what, value: false });
-                }
-            }).catch(function (error) {
-                if (state.debug) console.log('Error while validating timestamps: ', what);
-                console.log(error);
-            });
-        },
+        /**
+         * UI actions.
+         */
         addNotification: function addNotification(_ref5, _ref6) {
             var commit = _ref5.commit,
                 state = _ref5.state;
@@ -51510,18 +51528,56 @@ var debug = true;
                 return commit('removeNotification', id);
             }, 5000);
         },
-        fetchPerson: function fetchPerson(_ref7, id) {
+        /**
+         * Lists actions.
+         */
+        fetchList: function fetchList(_ref7, what) {
             var commit = _ref7.commit,
                 state = _ref7.state;
 
-            if (state.debug) console.log('Fetching person with id: ', id);
-            commit('updateModel', { which: 'person', properties_path: 'updating', value: true });
-            axios.get('/people/' + id + '/edit').then(function (response) {
-                commit('updateModel', { which: 'person', properties_path: 'values', value: response.data });
+            if (state.debug) console.log('Validating timestamps: ', what);
+            commit('updatingList', { what: what, value: true });
+            axios.get('/' + what + '/updated_at').then(function (response) {
+                var new_timestamp = new Date(response.data.updated_at);
+                if (state.lists[what].timestamp === null || state.lists[what].timestamp < new_timestamp) {
+                    if (state.debug) console.log('Fetching: ', what);
+                    axios.get('/' + what + '/list').then(function (response) {
+                        if (state.debug) console.log('Fetch success: ', what);
+                        commit('set', { what: what, data: response.data, timestamp: new_timestamp });
+                    }).catch(function (error) {
+                        if (state.debug) console.log('Fetch failed: ', what);
+                        console.log(error);
+                    }).finally(function () {
+                        return commit('updatingList', { what: what, value: false });
+                    });
+                } else {
+                    if (state.debug) console.log('Fetch not needed: ', what);
+                    commit('updatingList', { what: what, value: false });
+                }
+            }).catch(function (error) {
+                if (state.debug) console.log('Error while validating timestamps: ', what);
+                console.log(error);
+            });
+        },
+        /**
+         * Models actions.
+         */
+        fetchModel: function fetchModel(_ref8, _ref9) {
+            var getters = _ref8.getters,
+                commit = _ref8.commit,
+                state = _ref8.state;
+            var which = _ref9.which,
+                id = _ref9.id;
+
+            if (state.debug) console.log('Fetching', which, 'id', id);
+            var model = getters[which];
+            commit('updateModel', { which: which, properties_path: 'updating', value: true });
+            axios.get('/' + model.plural + '/' + id + '/edit').then(function (response) {
+                commit('updateModel', { which: which, properties_path: 'values', value: response.data });
             }).catch(function (error) {
                 console.log(error);
             }).finally(function () {
-                return commit('updateModel', { which: 'person', properties_path: 'updating', value: false });
+                return commit('updateModel', { which: which, properties_path: 'updating', value: false });
             });
         }
     }
@@ -53056,7 +53112,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         sidebar_opened: {
             get: function get() {
-                return this.$store.state.ui.sidebar.opened;
+                return this.$store.getters.sidebar_opened;
             },
             set: function set(newVal) {
                 this.$store.commit('toggleSidebar', newVal);
@@ -53844,8 +53900,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     beforeMount: function beforeMount() {
-        this.$store.dispatch('fetch', 'people');
-        this.people = this.$store.state.people.list;
+        this.$store.dispatch('fetchList', 'people');
+        this.people = this.$store.getters.people.list;
     },
 
     computed: {
@@ -53853,13 +53909,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          * Returns whether the list of people is being updated or not.
          */
         updating: function updating() {
-            return this.$store.state.people.updating;
+            return this.$store.getters.people.updating;
         },
         /**
          * Returns the list of people from the store.
          */
         unfilteredPeople: function unfilteredPeople() {
-            return this.$store.state.people.list;
+            return this.$store.getters.people.list;
         }
     },
     watch: {
@@ -54288,8 +54344,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             var _this2 = this;
 
             var ret = '';
-            if (this.values.working_information.company_id && !this.$store.state.companies.updating) {
-                var val = this.$store.state.companies.list.filter(function (company) {
+            if (this.values.working_information.company_id && !this.$store.getters.companies.updating) {
+                var val = this.$store.getters.companies.list.filter(function (company) {
                     return company.id == _this2.values.working_information.company_id;
                 });
                 return val.length > 0 ? val[0].name : '-';
@@ -54297,7 +54353,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return ret;
         },
         values: function values() {
-            return this.$store.state.models.person.values;
+            return this.$store.getters.person.values;
         }
     },
     methods: {
@@ -55358,8 +55414,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     beforeMount: function beforeMount() {
-        this.$store.dispatch('fetch', 'companies');
-        this.$store.dispatch('fetch', 'activities');
+        this.$store.dispatch('fetchList', 'companies');
+        this.$store.dispatch('fetchList', 'activities');
     },
 
     methods: {
@@ -55379,10 +55435,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return this.values.company_id;
         },
         companies: function companies() {
-            return this.$store.state.companies.list;
+            return this.$store.getters.companies.list;
         },
         activities: function activities() {
-            return this.$store.state.activities.list;
+            return this.$store.getters.activities.list;
         }
     }
 });
@@ -55398,8 +55454,8 @@ var render = function() {
   return _c(
     "div",
     [
-      this.$store.state.companies.updating ||
-      this.$store.state.activities.updating
+      this.$store.getters.companies.updating ||
+      this.$store.getters.activities.updating
         ? _c("loading-cover", { attrs: { message: "Cargando..." } })
         : [
             _c(
@@ -55863,16 +55919,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     beforeMount: function beforeMount() {
-        this.$store.dispatch('fetch', 'vehicles');
+        this.$store.dispatch('fetchList', 'vehicles');
         this.splitLists(this.companyid);
     },
 
     computed: {
         vehicles: function vehicles() {
-            return this.$store.state.vehicles.list;
+            return this.$store.getters.vehicles.list;
         },
         vehicles_picked: function vehicles_picked() {
-            return this.$store.state.models.person.values.assign_vehicles.vehicles_id;
+            return this.$store.getters.person.values.assign_vehicles.vehicles_id;
         }
     },
     methods: {
@@ -55890,7 +55946,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         unpickAll: function unpickAll() {
             var _this = this;
 
-            this.$store.state.vehicles.list.forEach(function (vehicle) {
+            this.$store.getters.vehicles.list.forEach(function (vehicle) {
                 return _this.$store.commit('pickVehicle', { id: vehicle.id, value: false });
             });
         },
@@ -55922,7 +55978,7 @@ var render = function() {
   return _c(
     "div",
     [
-      this.$store.state.vehicles.updating
+      this.$store.getters.vehicles.updating
         ? _c("loading-cover", { attrs: { message: "Cargando..." } })
         : [
             _c("div", { staticClass: "row text-center mb-3" }, [
@@ -56638,7 +56694,7 @@ var render = function() {
         "div",
         { staticClass: "card-body" },
         [
-          this.$store.state.models.person.updating
+          this.$store.getters.person.updating
             ? _c("loading-cover", { attrs: { message: "Cargando..." } })
             : [
                 _c("pc-personal-information", {
@@ -57001,7 +57057,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         edit: function edit() {
-            this.$store.dispatch('fetchPerson', this.$route.params.id);
+            this.$store.dispatch('fetchModel', { which: 'person', id: this.$route.params.id });
             this.$router.push('/people/create');
         }
     }
@@ -58664,7 +58720,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     },
     computed: {
         values: function values() {
-            return this.$store.state.models.company.values;
+            return this.$store.getters.company.values;
         }
     },
     mounted: function mounted() {

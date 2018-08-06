@@ -1,4 +1,27 @@
 const debug = true;
+
+class List {
+    constructor() {
+        this.timestamp = null;
+        this.updating  = false;
+        this.list      = [];
+    }
+}
+
+class Model {
+    constructor(name, plural) {
+        this.plural   = plural;
+        this.name     = name;
+        this.updating = false;
+        this.values   = require(`./models/${this.name}.js`).default.default(debug);
+    }
+
+    restart() {
+        this.updating = false;
+        this.values   = require(`./models/${this.name}.js`).default.default(false);
+    }
+}
+
 export default {
     strict: true,
     state: {
@@ -12,58 +35,66 @@ export default {
                 id: 0,
                 list: []
             },
-            sidebar: {
-                opened: true
-            }
+            sidebar_opened: true
         },
-        people: {
-            timestamp: null,
-            updating: false,
-            list: []
-        },
-        companies: {
-            timestamp: null,
-            updating: false,
-            list: []
-        },
-        vehicles: {
-            timestamp: null,
-            updating: false,
-            list: []
-        },
-        activities: {
-            timestamp: null,
-            updating: false,
-            list: []
+        lists: {
+            people:     new List(),
+            vehicles:   new List(),
+            companies:  new List(),
+            activities: new List(),
         },
         models: {
-            person: {
-                updating: false,
-                values: require(`./models/person.js`).default.default(false)
-            },
-            company: {
-                updating: false,
-                values: require('./models/company.js').default.default(debug)
-            }
+            person:  new Model('person', 'people'),
+            company: new Model('company', 'companies'),
         }
     },
     getters: {
+        /**
+         * UI getters
+         */
         notifications: function(state) {
             return state.ui.notifications.list;
         },
+        sidebar_opened: function(state) {
+            return state.ui.sidebar_opened;
+        },
+        /**
+         * Lists getters
+         */
+        people: function(state) {
+            return state.lists.people;
+        },
+        vehicles: function(state) {
+            return state.lists.vehicles;
+        },
+        companies: function(state) {
+            return state.lists.companies;
+        },
+        activities: function(state) {
+            return state.lists.activities;
+        },
+        /**
+         * Models getters
+         */
+        person: function(state) {
+            return state.models.person;
+        },
+        company: function(state) {
+            return state.models.company;
+        }
     },
     mutations: {
-        loading: function(state, values) {
-            if(state.debug) console.log('UI loading:', values.state, 'Message:', values.message);
-            state.ui.loading.state = values.state;
-            state.ui.loading.message = values.message;
+        loading: function({debug, ui}, values) {
+            if(debug) console.log('UI loading:', values.state, 'Message:', values.message);
+            ui.loading.state = values.state;
+            ui.loading.message = values.message;
         },
         /**
          * Changes the status of sidebar to the given value.
          */
         toggleSidebar: function(state, value) {
             if(state.debug) console.log('Toggling sidebar');
-            state.ui.sidebar.opened = value;
+            state.ui.sidebar_opened = value;
         },
         /**
          * Given a type and a message, creates and adds a new notification with an unique id
@@ -87,12 +118,12 @@ export default {
                 state.ui.notifications.list.splice(index, 1);
             }
         },
-        updating: function(state, {what, value}) {
-            state[what].updating = value;
+        updatingList: function(state, {what, value}) {
+            state.lists[what].updating = value;
         },
         set: function(state, {what, data, timestamp}) {
-            state[what].list = data;
-            state[what].timestamp = timestamp;
+            state.lists[what].list = data;
+            state.lists[what].timestamp = timestamp;
         },
         updateModel: function(state, {which, properties_path, value}) {
             if(state.debug) console.log('Updating model: ', which, properties_path, value);
@@ -112,15 +143,15 @@ export default {
          * Given a model name, resets this model to the default value.
          */
         resetModel: function(state, which) {
-            if(state.debug) console.log('Restarting model: ', which);
-            state.models[which].values = require(`./models/${which}.js`).default.default();
+            if(state.debug) console.log('Restarting model:', which);
+            state.models[which].restart();
         },
         /**
          * Given a vehicle id, puts in the picked attribute the given value.
          * If there isn't a vehicle with the given id, then does nothing.
          */
         pickVehicle: function(state, id) {
-            if(state.vehicles.list.getById(id) !== undefined) {
+            if(state.lists.vehicles.list.getById(id) !== undefined) {
                 let pos = state.models.person.values.assign_vehicles.vehicles_id.indexOf(id);
                 if(pos !== -1) {
                     state.models.person.values.assign_vehicles.vehicles_id.splice(pos, 1);
@@ -135,17 +166,28 @@ export default {
          * Unpicks each vehicle from the list of vehicles.
          */
         unpickAllVehicles: function(state) {
-            state.vehicles.list.forEach(vehicle => vehicle.picked = false);
+            state.models.person.values.assign_vehicles.vehicles_id = [];
         }
     },
     actions: {
-        fetch: function({ commit, state }, what) {
+        /**
+         * UI actions.
+         */
+        addNotification: function({ commit, state }, { type, message }) {
+            let id = state.ui.notifications.id;
+            commit('addNotification', { id, type, message });
+            setTimeout(() => commit('removeNotification', id), 5000);
+        },
+        /**
+         * Lists actions.
+         */
+        fetchList: function({ commit, state }, what) {
             if(state.debug) console.log('Validating timestamps: ', what);
-            commit(`updating`, { what, value: true });
+            commit(`updatingList`, { what, value: true });
             axios.get(`/${what}/updated_at`)
             .then(response => {
                 let new_timestamp = new Date(response.data.updated_at);
-                if(state[what].timestamp === null || state[what].timestamp < new_timestamp) {
+                if(state.lists[what].timestamp === null || state.lists[what].timestamp < new_timestamp) {
                     if(state.debug) console.log('Fetching: ', what);
                     axios.get(`/${what}/list`)
                     .then(response => {
@@ -156,11 +198,11 @@ export default {
                         if(state.debug) console.log('Fetch failed: ', what);
                         console.log(error);
                     })
-                    .finally(() => commit(`updating`, {what, value: false}));
+                    .finally(() => commit(`updatingList`, {what, value: false}));
                 }
                 else {
                     if(state.debug) console.log('Fetch not needed: ', what);
-                    commit(`updating`, {what, value: false});
+                    commit(`updatingList`, {what, value: false});
                 }
             })
             .catch(error => {
@@ -168,22 +210,21 @@ export default {
                 console.log(error);
             });
         },
-        addNotification: function({ commit, state }, { type, message }) {
-            let id = state.ui.notifications.id;
-            commit('addNotification', { id, type, message });
-            setTimeout(() => commit('removeNotification', id), 5000);
-        },
-        fetchPerson: function({ commit, state }, id) {
-            if(state.debug) console.log('Fetching person with id: ', id);
-            commit('updateModel', {which: 'person', properties_path: 'updating', value: true});
-            axios.get(`/people/${id}/edit`)
+        /**
+         * Models actions.
+         */
+        fetchModel: function({ getters, commit, state }, { which, id }) {
+            if(state.debug) console.log('Fetching', which, 'id', id);
+            let model = getters[which];
+            commit('updateModel', { which: which, properties_path: 'updating', value: true });
+            axios.get(`/${model.plural}/${id}/edit`)
             .then(response => {
-                commit('updateModel', {which: 'person', properties_path: 'values', value: response.data});
+                commit('updateModel', {which: which, properties_path: 'values', value: response.data })
             })
             .catch(error => {
                 console.log(error);
             })
-            .finally(() => commit('updateModel', {which: 'person', properties_path: 'updating', value: false}));
+            .finally(() => commit('updateModel', { which: which, properties_path: 'updating', value: false }));
         },
     }
 };

@@ -50,18 +50,18 @@
             }
         },
         beforeMount() {
-            this.$store.dispatch('fetch', 'people');
-            this.people = this.$store.state.people.list;
+            this.$store.dispatch('fetchList', 'people');
+            this.people = this.$store.getters.people.list;
         },
         computed: {
             /**
              * Returns whether the list of people is being updated or not.
              */
-            updating: function() { return this.$store.state.people.updating },
+            updating: function() { return this.$store.getters.people.updating },
             /**
              * Returns the list of people from the store.
              */
-            unfilteredPeople: function() { return this.$store.state.people.list }
+            unfilteredPeople: function() { return this.$store.getters.people.list }
         },
         watch: {
             /**
