@@ -10,6 +10,7 @@ class List {
 
 class Model {
     constructor(name, plural) {
+        this.id       = null;
         this.plural   = plural;
         this.name     = name;
         this.updating = false;
@@ -32,7 +33,7 @@ export default {
                 message: ''
             },
             notifications: {
-                id: 0,
+                next_id: 0,
                 list: []
             },
             sidebar_opened: true
@@ -50,44 +51,47 @@ export default {
     },
     getters: {
         /**
-         * UI getters
+         * User Interface
          */
-        notifications: function(state) {
-            return state.ui.notifications.list;
+        loading: function({ui}) {
+            return ui.loading;
         },
-        sidebar_opened: function(state) {
-            return state.ui.sidebar_opened;
+        notifications: function({ui}) {
+            return ui.notifications.list;
+        },
+        sidebar_opened: function({ui}) {
+            return ui.sidebar_opened;
         },
         /**
-         * Lists getters
+         * Lists
          */
-        people: function(state) {
-            return state.lists.people;
+        people: function({lists}) {
+            return lists.people;
         },
-        vehicles: function(state) {
-            return state.lists.vehicles;
+        vehicles: function({lists}) {
+            return lists.vehicles;
         },
-        companies: function(state) {
-            return state.lists.companies;
+        companies: function({lists}) {
+            return lists.companies;
         },
-        activities: function(state) {
-            return state.lists.activities;
+        activities: function({lists}) {
+            return lists.activities;
         },
         /**
-         * Models getters
+         * Models
          */
-        person: function(state) {
-            return state.models.person;
+        person: function({models}) {
+            return models.person;
         },
-        company: function(state) {
-            return state.models.company;
+        company: function({models}) {
+            return models.company;
         }
     },
     mutations: {
         loading: function({debug, ui}, values) {
-            if(debug) console.log('UI loading:', values.state, 'Message:', values.message);
             ui.loading.state = values.state;
             ui.loading.message = values.message;
+            if(debug) console.log('UI-Loading:', ui.loading.state, ui.loading.message);
         },
         /**
          * Changes the status of sidebar to the given value.
@@ -105,7 +109,7 @@ export default {
             state.ui.notifications.list.push(notification);
             // Increases the id for the next notification. Done here because
             // it can't be done in the 'addNotification' action.
-            state.ui.notifications.id++;
+            state.ui.notifications.next_id++;
         },
         /**
          * Given an id, removes the notification that matches that id from the array of notifications.
@@ -174,7 +178,7 @@ export default {
          * UI actions.
          */
         addNotification: function({ commit, state }, { type, message }) {
-            let id = state.ui.notifications.id;
+            let id = state.ui.notifications.next_id;
             commit('addNotification', { id, type, message });
             setTimeout(() => commit('removeNotification', id), 5000);
         },
@@ -182,7 +186,7 @@ export default {
          * Lists actions.
          */
         fetchList: function({ commit, state }, what) {
-            if(state.debug) console.log('Validating timestamps: ', what);
+            if(state.debug) console.log('Validating timestamps:', what);
             commit(`updatingList`, { what, value: true });
             axios.get(`/${what}/updated_at`)
             .then(response => {
@@ -219,7 +223,8 @@ export default {
             commit('updateModel', { which: which, properties_path: 'updating', value: true });
             axios.get(`/${model.plural}/${id}/edit`)
             .then(response => {
-                commit('updateModel', {which: which, properties_path: 'values', value: response.data })
+                commit('updateModel', {which: which, properties_path: 'id', value: response.data.id });
+                commit('updateModel', {which: which, properties_path: 'values', value: response.data.values });
             })
             .catch(error => {
                 console.log(error);

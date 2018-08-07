@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -490,7 +490,7 @@ function applyToTag (styleElement, obj) {
 
 
 var bind = __webpack_require__(8);
-var isBuffer = __webpack_require__(24);
+var isBuffer = __webpack_require__(23);
 
 /*global toString:true*/
 
@@ -827,7 +827,7 @@ module.exports = g;
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(3);
-var normalizeHeaderName = __webpack_require__(26);
+var normalizeHeaderName = __webpack_require__(25);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -14039,12 +14039,12 @@ process.umask = function() { return 0; };
 
 
 var utils = __webpack_require__(3);
-var settle = __webpack_require__(27);
-var buildURL = __webpack_require__(29);
-var parseHeaders = __webpack_require__(30);
-var isURLSameOrigin = __webpack_require__(31);
+var settle = __webpack_require__(26);
+var buildURL = __webpack_require__(28);
+var parseHeaders = __webpack_require__(29);
+var isURLSameOrigin = __webpack_require__(30);
 var createError = __webpack_require__(11);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(32);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(31);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -14141,7 +14141,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(33);
+      var cookies = __webpack_require__(32);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -14225,7 +14225,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(28);
+var enhanceError = __webpack_require__(27);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -14283,109 +14283,49 @@ module.exports = Cancel;
 
 /***/ }),
 /* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-    default: function _default() {
-        var debug = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-        return {
-            id: null,
-            personal_information: {
-                last_name: !debug ? '' : 'Example',
-                name: !debug ? '' : 'Example',
-                document_type: !debug ? '' : '1',
-                document_number: !debug ? '' : '11111111',
-                cuil: !debug ? '' : '11111111111',
-                birthday: !debug ? '' : '1995-01-01',
-                sex: !debug ? '' : 'M',
-                blood_type: !debug ? '' : '0+',
-                pna: !debug ? '' : '0123456789',
-                email: !debug ? '' : 'mail@example.com',
-                home_phone: !debug ? '' : '2231234567',
-                mobile_phone: !debug ? '' : '223123652643',
-                fax: !debug ? '' : '2237654321',
-                street: !debug ? '' : '',
-                apartment: !debug ? '' : '',
-                cp: !debug ? '' : '',
-                country: !debug ? '' : '',
-                province: !debug ? '' : '',
-                city: !debug ? '' : ''
-            },
-            working_information: {
-                company_id: !debug ? '' : '1',
-                activity_id: !debug ? '' : '1',
-                art: !debug ? '' : '123456789',
-                pbip: !debug ? '' : '2020-01-01'
-            },
-            assign_vehicles: {
-                vehicles_id: []
-            },
-            first_card: {
-                number: !debug ? '' : '918273645',
-                risk: !debug ? '' : '1',
-                from: !debug ? '' : '2020-01-01',
-                until: !debug ? '' : '2020-01-02'
-            },
-            documentation: {}
-        };
-    }
-});
+var map = {
+	"./company.js": 47,
+	"./person.js": 48
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 14;
 
 /***/ }),
 /* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony default export */ __webpack_exports__["default"] = ({
-    default: function _default() {
-        var debug = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-        return {
-            general_information: {
-                name: !debug ? '' : 'Example company',
-                area: !debug ? '' : 'Example area',
-                cuit: !debug ? '' : '0123456789',
-                expiration: !debug ? '' : '2020-01-01',
-                phone: !debug ? '' : '4880000',
-                fax: !debug ? '' : '4881111',
-                email: !debug ? '' : 'example@company.com',
-                web: !debug ? '' : 'www.company.com',
-                street: !debug ? '' : 'Example street',
-                apartment: !debug ? '' : '',
-                cp: !debug ? '' : '8888',
-                country: !debug ? '' : '',
-                province: !debug ? '' : '',
-                city: !debug ? '' : ''
-            }
-        };
-    }
-});
-
-/***/ }),
-/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(17);
+__webpack_require__(16);
 module.exports = __webpack_require__(148);
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bootstrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__bootstrap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__prototypes__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__prototypes__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__prototypes___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__prototypes__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_router__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__store_js__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_router__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__store_js__ = __webpack_require__(46);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -14394,7 +14334,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-window.Vue = __webpack_require__(42);
+window.Vue = __webpack_require__(41);
 
 
 window.Vue.use(__WEBPACK_IMPORTED_MODULE_2_vue_router__["a" /* default */]);
@@ -14417,6 +14357,7 @@ Vue.component('loading-cover', __webpack_require__(60));
 Vue.component('abbreviation-text', __webpack_require__(65));
 Vue.component('custom-table', __webpack_require__(68));
 Vue.component('confirmable-button', __webpack_require__(73));
+Vue.component('creation-wrapper', __webpack_require__(152));
 // Dashboards
 Vue.component('administration-dashboard', __webpack_require__(78));
 
@@ -14437,11 +14378,11 @@ var app = new Vue({
 });
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(19);
+window._ = __webpack_require__(18);
 window.Popper = __webpack_require__(6).default;
 
 /**
@@ -14453,7 +14394,7 @@ window.Popper = __webpack_require__(6).default;
 try {
   window.$ = window.jQuery = __webpack_require__(7);
 
-  __webpack_require__(21);
+  __webpack_require__(20);
 } catch (e) {}
 
 /**
@@ -14462,7 +14403,7 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(22);
+window.axios = __webpack_require__(21);
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -14498,7 +14439,7 @@ if (token) {
 // });
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -31608,10 +31549,10 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(20)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(19)(module)))
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -31639,11 +31580,11 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap v4.1.2 (https://getbootstrap.com/)
+  * Bootstrap v4.1.1 (https://getbootstrap.com/)
   * Copyright 2011-2018 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
@@ -31714,7 +31655,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): util.js
+   * Bootstrap (v4.1.1): util.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31791,7 +31732,8 @@ module.exports = function(module) {
         }
 
         try {
-          return document.querySelector(selector) ? selector : null;
+          var $selector = $$$1(document).find(selector);
+          return $selector.length > 0 ? selector : null;
         } catch (err) {
           return null;
         }
@@ -31846,7 +31788,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): alert.js
+   * Bootstrap (v4.1.1): alert.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31858,7 +31800,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'alert';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.alert';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -31921,7 +31863,7 @@ module.exports = function(module) {
         var parent = false;
 
         if (selector) {
-          parent = document.querySelector(selector);
+          parent = $$$1(selector)[0];
         }
 
         if (!parent) {
@@ -32021,7 +31963,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): button.js
+   * Bootstrap (v4.1.1): button.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32033,7 +31975,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'button';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.button';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32078,14 +32020,14 @@ module.exports = function(module) {
         var rootElement = $$$1(this._element).closest(Selector.DATA_TOGGLE)[0];
 
         if (rootElement) {
-          var input = this._element.querySelector(Selector.INPUT);
+          var input = $$$1(this._element).find(Selector.INPUT)[0];
 
           if (input) {
             if (input.type === 'radio') {
-              if (input.checked && this._element.classList.contains(ClassName.ACTIVE)) {
+              if (input.checked && $$$1(this._element).hasClass(ClassName.ACTIVE)) {
                 triggerChangeEvent = false;
               } else {
-                var activeElement = rootElement.querySelector(Selector.ACTIVE);
+                var activeElement = $$$1(rootElement).find(Selector.ACTIVE)[0];
 
                 if (activeElement) {
                   $$$1(activeElement).removeClass(ClassName.ACTIVE);
@@ -32098,7 +32040,7 @@ module.exports = function(module) {
                 return;
               }
 
-              input.checked = !this._element.classList.contains(ClassName.ACTIVE);
+              input.checked = !$$$1(this._element).hasClass(ClassName.ACTIVE);
               $$$1(input).trigger('change');
             }
 
@@ -32108,7 +32050,7 @@ module.exports = function(module) {
         }
 
         if (addAriaPressed) {
-          this._element.setAttribute('aria-pressed', !this._element.classList.contains(ClassName.ACTIVE));
+          this._element.setAttribute('aria-pressed', !$$$1(this._element).hasClass(ClassName.ACTIVE));
         }
 
         if (triggerChangeEvent) {
@@ -32185,7 +32127,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): carousel.js
+   * Bootstrap (v4.1.1): carousel.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32197,7 +32139,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'carousel';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.carousel';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32276,7 +32218,7 @@ module.exports = function(module) {
         this.touchTimeout = null;
         this._config = this._getConfig(config);
         this._element = $$$1(element)[0];
-        this._indicatorsElement = this._element.querySelector(Selector.INDICATORS);
+        this._indicatorsElement = $$$1(this._element).find(Selector.INDICATORS)[0];
 
         this._addEventListeners();
       } // Getters
@@ -32310,7 +32252,7 @@ module.exports = function(module) {
           this._isPaused = true;
         }
 
-        if (this._element.querySelector(Selector.NEXT_PREV)) {
+        if ($$$1(this._element).find(Selector.NEXT_PREV)[0]) {
           Util.triggerTransitionEnd(this._element);
           this.cycle(true);
         }
@@ -32337,7 +32279,7 @@ module.exports = function(module) {
       _proto.to = function to(index) {
         var _this = this;
 
-        this._activeElement = this._element.querySelector(Selector.ACTIVE_ITEM);
+        this._activeElement = $$$1(this._element).find(Selector.ACTIVE_ITEM)[0];
 
         var activeIndex = this._getItemIndex(this._activeElement);
 
@@ -32443,7 +32385,7 @@ module.exports = function(module) {
       };
 
       _proto._getItemIndex = function _getItemIndex(element) {
-        this._items = element && element.parentNode ? [].slice.call(element.parentNode.querySelectorAll(Selector.ITEM)) : [];
+        this._items = $$$1.makeArray($$$1(element).parent().find(Selector.ITEM));
         return this._items.indexOf(element);
       };
 
@@ -32468,7 +32410,7 @@ module.exports = function(module) {
       _proto._triggerSlideEvent = function _triggerSlideEvent(relatedTarget, eventDirectionName) {
         var targetIndex = this._getItemIndex(relatedTarget);
 
-        var fromIndex = this._getItemIndex(this._element.querySelector(Selector.ACTIVE_ITEM));
+        var fromIndex = this._getItemIndex($$$1(this._element).find(Selector.ACTIVE_ITEM)[0]);
 
         var slideEvent = $$$1.Event(Event.SLIDE, {
           relatedTarget: relatedTarget,
@@ -32482,8 +32424,7 @@ module.exports = function(module) {
 
       _proto._setActiveIndicatorElement = function _setActiveIndicatorElement(element) {
         if (this._indicatorsElement) {
-          var indicators = [].slice.call(this._indicatorsElement.querySelectorAll(Selector.ACTIVE));
-          $$$1(indicators).removeClass(ClassName.ACTIVE);
+          $$$1(this._indicatorsElement).find(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
 
           var nextIndicator = this._indicatorsElement.children[this._getItemIndex(element)];
 
@@ -32496,7 +32437,7 @@ module.exports = function(module) {
       _proto._slide = function _slide(direction, element) {
         var _this3 = this;
 
-        var activeElement = this._element.querySelector(Selector.ACTIVE_ITEM);
+        var activeElement = $$$1(this._element).find(Selector.ACTIVE_ITEM)[0];
 
         var activeElementIndex = this._getItemIndex(activeElement);
 
@@ -32662,13 +32603,11 @@ module.exports = function(module) {
 
     $$$1(document).on(Event.CLICK_DATA_API, Selector.DATA_SLIDE, Carousel._dataApiClickHandler);
     $$$1(window).on(Event.LOAD_DATA_API, function () {
-      var carousels = [].slice.call(document.querySelectorAll(Selector.DATA_RIDE));
-
-      for (var i = 0, len = carousels.length; i < len; i++) {
-        var $carousel = $$$1(carousels[i]);
+      $$$1(Selector.DATA_RIDE).each(function () {
+        var $carousel = $$$1(this);
 
         Carousel._jQueryInterface.call($carousel, $carousel.data());
-      }
+      });
     });
     /**
      * ------------------------------------------------------------------------
@@ -32689,7 +32628,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): collapse.js
+   * Bootstrap (v4.1.1): collapse.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32701,7 +32640,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'collapse';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.collapse';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32749,17 +32688,14 @@ module.exports = function(module) {
         this._isTransitioning = false;
         this._element = element;
         this._config = this._getConfig(config);
-        this._triggerArray = $$$1.makeArray(document.querySelectorAll("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
-        var toggleList = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE));
+        this._triggerArray = $$$1.makeArray($$$1("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
+        var tabToggles = $$$1(Selector.DATA_TOGGLE);
 
-        for (var i = 0, len = toggleList.length; i < len; i++) {
-          var elem = toggleList[i];
+        for (var i = 0; i < tabToggles.length; i++) {
+          var elem = tabToggles[i];
           var selector = Util.getSelectorFromElement(elem);
-          var filterElement = [].slice.call(document.querySelectorAll(selector)).filter(function (foundElem) {
-            return foundElem === element;
-          });
 
-          if (selector !== null && filterElement.length > 0) {
+          if (selector !== null && $$$1(selector).filter(element).length > 0) {
             this._selector = selector;
 
             this._triggerArray.push(elem);
@@ -32800,9 +32736,7 @@ module.exports = function(module) {
         var activesData;
 
         if (this._parent) {
-          actives = [].slice.call(this._parent.querySelectorAll(Selector.ACTIVES)).filter(function (elem) {
-            return elem.getAttribute('data-parent') === _this._config.parent;
-          });
+          actives = $$$1.makeArray($$$1(this._parent).find(Selector.ACTIVES).filter("[data-parent=\"" + this._config.parent + "\"]"));
 
           if (actives.length === 0) {
             actives = null;
@@ -32837,7 +32771,7 @@ module.exports = function(module) {
         $$$1(this._element).removeClass(ClassName.COLLAPSE).addClass(ClassName.COLLAPSING);
         this._element.style[dimension] = 0;
 
-        if (this._triggerArray.length) {
+        if (this._triggerArray.length > 0) {
           $$$1(this._triggerArray).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
         }
 
@@ -32878,15 +32812,14 @@ module.exports = function(module) {
         this._element.style[dimension] = this._element.getBoundingClientRect()[dimension] + "px";
         Util.reflow(this._element);
         $$$1(this._element).addClass(ClassName.COLLAPSING).removeClass(ClassName.COLLAPSE).removeClass(ClassName.SHOW);
-        var triggerArrayLength = this._triggerArray.length;
 
-        if (triggerArrayLength > 0) {
-          for (var i = 0; i < triggerArrayLength; i++) {
+        if (this._triggerArray.length > 0) {
+          for (var i = 0; i < this._triggerArray.length; i++) {
             var trigger = this._triggerArray[i];
             var selector = Util.getSelectorFromElement(trigger);
 
             if (selector !== null) {
-              var $elem = $$$1([].slice.call(document.querySelectorAll(selector)));
+              var $elem = $$$1(selector);
 
               if (!$elem.hasClass(ClassName.SHOW)) {
                 $$$1(trigger).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
@@ -32947,12 +32880,11 @@ module.exports = function(module) {
             parent = this._config.parent[0];
           }
         } else {
-          parent = document.querySelector(this._config.parent);
+          parent = $$$1(this._config.parent)[0];
         }
 
         var selector = "[data-toggle=\"collapse\"][data-parent=\"" + this._config.parent + "\"]";
-        var children = [].slice.call(parent.querySelectorAll(selector));
-        $$$1(children).each(function (i, element) {
+        $$$1(parent).find(selector).each(function (i, element) {
           _this3._addAriaAndCollapsedClass(Collapse._getTargetFromElement(element), [element]);
         });
         return parent;
@@ -32962,7 +32894,7 @@ module.exports = function(module) {
         if (element) {
           var isOpen = $$$1(element).hasClass(ClassName.SHOW);
 
-          if (triggerArray.length) {
+          if (triggerArray.length > 0) {
             $$$1(triggerArray).toggleClass(ClassName.COLLAPSED, !isOpen).attr('aria-expanded', isOpen);
           }
         }
@@ -32971,7 +32903,7 @@ module.exports = function(module) {
 
       Collapse._getTargetFromElement = function _getTargetFromElement(element) {
         var selector = Util.getSelectorFromElement(element);
-        return selector ? document.querySelector(selector) : null;
+        return selector ? $$$1(selector)[0] : null;
       };
 
       Collapse._jQueryInterface = function _jQueryInterface(config) {
@@ -33029,8 +32961,7 @@ module.exports = function(module) {
 
       var $trigger = $$$1(this);
       var selector = Util.getSelectorFromElement(this);
-      var selectors = [].slice.call(document.querySelectorAll(selector));
-      $$$1(selectors).each(function () {
+      $$$1(selector).each(function () {
         var $target = $$$1(this);
         var data = $target.data(DATA_KEY);
         var config = data ? 'toggle' : $trigger.data();
@@ -33057,7 +32988,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): dropdown.js
+   * Bootstrap (v4.1.1): dropdown.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -33069,7 +33000,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'dropdown';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.dropdown';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -33278,16 +33209,14 @@ module.exports = function(module) {
         if (!this._menu) {
           var parent = Dropdown._getParentFromElement(this._element);
 
-          if (parent) {
-            this._menu = parent.querySelector(Selector.MENU);
-          }
+          this._menu = $$$1(parent).find(Selector.MENU)[0];
         }
 
         return this._menu;
       };
 
       _proto._getPlacement = function _getPlacement() {
-        var $parentDropdown = $$$1(this._element.parentNode);
+        var $parentDropdown = $$$1(this._element).parent();
         var placement = AttachmentMap.BOTTOM; // Handle dropup
 
         if ($parentDropdown.hasClass(ClassName.DROPUP)) {
@@ -33375,19 +33304,15 @@ module.exports = function(module) {
           return;
         }
 
-        var toggles = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE));
+        var toggles = $$$1.makeArray($$$1(Selector.DATA_TOGGLE));
 
-        for (var i = 0, len = toggles.length; i < len; i++) {
+        for (var i = 0; i < toggles.length; i++) {
           var parent = Dropdown._getParentFromElement(toggles[i]);
 
           var context = $$$1(toggles[i]).data(DATA_KEY);
           var relatedTarget = {
             relatedTarget: toggles[i]
           };
-
-          if (event && event.type === 'click') {
-            relatedTarget.clickEvent = event;
-          }
 
           if (!context) {
             continue;
@@ -33427,7 +33352,7 @@ module.exports = function(module) {
         var selector = Util.getSelectorFromElement(element);
 
         if (selector) {
-          parent = document.querySelector(selector);
+          parent = $$$1(selector)[0];
         }
 
         return parent || element.parentNode;
@@ -33459,7 +33384,7 @@ module.exports = function(module) {
 
         if (!isActive && (event.which !== ESCAPE_KEYCODE || event.which !== SPACE_KEYCODE) || isActive && (event.which === ESCAPE_KEYCODE || event.which === SPACE_KEYCODE)) {
           if (event.which === ESCAPE_KEYCODE) {
-            var toggle = parent.querySelector(Selector.DATA_TOGGLE);
+            var toggle = $$$1(parent).find(Selector.DATA_TOGGLE)[0];
             $$$1(toggle).trigger('focus');
           }
 
@@ -33467,7 +33392,7 @@ module.exports = function(module) {
           return;
         }
 
-        var items = [].slice.call(parent.querySelectorAll(Selector.VISIBLE_ITEMS));
+        var items = $$$1(parent).find(Selector.VISIBLE_ITEMS).get();
 
         if (items.length === 0) {
           return;
@@ -33545,7 +33470,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): modal.js
+   * Bootstrap (v4.1.1): modal.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -33557,7 +33482,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'modal';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.modal';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -33601,7 +33526,8 @@ module.exports = function(module) {
       DATA_TOGGLE: '[data-toggle="modal"]',
       DATA_DISMISS: '[data-dismiss="modal"]',
       FIXED_CONTENT: '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top',
-      STICKY_CONTENT: '.sticky-top'
+      STICKY_CONTENT: '.sticky-top',
+      NAVBAR_TOGGLER: '.navbar-toggler'
       /**
        * ------------------------------------------------------------------------
        * Class Definition
@@ -33616,7 +33542,7 @@ module.exports = function(module) {
       function Modal(element, config) {
         this._config = this._getConfig(config);
         this._element = element;
-        this._dialog = element.querySelector(Selector.DIALOG);
+        this._dialog = $$$1(element).find(Selector.DIALOG)[0];
         this._backdrop = null;
         this._isShown = false;
         this._isBodyOverflowing = false;
@@ -33873,7 +33799,7 @@ module.exports = function(module) {
           this._backdrop.className = ClassName.BACKDROP;
 
           if (animate) {
-            this._backdrop.classList.add(animate);
+            $$$1(this._backdrop).addClass(animate);
           }
 
           $$$1(this._backdrop).appendTo(document.body);
@@ -33967,19 +33893,23 @@ module.exports = function(module) {
         if (this._isBodyOverflowing) {
           // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
           //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
-          var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
-          var stickyContent = [].slice.call(document.querySelectorAll(Selector.STICKY_CONTENT)); // Adjust fixed content padding
-
-          $$$1(fixedContent).each(function (index, element) {
-            var actualPadding = element.style.paddingRight;
+          // Adjust fixed content padding
+          $$$1(Selector.FIXED_CONTENT).each(function (index, element) {
+            var actualPadding = $$$1(element)[0].style.paddingRight;
             var calculatedPadding = $$$1(element).css('padding-right');
             $$$1(element).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + _this9._scrollbarWidth + "px");
           }); // Adjust sticky content margin
 
-          $$$1(stickyContent).each(function (index, element) {
-            var actualMargin = element.style.marginRight;
+          $$$1(Selector.STICKY_CONTENT).each(function (index, element) {
+            var actualMargin = $$$1(element)[0].style.marginRight;
             var calculatedMargin = $$$1(element).css('margin-right');
             $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) - _this9._scrollbarWidth + "px");
+          }); // Adjust navbar-toggler margin
+
+          $$$1(Selector.NAVBAR_TOGGLER).each(function (index, element) {
+            var actualMargin = $$$1(element)[0].style.marginRight;
+            var calculatedMargin = $$$1(element).css('margin-right');
+            $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) + _this9._scrollbarWidth + "px");
           }); // Adjust body padding
 
           var actualPadding = document.body.style.paddingRight;
@@ -33990,15 +33920,15 @@ module.exports = function(module) {
 
       _proto._resetScrollbar = function _resetScrollbar() {
         // Restore fixed content padding
-        var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
-        $$$1(fixedContent).each(function (index, element) {
+        $$$1(Selector.FIXED_CONTENT).each(function (index, element) {
           var padding = $$$1(element).data('padding-right');
-          $$$1(element).removeData('padding-right');
-          element.style.paddingRight = padding ? padding : '';
-        }); // Restore sticky content
 
-        var elements = [].slice.call(document.querySelectorAll("" + Selector.STICKY_CONTENT));
-        $$$1(elements).each(function (index, element) {
+          if (typeof padding !== 'undefined') {
+            $$$1(element).css('padding-right', padding).removeData('padding-right');
+          }
+        }); // Restore sticky content and navbar-toggler margin
+
+        $$$1(Selector.STICKY_CONTENT + ", " + Selector.NAVBAR_TOGGLER).each(function (index, element) {
           var margin = $$$1(element).data('margin-right');
 
           if (typeof margin !== 'undefined') {
@@ -34007,8 +33937,10 @@ module.exports = function(module) {
         }); // Restore body padding
 
         var padding = $$$1(document.body).data('padding-right');
-        $$$1(document.body).removeData('padding-right');
-        document.body.style.paddingRight = padding ? padding : '';
+
+        if (typeof padding !== 'undefined') {
+          $$$1(document.body).css('padding-right', padding).removeData('padding-right');
+        }
       };
 
       _proto._getScrollbarWidth = function _getScrollbarWidth() {
@@ -34073,7 +34005,7 @@ module.exports = function(module) {
       var selector = Util.getSelectorFromElement(this);
 
       if (selector) {
-        target = document.querySelector(selector);
+        target = $$$1(selector)[0];
       }
 
       var config = $$$1(target).data(DATA_KEY) ? 'toggle' : _objectSpread({}, $$$1(target).data(), $$$1(this).data());
@@ -34116,7 +34048,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): tooltip.js
+   * Bootstrap (v4.1.1): tooltip.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34128,7 +34060,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'tooltip';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.tooltip';
     var EVENT_KEY = "." + DATA_KEY;
     var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -34338,7 +34270,7 @@ module.exports = function(module) {
           var attachment = this._getAttachment(placement);
 
           this.addAttachmentClass(attachment);
-          var container = this.config.container === false ? document.body : $$$1(document).find(this.config.container);
+          var container = this.config.container === false ? document.body : $$$1(this.config.container);
           $$$1(tip).data(this.constructor.DATA_KEY, this);
 
           if (!$$$1.contains(this.element.ownerDocument.documentElement, this.tip)) {
@@ -34477,9 +34409,9 @@ module.exports = function(module) {
       };
 
       _proto.setContent = function setContent() {
-        var tip = this.getTipElement();
-        this.setElementContent($$$1(tip.querySelectorAll(Selector.TOOLTIP_INNER)), this.getTitle());
-        $$$1(tip).removeClass(ClassName.FADE + " " + ClassName.SHOW);
+        var $tip = $$$1(this.getTipElement());
+        this.setElementContent($tip.find(Selector.TOOLTIP_INNER), this.getTitle());
+        $tip.removeClass(ClassName.FADE + " " + ClassName.SHOW);
       };
 
       _proto.setElementContent = function setElementContent($element, content) {
@@ -34672,18 +34604,15 @@ module.exports = function(module) {
         var $tip = $$$1(this.getTipElement());
         var tabClass = $tip.attr('class').match(BSCLS_PREFIX_REGEX);
 
-        if (tabClass !== null && tabClass.length) {
+        if (tabClass !== null && tabClass.length > 0) {
           $tip.removeClass(tabClass.join(''));
         }
       };
 
-      _proto._handlePopperPlacementChange = function _handlePopperPlacementChange(popperData) {
-        var popperInstance = popperData.instance;
-        this.tip = popperInstance.popper;
-
+      _proto._handlePopperPlacementChange = function _handlePopperPlacementChange(data) {
         this._cleanTipClass();
 
-        this.addAttachmentClass(this._getAttachment(popperData.placement));
+        this.addAttachmentClass(this._getAttachment(data.placement));
       };
 
       _proto._fixTransition = function _fixTransition() {
@@ -34786,7 +34715,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): popover.js
+   * Bootstrap (v4.1.1): popover.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34798,7 +34727,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'popover';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.popover';
     var EVENT_KEY = "." + DATA_KEY;
     var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -34983,7 +34912,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): scrollspy.js
+   * Bootstrap (v4.1.1): scrollspy.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34995,7 +34924,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'scrollspy';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.scrollspy';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -35077,13 +35006,13 @@ module.exports = function(module) {
         this._offsets = [];
         this._targets = [];
         this._scrollHeight = this._getScrollHeight();
-        var targets = [].slice.call(document.querySelectorAll(this._selector));
+        var targets = $$$1.makeArray($$$1(this._selector));
         targets.map(function (element) {
           var target;
           var targetSelector = Util.getSelectorFromElement(element);
 
           if (targetSelector) {
-            target = document.querySelector(targetSelector);
+            target = $$$1(targetSelector)[0];
           }
 
           if (target) {
@@ -35180,9 +35109,7 @@ module.exports = function(module) {
           return;
         }
 
-        var offsetLength = this._offsets.length;
-
-        for (var i = offsetLength; i--;) {
+        for (var i = this._offsets.length; i--;) {
           var isActiveTarget = this._activeTarget !== this._targets[i] && scrollTop >= this._offsets[i] && (typeof this._offsets[i + 1] === 'undefined' || scrollTop < this._offsets[i + 1]);
 
           if (isActiveTarget) {
@@ -35202,7 +35129,7 @@ module.exports = function(module) {
         queries = queries.map(function (selector) {
           return selector + "[data-target=\"" + target + "\"]," + (selector + "[href=\"" + target + "\"]");
         });
-        var $link = $$$1([].slice.call(document.querySelectorAll(queries.join(','))));
+        var $link = $$$1(queries.join(','));
 
         if ($link.hasClass(ClassName.DROPDOWN_ITEM)) {
           $link.closest(Selector.DROPDOWN).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
@@ -35223,8 +35150,7 @@ module.exports = function(module) {
       };
 
       _proto._clear = function _clear() {
-        var nodes = [].slice.call(document.querySelectorAll(this._selector));
-        $$$1(nodes).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
+        $$$1(this._selector).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
       }; // Static
 
 
@@ -35271,10 +35197,9 @@ module.exports = function(module) {
 
 
     $$$1(window).on(Event.LOAD_DATA_API, function () {
-      var scrollSpys = [].slice.call(document.querySelectorAll(Selector.DATA_SPY));
-      var scrollSpysLength = scrollSpys.length;
+      var scrollSpys = $$$1.makeArray($$$1(Selector.DATA_SPY));
 
-      for (var i = scrollSpysLength; i--;) {
+      for (var i = scrollSpys.length; i--;) {
         var $spy = $$$1(scrollSpys[i]);
 
         ScrollSpy._jQueryInterface.call($spy, $spy.data());
@@ -35299,7 +35224,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): tab.js
+   * Bootstrap (v4.1.1): tab.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -35311,7 +35236,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'tab';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.tab';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -35393,7 +35318,7 @@ module.exports = function(module) {
         }
 
         if (selector) {
-          target = document.querySelector(selector);
+          target = $$$1(selector)[0];
         }
 
         this._activate(this._element, listElement);
@@ -35475,8 +35400,7 @@ module.exports = function(module) {
           var dropdownElement = $$$1(element).closest(Selector.DROPDOWN)[0];
 
           if (dropdownElement) {
-            var dropdownToggleList = [].slice.call(dropdownElement.querySelectorAll(Selector.DROPDOWN_TOGGLE));
-            $$$1(dropdownToggleList).addClass(ClassName.ACTIVE);
+            $$$1(dropdownElement).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
           }
 
           element.setAttribute('aria-expanded', true);
@@ -35548,7 +35472,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): index.js
+   * Bootstrap (v4.1.1): index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -35589,13 +35513,13 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(23);
+module.exports = __webpack_require__(22);
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35603,7 +35527,7 @@ module.exports = __webpack_require__(23);
 
 var utils = __webpack_require__(3);
 var bind = __webpack_require__(8);
-var Axios = __webpack_require__(25);
+var Axios = __webpack_require__(24);
 var defaults = __webpack_require__(5);
 
 /**
@@ -35638,14 +35562,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(13);
-axios.CancelToken = __webpack_require__(39);
+axios.CancelToken = __webpack_require__(38);
 axios.isCancel = __webpack_require__(12);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(40);
+axios.spread = __webpack_require__(39);
 
 module.exports = axios;
 
@@ -35654,7 +35578,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /*!
@@ -35681,7 +35605,7 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35689,8 +35613,8 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(5);
 var utils = __webpack_require__(3);
-var InterceptorManager = __webpack_require__(34);
-var dispatchRequest = __webpack_require__(35);
+var InterceptorManager = __webpack_require__(33);
+var dispatchRequest = __webpack_require__(34);
 
 /**
  * Create a new instance of Axios
@@ -35767,7 +35691,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35786,7 +35710,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35819,7 +35743,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35847,7 +35771,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35920,7 +35844,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35980,7 +35904,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36055,7 +35979,7 @@ module.exports = (
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36098,7 +36022,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36158,7 +36082,7 @@ module.exports = (
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36217,18 +36141,18 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(3);
-var transformData = __webpack_require__(36);
+var transformData = __webpack_require__(35);
 var isCancel = __webpack_require__(12);
 var defaults = __webpack_require__(5);
-var isAbsoluteURL = __webpack_require__(37);
-var combineURLs = __webpack_require__(38);
+var isAbsoluteURL = __webpack_require__(36);
+var combineURLs = __webpack_require__(37);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -36310,7 +36234,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36337,7 +36261,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36358,7 +36282,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36379,7 +36303,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36443,7 +36367,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36477,7 +36401,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports) {
 
 String.prototype.matches = function (other) {
@@ -36527,7 +36451,7 @@ Array.prototype.getByIds = function (ids) {
 };
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47490,10 +47414,10 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(43).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(42).setImmediate))
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -47549,7 +47473,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(44);
+__webpack_require__(43);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -47563,7 +47487,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -47756,7 +47680,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(9)))
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50386,7 +50310,7 @@ if (inBrowser && window.Vue) {
 
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51331,7 +51255,7 @@ var index_esm = {
 
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51353,17 +51277,18 @@ var Model = function () {
     function Model(name, plural) {
         _classCallCheck(this, Model);
 
+        this.id = null;
         this.plural = plural;
         this.name = name;
         this.updating = false;
-        this.values = __webpack_require__(48)("./" + this.name + '.js').default.default(debug);
+        this.values = __webpack_require__(14)("./" + this.name + '.js').default.default(debug);
     }
 
     _createClass(Model, [{
         key: 'restart',
         value: function restart() {
             this.updating = false;
-            this.values = __webpack_require__(48)("./" + this.name + '.js').default.default(false);
+            this.values = __webpack_require__(14)("./" + this.name + '.js').default.default(false);
         }
     }]);
 
@@ -51380,7 +51305,7 @@ var Model = function () {
                 message: ''
             },
             notifications: {
-                id: 0,
+                next_id: 0,
                 list: []
             },
             sidebar_opened: true
@@ -51392,64 +51317,74 @@ var Model = function () {
             activities: new List()
         },
         models: {
-<<<<<<< Updated upstream
             person: new Model('person', 'people'),
             company: new Model('company', 'companies')
-=======
-            person: {
-                updating: false,
-                values: __webpack_require__(14).default.default(debug)
-            },
-            company: {
-                updating: false,
-                values: __webpack_require__(15).default.default(debug)
-            }
->>>>>>> Stashed changes
         }
     },
     getters: {
         /**
-         * UI getters
+         * User Interface
          */
-        notifications: function notifications(state) {
-            return state.ui.notifications.list;
+        loading: function loading(_ref) {
+            var ui = _ref.ui;
+
+            return ui.loading;
         },
-        sidebar_opened: function sidebar_opened(state) {
-            return state.ui.sidebar_opened;
+        notifications: function notifications(_ref2) {
+            var ui = _ref2.ui;
+
+            return ui.notifications.list;
+        },
+        sidebar_opened: function sidebar_opened(_ref3) {
+            var ui = _ref3.ui;
+
+            return ui.sidebar_opened;
         },
         /**
-         * Lists getters
+         * Lists
          */
-        people: function people(state) {
-            return state.lists.people;
+        people: function people(_ref4) {
+            var lists = _ref4.lists;
+
+            return lists.people;
         },
-        vehicles: function vehicles(state) {
-            return state.lists.vehicles;
+        vehicles: function vehicles(_ref5) {
+            var lists = _ref5.lists;
+
+            return lists.vehicles;
         },
-        companies: function companies(state) {
-            return state.lists.companies;
+        companies: function companies(_ref6) {
+            var lists = _ref6.lists;
+
+            return lists.companies;
         },
-        activities: function activities(state) {
-            return state.lists.activities;
+        activities: function activities(_ref7) {
+            var lists = _ref7.lists;
+
+            return lists.activities;
         },
         /**
-         * Models getters
+         * Models
          */
-        person: function person(state) {
-            return state.models.person;
+        person: function person(_ref8) {
+            var models = _ref8.models;
+
+            return models.person;
         },
-        company: function company(state) {
-            return state.models.company;
+        company: function company(_ref9) {
+            var models = _ref9.models;
+
+            return models.company;
         }
     },
     mutations: {
-        loading: function loading(_ref, values) {
-            var debug = _ref.debug,
-                ui = _ref.ui;
+        loading: function loading(_ref10, values) {
+            var debug = _ref10.debug,
+                ui = _ref10.ui;
 
-            if (debug) console.log('UI loading:', values.state, 'Message:', values.message);
             ui.loading.state = values.state;
             ui.loading.message = values.message;
+            if (debug) console.log('UI-Loading:', ui.loading.state, ui.loading.message);
         },
         /**
          * Changes the status of sidebar to the given value.
@@ -51467,7 +51402,7 @@ var Model = function () {
             state.ui.notifications.list.push(notification);
             // Increases the id for the next notification. Done here because
             // it can't be done in the 'addNotification' action.
-            state.ui.notifications.id++;
+            state.ui.notifications.next_id++;
         },
         /**
          * Given an id, removes the notification that matches that id from the array of notifications.
@@ -51480,24 +51415,24 @@ var Model = function () {
                 state.ui.notifications.list.splice(index, 1);
             }
         },
-        updatingList: function updatingList(state, _ref2) {
-            var what = _ref2.what,
-                value = _ref2.value;
+        updatingList: function updatingList(state, _ref11) {
+            var what = _ref11.what,
+                value = _ref11.value;
 
             state.lists[what].updating = value;
         },
-        set: function set(state, _ref3) {
-            var what = _ref3.what,
-                data = _ref3.data,
-                timestamp = _ref3.timestamp;
+        set: function set(state, _ref12) {
+            var what = _ref12.what,
+                data = _ref12.data,
+                timestamp = _ref12.timestamp;
 
             state.lists[what].list = data;
             state.lists[what].timestamp = timestamp;
         },
-        updateModel: function updateModel(state, _ref4) {
-            var which = _ref4.which,
-                properties_path = _ref4.properties_path,
-                value = _ref4.value;
+        updateModel: function updateModel(state, _ref13) {
+            var which = _ref13.which,
+                properties_path = _ref13.properties_path,
+                value = _ref13.value;
 
             if (state.debug) console.log('Updating model: ', which, properties_path, value);
             if (properties_path.trim().length < 1) {
@@ -51544,13 +51479,13 @@ var Model = function () {
         /**
          * UI actions.
          */
-        addNotification: function addNotification(_ref5, _ref6) {
-            var commit = _ref5.commit,
-                state = _ref5.state;
-            var type = _ref6.type,
-                message = _ref6.message;
+        addNotification: function addNotification(_ref14, _ref15) {
+            var commit = _ref14.commit,
+                state = _ref14.state;
+            var type = _ref15.type,
+                message = _ref15.message;
 
-            var id = state.ui.notifications.id;
+            var id = state.ui.notifications.next_id;
             commit('addNotification', { id: id, type: type, message: message });
             setTimeout(function () {
                 return commit('removeNotification', id);
@@ -51559,11 +51494,11 @@ var Model = function () {
         /**
          * Lists actions.
          */
-        fetchList: function fetchList(_ref7, what) {
-            var commit = _ref7.commit,
-                state = _ref7.state;
+        fetchList: function fetchList(_ref16, what) {
+            var commit = _ref16.commit,
+                state = _ref16.state;
 
-            if (state.debug) console.log('Validating timestamps: ', what);
+            if (state.debug) console.log('Validating timestamps:', what);
             commit('updatingList', { what: what, value: true });
             axios.get('/' + what + '/updated_at').then(function (response) {
                 var new_timestamp = new Date(response.data.updated_at);
@@ -51590,18 +51525,19 @@ var Model = function () {
         /**
          * Models actions.
          */
-        fetchModel: function fetchModel(_ref8, _ref9) {
-            var getters = _ref8.getters,
-                commit = _ref8.commit,
-                state = _ref8.state;
-            var which = _ref9.which,
-                id = _ref9.id;
+        fetchModel: function fetchModel(_ref17, _ref18) {
+            var getters = _ref17.getters,
+                commit = _ref17.commit,
+                state = _ref17.state;
+            var which = _ref18.which,
+                id = _ref18.id;
 
             if (state.debug) console.log('Fetching', which, 'id', id);
             var model = getters[which];
             commit('updateModel', { which: which, properties_path: 'updating', value: true });
             axios.get('/' + model.plural + '/' + id + '/edit').then(function (response) {
-                commit('updateModel', { which: which, properties_path: 'values', value: response.data });
+                commit('updateModel', { which: which, properties_path: 'id', value: response.data.id });
+                commit('updateModel', { which: which, properties_path: 'values', value: response.data.values });
             }).catch(function (error) {
                 console.log(error);
             }).finally(function () {
@@ -51612,28 +51548,87 @@ var Model = function () {
 });
 
 /***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 47 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-var map = {
-	"./company.js": 15,
-	"./person.js": 14
-};
-function webpackContext(req) {
-	return __webpack_require__(webpackContextResolve(req));
-};
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) // check for number or string
-		throw new Error("Cannot find module '" + req + "'.");
-	return id;
-};
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 48;
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    default: function _default() {
+        var debug = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+        return {
+            general_information: {
+                name: !debug ? '' : 'Example company',
+                area: !debug ? '' : 'Example area',
+                cuit: !debug ? '' : '0123456789',
+                expiration: !debug ? '' : '2020-01-01',
+                phone: !debug ? '' : '4880000',
+                fax: !debug ? '' : '4881111',
+                email: !debug ? '' : 'example@company.com',
+                web: !debug ? '' : 'www.company.com',
+                street: !debug ? '' : 'Example street',
+                apartment: !debug ? '' : '',
+                cp: !debug ? '' : '8888',
+                country: !debug ? '' : '',
+                province: !debug ? '' : '',
+                city: !debug ? '' : ''
+            }
+        };
+    }
+});
+
+/***/ }),
+/* 48 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    default: function _default() {
+        var debug = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+        return {
+            personal_information: {
+                last_name: !debug ? '' : 'Example',
+                name: !debug ? '' : 'Example',
+                document_type: !debug ? '' : '1',
+                document_number: !debug ? '' : '11111111',
+                cuil: !debug ? '' : '11111111111',
+                birthday: !debug ? '' : '1995-01-01',
+                sex: !debug ? '' : 'M',
+                blood_type: !debug ? '' : '0+',
+                pna: !debug ? '' : '0123456789',
+                email: !debug ? '' : 'mail@example.com',
+                home_phone: !debug ? '' : '2231234567',
+                mobile_phone: !debug ? '' : '223123652643',
+                fax: !debug ? '' : '2237654321',
+                street: !debug ? '' : '',
+                apartment: !debug ? '' : '',
+                cp: !debug ? '' : '',
+                country: !debug ? '' : '',
+                province: !debug ? '' : '',
+                city: !debug ? '' : ''
+            },
+            working_information: {
+                company_id: !debug ? '' : '1',
+                activity_id: !debug ? '' : '1',
+                art: !debug ? '' : '123456789',
+                pbip: !debug ? '' : '2020-01-01'
+            },
+            assign_vehicles: {
+                vehicles_id: []
+            },
+            first_card: {
+                number: !debug ? '' : '918273645',
+                risk: !debug ? '' : '1',
+                from: !debug ? '' : '2020-01-01',
+                until: !debug ? '' : '2020-01-02'
+            },
+            documentation: {}
+        };
+    }
+});
 
 /***/ }),
 /* 49 */
@@ -53139,8 +53134,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         loading: function loading() {
             return {
-                state: this.$store.state.ui.loading.state,
-                message: this.$store.state.ui.loading.message
+                state: this.$store.getters.loading.state,
+                message: this.$store.getters.loading.message
             };
         },
         sidebar_opened: {
@@ -54151,21 +54146,17 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(97)
-}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(99)
 /* template */
-var __vue_template__ = __webpack_require__(116)
+var __vue_template__ = __webpack_require__(157)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
-var __vue_scopeId__ = "data-v-27ee5c54"
+var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -54198,75 +54189,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(98);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("2e1a62a1", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-27ee5c54\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Layout.vue", function() {
-     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-27ee5c54\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Layout.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 98 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.card-body[data-v-27ee5c54] {\n    min-height: 30vh;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 97 */,
+/* 98 */,
 /* 99 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -54322,14 +54251,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     data: function data() {
         return {
             tab: 0,
-            person: {},
-            step_validated: {
-                personal_information: null,
-                working_information: null,
-                assign_vehicles: null,
-                first_card: null,
-                documentation: null
-            },
+            first_save: false,
             errors: {
                 personal_information: {},
                 working_information: {},
@@ -54385,86 +54307,42 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }
             return ret;
         },
+        id: function id() {
+            return this.$store.getters.person.id;
+        },
         values: function values() {
             return this.$store.getters.person.values;
+        },
+        route: function route() {
+            return {
+                method: this.id ? 'put' : 'post',
+                url: this.id ? '/people/' + this.id : '/people'
+            };
+        },
+        step_validated: function step_validated() {
+            return {
+                personal_information: !this.first_save ? null : Object.keys(this.errors.personal_information).length > 0 ? false : true,
+                working_information: !this.first_save ? null : Object.keys(this.errors.working_information).length > 0 ? false : true,
+                assign_vehicles: !this.first_save ? null : Object.keys(this.errors.assign_vehicles).length > 0 ? false : true,
+                first_card: !this.first_save ? null : Object.keys(this.errors.first_card).length > 0 ? false : true,
+                documentation: !this.first_save ? null : Object.keys(this.errors.documentation).length > 0 ? false : true
+            };
         }
     },
     methods: {
-        cancel: function cancel() {
+        saveSuccess: function saveSuccess(id) {
+            this.$router.push('/people/show/' + id);
+            this.$store.dispatch('addNotification', { type: 'success', message: 'Persona ' + (this.id ? 'editada' : 'creada') + ' exitosamente.' });
             this.$store.commit('resetModel', 'person');
-            this.$router.go(-1);
+            this.first_save = true;
         },
-        /**
-         * Tries to save the new person on the server. If the saving is successful, then redirects the user.
-         * Otherwise, shows the validation errors.
-         */
-        save: function save() {
-            var _this3 = this;
-
-            // Until the axios request is performed, then the view will be locked and showing a loading message.
-            this.$store.commit('loading', { state: true, message: "Guardando..." });
-            // Performs the request whit the merged data of each steps.
-            var thenCallback = function thenCallback(response, text) {
-                if (_this3.$store.state.debug) console.log('Person saved successfully');
-                _this3.$store.commit('loading', { state: false, message: "" });
-                _this3.$store.dispatch('addNotification', { type: 'success', message: 'Persona ' + text + ' exitosamente.' });
-                _this3.$router.push('/people/show/' + response.data.id);
-                _this3.$store.commit('resetModel', 'person');
-            };
-            var catchCallback = function catchCallback(response) {
-                // Resets the errors of each component.
-                _this3.errors = {
-                    personal_information: {},
-                    working_information: {},
-                    assign_vehicles: {},
-                    first_card: {},
-                    documentation: {}
-                };
-                // When the request starts, puts each step as validated. If there are errors, this status will be changed later.
-                _this3.step_validated = {
-                    personal_information: true,
-                    working_information: true,
-                    assign_vehicles: true,
-                    first_card: true,
-                    documentation: true
-                };
-                // Function that adds the error to the step error object.
-                var addError = function addError(key, errors, step) {
-                    if (key in _this3.values[step]) {
-                        _this3.errors[step][key] = errors[key];
-                        _this3.step_validated[step] = false;
-                    }
-                };
-                // Gets the errors from the response.
-                var errors = response.response.data.errors;
-                // Iterates each error and adds them to the error object.
-                Object.keys(errors).forEach(function (key) {
-                    addError(key, errors, 'personal_information');
-                    addError(key, errors, 'working_information');
-                    addError(key, errors, 'assign_vehicles');
-                    addError(key, errors, 'first_card');
-                    addError(key, errors, 'documentation');
-                });
-                // Ends the loading status.
-                _this3.$store.dispatch('addNotification', { type: 'danger', message: 'Corrija los errores antes de continuar.' });
-                _this3.$store.commit('loading', { state: false, message: "" });
-            };
-            var data = _extends({}, this.values.personal_information, this.values.working_information, this.values.assign_vehicles, this.values.first_card);
-            if (!this.values.id) {
-                if (this.$store.state.debug) console.log('Saving person on people.store');
-                axios.post('/people', data).then(function (response) {
-                    return thenCallback(response, 'creada');
-                }).catch(function (response) {
-                    return catchCallback(response);
-                });
-            } else {
-                if (this.$store.state.debug) console.log('Saving person on people.update');
-                axios.put('/people/' + this.values.id, data).then(function (response) {
-                    return thenCallback(response, 'editada');
-                }).catch(function (response) {
-                    return catchCallback(response);
-                });
-            }
+        saveFailed: function saveFailed(errors) {
+            this.errors = errors;
+            this.first_save = true;
+        },
+        cancel: function cancel() {
+            this.$router.go(-1);
+            this.$store.commit('resetModel', 'person');
         }
     }
 });
@@ -56601,247 +56479,7 @@ if (false) {
 }
 
 /***/ }),
-/* 116 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "ul",
-      { staticClass: "nav nav-tabs" },
-      [
-        _c(
-          "tab-item",
-          {
-            attrs: {
-              active: _vm.tab === 0,
-              "has-errors": _vm.step_validated.personal_information,
-              icon: "fas fa-user"
-            },
-            nativeOn: {
-              click: function($event) {
-                _vm.tab = 0
-              }
-            }
-          },
-          [_vm._v("\n            Información personal\n        ")]
-        ),
-        _vm._v(" "),
-        _c(
-          "tab-item",
-          {
-            attrs: {
-              active: _vm.tab === 1,
-              "has-errors": _vm.step_validated.working_information,
-              icon: "fas fa-briefcase"
-            },
-            nativeOn: {
-              click: function($event) {
-                _vm.tab = 1
-              }
-            }
-          },
-          [_vm._v("\n            Información laboral\n        ")]
-        ),
-        _vm._v(" "),
-        _c(
-          "tab-item",
-          {
-            attrs: {
-              active: _vm.tab === 2,
-              "has-errors": _vm.step_validated.assign_vehicles,
-              icon: "fas fa-car"
-            },
-            nativeOn: {
-              click: function($event) {
-                _vm.tab = 2
-              }
-            }
-          },
-          [_vm._v("\n            Asignar vehículos\n        ")]
-        ),
-        _vm._v(" "),
-        _c(
-          "tab-item",
-          {
-            attrs: {
-              active: _vm.tab === 3,
-              "has-errors": _vm.step_validated.first_card,
-              icon: "fas fa-id-card"
-            },
-            nativeOn: {
-              click: function($event) {
-                _vm.tab = 3
-              }
-            }
-          },
-          [_vm._v("\n            Tarjeta\n        ")]
-        ),
-        _vm._v(" "),
-        _c(
-          "tab-item",
-          {
-            attrs: {
-              active: _vm.tab === 4,
-              "has-errors": _vm.step_validated.documentation,
-              icon: "fas fa-file-alt"
-            },
-            nativeOn: {
-              click: function($event) {
-                _vm.tab = 4
-              }
-            }
-          },
-          [_vm._v("\n            Documentación\n        ")]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "card card-default borderless-top-card " }, [
-      _c(
-        "div",
-        { staticClass: "card-body" },
-        [
-          this.$store.getters.person.updating
-            ? _c("loading-cover", { attrs: { message: "Cargando..." } })
-            : [
-                _c("pc-personal-information", {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.tab === 0,
-                      expression: "tab === 0"
-                    }
-                  ],
-                  ref: "personal_information",
-                  attrs: {
-                    errors: _vm.errors.personal_information,
-                    values: _vm.values.personal_information
-                  }
-                }),
-                _vm._v(" "),
-                _c("pc-working-information", {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.tab === 1,
-                      expression: "tab === 1"
-                    }
-                  ],
-                  ref: "working_information",
-                  attrs: {
-                    errors: _vm.errors.working_information,
-                    values: _vm.values.working_information
-                  }
-                }),
-                _vm._v(" "),
-                _c("pc-assign-vehicles", {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.tab === 2,
-                      expression: "tab === 2"
-                    }
-                  ],
-                  ref: "assign_vehicles",
-                  attrs: {
-                    companyname: _vm.company_name,
-                    companyid: parseInt(
-                      _vm.values.working_information.company_id
-                    )
-                  }
-                }),
-                _vm._v(" "),
-                _c("pc-first-card", {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.tab === 3,
-                      expression: "tab === 3"
-                    }
-                  ],
-                  ref: "first_card",
-                  attrs: {
-                    errors: _vm.errors.first_card,
-                    values: _vm.values.first_card,
-                    fullname: _vm.full_name,
-                    companyname: _vm.company_name
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.tab === 4,
-                        expression: "tab === 4"
-                      }
-                    ]
-                  },
-                  [
-                    _vm._v(
-                      "\n                    Documentación\n                "
-                    )
-                  ]
-                )
-              ],
-          _vm._v(" "),
-          _c("hr"),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c(
-              "div",
-              { staticClass: "col" },
-              [
-                _c(
-                  "confirmable-button",
-                  {
-                    attrs: { btnclass: "btn btn-outline-danger btn-sm" },
-                    on: { confirmed: _vm.cancel }
-                  },
-                  [_vm._v("Cancelar")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-success btn-sm float-right",
-                    on: { click: _vm.save }
-                  },
-                  [_vm._v("Guardar")]
-                )
-              ],
-              1
-            )
-          ])
-        ],
-        2
-      )
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-27ee5c54", module.exports)
-  }
-}
-
-/***/ }),
+/* 116 */,
 /* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -59373,6 +59011,486 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 149 */,
+/* 150 */,
+/* 151 */,
+/* 152 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(158)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(155)
+/* template */
+var __vue_template__ = __webpack_require__(156)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-3b15fe48"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/_common/CreationWrapper.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3b15fe48", Component.options)
+  } else {
+    hotAPI.reload("data-v-3b15fe48", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 153 */,
+/* 154 */,
+/* 155 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        updating: {
+            type: Boolean,
+            required: true
+        },
+        values: {
+            type: Object,
+            required: true
+        },
+        route: {
+            type: Object,
+            required: true
+        }
+    },
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        cancel: function cancel() {
+            this.$emit('cancel');
+        },
+        save: function save() {
+            var _this = this;
+
+            this.$store.commit('loading', { state: true, message: "Guardando..." });
+
+            var thenCallback = function thenCallback(response) {
+                _this.$emit('saveSuccess', response.data.id);
+            };
+
+            var catchCallback = function catchCallback(response) {
+                var errors = {};
+                var r_errors = response.response.data.errors;
+                var values_keys = Object.keys(_this.values);
+                values_keys.forEach(function (key) {
+                    errors[key] = {};
+                    Object.keys(r_errors).forEach(function (error) {
+                        if (error in _this.values[key]) {
+                            errors[key][error] = r_errors[error];
+                        }
+                    });
+                });
+                _this.$store.dispatch('addNotification', { type: 'danger', message: 'Corrija los errores antes de continuar.' });
+                _this.$emit('saveFailed', errors);
+            };
+
+            var finallyCallback = function finallyCallback() {
+                _this.$store.commit('loading', { state: false, message: "" });
+            };
+
+            var data = {};
+
+            Object.keys(this.values).forEach(function (step) {
+                Object.keys(_this.values[step]).forEach(function (key) {
+                    data[key] = _this.values[step][key];
+                });
+            });
+
+            axios({
+                url: this.route.url,
+                method: this.route.method,
+                data: data
+            }).then(function (response) {
+                return thenCallback(response);
+            }).catch(function (response) {
+                return catchCallback(response);
+            }).finally(function () {
+                return finallyCallback();
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 156 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "card card-default borderless-top-card" }, [
+    _c(
+      "div",
+      { staticClass: "card-body" },
+      [
+        _vm.updating
+          ? _c("loading-cover", { attrs: { message: "Cargando..." } })
+          : [
+              _vm._t("default"),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c(
+                  "div",
+                  { staticClass: "col" },
+                  [
+                    _c(
+                      "confirmable-button",
+                      {
+                        attrs: { btnclass: "btn btn-outline-danger btn-sm" },
+                        on: { confirmed: _vm.cancel }
+                      },
+                      [_vm._v("Cancelar")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "btn btn-outline-success btn-sm float-right",
+                        on: { click: _vm.save }
+                      },
+                      [_vm._v("Guardar")]
+                    )
+                  ],
+                  1
+                )
+              ])
+            ]
+      ],
+      2
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3b15fe48", module.exports)
+  }
+}
+
+/***/ }),
+/* 157 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "ul",
+        { staticClass: "nav nav-tabs" },
+        [
+          _c(
+            "tab-item",
+            {
+              attrs: {
+                active: _vm.tab === 0,
+                "has-errors": _vm.step_validated.personal_information,
+                icon: "fas fa-user"
+              },
+              nativeOn: {
+                click: function($event) {
+                  _vm.tab = 0
+                }
+              }
+            },
+            [_vm._v("\n            Información personal\n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "tab-item",
+            {
+              attrs: {
+                active: _vm.tab === 1,
+                "has-errors": _vm.step_validated.working_information,
+                icon: "fas fa-briefcase"
+              },
+              nativeOn: {
+                click: function($event) {
+                  _vm.tab = 1
+                }
+              }
+            },
+            [_vm._v("\n            Información laboral\n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "tab-item",
+            {
+              attrs: {
+                active: _vm.tab === 2,
+                "has-errors": _vm.step_validated.assign_vehicles,
+                icon: "fas fa-car"
+              },
+              nativeOn: {
+                click: function($event) {
+                  _vm.tab = 2
+                }
+              }
+            },
+            [_vm._v("\n            Asignar vehículos\n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "tab-item",
+            {
+              attrs: {
+                active: _vm.tab === 3,
+                "has-errors": _vm.step_validated.first_card,
+                icon: "fas fa-id-card"
+              },
+              nativeOn: {
+                click: function($event) {
+                  _vm.tab = 3
+                }
+              }
+            },
+            [_vm._v("\n            Tarjeta\n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "tab-item",
+            {
+              attrs: {
+                active: _vm.tab === 4,
+                "has-errors": _vm.step_validated.documentation,
+                icon: "fas fa-file-alt"
+              },
+              nativeOn: {
+                click: function($event) {
+                  _vm.tab = 4
+                }
+              }
+            },
+            [_vm._v("\n            Documentación\n        ")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "creation-wrapper",
+        {
+          attrs: {
+            updating: this.$store.getters.person.updating,
+            values: _vm.values,
+            route: _vm.route
+          },
+          on: {
+            saveSuccess: _vm.saveSuccess,
+            saveFailed: _vm.saveFailed,
+            cancel: _vm.cancel
+          }
+        },
+        [
+          _c("pc-personal-information", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.tab === 0,
+                expression: "tab === 0"
+              }
+            ],
+            ref: "personal_information",
+            attrs: {
+              errors: _vm.errors.personal_information,
+              values: _vm.values.personal_information
+            }
+          }),
+          _vm._v(" "),
+          _c("pc-working-information", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.tab === 1,
+                expression: "tab === 1"
+              }
+            ],
+            ref: "working_information",
+            attrs: {
+              errors: _vm.errors.working_information,
+              values: _vm.values.working_information
+            }
+          }),
+          _vm._v(" "),
+          _c("pc-assign-vehicles", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.tab === 2,
+                expression: "tab === 2"
+              }
+            ],
+            ref: "assign_vehicles",
+            attrs: {
+              companyname: _vm.company_name,
+              companyid: parseInt(_vm.values.working_information.company_id)
+            }
+          }),
+          _vm._v(" "),
+          _c("pc-first-card", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.tab === 3,
+                expression: "tab === 3"
+              }
+            ],
+            ref: "first_card",
+            attrs: {
+              errors: _vm.errors.first_card,
+              values: _vm.values.first_card,
+              fullname: _vm.full_name,
+              companyname: _vm.company_name
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.tab === 4,
+                  expression: "tab === 4"
+                }
+              ]
+            },
+            [_vm._v("Documentación")]
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-27ee5c54", module.exports)
+  }
+}
+
+/***/ }),
+/* 158 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(159);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("419142fc", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3b15fe48\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreationWrapper.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3b15fe48\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreationWrapper.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.card-body[data-v-3b15fe48] {\n    min-height: 30vh;\n}\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);

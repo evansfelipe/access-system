@@ -103,47 +103,48 @@ class PeopleController extends Controller
         // Generates the json with the actual information of the person to send to the view.
         $person_json = [
             'id' => $person->id,
-            'personal_information'  => [
-                // Basic information
-                'last_name'         => $person->last_name,
-                'name'              => $person->name,
-                'document_type'     => $person->document_type,
-                'document_number'   => $person->document_number,
-                'cuil'              => $person->cuil,
-                'birthday'          => date('Y-m-d', strtotime($person->birthday)),
-                'sex'               => $person->sex,
-                'blood_type'        => $person->blood_type,
-                'pna'               => $person->pna,
-                // Contact
-                'email'             => $contact->email,
-                'home_phone'        => $contact->home_phone,
-                'mobile_phone'      => $contact->mobile_phone,
-                'fax'               => $contact->fax,
-                // Residency
-                'street'            => $person->residency->street,
-                'apartment'         => $person->residency->apartment,
-                'cp'                => $person->residency->cp,
-                'country'           => $person->residency->country,
-                'province'          => $person->residency->province,
-                'city'              => $person->residency->city
-            ],
-            'working_information'   => [
-                'company_id'        => $person->company()->id,
-                'activity_id'       => $person_company->activity_id,
-                'art'               => $person_company->art,
-                'pbip'              => date('Y-m-d', strtotime($person_company->pbip))
-            ],
-            'assign_vehicles'   => [
-                'vehicles_id' => $vehicles_id
-            ],
-            'first_card'    => [
-                'number'    => $card->number,
-                'risk'      => $card->risk,
-                'from'      => date('Y-m-d', strtotime($card->from)),
-                'until'     => date('Y-m-d', strtotime($card->until))
-            ],
-            'documentation' => [
-
+            'values' => [
+                'personal_information'  => [
+                    // Basic information
+                    'last_name'         => $person->last_name,
+                    'name'              => $person->name,
+                    'document_type'     => $person->document_type,
+                    'document_number'   => $person->document_number,
+                    'cuil'              => $person->cuil,
+                    'birthday'          => date('Y-m-d', strtotime($person->birthday)),
+                    'sex'               => $person->sex,
+                    'blood_type'        => $person->blood_type,
+                    'pna'               => $person->pna,
+                    // Contact
+                    'email'             => $contact->email,
+                    'home_phone'        => $contact->home_phone,
+                    'mobile_phone'      => $contact->mobile_phone,
+                    'fax'               => $contact->fax,
+                    // Residency
+                    'street'            => $person->residency->street,
+                    'apartment'         => $person->residency->apartment,
+                    'cp'                => $person->residency->cp,
+                    'country'           => $person->residency->country,
+                    'province'          => $person->residency->province,
+                    'city'              => $person->residency->city
+                ],
+                'working_information'   => [
+                    'company_id'        => $person->company()->id,
+                    'activity_id'       => $person_company->activity_id,
+                    'art'               => $person_company->art,
+                    'pbip'              => date('Y-m-d', strtotime($person_company->pbip))
+                ],
+                'assign_vehicles'   => [
+                    'vehicles_id' => $vehicles_id
+                ],
+                'first_card'    => [
+                    'number'    => $card->number,
+                    'risk'      => $card->risk,
+                    'from'      => date('Y-m-d', strtotime($card->from)),
+                    'until'     => date('Y-m-d', strtotime($card->until))
+                ],
+                'documentation' => [
+                ]
             ],
         ];
 

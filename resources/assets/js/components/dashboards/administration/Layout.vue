@@ -40,8 +40,8 @@ export default {
     computed: {
         loading: function() {
             return {
-                state: this.$store.state.ui.loading.state,
-                message: this.$store.state.ui.loading.message
+                state: this.$store.getters.loading.state,
+                message: this.$store.getters.loading.message
             };
         },
         sidebar_opened: {

@@ -29,6 +29,7 @@ Vue.component('loading-cover',     require('./components/_common/LoadingCover.vu
 Vue.component('abbreviation-text', require('./components/_common/AbbreviationText.vue'));
 Vue.component('custom-table', require('./components/_common/CustomTable.vue'));
 Vue.component('confirmable-button', require('./components/_common/ConfirmableButton.vue'));
+Vue.component('creation-wrapper', require('./components/_common/CreationWrapper.vue'));
 // Dashboards
 Vue.component('administration-dashboard', require('./components/dashboards/administration/Layout.vue'));
 

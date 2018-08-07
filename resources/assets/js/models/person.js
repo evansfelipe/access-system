@@ -1,7 +1,6 @@
 export default {
     default: (debug = false) => { 
         return {
-            id: null,
             personal_information: {
                 last_name:       !debug ? '' : 'Example',
                 name:            !debug ? '' : 'Example',

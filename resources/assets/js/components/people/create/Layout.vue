@@ -1,9 +1,3 @@
-<style scoped>
-    .card-body {
-        min-height: 30vh;
-    }
-</style>
-
 <template>
     <div>
         <!-- Tabs -->
@@ -29,38 +23,22 @@
                 Documentación
             </tab-item>
         </ul>
-        <!-- /Tabs -->
-        <!-- Forms -->
-        <div class="card card-default borderless-top-card ">
-            <div class="card-body">
-                <loading-cover v-if="this.$store.getters.person.updating" message="Cargando..."/>
-                <template v-else>
-                    <!-- Personal information form -->
-                    <pc-personal-information v-show="tab === 0" ref="personal_information" :errors="errors.personal_information" :values="values.personal_information"/>
-                    <!-- Working information form -->
-                    <pc-working-information v-show="tab === 1" ref="working_information" :errors="errors.working_information" :values="values.working_information"/>
-                    <!-- Assign vehicles form -->
-                    <pc-assign-vehicles v-show="tab === 2" ref="assign_vehicles" :companyname="company_name"
-                                        :companyid="parseInt(values.working_information.company_id)"/>
-                    <!-- First card form -->
-                    <pc-first-card  v-show="tab === 3" ref="first_card" :errors="errors.first_card" :values="values.first_card"
-                                    :fullname="full_name" :companyname="company_name"/>
-                    <!-- Documentation form -->
-                    <div v-show="tab === 4">
-                        Documentación
-                    </div>
-                </template>
-                <!-- Buttons -->
-                <hr>
-                <div class="row">
-                    <div class="col">
-                        <confirmable-button btnclass="btn btn-outline-danger btn-sm" @confirmed="cancel">Cancelar</confirmable-button>
-                        <button class="btn btn-outline-success btn-sm float-right" @click="save">Guardar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /Forms -->
+        <!-- Card -->
+        <creation-wrapper   :updating="this.$store.getters.person.updating" :values="values" :route="route" 
+                            @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel">
+            <!-- Personal information form -->
+            <pc-personal-information v-show="tab === 0" ref="personal_information" :errors="errors.personal_information" :values="values.personal_information"/>
+            <!-- Working information form -->
+            <pc-working-information v-show="tab === 1" ref="working_information" :errors="errors.working_information" :values="values.working_information"/>
+            <!-- Assign vehicles form -->
+            <pc-assign-vehicles v-show="tab === 2" ref="assign_vehicles" :companyname="company_name"
+                                :companyid="parseInt(values.working_information.company_id)"/>
+            <!-- First card form -->
+            <pc-first-card  v-show="tab === 3" ref="first_card" :errors="errors.first_card" :values="values.first_card"
+                            :fullname="full_name" :companyname="company_name"/>
+            <!-- Documentation form -->
+            <div v-show="tab === 4">Documentación</div>
+        </creation-wrapper>
     </div>
 </template>
 
@@ -75,20 +53,13 @@
         data: function() {
             return {
                 tab: 0,
-                person: {},
-                step_validated: {
-                    personal_information: null,
-                    working_information:  null,
-                    assign_vehicles:      null,
-                    first_card:           null,
-                    documentation:        null
-                },
+                first_save: false,
                 errors: {
                     personal_information: {},
-                    working_information: {},
-                    assign_vehicles: {},
-                    first_card: {},
-                    documentation: {}
+                    working_information:  {},
+                    assign_vehicles:      {},
+                    first_card:           {},
+                    documentation:        {}
                 }
             };
         },
@@ -121,87 +92,43 @@
                 }
                 return ret;
             },
+            id: function() {
+                return this.$store.getters.person.id;
+            },   
             values: function() {
                 return this.$store.getters.person.values;
+            },
+            route: function() {
+                return {
+                    method: this.id ? 'put' : 'post',
+                    url:    this.id ? `/people/${this.id}` : '/people'
+                }
+            },
+            step_validated: function() {
+                return {
+                    personal_information: !this.first_save ? null : Object.keys(this.errors.personal_information).length > 0 ? false : true,
+                    working_information:  !this.first_save ? null : Object.keys(this.errors.working_information).length > 0 ? false : true,
+                    assign_vehicles:      !this.first_save ? null : Object.keys(this.errors.assign_vehicles).length > 0 ? false : true,
+                    first_card:           !this.first_save ? null : Object.keys(this.errors.first_card).length > 0 ? false : true,
+                    documentation:        !this.first_save ? null : Object.keys(this.errors.documentation).length > 0 ? false : true
+                }
             }
         },
         methods: {
-            cancel: function() {
+            saveSuccess: function(id) {
+                this.$router.push(`/people/show/${id}`);
+                this.$store.dispatch('addNotification', {type: 'success', message: `Persona ${this.id ? 'editada' : 'creada'} exitosamente.`});
                 this.$store.commit('resetModel', 'person');
-                this.$router.go(-1);
+                this.first_save = true;
             },
-            /**
-             * Tries to save the new person on the server. If the saving is successful, then redirects the user.
-             * Otherwise, shows the validation errors.
-             */
-            save: function() {
-                // Until the axios request is performed, then the view will be locked and showing a loading message.
-                this.$store.commit('loading', { state: true, message: "Guardando..." })
-                // Performs the request whit the merged data of each steps.
-                let thenCallback = (response, text) => {
-                    if(this.$store.state.debug) console.log('Person saved successfully');
-                    this.$store.commit('loading', { state: false, message: "" });
-                    this.$store.dispatch('addNotification', {type: 'success', message: `Persona ${text} exitosamente.`});
-                    this.$router.push(`/people/show/${response.data.id}`);
-                    this.$store.commit('resetModel', 'person');
-                };
-                let catchCallback = response => {
-                    // Resets the errors of each component.
-                    this.errors = {
-                        personal_information: {},
-                        working_information: {},
-                        assign_vehicles: {},
-                        first_card: {},
-                        documentation: {}
-                    };
-                    // When the request starts, puts each step as validated. If there are errors, this status will be changed later.
-                    this.step_validated = {
-                        personal_information: true,
-                        working_information: true,
-                        assign_vehicles: true,
-                        first_card: true,
-                        documentation: true,
-                    };
-                    // Function that adds the error to the step error object.
-                    let addError = (key, errors, step) => {
-                        if(key in this.values[step]) {
-                            this.errors[step][key] = errors[key];
-                            this.step_validated[step] = false;
-                        }
-                    }
-                    // Gets the errors from the response.
-                    let errors = response.response.data.errors;
-                    // Iterates each error and adds them to the error object.
-                    Object.keys(errors).forEach(key => {
-                        addError(key, errors, 'personal_information');
-                        addError(key, errors, 'working_information');
-                        addError(key, errors, 'assign_vehicles');
-                        addError(key, errors, 'first_card');
-                        addError(key, errors, 'documentation');
-                    });
-                    // Ends the loading status.
-                    this.$store.dispatch('addNotification', {type: 'danger', message: 'Corrija los errores antes de continuar.'});
-                    this.$store.commit('loading', { state: false, message: "" })
-                };
-                let data = { 
-                    ...this.values.personal_information,
-                    ...this.values.working_information,
-                    ...this.values.assign_vehicles,
-                    ...this.values.first_card
-                };
-                if(!this.values.id) {
-                    if(this.$store.state.debug) console.log('Saving person on people.store');
-                    axios.post('/people', data) 
-                        .then(response => thenCallback(response, 'creada'))
-                        .catch(response => catchCallback(response));
-                }
-                else {
-                    if(this.$store.state.debug) console.log('Saving person on people.update');
-                    axios.put(`/people/${this.values.id}`, data) 
-                        .then(response => thenCallback(response, 'editada'))
-                        .catch(response => catchCallback(response));
-                }
-            }
+            saveFailed: function(errors) {
+                this.errors = errors;
+                this.first_save = true;
+            },
+            cancel: function() {
+                this.$router.go(-1);
+                this.$store.commit('resetModel', 'person');
+            },
         }
     }
 </script>
