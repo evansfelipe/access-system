@@ -5,19 +5,11 @@
                 Información general
             </tab-item>
         </ul>
-        <div class="card card-default borderless-top-card ">
-            <div class="card-body">
-                <general-information v-show="tab === 0" :values="values.general_information" :errors="errors"></general-information>
-                <!-- Buttons -->
-                <hr>
-                <div class="row">
-                    <div class="col">
-                        <confirmable-button btnclass="btn btn-outline-danger btn-sm" @confirmed="cancel">Cancelar</confirmable-button>
-                        <button class="btn btn-outline-success btn-sm float-right" @click="save">Guardar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+        <creation-wrapper   :updating="this.$store.getters.company.updating" :values="values" :route="route" 
+                            @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel">
+                <general-information v-show="tab === 0" :values="values.general_information" :errors="errors.general_information"></general-information>
+        </creation-wrapper>
     </div>
 </template>
 
@@ -29,43 +21,45 @@ export default {
     data: function() {
         return {
             tab: 0,
+            first_save: false,
+            errors: {
+                general_information: {},
+            },
             step_validated: {
                 general_information: null,
-            },
-            errors: {}
+            }
         };
     },
     computed: {
+        id: function() {
+            return this.$store.getters.company.id;
+        },
         values: function() {
             return this.$store.getters.company.values;
-        }
-    },
-    mounted() {
-        let callback = (values, properties_path) => this.$store.commit('updateModel', { which: 'company', properties_path: properties_path, value: values });
-        this.$on('general-information-values', values => callback(values, 'values.general_information'));
+        },
+        route: function() {
+            return {
+                method: this.id ? 'put' : 'post',
+                url:    this.id ? `/companies/${this.id}` : '/companies'
+            }
+        },
     },
     methods: {
-        cancel: function() {
+        saveSuccess: function(id) {
+            console.log("Redirigir a vista show de company");
+            // this.$router.push(`/companies/show/${id}`);
+            this.$store.dispatch('addNotification', {type: 'success', message: `Empresa ${this.id ? 'editada' : 'creada'} exitosamente.`});
             this.$store.commit('resetModel', 'company');
-            this.$router.go(-1);
+            this.first_save = true;
         },
-        save: function() {
-            this.$store.commit('loading', { state: true, message: "Guardando..." });
-            this.step_validated = {
-                general_information: true,
-            }
-            axios.post('/companies', { ...this.values.general_information })
-            .then(response => {
-                this.$store.dispatch('addNotification', {type: 'success', message: `Empresa creada exitosamente.`});
-            })
-            .catch(error => {
-                this.step_validated.general_information = false;
-                if(error.response.status === 422) {
-                    this.errors = error.response.data.errors;
-                    this.$store.dispatch('addNotification', {type: 'danger', message: 'Corrija los errores antes de continuar.'});
-                }
-            })
-            .finally(() => this.$store.commit('loading', { state: false, message: "" }));
+        saveFailed: function({errors, step_validated}) {
+            this.errors = errors;
+            this.step_validated = step_validated;
+            this.first_save = true;
+        },
+        cancel: function() {
+            this.$router.go(-1);
+            this.$store.commit('resetModel', 'company');
         }
     }
 }

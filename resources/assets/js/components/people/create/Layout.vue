@@ -25,18 +25,12 @@
         </ul>
         <!-- Card -->
         <creation-wrapper   :updating="this.$store.getters.person.updating" :values="values" :route="route" 
-                            @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel">
-            <!-- Personal information form -->
-            <pc-personal-information v-show="tab === 0" ref="personal_information" :errors="errors.personal_information" :values="values.personal_information"/>
-            <!-- Working information form -->
-            <pc-working-information v-show="tab === 1" ref="working_information" :errors="errors.working_information" :values="values.working_information"/>
-            <!-- Assign vehicles form -->
-            <pc-assign-vehicles v-show="tab === 2" ref="assign_vehicles" :companyname="company_name"
-                                :companyid="parseInt(values.working_information.company_id)"/>
-            <!-- First card form -->
-            <pc-first-card  v-show="tab === 3" ref="first_card" :errors="errors.first_card" :values="values.first_card"
-                            :fullname="full_name" :companyname="company_name"/>
-            <!-- Documentation form -->
+                            @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel"
+        >
+            <personal-information v-show="tab === 0" :errors="errors.personal_information" :values="values.personal_information"/>
+            <working-information  v-show="tab === 1" :errors="errors.working_information"  :values="values.working_information"/>
+            <assign-vehicles      v-show="tab === 2" :companyname="company_name" :companyid="parseInt(values.working_information.company_id)"/>
+            <first-card           v-show="tab === 3" :errors="errors.first_card" :values="values.first_card" :fullname="full_name" :companyname="company_name"/>
             <div v-show="tab === 4">Documentación</div>
         </creation-wrapper>
     </div>
@@ -45,10 +39,10 @@
 <script>
     export default {
         components: {
-            'pc-personal-information': require('./partials/PersonalInformation.vue'),
-            'pc-working-information': require('./partials/WorkingInformation.vue'),
-            'pc-assign-vehicles': require('./partials/AssignVehicles.vue'),
-            'pc-first-card': require('./partials/FirstCard.vue'),
+            'personal-information': require('./partials/PersonalInformation.vue'),
+            'working-information':  require('./partials/WorkingInformation.vue'),
+            'assign-vehicles':      require('./partials/AssignVehicles.vue'),
+            'first-card':           require('./partials/FirstCard.vue'),
         },
         data: function() {
             return {
@@ -60,19 +54,15 @@
                     assign_vehicles:      {},
                     first_card:           {},
                     documentation:        {}
+                },
+                step_validated: {
+                    personal_information: null,
+                    working_information:  null,
+                    assign_vehicles:      null,
+                    first_card:           null,
+                    documentation:        null  
                 }
             };
-        },
-        mounted() {
-            let callback = (values, properties_path) => {
-                this.$store.commit('updateModel', { which: 'person', properties_path: properties_path, value: values });
-            }
-            // Listens to the children component values changes.
-            this.$on('personal-information-values', values => callback(values, 'values.personal_information'));
-            this.$on('working-information-values',  values => callback(values, 'values.working_information'));
-            this.$on('assign-vehicles-values',      values => callback(values, 'values.assign_vehicles'));
-            this.$on('first-card-values',           values => callback(values, 'values.first_card'));
-            this.$on('documentation-values',        values => callback(values, 'values.documentation'));
         },
         computed: {
             /**
@@ -104,15 +94,6 @@
                     url:    this.id ? `/people/${this.id}` : '/people'
                 }
             },
-            step_validated: function() {
-                return {
-                    personal_information: !this.first_save ? null : Object.keys(this.errors.personal_information).length > 0 ? false : true,
-                    working_information:  !this.first_save ? null : Object.keys(this.errors.working_information).length > 0 ? false : true,
-                    assign_vehicles:      !this.first_save ? null : Object.keys(this.errors.assign_vehicles).length > 0 ? false : true,
-                    first_card:           !this.first_save ? null : Object.keys(this.errors.first_card).length > 0 ? false : true,
-                    documentation:        !this.first_save ? null : Object.keys(this.errors.documentation).length > 0 ? false : true
-                }
-            }
         },
         methods: {
             saveSuccess: function(id) {
@@ -121,8 +102,9 @@
                 this.$store.commit('resetModel', 'person');
                 this.first_save = true;
             },
-            saveFailed: function(errors) {
+            saveFailed: function({errors, step_validated}) {
                 this.errors = errors;
+                this.step_validated = step_validated;
                 this.first_save = true;
             },
             cancel: function() {

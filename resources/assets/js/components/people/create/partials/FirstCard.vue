@@ -109,8 +109,8 @@ export default {
             let keys = Object.keys(this.values);
             keys.forEach(key => {
                 data[key] = this.$refs[key].value;
-            })
-            this.$parent.$emit('first-card-values', data);
+            });
+            this.$store.commit('updateModel', { which: 'person', properties_path: 'values.first_card', value: data });
         }
     },
     computed: {

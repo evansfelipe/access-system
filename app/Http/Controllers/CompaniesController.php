@@ -71,7 +71,7 @@ class CompaniesController extends Controller
         ]);
         $company->expiration = $request->expiration;
         $company->save();
-        return response(route('companies.show', $company->id), 200)->header('Content-Type', 'text/plain');
+        return response(json_encode(['id' => $company->id]), 200)->header('Content-Type', 'application/json');
     }
 
     /**

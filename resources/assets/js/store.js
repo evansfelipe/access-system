@@ -18,6 +18,7 @@ class Model {
     }
 
     restart() {
+        this.id       = null;
         this.updating = false;
         this.values   = require(`./models/${this.name}.js`).default.default(false);
     }

@@ -34,6 +34,7 @@ class Company extends Model
             ],
             'cuit' => [
                 'required',
+                'unique:companies',
                 'string',
                 'min:'.Company::LENGTHS['cuit']['min'],
                 'max:'.Company::LENGTHS['cuit']['max'],

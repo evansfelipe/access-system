@@ -134,8 +134,8 @@ export default {
             let keys = Object.keys(this.values);
             keys.forEach(key => {
                 data[key] = this.$refs[key].value;
-            })
-            this.$parent.$emit('general-information-values', data);
+            });
+            this.$store.commit('updateModel', { which: 'company', properties_path: 'values.general_information', value: data });
         }
     },
 }

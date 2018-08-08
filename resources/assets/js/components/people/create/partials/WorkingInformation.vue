@@ -95,7 +95,7 @@ export default {
             keys.forEach(key => {
                 data[key] = this.$refs[key].value;
             })
-            this.$parent.$emit('working-information-values', data);
+            this.$store.commit('updateModel', { which: 'person', properties_path: 'values.working_information', value: data });
         }
     },
     computed: {
