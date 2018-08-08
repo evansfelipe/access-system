@@ -18,11 +18,15 @@ class CreateVehiclesTable extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('company_id')->unsigned()->required();
+            $table->string('type', Vehicle::LENGTHS['type']['max'])->required();
+            $table->string('owner', Vehicle::LENGTHS['owner']['max'])->required();
             $table->string('plate', Vehicle::LENGTHS['plate']['max'])->unique()->required();
             $table->string('brand', Vehicle::LENGTHS['brand']['max'])->required();
             $table->string('model', Vehicle::LENGTHS['model']['max'])->required();
             $table->string('colour', Vehicle::LENGTHS['colour']['max'])->nullable();
             $table->year('year')->nullable();
+            $table->datetime('insurance')->required();
+            $table->datetime('vtv')->required();
             $table->timestamps();
         });
     }

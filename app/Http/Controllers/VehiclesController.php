@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Vehicle;
 use Illuminate\Http\Request;
+use App\Http\Requests\{ SaveVehicleRequest };
+
 
 class VehiclesController extends Controller
 {
@@ -42,12 +44,14 @@ class VehiclesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\SaveVehicleRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SaveVehicleRequest $request)
     {
-        //
+        $vehicle = new Vehicle($request->toArray());
+        $vehicle->save();
+        return response(json_encode(['id' => $vehicle->id]), 200)->header('Content-Type', 'application/json');
     }
 
     /**

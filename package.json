@@ -22,6 +22,7 @@
     "vue": "^2.5.7"
   },
   "dependencies": {
+    "select2": "^4.0.6-rc.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   }

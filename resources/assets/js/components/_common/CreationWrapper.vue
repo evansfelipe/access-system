@@ -69,6 +69,12 @@ export default {
                 });
             });
 
+            console.log({
+                url: this.route.url,
+                method: this.route.method,
+                data: data
+            });
+            
             axios({
                 url: this.route.url,
                 method: this.route.method,

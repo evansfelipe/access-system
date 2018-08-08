@@ -95,12 +95,13 @@
                         <option value="Mar del Plata">Mar del Plata</option>
                     </select>
                 </div>
-            </form-item>          
+            </form-item>
         </div>
     </div>
 </template>
 
 <script>
+
 export default {
     props: {
         values: {

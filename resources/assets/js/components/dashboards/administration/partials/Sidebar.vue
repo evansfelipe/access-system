@@ -92,7 +92,7 @@
                     <i :class="'toggle-icon fas centered fa-caret-' + (group_active.vehicles ? 'up' : 'down')"></i>
                 </a>
                 <div class="items" v-if="group_active.vehicles">
-                    <router-link to="/bar" class="btn-sidebar">Go to Bar</router-link>
+                    <router-link to="/vehicles/create" class="btn-sidebar">Crear</router-link>
                 </div>
             </div>
 

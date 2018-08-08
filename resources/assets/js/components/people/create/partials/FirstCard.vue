@@ -35,7 +35,7 @@
             <div class="offset-1 col-4">
                 <form-item :errors="errors.number">
                     <input  type="text" name="number" class="form-control"
-                            placeholder="Número de tarjeta" :value="values.number" @input="updateValues" ref="number">
+                            placeholder="Número de tarjeta" :value="values.number" @input="(e) => update(e.target)">
                 </form-item>
                 <div class="active-card">
                     <div class="title">
@@ -55,12 +55,8 @@
             <div class="form-row">
                 <form-item label="Riesgo" :errors="errors.risk">
                     <div class="col">
-                        <select name="risk" class="form-control" :value="values.risk" @input="updateValues" ref="risk">
-                            <option value="" hidden>Seleccione riesgo</option>
-                            <option value="1">Nivel 1</option>
-                            <option value="2">Nivel 2</option>
-                            <option value="3">Nivel 3</option>
-                        </select>
+                        <select2    name="risk" :value="values.risk" @input="(value) => update({name: 'risk', value: value})"
+                                    placeholder="Seleccione nivel de riesgo" :options="risk_levels"/>
                     </div>
                 </form-item>
             </div>
@@ -68,11 +64,11 @@
                 <form-item label="Validez" :errors="validity_errors">
                     <div class="col-6">
                         <small>Desde:</small>
-                        <input type="date" name="from" class="form-control" :value="values.from" @input="updateValues" ref="from">
+                        <input type="date" name="from" class="form-control" :value="values.from" @input="(e) => update(e.target)">
                     </div>
                     <div class="col-6">
                         <small>Hasta:</small>
-                        <input type="date" name="until" class="form-control" :value="values.until" @input="updateValues" ref="until">
+                        <input type="date" name="until" class="form-control" :value="values.until" @input="(e) => update(e.target)">
                     </div>
                 </form-item>
             </div>
@@ -103,15 +99,19 @@ export default {
             type: Object
         }
     },
-    methods: {
-        updateValues: function() {
-            let data = {};
-            let keys = Object.keys(this.values);
-            keys.forEach(key => {
-                data[key] = this.$refs[key].value;
-            });
-            this.$store.commit('updateModel', { which: 'person', properties_path: 'values.first_card', value: data });
+    data() {
+        return {
+            risk_levels: [
+                {id: 1, text: 'Nivel 1'},
+                {id: 2, text: 'Nivel 2'},
+                {id: 3, text: 'Nivel 3'},
+            ],
         }
+    },
+    methods: {
+        update: function({name, value}) {
+            this.$store.commit('updateModel', { which: 'person', properties_path: `values.first_card.${name}`, value: value });
+        },        
     },
     computed: {
         validity_errors: function() {

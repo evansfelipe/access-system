@@ -48,6 +48,7 @@ export default {
         models: {
             person:  new Model('person', 'people'),
             company: new Model('company', 'companies'),
+            vehicle: new Model('vehicle', 'vehicles'),
         }
     },
     getters: {
@@ -86,6 +87,9 @@ export default {
         },
         company: function({models}) {
             return models.company;
+        },
+        vehicle: function({models}) {
+            return models.vehicle;
         }
     },
     mutations: {
