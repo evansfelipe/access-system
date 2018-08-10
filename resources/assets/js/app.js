@@ -25,6 +25,7 @@ import store from './store.js';
 
 // Common components that are re-usable across all components
 Vue.component('tab-item',          require('./components/_common/TabItem.vue'));
+Vue.component('web-camera',          require('./components/_common/WebCamera.vue'));
 Vue.component('select2',          require('./components/_common/Select2.vue'));
 Vue.component('form-item',         require('./components/_common/FormItem.vue'));
 Vue.component('loading-cover',     require('./components/_common/LoadingCover.vue'));

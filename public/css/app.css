@@ -10516,6 +10516,10 @@ body > * {
   user-select: none;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 i.fas.centered,
 i.far.centered {
   display: inline-block;

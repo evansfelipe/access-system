@@ -2,6 +2,7 @@ export default {
     default: (debug = false) => { 
         return {
             personal_information: {
+                // picture:         '',
                 last_name:       !debug ? '' : 'Example',
                 name:            !debug ? '' : 'Example',
                 document_type:   !debug ? '' : '1',

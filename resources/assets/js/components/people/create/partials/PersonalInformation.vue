@@ -2,11 +2,9 @@
 <div>
     <div class="form-row d-flex align-items-center">
         <!-- Photo loader section -->
-        <div class="col-4 text-center">
-            <div class="offset-1 col-10">
-                <img class="img-fluid rounded-circle" src="/pictures/no-image.jpg" alt="Subir imagen">
-            </div>
-        </div>
+        <form-item col="col-4" :errors="errors.picture">
+            <web-camera @pictureTaken="(picture) => update({name: 'picture', value: picture})"/>
+        </form-item>
         <!-- Identification information section -->
         <div class="col-8">
             <!-- Last name & name -->

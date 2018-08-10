@@ -119,6 +119,7 @@ return [
 
     'attributes' => [
         // Person's personal information
+        'picture'         => 'Foto',
         'last_name'       => 'Apellido',
         'name'            => 'Nombre',
         'document_type'   => 'Tipo de documento',

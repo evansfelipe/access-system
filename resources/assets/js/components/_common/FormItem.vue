@@ -9,8 +9,8 @@
     .error-message:first-of-type {
         margin-top: 5px;
     }
-    .item-wrapper input, .item-wrapper select{
-        border-color: red;
+    .item-wrapper input, .item-wrapper select, .item-wrapper span{
+        border-color: red !important;
     }
 </style>
 

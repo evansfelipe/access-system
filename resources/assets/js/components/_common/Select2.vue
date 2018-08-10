@@ -47,7 +47,6 @@ export default {
         select.data('select2').$selection.css({
             'height': '37px',
         });
-        
     },
     destroyed() {
         $(this.$el).off().select2('destroy');
