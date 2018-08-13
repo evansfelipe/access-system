@@ -6,6 +6,7 @@
 
 import './bootstrap';
 import './prototypes';
+
 window.Vue = require('vue');
 
 import VueRouter from 'vue-router';
@@ -16,7 +17,6 @@ window.Vue.use(Vuex);
 
 import store from './store.js';
 
-
 /**
  * Finally, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -24,15 +24,16 @@ import store from './store.js';
  */
 
 // Common components that are re-usable across all components
-Vue.component('tab-item',          require('./components/_common/TabItem.vue'));
-Vue.component('web-camera',          require('./components/_common/WebCamera.vue'));
-Vue.component('select2',          require('./components/_common/Select2.vue'));
-Vue.component('form-item',         require('./components/_common/FormItem.vue'));
-Vue.component('loading-cover',     require('./components/_common/LoadingCover.vue'));
-Vue.component('abbreviation-text', require('./components/_common/AbbreviationText.vue'));
-Vue.component('custom-table', require('./components/_common/CustomTable.vue'));
+Vue.component('modal-wrapper'     , require('./components/_common/partials/Modal.vue'));
+Vue.component('select2'           , require('./components/_common/Select2.vue'));
+Vue.component('tab-item'          , require('./components/_common/TabItem.vue'));
+Vue.component('form-item'         , require('./components/_common/FormItem.vue'));
+Vue.component('web-camera'        , require('./components/_common/WebCamera.vue'));
+Vue.component('custom-table'      , require('./components/_common/CustomTable.vue'));
+Vue.component('loading-cover'     , require('./components/_common/LoadingCover.vue'));
+Vue.component('creation-wrapper'  , require('./components/_common/CreationWrapper.vue'));
+Vue.component('abbreviation-text' , require('./components/_common/AbbreviationText.vue'));
 Vue.component('confirmable-button', require('./components/_common/ConfirmableButton.vue'));
-Vue.component('creation-wrapper', require('./components/_common/CreationWrapper.vue'));
 // Dashboards
 Vue.component('administration-dashboard', require('./components/dashboards/administration/Layout.vue'));
 
@@ -56,3 +57,7 @@ const app = new Vue({
     store: new Vuex.Store(store),
     router,
 });
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})

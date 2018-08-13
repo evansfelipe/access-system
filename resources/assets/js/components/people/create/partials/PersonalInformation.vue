@@ -3,7 +3,7 @@
     <div class="form-row d-flex align-items-center">
         <!-- Photo loader section -->
         <form-item col="col-4" :errors="errors.picture">
-            <web-camera @pictureTaken="(picture) => update({name: 'picture', value: picture})"/>
+            <web-camera @pictureTaken="(picture) => update({name: 'picture', value: picture})" :img="values.picture_path"/>
         </form-item>
         <!-- Identification information section -->
         <div class="col-8">

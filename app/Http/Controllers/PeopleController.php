@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Requests\{ SavePersonRequest };
+use Storage;
 use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle };
 
 class PeopleController extends Controller
@@ -21,6 +22,18 @@ class PeopleController extends Controller
             });
         
         return response(json_encode($people))->header('Content-Type', 'application/json');        
+    }
+
+    public function pictures(Person $person)
+    {
+        $path = 'storage/documentation/'.$person->last_name[0].'/'.$person->id.'_'.$person->last_name.'_'.$person->name.'/pictures';
+        $pictures = [];
+        foreach(scandir($path, 1) as $file) {
+            if($file !== '.' && $file !== '..') {
+                array_push($pictures, $path.'/'.$file);
+            }
+        }
+        return response(json_encode($pictures))->header('Content-Type', 'application/json');
     }
 
     /**
@@ -66,6 +79,11 @@ class PeopleController extends Controller
         $card = new Card($request->toArray());
         $card->person_id = $person->id;
         $card->save();
+        // Saves the picture
+        $path = 'public/documentation/'.$person->last_name[0].'/'.$person->id.'_'.$person->last_name.'_'.$person->name;
+        $person->picture_name = time() . '.' . $request->file('picture')->guessExtension();
+        Storage::putFileAs($path.'/pictures', $request->file('picture'), $person->picture_name);
+        $person->save();
         /**
          * TODO: store the documentation.
          */
@@ -111,7 +129,7 @@ class PeopleController extends Controller
                     'document_type'     => $person->document_type,
                     'document_number'   => $person->document_number,
                     'cuil'              => $person->cuil,
-                    'birthday'          => date('Y-m-d', strtotime($person->birthday)),
+                    'birthday'          => $person->birthday ? date('Y-m-d', strtotime($person->birthday)) : '',
                     'sex'               => $person->sex,
                     'blood_type'        => $person->blood_type,
                     'pna'               => $person->pna,
@@ -126,13 +144,14 @@ class PeopleController extends Controller
                     'cp'                => $person->residency->cp,
                     'country'           => $person->residency->country,
                     'province'          => $person->residency->province,
-                    'city'              => $person->residency->city
+                    'city'              => $person->residency->city,
+                    'picture_path' => 'storage/documentation/'.$person->last_name[0].'/'.$person->id.'_'.$person->last_name.'_'.$person->name.'/pictures/'.$person->picture_name,
                 ],
                 'working_information'   => [
                     'company_id'        => $person->company()->id,
                     'activity_id'       => $person_company->activity_id,
                     'art'               => $person_company->art,
-                    'pbip'              => date('Y-m-d', strtotime($person_company->pbip))
+                    'pbip'              => $person_company->pbip ? date('Y-m-d', strtotime($person_company->pbip)) : ''
                 ],
                 'assign_vehicles'   => [
                     'vehicles_id' => $vehicles_id
@@ -140,8 +159,8 @@ class PeopleController extends Controller
                 'first_card'    => [
                     'number'    => $card->number,
                     'risk'      => $card->risk,
-                    'from'      => date('Y-m-d', strtotime($card->from)),
-                    'until'     => date('Y-m-d', strtotime($card->until))
+                    'from'      => $card->from ? date('Y-m-d', strtotime($card->from)) : '',
+                    'until'     => $card->until ? date('Y-m-d', strtotime($card->until)) : ''
                 ],
                 'documentation' => [
                 ]
@@ -163,6 +182,11 @@ class PeopleController extends Controller
         // Updates the person
         $person->fill($request->toArray());
         $person->setContact($request->toArray());
+        if($request->has('picture')) {
+            $path = 'public/documentation/'.$person->last_name[0].'/'.$person->id.'_'.$person->last_name.'_'.$person->name;
+            $person->picture_name = time() . '.' . $request->file('picture')->guessExtension();
+            Storage::putFileAs($path.'/pictures', $request->file('picture'), $person->picture_name);
+        }
         $person->save();
         // Updates the residency
         $person->residency->fill($request->toArray());

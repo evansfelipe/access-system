@@ -1,64 +1,47 @@
-<style lang="scss" scoped>
-    div.camera-modal {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: fixed;
-        z-index: 15;
-        top: 0; bottom: 0; left: 0; right: 0;
-        background-color: rgba(0, 0, 0, .4);
-        visibility: visible;
-        &.closed {
-            visibility: hidden;
-            height: 0;
-        }
-        & > div.container {
-            width: 40%;
-        }
-    }
-</style>
-
-
 <template>
     <div class="text-center">
+        <!-- Photo -->
         <div class="row">
             <div class="offset-1 col-10">
-                <img class="img-fluid rounded-circle shadow" :src="dataURI || '/pictures/no-image.jpg'"/>
+                <img class="img-fluid rounded-circle shadow-sm" :src="dataURI || img"/>
             </div>
         </div>
-
+        <!-- Buttons -->
         <div class="row mt-2">
             <div class="col">
-                <button class="btn btn-link" @click="openCamera">
-                    <i class="fas fa-camera" title="Tomar foto"></i>
+                <button class="btn btn-link" data-toggle="tooltip" data-placement="bottom" title="Tomar foto" @click="openCamera">
+                    <i class="fas fa-camera"></i>
                 </button>
                 <span style="color: grey">|</span>
-                <button class="btn btn-link" @click="openCamera">
-                    <i class="fas fa-upload" title="Subir foto"></i>
+                <button class="btn btn-link" data-toggle="tooltip" data-placement="bottom" title="Subir foto" @click="uploadFile">
+                    <i class="fas fa-upload"></i>
+                    <input type="file" @change="fileUploaded" style="display:none" ref="inputFile">
                 </button>
             </div>
         </div>
-
-        <div :class="'camera-modal' + (camera_opened ? '' : ' closed')">
-            <div class="container">
-                <div class="card card-default">
-                    <div class="card-body">
-                        <i class="fas fa-times float-right cursor-pointer" @click="cancel"></i>
-                        <div id="camera" class="d-inline-block"></div>
-                        <hr>
-                        <button class="btn btn-sm btn-outline-primary" @click="takePicture">Tomar foto</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Camera modal -->
+        <modal-wrapper :visible="camera_opened" @closed="cancel">
+            <loading-cover v-if="!camera_ready" message="Iniciando camara..."/>
+            <div id="camera" class="d-inline-block"></div>
+            <hr>
+            <button class="btn btn-sm btn-outline-primary" @click="takePicture">Tomar foto</button>
+        </modal-wrapper>
     </div>
 </template>
 
 <script>
 export default {
+    props: {
+        img: {
+            type: String,
+            required: false,
+            default: '/pictures/no-image.jpg'
+        }
+    },
     data() {
         return {
             camera_opened: false,
+            camera_ready:  false,
             dataURI: ''
         };
     },
@@ -92,6 +75,22 @@ export default {
                 this.$emit('pictureTaken', this.dataURItoBlob(dataURI));
             });
         },
+        uploadFile: function () {
+            this.$refs.inputFile.click();
+        },
+        fileUploaded: function(e) {
+            let file =  e.target.files[0];
+            this.$emit('pictureTaken',file);
+            var reader  = new FileReader();
+
+            reader.addEventListener("load", () => {
+                this.dataURI = reader.result;
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        },
         cancel: function() {
             this.camera_opened = false;
         }
@@ -99,18 +98,22 @@ export default {
     watch: {
         camera_opened: function() {
             if(this.camera_opened) {
-                Webcam.set({
-                    width: 320 * 1.5,
-                    height: 240 * 1.5,
-                    dest_width: 640,
-                    dest_height: 480,
-                    crop_width: 480,
-                    crop_height: 480,
-                    image_format: 'jpeg',
-                    jpeg_quality: 90,
-                    force_flash: false
+                this.camera_ready = false;
+                this.$nextTick(() => {
+                    Webcam.set({
+                        width: 320 * 1.5,
+                        height: 240 * 1.5,
+                        dest_width: 640,
+                        dest_height: 480,
+                        crop_width: 480,
+                        crop_height: 480,
+                        image_format: 'jpeg',
+                        jpeg_quality: 90,
+                        force_flash: false
+                    });
+                    Webcam.attach('#camera');
+                    Webcam.on('live', () => this.camera_ready = true);
                 });
-                Webcam.attach('#camera');
             }
             else {
                 Webcam.reset();

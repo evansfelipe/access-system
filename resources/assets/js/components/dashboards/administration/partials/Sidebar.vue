@@ -18,7 +18,6 @@
     div.sidebar {
         // Puts the sidebar over eveithing but the navbar
         z-index: 9;
-        // Right shadow
         // Position
         position: absolute;
         top: 0; bottom: 0; left: 0; 

@@ -59,27 +59,24 @@ export default {
                 });
                 this.$store.dispatch('addNotification', {type: 'danger', message: 'Corrija los errores antes de continuar.'});
                 this.$emit('saveFailed', {errors: errors, step_validated: results});
+                console.log(errors);
+                
             }
             
-            let data = {};
+            let data = new FormData();
 
             Object.keys(this.values).forEach(step => {
                 Object.keys(this.values[step]).forEach(key => {
-                    data[key] = this.values[step][key];
+                    let val = this.values[step][key];
+                    data.append(key, Array.isArray(val) ? JSON.stringify(val) : val);
                 });
             });
 
-            console.log({
-                url: this.route.url,
-                method: this.route.method,
-                data: data
-            });
-            
-            axios({
-                url: this.route.url,
-                method: this.route.method,
-                data: data
-            })
+            if(this.route.method === 'put') {
+                data.append('_method', 'PUT');
+            }
+
+            axios.post(this.route.url, data)
             .then(response => this.$emit('saveSuccess', response.data.id))
             .catch(response => onError(response))
             .finally(() => this.$store.commit('loading', { state: false, message: "" }));

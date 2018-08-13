@@ -77,6 +77,7 @@ class Person extends Model
                 'nullable'
             ],
             'picture' => [
+                'required',
                 'image', 
                 'mimes:jpeg,jpg,png'
             ],
@@ -253,6 +254,7 @@ class Person extends Model
                 'city' => $residency->city ?? '-',
                 'province' => $residency->province ?? '-',
                 'country' => $residency->country ?? '-',
+                'picture_path' => 'storage/documentation/'.$this->last_name[0].'/'.$this->id.'_'.$this->last_name.'_'.$this->name.'/pictures/'.$this->picture_name,
             ],
             'working_information' => [
                 'company_url' => route('companies.show', $company->id),

@@ -2,7 +2,7 @@ export default {
     default: (debug = false) => { 
         return {
             personal_information: {
-                // picture:         '',
+                picture:         '',
                 last_name:       !debug ? '' : 'Example',
                 name:            !debug ? '' : 'Example',
                 document_type:   !debug ? '' : '1',
@@ -21,7 +21,7 @@ export default {
                 cp:              !debug ? '' : '',
                 country:         !debug ? '' : '',
                 province:        !debug ? '' : '',
-                city:            !debug ? '' : ''
+                city:            !debug ? '' : '',
             },
             working_information: {
                 company_id:      !debug ? '' : '1',
