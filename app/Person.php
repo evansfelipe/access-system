@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\{ Residency, Activity, Vehicle};
+use App\{ Residency, Activity, Vehicle };
 
 class Person extends Model
 {
@@ -203,19 +203,21 @@ class Person extends Model
         return $this->cards()->where('active','=',false)->orderBy('updated_at','desc')->get();
     }
 
-    public function setContact(Array $request)
+    /**
+     * Given an array, sets the contact json of this person.
+     */
+    public function setContact(Array $data)
     {
         $this->contact = json_encode([
-            'fax'          => $request['fax'] ?? null,
-            'email'        => $request['email'] ?? null,
-            'home_phone'   => $request['home_phone'] ?? null,
-            'mobile_phone' => $request['mobile_phone'] ?? null
+            'fax'          => $data['fax']          ?? null,
+            'email'        => $data['email']        ?? null,
+            'home_phone'   => $data['home_phone']   ?? null,
+            'mobile_phone' => $data['mobile_phone'] ?? null
         ]);
     }
 
     /**
-     * Decodes and returns the json where the contact information of this person 
-     * is stored.
+     * Decodes and returns the json where the contact information of this person is stored.
      */
     public function contactToObject()
     {

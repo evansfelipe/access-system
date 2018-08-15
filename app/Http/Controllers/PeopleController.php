@@ -1,17 +1,27 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests\{ SavePersonRequest };
 use Storage;
+use App\Http\Requests\{ SavePersonRequest };
 use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle };
 
 class PeopleController extends Controller
 {
 
+    /**
+     * Returns the timestamp of the last update on people's table.
+     * 
+     * @return Timestamp
+     */
     public function updated_at()
     {
         return Person::select(['updated_at'])->orderBy('updated_at','desc')->first(); 
     }
 
+    /**
+     * Returns an array with each person from the system, order desc by the creation timestamp.
+     * 
+     * @return Array<Person>
+     */
     public function list()
     {
         $people = Person::select(['id','last_name','name','cuil'])->orderBy('created_at','desc')
@@ -24,6 +34,11 @@ class PeopleController extends Controller
         return response(json_encode($people))->header('Content-Type', 'application/json');        
     }
 
+    /**
+     * Returns an array with the routes to each picture associated with a given person.
+     * 
+     * @return Array<String>
+     */
     public function pictures(Person $person)
     {
         $path = 'storage/documentation/'.$person->last_name[0].'/'.$person->id.'_'.$person->last_name.'_'.$person->name.'/pictures';
@@ -134,10 +149,10 @@ class PeopleController extends Controller
                     'blood_type'        => $person->blood_type,
                     'pna'               => $person->pna,
                     // Contact
+                    'fax'               => $contact->fax,
                     'email'             => $contact->email,
                     'home_phone'        => $contact->home_phone,
                     'mobile_phone'      => $contact->mobile_phone,
-                    'fax'               => $contact->fax,
                     // Residency
                     'street'            => $person->residency->street,
                     'apartment'         => $person->residency->apartment,
@@ -145,7 +160,7 @@ class PeopleController extends Controller
                     'country'           => $person->residency->country,
                     'province'          => $person->residency->province,
                     'city'              => $person->residency->city,
-                    'picture_path' => 'storage/documentation/'.$person->last_name[0].'/'.$person->id.'_'.$person->last_name.'_'.$person->name.'/pictures/'.$person->picture_name,
+                    'picture_path'      => 'storage/documentation/'.$person->last_name[0].'/'.$person->id.'_'.$person->last_name.'_'.$person->name.'/pictures/'.$person->picture_name,
                 ],
                 'working_information'   => [
                     'company_id'        => $person->company()->id,
@@ -166,6 +181,8 @@ class PeopleController extends Controller
                 ]
             ],
         ];
+
+        \Debugbar::info($person_json);
 
         return response(json_encode($person_json))->header('Content-Type', 'application/json');
     }

@@ -32,9 +32,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col text-right">
-                            <button class="btn btn-sm btn-link" data-toggle="tooltip" data-placement="bottom" title="Cerrar"
-                                    @click="close"
-                            >
+                            <button class="btn btn-sm btn-link" title="Cerrar" @click="close">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -62,7 +60,7 @@ export default {
     methods: {
         close: function() {
             this.$emit('closed');
-        }
+        },
     }
 }
 </script>

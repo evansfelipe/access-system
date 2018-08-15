@@ -48,7 +48,7 @@ class SavePersonRequest extends FormRequest
     }
 
     /**
-     * Transforms the request input data before validating it.
+     * Transforms the request input data before validation.
      * 
      * @return void
      */

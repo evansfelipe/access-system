@@ -59,15 +59,13 @@ export default {
                 });
                 this.$store.dispatch('addNotification', {type: 'danger', message: 'Corrija los errores antes de continuar.'});
                 this.$emit('saveFailed', {errors: errors, step_validated: results});
-                console.log(errors);
-                
             }
             
             let data = new FormData();
 
             Object.keys(this.values).forEach(step => {
                 Object.keys(this.values[step]).forEach(key => {
-                    let val = this.values[step][key];
+                    let val = this.values[step][key] ? this.values[step][key] : '';
                     data.append(key, Array.isArray(val) ? JSON.stringify(val) : val);
                 });
             });

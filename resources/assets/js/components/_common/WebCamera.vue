@@ -9,11 +9,11 @@
         <!-- Buttons -->
         <div class="row mt-2">
             <div class="col">
-                <button class="btn btn-link" data-toggle="tooltip" data-placement="bottom" title="Tomar foto" @click="openCamera">
+                <button class="btn btn-link" title="Tomar foto" @click="openCamera">
                     <i class="fas fa-camera"></i>
                 </button>
                 <span style="color: grey">|</span>
-                <button class="btn btn-link" data-toggle="tooltip" data-placement="bottom" title="Subir foto" @click="uploadFile">
+                <button class="btn btn-link" title="Subir foto" @click="uploadFile">
                     <i class="fas fa-upload"></i>
                     <input type="file" @change="fileUploaded" style="display:none" ref="inputFile">
                 </button>

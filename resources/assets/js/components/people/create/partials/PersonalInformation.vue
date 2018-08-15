@@ -3,7 +3,7 @@
     <div class="form-row d-flex align-items-center">
         <!-- Photo loader section -->
         <form-item col="col-4" :errors="errors.picture">
-            <web-camera @pictureTaken="(picture) => update({name: 'picture', value: picture})" :img="values.picture_path"/>
+            <web-camera @pictureTaken="picture => update({ name: 'picture', value: picture })" :img="values.picture_path"/>
         </form-item>
         <!-- Identification information section -->
         <div class="col-8">
@@ -111,19 +111,19 @@
         <form-item col="col-4" label="País" :errors="errors.country">
             <div class="col">
                 <select2    name="country" :value="values.country" @input="(value) => update({name: 'country', value: value})"
-                            placeholder="Seleccione un país" :options="options.country" :tags="true"></select2>                                
+                            placeholder="Seleccione un país" :options="options.country" :tags="true"/>                                
             </div>
         </form-item>
         <form-item col="col-4" label="Provincia / Estado" :errors="errors.province">
             <div class="col">
                 <select2    name="province" :value="values.province" @input="(value) => update({name: 'province', value: value})"
-                            placeholder="Seleccione una provincia/estado" :options="options.province" :tags="true"></select2>
+                            placeholder="Seleccione una provincia/estado" :options="options.province" :tags="true"/>
             </div>
         </form-item>
         <form-item col="col-4" label="Ciudad" :errors="errors.city">
             <div class="col">
                 <select2    name="city" :value="values.city" @input="(value) => update({name: 'city', value: value})"
-                            placeholder="Seleccione una ciudad" :options="options.city" :tags="true"></select2>
+                            placeholder="Seleccione una ciudad" :options="options.city" :tags="true"/>
             </div>
         </form-item>          
     </div>
