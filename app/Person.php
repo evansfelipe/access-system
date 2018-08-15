@@ -20,7 +20,7 @@ class Person extends Model
         'last_name' => ['max' => 50],
         'name' => ['max' => 50],
         'document_number' => ['min' => 7, 'max' => 12],
-        'cuil' => ['min' => 10, 'max' => 15],
+        'cuil' => ['max' => 15],
         'pna' => ['min' => 10, 'max' => 15]
     ];
 
@@ -53,11 +53,10 @@ class Person extends Model
                 'max:'.Person::LENGTHS['document_number']['max']
             ],
             'cuil' => [
-                'required',
                 'unique:people',
                 'string', 
-                'min:'.Person::LENGTHS['cuil']['min'], 
-                'max:'.Person::LENGTHS['cuil']['max']
+                "regex:/^(20|23|24|27|30|33|34)-[0-9]{8}-[0-9]{1}$/", 
+                'nullable',
             ],
             'birthday' => [
                 'string', 

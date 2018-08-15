@@ -7,7 +7,7 @@ export default {
                 name:            !debug ? '' : 'Example',
                 document_type:   !debug ? '' : '1',
                 document_number: !debug ? '' : '11111111',                
-                cuil:            !debug ? '' : '11111111111',
+                cuil:            !debug ? '' : '20-11111111-1',
                 birthday:        !debug ? '' : '1995-01-01',
                 sex:             !debug ? '' : 'M', 
                 blood_type:      !debug ? '' : '0+',

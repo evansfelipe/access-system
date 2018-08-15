@@ -32,7 +32,7 @@
                 </form-item>
                 <form-item col="col-6" label="CUIL / CUIT" :errors="errors.cuil">
                     <div class="col">
-                        <input  type="text" name="cuil" class="form-control" placeholder="xx-xxxxxxxx-x" :value="values.cuil" @input="(e) => update(e.target)">
+                        <cuil-cuit :value="values.cuil" @input="(value) => update({name: 'cuil', value: value})"></cuil-cuit>
                     </div>
                 </form-item>
             </div>
