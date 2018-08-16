@@ -15,7 +15,6 @@
                 <custom-table
                     :columns="columns"
                     :rows="vehicles"
-                    maxHeight="65vh"
                     @rowclicked="showVehicle"
                 />
             </div>

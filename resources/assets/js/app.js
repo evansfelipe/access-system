@@ -27,6 +27,7 @@ import store from './store.js';
 Vue.component('modal-wrapper'     , require('./components/_common/partials/Modal.vue'));
 Vue.component('select2'           , require('./components/_common/Select2.vue'));
 Vue.component('cuil-cuit'           , require('./components/_common/CuilCuit.vue'));
+Vue.component('residency-input'   , require('./components/_common/ResidencyInput.vue'));
 Vue.component('tab-item'          , require('./components/_common/TabItem.vue'));
 Vue.component('form-item'         , require('./components/_common/FormItem.vue'));
 Vue.component('web-camera'        , require('./components/_common/WebCamera.vue'));

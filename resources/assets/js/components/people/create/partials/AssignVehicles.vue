@@ -73,7 +73,6 @@
                         :columns="columns"
                         :rows="vehicles_list"
                         :filter="filter"
-                        maxHeight="53vh"
                         :pickable="{
                             active: true,
                             list: vehicles_picked

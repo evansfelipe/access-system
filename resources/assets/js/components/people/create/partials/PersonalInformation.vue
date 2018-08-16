@@ -90,43 +90,7 @@
         </form-item>   
     </div>
     <hr>
-    <!-- Street, apartment & zip code -->
-    <div class="form-row">
-        <form-item col="col-8" label="Domicilio" :errors="direction_errors">
-            <div class="col-6">
-                <input type="text" name="street" class="form-control" placeholder="Calle y número" :value="values.street" @input="(e) => update(e.target)">
-            </div>
-            <div class="col-6">
-                <input type="text" name="apartment" class="form-control" placeholder="Departamento" :value="values.apartment" @input="(e) => update(e.target)">
-            </div>
-        </form-item>
-        <form-item col="col-4" label="Código Postal" :errors="errors.cp">
-            <div class="col">
-                <input type="text" name="cp" class="form-control" :value="values.cp" @input="(e) => update(e.target)">                                                                    
-            </div>
-        </form-item>           
-    </div>
-    <!-- Country, Province & City -->
-    <div class="form-row">
-        <form-item col="col-4" label="País" :errors="errors.country">
-            <div class="col">
-                <select2    name="country" :value="values.country" @input="(value) => update({name: 'country', value: value})"
-                            placeholder="Seleccione un país" :options="options.country" :tags="true"/>                                
-            </div>
-        </form-item>
-        <form-item col="col-4" label="Provincia / Estado" :errors="errors.province">
-            <div class="col">
-                <select2    name="province" :value="values.province" @input="(value) => update({name: 'province', value: value})"
-                            placeholder="Seleccione una provincia/estado" :options="options.province" :tags="true"/>
-            </div>
-        </form-item>
-        <form-item col="col-4" label="Ciudad" :errors="errors.city">
-            <div class="col">
-                <select2    name="city" :value="values.city" @input="(value) => update({name: 'city', value: value})"
-                            placeholder="Seleccione una ciudad" :options="options.city" :tags="true"/>
-            </div>
-        </form-item>          
-    </div>
+    <residency-input :values="residency_values" :errors="residency_errors" @input="v => update(v)"></residency-input>
 </div>
 </template>
 
@@ -163,18 +127,6 @@ export default {
                     {id: "B+", text: "B+"},
                     {id: "AB-", text: "AB-"},
                     {id: "AB+", text: "AB+"},   
-                ],             
-                country: [
-                    {id: 0, text: 'Argentina'},
-                    {id: 1, text: 'Brasil'}                    
-                ],
-                province: [
-                    {id: 0, text: 'Buenos Aires'},
-                    {id: 1, text: 'Salta'}                    
-                ],
-                city: [
-                    {id: 0, text: 'Mar del Plata'},
-                    {id: 1, text: 'Balcarce'}                    
                 ]
             },
         }
@@ -185,6 +137,36 @@ export default {
         },
     },
     computed: {
+        residency_values: function() {
+            return {
+                street: this.values.street,
+                apartment: this.values.apartment,
+                cp: this.values.cp,
+                country: this.values.country,
+                province: this.values.province,
+                city: this.values.city
+            }
+        },
+        residency_errors: function() {
+            let direction = [];
+            if(this.errors.street && this.errors.apartment) {
+                direction = this.errors.street.concat(this.errors.apartment);
+            }
+            else if(this.errors.street) {
+                direction = this.errors.street;
+            }
+            else if(this.errors.apartment) {
+                direction = this.errors.apartment
+            }
+
+            return {
+                direction: direction,
+                cp: this.errors.cp,
+                country: this.errors.country,
+                province: this.errors.province,
+                city: this.errors.city
+            }
+        },
         document_errors: function() {
             if(this.errors.document_type && this.errors.document_number) {
                 return this.errors.document_type.concat(this.errors.document_number);
@@ -198,21 +180,7 @@ export default {
             else {
                 return [];
             }
-        },
-        direction_errors: function() {
-            if(this.errors.street && this.errors.apartment) {
-                return this.errors.street.concat(this.errors.apartment);
-            }
-            else if(this.errors.street) {
-                return this.errors.street;
-            }
-            else if(this.errors.apartment) {
-                return this.errors.apartment
-            }
-            else {
-                return [];
-            }
-        },
+        }
     }
 }
 </script>

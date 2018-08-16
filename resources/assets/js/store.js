@@ -204,8 +204,7 @@ export default {
                         commit(`set`, {what, data: response.data, timestamp: new_timestamp});
                     })
                     .catch(error => {
-                        if(state.debug) console.log('Fetch failed: ', what);
-                        console.log(error);
+                        if(state.debug) console.log('Fetch failed: ', what, error);
                     })
                     .finally(() => commit(`updatingList`, {what, value: false}));
                 }
@@ -215,8 +214,7 @@ export default {
                 }
             })
             .catch(error => {
-                if(state.debug) console.log('Error while validating timestamps: ', what);
-                console.log(error);
+                if(state.debug) console.log('Error while validating timestamps: ', what, error);
             });
         },
         /**

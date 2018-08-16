@@ -59,6 +59,10 @@ body {
     cursor: pointer;
 }
 
+.cursor-not-allowed {
+    cursor: not-allowed;
+}
+
 i.fas.centered, i.far.centered {
     display: inline-block;
     width: 40px;
@@ -119,3 +123,56 @@ input {
     color: #3F729B;
     background-color: transparent;
 }
+
+// Old table format
+//     display: flex;
+//     flex-flow: column;
+//     height: 100%; width: 100%;
+//     & > thead {
+//         flex: 0 0 auto;
+//         width: calc(100% - 5px);
+//         & > tr {
+//             border: 0;
+//             border-bottom: 1px solid grey;
+//             & > th {
+//                 padding: 0.5em;
+//                 cursor: pointer; 
+//                 border: 0;
+//             }
+//         }
+//     }
+
+//     & > thead, & > tbody > tr {
+//         display: table;
+//         table-layout: fixed;
+//     }
+
+//     & > tbody {
+//         flex: 1 1 auto;
+//         display: block;
+//         overflow-y: scroll;
+//         & > tr {
+//             width: 100%;
+//         }
+//         & > tr > td > i.selected-item {
+//             color: #3F729B;
+//         }
+//         & > tr:hover {
+//             cursor: pointer;
+//             background-color: rgb(240, 240, 240);
+//         }
+//         & > tr > td {
+//             border: 0;
+//             border-bottom: 1px solid whitesmoke;
+//             padding: 8px;
+//         } 
+//     }
+
+//     & > thead > tr > th.pickable, & > tbody > tr > td.pickable {
+//         width: 3em;
+//     }
+
+//     /* Track */
+//     ::-webkit-scrollbar-track {
+//         background: transparent; 
+//     }

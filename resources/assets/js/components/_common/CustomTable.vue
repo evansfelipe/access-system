@@ -1,86 +1,89 @@
 <style lang="scss" scoped>
     table {
-        display: flex;
-        flex-flow: column;
-        height: 100%; width: 100%;
-        & > thead {
-            flex: 0 0 auto;
-            width: calc(100% - 5px);
-            & > tr {
+        width: 100%;
+        cursor: pointer;
+        & > thead > tr {
+            border: 0;
+            border-bottom: 1px solid grey;
+            & > th {
                 border: 0;
-                border-bottom: 1px solid grey;
-                & > th {
-                    padding: 0.5em;
-                    cursor: pointer; 
-                    border: 0;
-                }
+                padding: 0.5em;
             }
         }
 
-        & > thead, & > tbody > tr {
-            display: table;
-            table-layout: fixed;
-        }
-
-        & > tbody {
-            flex: 1 1 auto;
-            display: block;
-            overflow-y: scroll;
-            & > tr {
-                width: 100%;
-            }
-            & > tr > td > i.selected-item {
-                color: #3F729B;
-            }
-            & > tr:hover {
-                cursor: pointer;
+        & > tbody > tr {
+            &:hover {
                 background-color: rgb(240, 240, 240);
             }
-            & > tr > td {
+            & > td {
                 border: 0;
                 border-bottom: 1px solid whitesmoke;
-                padding: 8px;
-            } 
-        }
-
-        & > thead > tr > th.pickable, & > tbody > tr > td.pickable {
-            width: 3em;
-        }
-
-        /* Track */
-        ::-webkit-scrollbar-track {
-            background: transparent; 
+                padding: 0.5em;
+            }
         }
     }
 </style>
 
 <template>
-    <div :style="'min-height:40vh; height:' + maxHeight">
-        <table v-if="shown_rows.length > 0">
-            <thead>
-                <tr>
-                    <th v-if="pickable.active" class="pickable"></th>
-                    <th v-for="(column,key) in columns" :key="key" @click="sortColumn(key)">
-                        {{ column.text }}
-                        <i v-if="sort.column === key && sort.order !== 0" :class="'float-right centered fas fa-sort-' + (sort.order === 1 ? 'up' :  'down' )"></i>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(row,key) in shown_rows" :key="key" @click="click(row)">
-                    <td v-if="pickable.active" class="pickable text-center" :key="key + '-pickable'">
-                        <i v-if="pickable.list.includes(row.id)" class="far fa-check-square text-unique"></i>
-                        <i v-else class="far fa-square" style="color: rgba(0,0,0,0.3)"></i>
-                    </td>
-                    <td v-for="(column,column_key) in columns" :key="column_key">
-                        {{ row[column.name] }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div v-else class="d-flex align-items-center justify-content-center" style="min-height:40vh">
-            <h3>No se encontraron coincidencias</h3>
-        </div>
+    <div>
+        <!-- Data situation -->
+        <template v-if="shown_rows.length > 0">
+            <!-- Data displayed on a table -->
+            <div class="row">
+                <div class="col">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th v-if="pickable.active" class="pickable"></th>
+                                <th v-for="(column,key) in columns" :key="key" @click="sortColumn(key)" :style="'width: ' + 100/columns.length + '%'">
+                                    {{ column.text }}
+                                    <i v-if="sort.column === key && sort.order !== 0" :class="'float-right centered fas fa-sort-' + (sort.order === 1 ? 'up' :  'down' )"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(row,key) in pagination.page" :key="key" @click="click(row)">
+                                <td v-if="pickable.active" class="pickable text-center" :key="key + '-pickable'">
+                                    <i v-if="pickable.list.includes(row.id)" class="far fa-check-square text-unique"></i>
+                                    <i v-else class="far fa-square" style="color: rgba(0,0,0,0.3)"></i>
+                                </td>
+                                <td v-for="(column,column_key) in columns" :key="column_key">
+                                    {{ row[column.name] }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Pagination -->
+            <div class="row mt-3">
+                <div class="col-4">
+                    Mostrar 
+                    <select class="form-control form-control-sm" style="width: auto; display: inline" v-model.number="pagination.quantity">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select> 
+                    filas
+                </div>
+                <div class="col-8">
+                    <ul class="pagination justify-content-end" style="margin-bottom: 0px">
+                        <li :class="`page-item ${pagination.current <= 0 ? 'disabled cursor-not-allowed' : ''}`" @click="changeToPage(pagination.current - 1)">
+                            <a class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                        </li>
+                        <li v-for="(i, key) in pagination.last" :key="key" :class="`page-item ${key === pagination.current ? 'active' : ''}`" @click="changeToPage(key)">
+                            <a class="page-link">{{ i }}</a>
+                        </li>
+                        <li :class="`page-item ${pagination.current >= this.pagination.last - 1 ? 'disabled cursor-not-allowed' : ''}`" @click="changeToPage(pagination.current + 1)">
+                            <a class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </template>
+        <!-- No data situation -->
+        <h3 v-else class="text-center m-0">No se encontraron coincidencias</h3>
     </div>
 </template>
 
@@ -105,11 +108,6 @@ export default {
                 };
             }
         },
-        maxHeight: {
-            type: String,
-            required: false,
-            default: '100%'
-        },
         pickable: {
             type: Object,
             required: false,
@@ -127,8 +125,17 @@ export default {
             sort: {
                 column: -1,
                 order: 0,
+            },
+            pagination: {
+                quantity: 10,
+                current: 0,
+                last: Math.ceil((this.rows.length) / 10),
+                page: [],
             }
         }
+    },
+    mounted() {
+        this.paginate();
     },
     watch: {
         rows: {
@@ -160,9 +167,23 @@ export default {
                 this.sortColumn(this.sort.column, true);
             },
             deep: true
-        }
+        },
+        'shown_rows.length': function() {
+            this.paginate();
+        },
+        'pagination.quantity': function() {
+            this.paginate();
+        },
     },
     methods: {
+        paginate: function() {
+            this.pagination.last = Math.ceil((this.shown_rows.length) / this.pagination.quantity);
+            this.changeToPage(0);
+        },
+        changeToPage: function(number) {
+            this.pagination.current = (number >= 0 && number <= this.pagination.last - 1)  ? number : (number < 0 ? 0 : this.pagination.last - 1);
+            this.pagination.page = this.shown_rows.slice(this.pagination.current * this.pagination.quantity, this.pagination.current * this.pagination.quantity + this.pagination.quantity);
+        },
         click: function(row) {
             this.$emit('rowclicked', row);
         },
@@ -195,6 +216,7 @@ export default {
                     this.shown_rows.sort((a, b) => this.sort.order * a[col_name].toString().localeCompare(b[col_name].toString()));   
                 }
             }
+            this.changeToPage(this.pagination.current);
         }
     }
 }

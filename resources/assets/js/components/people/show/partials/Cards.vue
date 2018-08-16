@@ -92,7 +92,6 @@
                         <custom-table
                             :columns="columns"
                             :rows="inactiveCards"
-                            maxHeight="30vh"
                         />
                     </div>
                 </div>
