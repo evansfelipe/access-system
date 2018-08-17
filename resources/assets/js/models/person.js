@@ -24,10 +24,15 @@ export default {
                 city:            !debug ? '' : '',
             },
             working_information: {
-                company_id:      !debug ? '' : '1',
-                activity_id:     !debug ? '' : '1',
                 art:             !debug ? '' : '123456789',
-                pbip:            !debug ? '' : '2020-01-01'
+                pbip:            !debug ? '' : '2020-01-01',
+                jobs:            [
+                                    {
+                                        company_id: '',
+                                        activity_id: '',
+                                        subactivities: []
+                                    }
+                                ],
             },
             assign_vehicles: {
                 vehicles_id: []

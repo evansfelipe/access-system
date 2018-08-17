@@ -166,7 +166,8 @@ class PeopleController extends Controller
                     'company_id'        => $person->company()->id,
                     'activity_id'       => $person_company->activity_id,
                     'art'               => $person_company->art,
-                    'pbip'              => $person_company->pbip ? date('Y-m-d', strtotime($person_company->pbip)) : ''
+                    'pbip'              => $person_company->pbip ? date('Y-m-d', strtotime($person_company->pbip)) : '',
+                    'jobs'              => []
                 ],
                 'assign_vehicles'   => [
                     'vehicles_id' => $vehicles_id

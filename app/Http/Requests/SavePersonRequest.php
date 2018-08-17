@@ -22,6 +22,7 @@ class SavePersonRequest extends FormRequest
      */
     public function rules()
     {
+        \Debugbar::info($this->jobs);
         $person_rules = Person::getValidationRules();
         $residency_rules = Residency::getValidationRules();
         $working_information_rules = PersonCompany::getValidationRules();
@@ -55,5 +56,6 @@ class SavePersonRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge(['vehicles_id' => json_decode($this->vehicles_id)]);
+        $this->merge(['jobs' => json_decode($this->jobs, true)]);
     }
 }

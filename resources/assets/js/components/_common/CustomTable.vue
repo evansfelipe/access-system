@@ -121,7 +121,7 @@ export default {
     },
     data() {
         return {
-            shown_rows: JSON.parse(JSON.stringify(this.rows)),
+            shown_rows: this.clone(this.rows),
             sort: {
                 column: -1,
                 order: 0,
@@ -140,13 +140,13 @@ export default {
     watch: {
         rows: {
             handler: function() {
-                this.shown_rows = JSON.parse(JSON.stringify(this.rows));
+                this.shown_rows = this.clone(this.rows);
             },
             deep: true
         },
         filter: {
             handler: function() {
-                this.shown_rows = JSON.parse(JSON.stringify(this.rows)).filter(row => {
+                this.shown_rows = this.clone(this.rows).filter(row => {
                     let ret = this.filter.strict ? true : false;
                     if(this.filter.strict) {
                         this.columns.forEach(column => {
@@ -209,7 +209,7 @@ export default {
                     }
                 }
                 if(this.sort.order === 0 && !skipOrder) {
-                    this.shown_rows = JSON.parse(JSON.stringify(this.rows));
+                    this.shown_rows = this.clone(this.rows);
                 }
                 else {
                     let col_name = this.columns[key].name;

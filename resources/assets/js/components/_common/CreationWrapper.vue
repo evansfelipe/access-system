@@ -37,6 +37,12 @@ export default {
             required: true
         }
     },
+    watch: {
+        values: {
+            handler: function() {},
+            deep: true
+        }
+    },
     methods: {
         cancel: function() {
             this.$emit('cancel');
@@ -51,7 +57,14 @@ export default {
                 Object.keys(this.values).forEach(key => {
                     errors[key] = {};
                     Object.keys(r_errors).forEach(error => {
-                        if(error in this.values[key]) {
+                        let attributes = Object.keys(this.values[key]);
+                        let found = false;
+                        attributes.forEach(attr => {
+                            if(error.startsWith(attr)) {
+                                found = true;
+                            }
+                        })
+                        if(found) {
                             errors[key][error] = r_errors[error];
                         }
                     });
@@ -59,6 +72,8 @@ export default {
                 });
                 this.$store.dispatch('addNotification', {type: 'danger', message: 'Corrija los errores antes de continuar.'});
                 this.$emit('saveFailed', {errors: errors, step_validated: results});
+                console.log(r_errors);
+                console.log(errors);
             }
             
             let data = new FormData();

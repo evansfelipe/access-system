@@ -17,16 +17,6 @@ class PersonCompany extends Pivot
     public static function getValidationRules()
     {
         return [
-            'company_id' => [
-                'required',
-                'integer',
-                'exists:companies,id'
-            ],
-            'activity_id' => [
-                'required',
-                'integer',
-                'exists:activities,id'
-            ],
             'art' => [
                 'required',
                 'string',
@@ -37,6 +27,26 @@ class PersonCompany extends Pivot
                 'date',
                 "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", 
                 'after:'.date('Y-m-d'), 
+            ],
+            'jobs' => [
+                'required',
+                'array',
+                'min:1'
+            ],
+            'jobs.*.company_id' => [
+                'integer',
+                'exists:companies,id'
+            ],
+            'jobs.*.activity_id' => [
+                'required',
+                'integer',
+                'exists:activities,id'
+            ],
+            'jobs.*.subactivities' => [
+                'array'
+            ],
+            'jobs.*.subactivities.*' => [
+                'string'
             ]
         ];
     }

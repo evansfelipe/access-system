@@ -55,6 +55,13 @@ body {
     }
 }
 
+.btn-link {
+    color: #3E4551 !important;
+    &:hover {
+        color: #4B515D !important;
+    }
+}
+
 .cursor-pointer {
     cursor: pointer;
 }

@@ -54,6 +54,14 @@ const router = new VueRouter({
     ]
 });
 
+Vue.mixin({
+    methods: {
+        clone: function(object) {
+            return JSON.parse(JSON.stringify(object));
+        }
+    }
+});
+
 const app = new Vue({
     el: '#app',
     store: new Vuex.Store(store),

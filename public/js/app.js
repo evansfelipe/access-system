@@ -14380,6 +14380,14 @@ var router = new __WEBPACK_IMPORTED_MODULE_2_vue_router__["a" /* default */]({
     { path: '/bar', component: { template: '<div>Test route</div>' } }]
 });
 
+Vue.mixin({
+    methods: {
+        clone: function clone(object) {
+            return JSON.parse(JSON.stringify(object));
+        }
+    }
+});
+
 var app = new Vue({
     el: '#app',
     store: new __WEBPACK_IMPORTED_MODULE_3_vuex__["a" /* default */].Store(__WEBPACK_IMPORTED_MODULE_4__store_js__["a" /* default */]),
@@ -51644,10 +51652,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 city: !debug ? '' : ''
             },
             working_information: {
-                company_id: !debug ? '' : '1',
-                activity_id: !debug ? '' : '1',
                 art: !debug ? '' : '123456789',
-                pbip: !debug ? '' : '2020-01-01'
+                pbip: !debug ? '' : '2020-01-01',
+                jobs: [{
+                    company_id: '',
+                    activity_id: '',
+                    subactivities: []
+                }]
             },
             assign_vehicles: {
                 vehicles_id: []
@@ -52062,17 +52073,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             type: Boolean,
             required: false,
             default: false
+        },
+        name: {
+            type: String,
+            required: false,
+            default: ''
+        },
+        multiple: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     mounted: function mounted() {
+        console.log(this.value);
+
         var vm = this;
-        var select = $(this.$el).select2({ data: this.options, placeholder: this.placeholder, tags: this.tags, color: 'red', theme: 'bootstrap' }).val(this.value).trigger('change').on('change', function () {
+        var select = $(this.$el).select2({ data: this.options, placeholder: this.placeholder, tags: this.tags, color: 'red', theme: 'bootstrap' }).val(this.value).trigger('change');
+        select.data('select2').$selection.css({
+            'min-height': '37px'
+        });
+        select.on('change', function () {
             // As we need this to refer to select element, we can't use an arrow function
             // and we need to use the vm variable to refer the component's this.
-            vm.$emit('input', this.value);
-        });
-        select.data('select2').$selection.css({
-            'height': '37px'
+            if (this.multiple) {
+                vm.$emit('input', $(vm.$el).select2('data').map(function (el) {
+                    return el.id;
+                }));
+            } else {
+                vm.$emit('input', this.value);
+            }
         });
     },
     destroyed: function destroyed() {
@@ -57956,7 +57986,13 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "select",
-    { staticStyle: { width: "100%", "max-height": "50px !important" } },
+    {
+      staticStyle: { width: "100%", "max-height": "50px !important" },
+      attrs: {
+        name: "" + _vm.name + (_vm.multiple ? "[]" : ""),
+        multiple: _vm.multiple
+      }
+    },
     [_vm._t("default")],
     2
   )
@@ -59394,7 +59430,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
-            shown_rows: JSON.parse(JSON.stringify(this.rows)),
+            shown_rows: this.clone(this.rows),
             sort: {
                 column: -1,
                 order: 0
@@ -59414,7 +59450,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     watch: {
         rows: {
             handler: function handler() {
-                this.shown_rows = JSON.parse(JSON.stringify(this.rows));
+                this.shown_rows = this.clone(this.rows);
             },
             deep: true
         },
@@ -59422,7 +59458,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             handler: function handler() {
                 var _this = this;
 
-                this.shown_rows = JSON.parse(JSON.stringify(this.rows)).filter(function (row) {
+                this.shown_rows = this.clone(this.rows).filter(function (row) {
                     var ret = _this.filter.strict ? true : false;
                     if (_this.filter.strict) {
                         _this.columns.forEach(function (column) {
@@ -59484,7 +59520,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     }
                 }
                 if (this.sort.order === 0 && !skipOrder) {
-                    this.shown_rows = JSON.parse(JSON.stringify(this.rows));
+                    this.shown_rows = this.clone(this.rows);
                 } else {
                     var col_name = this.columns[key].name;
                     this.shown_rows.sort(function (a, b) {
@@ -60057,6 +60093,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             required: true
         }
     },
+    watch: {
+        values: {
+            handler: function handler() {},
+            deep: true
+        }
+    },
     methods: {
         cancel: function cancel() {
             this.$emit('cancel');
@@ -60073,7 +60115,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 Object.keys(_this.values).forEach(function (key) {
                     errors[key] = {};
                     Object.keys(r_errors).forEach(function (error) {
-                        if (error in _this.values[key]) {
+                        var attributes = Object.keys(_this.values[key]);
+                        var found = false;
+                        attributes.forEach(function (attr) {
+                            if (error.startsWith(attr)) {
+                                found = true;
+                            }
+                        });
+                        if (found) {
                             errors[key][error] = r_errors[error];
                         }
                     });
@@ -60081,6 +60130,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
                 _this.$store.dispatch('addNotification', { type: 'danger', message: 'Corrija los errores antes de continuar.' });
                 _this.$emit('saveFailed', { errors: errors, step_validated: results });
+                console.log(r_errors);
+                console.log(errors);
             };
 
             var data = new FormData();
@@ -62499,17 +62550,21 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(191)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(130)
 /* template */
-var __vue_template__ = __webpack_require__(131)
+var __vue_template__ = __webpack_require__(193)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-92e42444"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -62604,6 +62659,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -62616,15 +62689,45 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             type: Object
         }
     },
+    data: function data() {
+        return {
+            risk_levels: [{ id: 1, text: 'Nivel 1' }, { id: 2, text: 'Nivel 2' }, { id: 3, text: 'Nivel 3' }],
+            test: [{ id: 1, text: 'Nivel 1' }, { id: 2, text: 'Nivel 2' }, { id: 3, text: 'Nivel 3' }]
+        };
+    },
     beforeMount: function beforeMount() {
         this.$store.dispatch('fetchList', 'companies');
         this.$store.dispatch('fetchList', 'activities');
     },
 
     methods: {
-        update: function update(_ref) {
-            var name = _ref.name,
+        addJob: function addJob() {
+            var copy = this.clone(this.jobs);
+            copy.push({
+                company_id: '',
+                activity_id: '',
+                subactivities: []
+            });
+            this.jobs = copy;
+        },
+        removeJob: function removeJob(job) {
+            var pos = this.jobs.indexOf(job);
+            var copy = this.clone(this.jobs);
+            this.$delete(copy, pos);
+            this.jobs = copy;
+        },
+        editJob: function editJob(_ref) {
+            var key = _ref.key,
+                attribute = _ref.attribute,
                 value = _ref.value;
+
+            var copy = this.clone(this.jobs);
+            copy[key][attribute] = value;
+            this.jobs = copy;
+        },
+        update: function update(_ref2) {
+            var name = _ref2.name,
+                value = _ref2.value;
 
             this.$store.commit('updateModel', { which: 'person', properties_path: 'values.working_information.' + name, value: value });
         }
@@ -62648,233 +62751,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     text: activity.name
                 };
             });
+        },
+        jobs: {
+            get: function get() {
+                var obj = {
+                    company_id: '',
+                    activity_id: '',
+                    subactivities: []
+                };
+                return this.values.jobs.length > 0 ? this.values.jobs : [obj];
+            },
+            set: function set(value) {
+                this.$store.commit('updateModel', { which: 'person', properties_path: 'values.working_information.jobs', value: value });
+            }
+        },
+        jobs_errors: function jobs_errors() {
+            var _this = this;
+
+            var errors = {};
+            var keys = Object.keys(this.errors);
+            keys.forEach(function (error) {
+                if (error.startsWith('jobs.')) {
+                    var tokens = error.split('.');
+                    if (!errors[tokens[1]]) {
+                        errors[tokens[1]] = {};
+                    }
+                    errors[tokens[1]][tokens[2]] = _this.errors[error];
+                }
+            });
+            return errors;
         }
     }
 });
 
 /***/ }),
-/* 131 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      this.$store.getters.companies.updating ||
-      this.$store.getters.activities.updating
-        ? _c("loading-cover", { attrs: { message: "Cargando..." } })
-        : [
-            _c(
-              "div",
-              { staticClass: "form-row" },
-              [
-                _c(
-                  "form-item",
-                  {
-                    attrs: { label: "Empresa", errors: _vm.errors.company_id }
-                  },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "col-6" },
-                      [
-                        _c("select2", {
-                          attrs: {
-                            name: "company_id",
-                            value: _vm.values.company_id,
-                            placeholder: "Seleccione una empresa",
-                            options: _vm.companies
-                          },
-                          on: {
-                            input: function(value) {
-                              return _vm.update({
-                                name: "company_id",
-                                value: value
-                              })
-                            }
-                          }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "col-1 d-flex align-items-center justify-content-center"
-                      },
-                      [_c("strong", [_vm._v("o")])]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-5" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-block btn-outline-unique",
-                          attrs: { type: "button" }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Cree una nueva empresa\n                    "
-                          )
-                        ]
-                      )
-                    ])
-                  ]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "form-row" },
-              [
-                _c(
-                  "form-item",
-                  {
-                    attrs: {
-                      label: "Actividad / Categoría",
-                      errors: _vm.errors.activity_id
-                    }
-                  },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "col-6" },
-                      [
-                        _c("select2", {
-                          attrs: {
-                            placeholder: "Seleccione una actividad",
-                            name: "activity_id",
-                            value: _vm.values.activity_id,
-                            options: _vm.activities
-                          },
-                          on: {
-                            input: function(value) {
-                              return _vm.update({
-                                name: "activity_id",
-                                value: value
-                              })
-                            }
-                          }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "col-1 d-flex align-items-center justify-content-center"
-                      },
-                      [_c("strong", [_vm._v("o")])]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-5" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-block btn-outline-unique",
-                          attrs: { type: "button" }
-                        },
-                        [
-                          _vm._v(
-                            "\n                        Cree una nueva actividad\n                    "
-                          )
-                        ]
-                      )
-                    ])
-                  ]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "form-row" },
-              [
-                _c(
-                  "form-item",
-                  {
-                    attrs: {
-                      col: "col-6",
-                      label: "ART",
-                      errors: _vm.errors.art
-                    }
-                  },
-                  [
-                    _c("div", { staticClass: "col" }, [
-                      _c("input", {
-                        staticClass: "form-control",
-                        attrs: { type: "text", name: "art" },
-                        domProps: { value: _vm.values.art },
-                        on: {
-                          input: function(e) {
-                            return _vm.update(e.target)
-                          }
-                        }
-                      })
-                    ])
-                  ]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "form-row" },
-              [
-                _c(
-                  "form-item",
-                  {
-                    attrs: {
-                      col: "col-6",
-                      label: "Vencimiento PBIP",
-                      errors: _vm.errors.pbip
-                    }
-                  },
-                  [
-                    _c("div", { staticClass: "col" }, [
-                      _c("input", {
-                        staticClass: "form-control",
-                        attrs: { type: "date", name: "pbip" },
-                        domProps: { value: _vm.values.pbip },
-                        on: {
-                          input: function(e) {
-                            return _vm.update(e.target)
-                          }
-                        }
-                      })
-                    ])
-                  ]
-                )
-              ],
-              1
-            )
-          ]
-    ],
-    2
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-92e42444", module.exports)
-  }
-}
-
-/***/ }),
+/* 131 */,
 /* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -67867,6 +67778,334 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(192);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("71201b43", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-92e42444\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./WorkingInformation.vue", function() {
+     var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-92e42444\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./WorkingInformation.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 192 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\ndiv.job-row i.delete-job[data-v-92e42444] {\n  position: absolute;\n  right: .5em;\n  color: #CC0000;\n  display: none;\n}\ndiv.job-row:hover i.delete-job[data-v-92e42444] {\n  display: inline;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 193 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      this.$store.getters.companies.updating ||
+      this.$store.getters.activities.updating
+        ? _c("loading-cover", { attrs: { message: "Cargando..." } })
+        : [
+            _c(
+              "div",
+              { staticClass: "form-row" },
+              [
+                _c(
+                  "form-item",
+                  { attrs: { label: "Riesgo", errors: _vm.errors.risk } },
+                  [
+                    _c(
+                      "div",
+                      { staticClass: "col" },
+                      [
+                        _c("select2", {
+                          attrs: {
+                            name: "risk",
+                            value: _vm.values.risk,
+                            placeholder: "Seleccione un nivel de riesgo",
+                            options: _vm.risk_levels
+                          },
+                          on: {
+                            input: function(value) {
+                              return _vm.update({ name: "risk", value: value })
+                            }
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "form-item",
+                  {
+                    attrs: {
+                      col: "col-6",
+                      label: "Vencimiento PBIP",
+                      errors: _vm.errors.pbip
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "col" }, [
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: { type: "date", name: "pbip" },
+                        domProps: { value: _vm.values.pbip },
+                        on: {
+                          input: function(e) {
+                            return _vm.update(e.target)
+                          }
+                        }
+                      })
+                    ])
+                  ]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "row" },
+              [
+                _c(
+                  "form-item",
+                  {
+                    attrs: {
+                      col: "col-4",
+                      label: "ART",
+                      errors: _vm.errors.art
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "col" }, [
+                      _c("input", {
+                        staticClass: "form-control",
+                        attrs: { type: "text", name: "art" },
+                        domProps: { value: _vm.values.art },
+                        on: {
+                          input: function(e) {
+                            return _vm.update(e.target)
+                          }
+                        }
+                      })
+                    ])
+                  ]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm._l(_vm.jobs, function(job, key) {
+              return _c(
+                "div",
+                { key: key, staticClass: "form-row job-row" },
+                [
+                  _c("div", { staticClass: "col-12 text-right" }, [
+                    _c("hr"),
+                    _vm._v(" "),
+                    _vm.jobs.length > 1
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-link p-0",
+                            on: {
+                              click: function($event) {
+                                _vm.removeJob(job)
+                              }
+                            }
+                          },
+                          [
+                            _c("i", {
+                              staticClass: "fas fa-minus-circle delete-job"
+                            })
+                          ]
+                        )
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "form-item",
+                    {
+                      attrs: {
+                        col: "col-4",
+                        label: "Empresa",
+                        errors: _vm.jobs_errors[key]
+                          ? _vm.jobs_errors[key].company_id
+                          : []
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "col" },
+                        [
+                          _c("select2", {
+                            attrs: {
+                              name: "company_id",
+                              value: job.company_id,
+                              placeholder: "Seleccione una empresa",
+                              options: _vm.companies
+                            },
+                            on: {
+                              input: function(value) {
+                                return _vm.editJob({
+                                  key: key,
+                                  attribute: "company_id",
+                                  value: value
+                                })
+                              }
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "form-item",
+                    {
+                      attrs: {
+                        col: "col-4",
+                        label: "Actividad",
+                        errors: _vm.jobs_errors[key]
+                          ? _vm.jobs_errors[key].activity_id
+                          : []
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "col" },
+                        [
+                          _c("select2", {
+                            attrs: {
+                              placeholder: "Seleccione una actividad",
+                              name: "activity_id",
+                              value: job.activity_id,
+                              options: _vm.activities
+                            },
+                            on: {
+                              input: function(value) {
+                                return _vm.editJob({
+                                  key: key,
+                                  attribute: "activity_id",
+                                  value: value
+                                })
+                              }
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "form-item",
+                    {
+                      attrs: {
+                        col: "col-4",
+                        label: "Subactividad/es",
+                        errors: _vm.jobs_errors[key]
+                          ? _vm.jobs_errors[key].subactivities
+                          : []
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "col" },
+                        [
+                          _c("select2", {
+                            attrs: {
+                              tags: true,
+                              placeholder: "Seleccione una actividad",
+                              name: "subactivities",
+                              multiple: true,
+                              options: _vm.test,
+                              value: [1, 2]
+                            },
+                            on: {
+                              input: function(value) {
+                                return _vm.editJob({
+                                  key: key,
+                                  attribute: "subactivities",
+                                  value: value
+                                })
+                              }
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ]
+                  )
+                ],
+                1
+              )
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col text-right mt-2" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-link p-0",
+                    attrs: { title: "Añadir nueva empresa y actividad" },
+                    on: { click: _vm.addJob }
+                  },
+                  [_c("i", { staticClass: "fas fa-plus-circle fa-2x" })]
+                )
+              ])
+            ])
+          ]
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-92e42444", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

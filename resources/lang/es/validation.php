@@ -151,6 +151,13 @@ return [
         'risk'            => 'Riesgo',
         'from'            => 'Desde',
         'until'           => 'Hasta',
+
+
+        // Jobs
+        'jobs.*.company_id'  => 'Empresa',
+        'jobs.*.activity_id' => 'Actividad',
+        'jobs.*.subactivities' => 'Subactividad/es',
+        'jobs.*.subactivities.*' => 'Subactividad/es',
     ],
 
 ];

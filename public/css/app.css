@@ -10458,6 +10458,14 @@ body > * {
   user-select: none;
 }
 
+.btn-link {
+  color: #3E4551 !important;
+}
+
+.btn-link:hover {
+  color: #4B515D !important;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
