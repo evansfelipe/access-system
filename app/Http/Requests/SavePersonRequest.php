@@ -22,7 +22,6 @@ class SavePersonRequest extends FormRequest
      */
     public function rules()
     {
-        \Debugbar::info($this);
         $person_rules = Person::getValidationRules();
         $residency_rules = Residency::getValidationRules();
         $working_information_rules = PersonCompany::getValidationRules();

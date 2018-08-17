@@ -10,12 +10,7 @@
         // Color
         background-color: rgba(0, 0, 0, .2);
     }
-
-    .content {
-        min-height: 300px;
-        min-width: 600px;
-    }
-
+    // Open/close transitions.
     .slide-leave-active, .slide-enter-active {
         transition: all .5s;
     }
@@ -29,16 +24,14 @@
     <transition name="slide">
         <div v-if="visible" class="modal-wrapper">
             <div class="card card-default shadow">
-                <div class="card-body">
+                <div class="card-body pt-2">
                     <div class="row">
                         <div class="col text-right">
-                            <button class="btn btn-sm btn-link" title="Cerrar" @click="close">
-                                <i class="fas fa-times"></i>
-                            </button>
+                            <a class="btn btn-link cursor-pointer p-0" title="Cerrar" @click="close"><i class="fas fa-times fa-sm"></i></a>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col content">
+                        <div class="col">
                             <slot/>
                         </div>
                     </div>

@@ -1,9 +1,7 @@
-<?php
+<?php namespace App;
 
-namespace App;
-
+use App\Http\Traits\Helpers;
 use Illuminate\Database\Eloquent\Model;
-
 use App\{ Residency, Activity, Vehicle };
 
 class Person extends Model

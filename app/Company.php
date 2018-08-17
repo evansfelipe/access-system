@@ -1,7 +1,6 @@
-<?php
+<?php namespace App;
 
-namespace App;
-
+use App\Http\Traits\Helpers;
 use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
