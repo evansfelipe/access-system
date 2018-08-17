@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Vehicle;
+use App\{ Vehicle, PersonVehicle };
 use Illuminate\Http\Request;
 use App\Http\Requests\{ SaveVehicleRequest };
 
@@ -49,8 +49,16 @@ class VehiclesController extends Controller
      */
     public function store(SaveVehicleRequest $request)
     {
+        // Saves the new vehicle
         $vehicle = new Vehicle($request->toArray());
         $vehicle->save();
+        // Creates the association between person and vehicle
+        if(isset($request->people_id)) {
+            foreach($request->people_id as $person_id) {
+                $person_vehicle = new PersonVehicle(['person_id' => $person_id, 'vehicle_id' => $vehicle->id]);
+                $person_vehicle->save();
+            } 
+         }
         return response(json_encode(['id' => $vehicle->id]), 200)->header('Content-Type', 'application/json');
     }
 

@@ -11,8 +11,8 @@ class Company extends Model
      */
     public const LENGTHS = [
         'name' => ['max' => 50],
-        'area' => ['max' => 50 ],
-        'cuit' => ['max' => 15, 'min' => 10],
+        'area' => ['max' => 50],
+        'cuit' => ['max' => 15],
     ];
 
     /**
@@ -32,13 +32,13 @@ class Company extends Model
                 'string',
                 'max:'.Company::LENGTHS['area']['max'],
             ],
-            'cuit' => [
-                'required',
-                'unique:companies',
-                'string',
-                'min:'.Company::LENGTHS['cuit']['min'],
-                'max:'.Company::LENGTHS['cuit']['max'],
-            ],
+            'cuit' => array_merge(
+                [
+                    'required',
+                    'unique:companies',
+                ], 
+                Helpers::getCuilRules()
+            ),
             'expiration' => [
                 'required',
                 'date',

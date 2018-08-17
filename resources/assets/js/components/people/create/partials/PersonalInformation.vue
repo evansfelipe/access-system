@@ -32,7 +32,7 @@
                 </form-item>
                 <form-item col="col-6" label="CUIL / CUIT" :errors="errors.cuil">
                     <div class="col">
-                        <cuil-cuit :value="values.cuil" @input="(value) => update({name: 'cuil', value: value})"></cuil-cuit>
+                        <cuil-cuit :value="values.cuil" @input="(value) => update({name: 'cuil', value: value})"/>
                     </div>
                 </form-item>
             </div>
@@ -80,7 +80,7 @@
         </form-item>
         <form-item col="col-4" label="Teléfono móvil" :errors="errors.mobile_phone">
             <div class="col">
-                <input type="text" name="mobile_phone" class="form-control" :value="values.mobile_phone" @input="(e) => update(e.target)">                                
+                <input type="text" name="mobile_phone" class="form-control" :value="values.mobile_phone" @input="(e) => update(e.target)">
             </div>            
         </form-item>
         <form-item col="col-4" label="FAX" :errors="errors.fax">
@@ -134,7 +134,7 @@ export default {
     methods: {
         update: function({name, value}) {
             this.$store.commit('updateModel', { which: 'person', properties_path: `values.personal_information.${name}`, value: value });
-        },
+        }
     },
     computed: {
         residency_values: function() {

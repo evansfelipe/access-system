@@ -12,6 +12,9 @@ export default {
                 year:       !debug ? '' : '2010',
                 vtv:        !debug ? '' : '2020-01-01',
                 insurance:  !debug ? '' : '2020-01-01',
+            },
+            assign_people: {
+                people_id: []
             }
         }
     }

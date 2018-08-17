@@ -21,7 +21,7 @@ class CreatePeopleTable extends Migration
             $table->string('name', Person::LENGTHS['name']['max'])->required();
             $table->integer('document_type')->unsigned()->required();
             $table->string('document_number', Person::LENGTHS['document_number']['max'])->required();
-            $table->string('cuil', Person::LENGTHS['cuil']['max'])->unique()->required();
+            $table->string('cuil', Person::LENGTHS['cuil']['max'])->unique()->nullable();
             $table->datetime('birthday')->nullable();
             $table->char('sex', 1)->nullable();
             $table->string('blood_type',3)->nullable();

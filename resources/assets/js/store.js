@@ -171,11 +171,26 @@ export default {
                 if(state.debug) console.log('Vehicles picked:', state.models.person.values.assign_vehicles.vehicles_id);
             }
         },
+        pickPerson: function(state, id) {
+            if(state.lists.people.list.getById(id) !== undefined) {
+                let pos = state.models.vehicle.values.assign_people.people_id.indexOf(id);
+                if(pos !== -1) {
+                    state.models.vehicle.values.assign_people.people_id.splice(pos, 1);
+                }
+                else {
+                    state.models.vehicle.values.assign_people.people_id.push(id);
+                }
+                if(state.debug) console.log('People picked:', state.models.vehicle.values.assign_people.people_id);
+            }
+        },
         /**
          * Unpicks each vehicle from the list of vehicles.
          */
         unpickAllVehicles: function(state) {
             state.models.person.values.assign_vehicles.vehicles_id = [];
+        },
+        unpickAllPeople: function(state) {
+            state.models.vehicle.values.assign_people.people_id = [];
         }
     },
     actions: {

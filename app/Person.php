@@ -52,12 +52,13 @@ class Person extends Model
                 'min:'.Person::LENGTHS['document_number']['min'], 
                 'max:'.Person::LENGTHS['document_number']['max']
             ],
-            'cuil' => [
-                'unique:people',
-                'string', 
-                "regex:/^(20|23|24|27|30|33|34)-[0-9]{8}-[0-9]{1}$/", 
-                'nullable',
-            ],
+            'cuil' => array_merge(
+                [
+                    'unique:people',
+                    'nullable'
+                ], 
+                Helpers::getCuilRules()
+            ),
             'birthday' => [
                 'string', 
                 "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", 

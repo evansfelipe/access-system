@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 use Auth;
-use App\{ User, Vehicle };
+use App\{ User, Vehicle, PersonVehicle };
 use Illuminate\Foundation\Http\FormRequest;
 
 class SaveVehicleRequest extends FormRequest
@@ -24,7 +24,19 @@ class SaveVehicleRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = Vehicle::getValidationRules();
-        return $rules;
+        return array_merge(
+            Vehicle::getValidationRules(),
+            PersonVehicle::getPeopleValidationRules()
+        );
+    }
+
+    /**
+     * Transforms the request input data before validation.
+     * 
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge(['people_id' => json_decode($this->people_id)]);
     }
 }

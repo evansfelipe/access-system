@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vehicle extends Model
 {
-    protected $fillable = ['company_id', 'type', 'owner', 'plate', 'brand', 'model', 'colour', 'insurance', 'vtv'];
+    protected $fillable = ['company_id', 'type', 'owner', 'plate', 'brand', 'model', 'year', 'colour', 'insurance', 'vtv'];
 
     public const LENGTHS = [
         'type' => ['max' => 15],

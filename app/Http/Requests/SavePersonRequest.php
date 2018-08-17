@@ -26,7 +26,7 @@ class SavePersonRequest extends FormRequest
         $person_rules = Person::getValidationRules();
         $residency_rules = Residency::getValidationRules();
         $working_information_rules = PersonCompany::getValidationRules();
-        $assign_vehicles_rules = PersonVehicle::getValidationRules();
+        $assign_vehicles_rules = PersonVehicle::getVehiclesValidationRules();
         $first_card_rules = Card::getValidationRules();
 
         if($this->route()->getName() === 'people.update') {

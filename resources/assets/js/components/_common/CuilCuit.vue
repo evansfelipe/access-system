@@ -55,7 +55,10 @@ export default {
             let val1 = document.getElementById("cuil1").value;
             let val2 = document.getElementById("cuil2").value;
             let val3 = document.getElementById("cuil3").value;
-            this.$emit('input', val1 + '-' + val2 + '-' + val3);
+            if( val1 === '' && val2 === '' && val3 === '' )
+                this.$emit('input', '');
+            else
+                this.$emit('input', val1 + '-' + val2 + '-' + val3);
         }
     },
 }

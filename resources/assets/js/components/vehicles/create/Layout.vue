@@ -7,7 +7,7 @@
                 Información general
             </tab-item>
             <!-- Assign people tab -->
-            <tab-item :active="tab === 2" @click.native="tab = 1" :has-errors="step_validated.assign_people" icon="fas fa-users">
+            <tab-item :active="tab === 1" @click.native="tab = 1" :has-errors="step_validated.assign_people" icon="fas fa-users">
                 Asignar personas
             </tab-item>
         </ul>
@@ -15,6 +15,7 @@
         <creation-wrapper   :updating="this.$store.getters.vehicle.updating" :values="values" :route="route" 
                             @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel">
             <general-information v-show="tab === 0" :errors="errors.general_information" :values="values.general_information"/>
+            <assign-people v-show="tab === 1" :errors="errors.assign_people" :values="values.assign_people" :companyname="company_name"/>
         </creation-wrapper>
     </div>
 </template>
@@ -23,6 +24,7 @@
 export default {
     components: {
         'general-information': require('./partials/GeneralInformation.vue'),
+        'assign-people': require('./partials/AssignPeople.vue'),
     },
     data: function() {
         return {
@@ -50,7 +52,15 @@ export default {
                 method: this.id ? 'put' : 'post',
                 url:    this.id ? `/vehicles/${this.id}` : '/vehicles'
             }
-        }
+        },
+        company_name: function() {
+            let ret = '';
+            if(this.values.general_information.company_id && !this.$store.getters.companies.updating) {
+                let val = this.$store.getters.companies.list.filter(company => company.id == this.values.general_information.company_id);
+                return val.length > 0 ? val[0].name : '-';
+            }
+            return ret;
+        },
     },
     methods: {
         saveSuccess: function(id) {
