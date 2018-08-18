@@ -5,10 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
+    protected $fillable = ['business_name', 'name', 'area', 'cuit', 'expiration'];
+
     /**
      * Array with the length of each string column of the database associated with this model.
      */
     public const LENGTHS = [
+        'business_name' => ['max' => 50],
         'name' => ['max' => 50],
         'area' => ['max' => 50],
         'cuit' => ['max' => 15],
@@ -21,6 +24,11 @@ class Company extends Model
     public static function getValidationRules()
     {
         return [
+            'business_name' => [
+                'required',
+                'string',
+                'max:'.Company::LENGTHS['business_name']['max']
+            ],
             'name' => [
                 'required',
                 'string',

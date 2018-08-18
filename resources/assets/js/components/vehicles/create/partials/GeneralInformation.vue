@@ -117,14 +117,6 @@ export default {
     methods: {
         update: function({name, value}) {
             this.$store.commit('updateModel', { which: 'vehicle', properties_path: `values.general_information.${name}`, value: value });
-        },
-        updateValues: function() {
-            let data = {};
-            let keys = Object.keys(this.values);
-            keys.forEach(key => {
-                data[key] = this.$refs[key].value;
-            })
-            this.$store.commit('updateModel', { which: 'vehicle', properties_path: 'values.general_information', value: data});
         }
     },
 }

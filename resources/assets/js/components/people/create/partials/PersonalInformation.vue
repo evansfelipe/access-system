@@ -90,7 +90,7 @@
         </form-item>   
     </div>
     <hr>
-    <residency-input :values="residency_values" :errors="residency_errors" @input="v => update(v)"></residency-input>
+    <residency-input :values="residency_values" :errors="residency_errors" @input="v => update(v)"/>
 </div>
 </template>
 

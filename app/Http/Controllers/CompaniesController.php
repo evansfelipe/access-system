@@ -58,10 +58,7 @@ class CompaniesController extends Controller
         $residency = new Residency($request->toArray());
         $residency->save();
         // Sets the new company data
-        $company = new Company();
-        $company->name = $request->name;
-        $company->area = $request->area;
-        $company->cuit = $request->cuit;
+        $company = new Company($request->toArray());
         $company->residency_id = $residency->id;
         $company->contact = json_encode([
             'web'   => $request->web,        
@@ -69,7 +66,6 @@ class CompaniesController extends Controller
             'phone' => $request->phone,
             'email' => $request->email
         ]);
-        $company->expiration = $request->expiration;
         $company->save();
         return response(json_encode(['id' => $company->id]), 200)->header('Content-Type', 'application/json');
     }

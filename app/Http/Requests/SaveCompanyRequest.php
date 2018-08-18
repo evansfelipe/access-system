@@ -26,6 +26,7 @@ class SaveCompanyRequest extends FormRequest
      */
     public function rules()
     {
+        \Debugbar::info($this);
         $residency_rules = Residency::getValidationRules();
         array_push($residency_rules['street'],    'required');
         array_push($residency_rules['cp'],        'required');

@@ -40,6 +40,7 @@ class Vehicle extends Model
             ],
             'plate' => [
                 'required',
+                'unique:vehicles',
                 'string',
                 'min:'.Vehicle::LENGTHS['plate']['min'],
                 'max:'.Vehicle::LENGTHS['plate']['max']

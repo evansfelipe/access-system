@@ -26,6 +26,7 @@ class PeopleController extends Controller
     {
         $people = Person::select(['id','last_name','name','cuil'])->orderBy('created_at','desc')
             ->with('companies:name')->get()->map( function($person) {
+                $person->cuil = $person->cuil ?? '';
                 $person->company_name = $person->companies[0]->name;
                 unset($person->companies);
                 return $person;

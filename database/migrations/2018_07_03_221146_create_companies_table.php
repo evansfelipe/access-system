@@ -17,6 +17,7 @@ class CreateCompaniesTable extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('business_name', Company::LENGTHS['business_name']['max'])->required();
             $table->string('name', Company::LENGTHS['name']['max'])->required();
             $table->string('area', Company::LENGTHS['area']['max'])->required();
             $table->string('cuit', Company::LENGTHS['cuit']['max'])->unique()->required();
