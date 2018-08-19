@@ -31606,7 +31606,7 @@ module.exports = function(module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap v4.1.2 (https://getbootstrap.com/)
+  * Bootstrap v4.1.1 (https://getbootstrap.com/)
   * Copyright 2011-2018 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
@@ -31677,7 +31677,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): util.js
+   * Bootstrap (v4.1.1): util.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31754,7 +31754,8 @@ module.exports = function(module) {
         }
 
         try {
-          return document.querySelector(selector) ? selector : null;
+          var $selector = $$$1(document).find(selector);
+          return $selector.length > 0 ? selector : null;
         } catch (err) {
           return null;
         }
@@ -31809,7 +31810,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): alert.js
+   * Bootstrap (v4.1.1): alert.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31821,7 +31822,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'alert';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.alert';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -31884,7 +31885,7 @@ module.exports = function(module) {
         var parent = false;
 
         if (selector) {
-          parent = document.querySelector(selector);
+          parent = $$$1(selector)[0];
         }
 
         if (!parent) {
@@ -31984,7 +31985,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): button.js
+   * Bootstrap (v4.1.1): button.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31996,7 +31997,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'button';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.button';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32041,14 +32042,14 @@ module.exports = function(module) {
         var rootElement = $$$1(this._element).closest(Selector.DATA_TOGGLE)[0];
 
         if (rootElement) {
-          var input = this._element.querySelector(Selector.INPUT);
+          var input = $$$1(this._element).find(Selector.INPUT)[0];
 
           if (input) {
             if (input.type === 'radio') {
-              if (input.checked && this._element.classList.contains(ClassName.ACTIVE)) {
+              if (input.checked && $$$1(this._element).hasClass(ClassName.ACTIVE)) {
                 triggerChangeEvent = false;
               } else {
-                var activeElement = rootElement.querySelector(Selector.ACTIVE);
+                var activeElement = $$$1(rootElement).find(Selector.ACTIVE)[0];
 
                 if (activeElement) {
                   $$$1(activeElement).removeClass(ClassName.ACTIVE);
@@ -32061,7 +32062,7 @@ module.exports = function(module) {
                 return;
               }
 
-              input.checked = !this._element.classList.contains(ClassName.ACTIVE);
+              input.checked = !$$$1(this._element).hasClass(ClassName.ACTIVE);
               $$$1(input).trigger('change');
             }
 
@@ -32071,7 +32072,7 @@ module.exports = function(module) {
         }
 
         if (addAriaPressed) {
-          this._element.setAttribute('aria-pressed', !this._element.classList.contains(ClassName.ACTIVE));
+          this._element.setAttribute('aria-pressed', !$$$1(this._element).hasClass(ClassName.ACTIVE));
         }
 
         if (triggerChangeEvent) {
@@ -32148,7 +32149,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): carousel.js
+   * Bootstrap (v4.1.1): carousel.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32160,7 +32161,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'carousel';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.carousel';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32239,7 +32240,7 @@ module.exports = function(module) {
         this.touchTimeout = null;
         this._config = this._getConfig(config);
         this._element = $$$1(element)[0];
-        this._indicatorsElement = this._element.querySelector(Selector.INDICATORS);
+        this._indicatorsElement = $$$1(this._element).find(Selector.INDICATORS)[0];
 
         this._addEventListeners();
       } // Getters
@@ -32273,7 +32274,7 @@ module.exports = function(module) {
           this._isPaused = true;
         }
 
-        if (this._element.querySelector(Selector.NEXT_PREV)) {
+        if ($$$1(this._element).find(Selector.NEXT_PREV)[0]) {
           Util.triggerTransitionEnd(this._element);
           this.cycle(true);
         }
@@ -32300,7 +32301,7 @@ module.exports = function(module) {
       _proto.to = function to(index) {
         var _this = this;
 
-        this._activeElement = this._element.querySelector(Selector.ACTIVE_ITEM);
+        this._activeElement = $$$1(this._element).find(Selector.ACTIVE_ITEM)[0];
 
         var activeIndex = this._getItemIndex(this._activeElement);
 
@@ -32406,7 +32407,7 @@ module.exports = function(module) {
       };
 
       _proto._getItemIndex = function _getItemIndex(element) {
-        this._items = element && element.parentNode ? [].slice.call(element.parentNode.querySelectorAll(Selector.ITEM)) : [];
+        this._items = $$$1.makeArray($$$1(element).parent().find(Selector.ITEM));
         return this._items.indexOf(element);
       };
 
@@ -32431,7 +32432,7 @@ module.exports = function(module) {
       _proto._triggerSlideEvent = function _triggerSlideEvent(relatedTarget, eventDirectionName) {
         var targetIndex = this._getItemIndex(relatedTarget);
 
-        var fromIndex = this._getItemIndex(this._element.querySelector(Selector.ACTIVE_ITEM));
+        var fromIndex = this._getItemIndex($$$1(this._element).find(Selector.ACTIVE_ITEM)[0]);
 
         var slideEvent = $$$1.Event(Event.SLIDE, {
           relatedTarget: relatedTarget,
@@ -32445,8 +32446,7 @@ module.exports = function(module) {
 
       _proto._setActiveIndicatorElement = function _setActiveIndicatorElement(element) {
         if (this._indicatorsElement) {
-          var indicators = [].slice.call(this._indicatorsElement.querySelectorAll(Selector.ACTIVE));
-          $$$1(indicators).removeClass(ClassName.ACTIVE);
+          $$$1(this._indicatorsElement).find(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
 
           var nextIndicator = this._indicatorsElement.children[this._getItemIndex(element)];
 
@@ -32459,7 +32459,7 @@ module.exports = function(module) {
       _proto._slide = function _slide(direction, element) {
         var _this3 = this;
 
-        var activeElement = this._element.querySelector(Selector.ACTIVE_ITEM);
+        var activeElement = $$$1(this._element).find(Selector.ACTIVE_ITEM)[0];
 
         var activeElementIndex = this._getItemIndex(activeElement);
 
@@ -32625,13 +32625,11 @@ module.exports = function(module) {
 
     $$$1(document).on(Event.CLICK_DATA_API, Selector.DATA_SLIDE, Carousel._dataApiClickHandler);
     $$$1(window).on(Event.LOAD_DATA_API, function () {
-      var carousels = [].slice.call(document.querySelectorAll(Selector.DATA_RIDE));
-
-      for (var i = 0, len = carousels.length; i < len; i++) {
-        var $carousel = $$$1(carousels[i]);
+      $$$1(Selector.DATA_RIDE).each(function () {
+        var $carousel = $$$1(this);
 
         Carousel._jQueryInterface.call($carousel, $carousel.data());
-      }
+      });
     });
     /**
      * ------------------------------------------------------------------------
@@ -32652,7 +32650,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): collapse.js
+   * Bootstrap (v4.1.1): collapse.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32664,7 +32662,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'collapse';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.collapse';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32712,17 +32710,14 @@ module.exports = function(module) {
         this._isTransitioning = false;
         this._element = element;
         this._config = this._getConfig(config);
-        this._triggerArray = $$$1.makeArray(document.querySelectorAll("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
-        var toggleList = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE));
+        this._triggerArray = $$$1.makeArray($$$1("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
+        var tabToggles = $$$1(Selector.DATA_TOGGLE);
 
-        for (var i = 0, len = toggleList.length; i < len; i++) {
-          var elem = toggleList[i];
+        for (var i = 0; i < tabToggles.length; i++) {
+          var elem = tabToggles[i];
           var selector = Util.getSelectorFromElement(elem);
-          var filterElement = [].slice.call(document.querySelectorAll(selector)).filter(function (foundElem) {
-            return foundElem === element;
-          });
 
-          if (selector !== null && filterElement.length > 0) {
+          if (selector !== null && $$$1(selector).filter(element).length > 0) {
             this._selector = selector;
 
             this._triggerArray.push(elem);
@@ -32763,9 +32758,7 @@ module.exports = function(module) {
         var activesData;
 
         if (this._parent) {
-          actives = [].slice.call(this._parent.querySelectorAll(Selector.ACTIVES)).filter(function (elem) {
-            return elem.getAttribute('data-parent') === _this._config.parent;
-          });
+          actives = $$$1.makeArray($$$1(this._parent).find(Selector.ACTIVES).filter("[data-parent=\"" + this._config.parent + "\"]"));
 
           if (actives.length === 0) {
             actives = null;
@@ -32800,7 +32793,7 @@ module.exports = function(module) {
         $$$1(this._element).removeClass(ClassName.COLLAPSE).addClass(ClassName.COLLAPSING);
         this._element.style[dimension] = 0;
 
-        if (this._triggerArray.length) {
+        if (this._triggerArray.length > 0) {
           $$$1(this._triggerArray).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
         }
 
@@ -32841,15 +32834,14 @@ module.exports = function(module) {
         this._element.style[dimension] = this._element.getBoundingClientRect()[dimension] + "px";
         Util.reflow(this._element);
         $$$1(this._element).addClass(ClassName.COLLAPSING).removeClass(ClassName.COLLAPSE).removeClass(ClassName.SHOW);
-        var triggerArrayLength = this._triggerArray.length;
 
-        if (triggerArrayLength > 0) {
-          for (var i = 0; i < triggerArrayLength; i++) {
+        if (this._triggerArray.length > 0) {
+          for (var i = 0; i < this._triggerArray.length; i++) {
             var trigger = this._triggerArray[i];
             var selector = Util.getSelectorFromElement(trigger);
 
             if (selector !== null) {
-              var $elem = $$$1([].slice.call(document.querySelectorAll(selector)));
+              var $elem = $$$1(selector);
 
               if (!$elem.hasClass(ClassName.SHOW)) {
                 $$$1(trigger).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
@@ -32910,12 +32902,11 @@ module.exports = function(module) {
             parent = this._config.parent[0];
           }
         } else {
-          parent = document.querySelector(this._config.parent);
+          parent = $$$1(this._config.parent)[0];
         }
 
         var selector = "[data-toggle=\"collapse\"][data-parent=\"" + this._config.parent + "\"]";
-        var children = [].slice.call(parent.querySelectorAll(selector));
-        $$$1(children).each(function (i, element) {
+        $$$1(parent).find(selector).each(function (i, element) {
           _this3._addAriaAndCollapsedClass(Collapse._getTargetFromElement(element), [element]);
         });
         return parent;
@@ -32925,7 +32916,7 @@ module.exports = function(module) {
         if (element) {
           var isOpen = $$$1(element).hasClass(ClassName.SHOW);
 
-          if (triggerArray.length) {
+          if (triggerArray.length > 0) {
             $$$1(triggerArray).toggleClass(ClassName.COLLAPSED, !isOpen).attr('aria-expanded', isOpen);
           }
         }
@@ -32934,7 +32925,7 @@ module.exports = function(module) {
 
       Collapse._getTargetFromElement = function _getTargetFromElement(element) {
         var selector = Util.getSelectorFromElement(element);
-        return selector ? document.querySelector(selector) : null;
+        return selector ? $$$1(selector)[0] : null;
       };
 
       Collapse._jQueryInterface = function _jQueryInterface(config) {
@@ -32992,8 +32983,7 @@ module.exports = function(module) {
 
       var $trigger = $$$1(this);
       var selector = Util.getSelectorFromElement(this);
-      var selectors = [].slice.call(document.querySelectorAll(selector));
-      $$$1(selectors).each(function () {
+      $$$1(selector).each(function () {
         var $target = $$$1(this);
         var data = $target.data(DATA_KEY);
         var config = data ? 'toggle' : $trigger.data();
@@ -33020,7 +33010,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): dropdown.js
+   * Bootstrap (v4.1.1): dropdown.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -33032,7 +33022,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'dropdown';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.dropdown';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -33241,16 +33231,14 @@ module.exports = function(module) {
         if (!this._menu) {
           var parent = Dropdown._getParentFromElement(this._element);
 
-          if (parent) {
-            this._menu = parent.querySelector(Selector.MENU);
-          }
+          this._menu = $$$1(parent).find(Selector.MENU)[0];
         }
 
         return this._menu;
       };
 
       _proto._getPlacement = function _getPlacement() {
-        var $parentDropdown = $$$1(this._element.parentNode);
+        var $parentDropdown = $$$1(this._element).parent();
         var placement = AttachmentMap.BOTTOM; // Handle dropup
 
         if ($parentDropdown.hasClass(ClassName.DROPUP)) {
@@ -33338,19 +33326,15 @@ module.exports = function(module) {
           return;
         }
 
-        var toggles = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE));
+        var toggles = $$$1.makeArray($$$1(Selector.DATA_TOGGLE));
 
-        for (var i = 0, len = toggles.length; i < len; i++) {
+        for (var i = 0; i < toggles.length; i++) {
           var parent = Dropdown._getParentFromElement(toggles[i]);
 
           var context = $$$1(toggles[i]).data(DATA_KEY);
           var relatedTarget = {
             relatedTarget: toggles[i]
           };
-
-          if (event && event.type === 'click') {
-            relatedTarget.clickEvent = event;
-          }
 
           if (!context) {
             continue;
@@ -33390,7 +33374,7 @@ module.exports = function(module) {
         var selector = Util.getSelectorFromElement(element);
 
         if (selector) {
-          parent = document.querySelector(selector);
+          parent = $$$1(selector)[0];
         }
 
         return parent || element.parentNode;
@@ -33422,7 +33406,7 @@ module.exports = function(module) {
 
         if (!isActive && (event.which !== ESCAPE_KEYCODE || event.which !== SPACE_KEYCODE) || isActive && (event.which === ESCAPE_KEYCODE || event.which === SPACE_KEYCODE)) {
           if (event.which === ESCAPE_KEYCODE) {
-            var toggle = parent.querySelector(Selector.DATA_TOGGLE);
+            var toggle = $$$1(parent).find(Selector.DATA_TOGGLE)[0];
             $$$1(toggle).trigger('focus');
           }
 
@@ -33430,7 +33414,7 @@ module.exports = function(module) {
           return;
         }
 
-        var items = [].slice.call(parent.querySelectorAll(Selector.VISIBLE_ITEMS));
+        var items = $$$1(parent).find(Selector.VISIBLE_ITEMS).get();
 
         if (items.length === 0) {
           return;
@@ -33508,7 +33492,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): modal.js
+   * Bootstrap (v4.1.1): modal.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -33520,7 +33504,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'modal';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.modal';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -33564,7 +33548,8 @@ module.exports = function(module) {
       DATA_TOGGLE: '[data-toggle="modal"]',
       DATA_DISMISS: '[data-dismiss="modal"]',
       FIXED_CONTENT: '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top',
-      STICKY_CONTENT: '.sticky-top'
+      STICKY_CONTENT: '.sticky-top',
+      NAVBAR_TOGGLER: '.navbar-toggler'
       /**
        * ------------------------------------------------------------------------
        * Class Definition
@@ -33579,7 +33564,7 @@ module.exports = function(module) {
       function Modal(element, config) {
         this._config = this._getConfig(config);
         this._element = element;
-        this._dialog = element.querySelector(Selector.DIALOG);
+        this._dialog = $$$1(element).find(Selector.DIALOG)[0];
         this._backdrop = null;
         this._isShown = false;
         this._isBodyOverflowing = false;
@@ -33836,7 +33821,7 @@ module.exports = function(module) {
           this._backdrop.className = ClassName.BACKDROP;
 
           if (animate) {
-            this._backdrop.classList.add(animate);
+            $$$1(this._backdrop).addClass(animate);
           }
 
           $$$1(this._backdrop).appendTo(document.body);
@@ -33930,19 +33915,23 @@ module.exports = function(module) {
         if (this._isBodyOverflowing) {
           // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
           //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
-          var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
-          var stickyContent = [].slice.call(document.querySelectorAll(Selector.STICKY_CONTENT)); // Adjust fixed content padding
-
-          $$$1(fixedContent).each(function (index, element) {
-            var actualPadding = element.style.paddingRight;
+          // Adjust fixed content padding
+          $$$1(Selector.FIXED_CONTENT).each(function (index, element) {
+            var actualPadding = $$$1(element)[0].style.paddingRight;
             var calculatedPadding = $$$1(element).css('padding-right');
             $$$1(element).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + _this9._scrollbarWidth + "px");
           }); // Adjust sticky content margin
 
-          $$$1(stickyContent).each(function (index, element) {
-            var actualMargin = element.style.marginRight;
+          $$$1(Selector.STICKY_CONTENT).each(function (index, element) {
+            var actualMargin = $$$1(element)[0].style.marginRight;
             var calculatedMargin = $$$1(element).css('margin-right');
             $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) - _this9._scrollbarWidth + "px");
+          }); // Adjust navbar-toggler margin
+
+          $$$1(Selector.NAVBAR_TOGGLER).each(function (index, element) {
+            var actualMargin = $$$1(element)[0].style.marginRight;
+            var calculatedMargin = $$$1(element).css('margin-right');
+            $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) + _this9._scrollbarWidth + "px");
           }); // Adjust body padding
 
           var actualPadding = document.body.style.paddingRight;
@@ -33953,15 +33942,15 @@ module.exports = function(module) {
 
       _proto._resetScrollbar = function _resetScrollbar() {
         // Restore fixed content padding
-        var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
-        $$$1(fixedContent).each(function (index, element) {
+        $$$1(Selector.FIXED_CONTENT).each(function (index, element) {
           var padding = $$$1(element).data('padding-right');
-          $$$1(element).removeData('padding-right');
-          element.style.paddingRight = padding ? padding : '';
-        }); // Restore sticky content
 
-        var elements = [].slice.call(document.querySelectorAll("" + Selector.STICKY_CONTENT));
-        $$$1(elements).each(function (index, element) {
+          if (typeof padding !== 'undefined') {
+            $$$1(element).css('padding-right', padding).removeData('padding-right');
+          }
+        }); // Restore sticky content and navbar-toggler margin
+
+        $$$1(Selector.STICKY_CONTENT + ", " + Selector.NAVBAR_TOGGLER).each(function (index, element) {
           var margin = $$$1(element).data('margin-right');
 
           if (typeof margin !== 'undefined') {
@@ -33970,8 +33959,10 @@ module.exports = function(module) {
         }); // Restore body padding
 
         var padding = $$$1(document.body).data('padding-right');
-        $$$1(document.body).removeData('padding-right');
-        document.body.style.paddingRight = padding ? padding : '';
+
+        if (typeof padding !== 'undefined') {
+          $$$1(document.body).css('padding-right', padding).removeData('padding-right');
+        }
       };
 
       _proto._getScrollbarWidth = function _getScrollbarWidth() {
@@ -34036,7 +34027,7 @@ module.exports = function(module) {
       var selector = Util.getSelectorFromElement(this);
 
       if (selector) {
-        target = document.querySelector(selector);
+        target = $$$1(selector)[0];
       }
 
       var config = $$$1(target).data(DATA_KEY) ? 'toggle' : _objectSpread({}, $$$1(target).data(), $$$1(this).data());
@@ -34079,7 +34070,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): tooltip.js
+   * Bootstrap (v4.1.1): tooltip.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34091,7 +34082,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'tooltip';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.tooltip';
     var EVENT_KEY = "." + DATA_KEY;
     var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -34301,7 +34292,7 @@ module.exports = function(module) {
           var attachment = this._getAttachment(placement);
 
           this.addAttachmentClass(attachment);
-          var container = this.config.container === false ? document.body : $$$1(document).find(this.config.container);
+          var container = this.config.container === false ? document.body : $$$1(this.config.container);
           $$$1(tip).data(this.constructor.DATA_KEY, this);
 
           if (!$$$1.contains(this.element.ownerDocument.documentElement, this.tip)) {
@@ -34440,9 +34431,9 @@ module.exports = function(module) {
       };
 
       _proto.setContent = function setContent() {
-        var tip = this.getTipElement();
-        this.setElementContent($$$1(tip.querySelectorAll(Selector.TOOLTIP_INNER)), this.getTitle());
-        $$$1(tip).removeClass(ClassName.FADE + " " + ClassName.SHOW);
+        var $tip = $$$1(this.getTipElement());
+        this.setElementContent($tip.find(Selector.TOOLTIP_INNER), this.getTitle());
+        $tip.removeClass(ClassName.FADE + " " + ClassName.SHOW);
       };
 
       _proto.setElementContent = function setElementContent($element, content) {
@@ -34635,18 +34626,15 @@ module.exports = function(module) {
         var $tip = $$$1(this.getTipElement());
         var tabClass = $tip.attr('class').match(BSCLS_PREFIX_REGEX);
 
-        if (tabClass !== null && tabClass.length) {
+        if (tabClass !== null && tabClass.length > 0) {
           $tip.removeClass(tabClass.join(''));
         }
       };
 
-      _proto._handlePopperPlacementChange = function _handlePopperPlacementChange(popperData) {
-        var popperInstance = popperData.instance;
-        this.tip = popperInstance.popper;
-
+      _proto._handlePopperPlacementChange = function _handlePopperPlacementChange(data) {
         this._cleanTipClass();
 
-        this.addAttachmentClass(this._getAttachment(popperData.placement));
+        this.addAttachmentClass(this._getAttachment(data.placement));
       };
 
       _proto._fixTransition = function _fixTransition() {
@@ -34749,7 +34737,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): popover.js
+   * Bootstrap (v4.1.1): popover.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34761,7 +34749,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'popover';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.popover';
     var EVENT_KEY = "." + DATA_KEY;
     var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -34946,7 +34934,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): scrollspy.js
+   * Bootstrap (v4.1.1): scrollspy.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34958,7 +34946,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'scrollspy';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.scrollspy';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -35040,13 +35028,13 @@ module.exports = function(module) {
         this._offsets = [];
         this._targets = [];
         this._scrollHeight = this._getScrollHeight();
-        var targets = [].slice.call(document.querySelectorAll(this._selector));
+        var targets = $$$1.makeArray($$$1(this._selector));
         targets.map(function (element) {
           var target;
           var targetSelector = Util.getSelectorFromElement(element);
 
           if (targetSelector) {
-            target = document.querySelector(targetSelector);
+            target = $$$1(targetSelector)[0];
           }
 
           if (target) {
@@ -35143,9 +35131,7 @@ module.exports = function(module) {
           return;
         }
 
-        var offsetLength = this._offsets.length;
-
-        for (var i = offsetLength; i--;) {
+        for (var i = this._offsets.length; i--;) {
           var isActiveTarget = this._activeTarget !== this._targets[i] && scrollTop >= this._offsets[i] && (typeof this._offsets[i + 1] === 'undefined' || scrollTop < this._offsets[i + 1]);
 
           if (isActiveTarget) {
@@ -35165,7 +35151,7 @@ module.exports = function(module) {
         queries = queries.map(function (selector) {
           return selector + "[data-target=\"" + target + "\"]," + (selector + "[href=\"" + target + "\"]");
         });
-        var $link = $$$1([].slice.call(document.querySelectorAll(queries.join(','))));
+        var $link = $$$1(queries.join(','));
 
         if ($link.hasClass(ClassName.DROPDOWN_ITEM)) {
           $link.closest(Selector.DROPDOWN).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
@@ -35186,8 +35172,7 @@ module.exports = function(module) {
       };
 
       _proto._clear = function _clear() {
-        var nodes = [].slice.call(document.querySelectorAll(this._selector));
-        $$$1(nodes).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
+        $$$1(this._selector).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
       }; // Static
 
 
@@ -35234,10 +35219,9 @@ module.exports = function(module) {
 
 
     $$$1(window).on(Event.LOAD_DATA_API, function () {
-      var scrollSpys = [].slice.call(document.querySelectorAll(Selector.DATA_SPY));
-      var scrollSpysLength = scrollSpys.length;
+      var scrollSpys = $$$1.makeArray($$$1(Selector.DATA_SPY));
 
-      for (var i = scrollSpysLength; i--;) {
+      for (var i = scrollSpys.length; i--;) {
         var $spy = $$$1(scrollSpys[i]);
 
         ScrollSpy._jQueryInterface.call($spy, $spy.data());
@@ -35262,7 +35246,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): tab.js
+   * Bootstrap (v4.1.1): tab.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -35274,7 +35258,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'tab';
-    var VERSION = '4.1.2';
+    var VERSION = '4.1.1';
     var DATA_KEY = 'bs.tab';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -35356,7 +35340,7 @@ module.exports = function(module) {
         }
 
         if (selector) {
-          target = document.querySelector(selector);
+          target = $$$1(selector)[0];
         }
 
         this._activate(this._element, listElement);
@@ -35438,8 +35422,7 @@ module.exports = function(module) {
           var dropdownElement = $$$1(element).closest(Selector.DROPDOWN)[0];
 
           if (dropdownElement) {
-            var dropdownToggleList = [].slice.call(dropdownElement.querySelectorAll(Selector.DROPDOWN_TOGGLE));
-            $$$1(dropdownToggleList).addClass(ClassName.ACTIVE);
+            $$$1(dropdownElement).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
           }
 
           element.setAttribute('aria-expanded', true);
@@ -35511,7 +35494,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.2): index.js
+   * Bootstrap (v4.1.1): index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -36447,21 +36430,23 @@ String.prototype.matches = function (other) {
     return this.toUpperCase().includes(other.toString().toUpperCase());
 };
 
-Array.prototype.getPositionById = function (id) {
+Array.prototype.getPositionById = function (id, attr) {
+    attr = attr ? attr : 'id';
     var i = 0;
-    while (i < this.length && this[i].id !== id) {
+    while (i < this.length && this[i][attr] != id) {
         i++;
     }
     return i === this.length ? undefined : i;
 };
 
-Array.prototype.getPositionsByIds = function (ids) {
+Array.prototype.getPositionsByIds = function (ids, attr) {
     var _this = this;
 
+    attr = attr ? attr : 'id';
     var i = void 0;
     var ret = [];
     ids.forEach(function (id) {
-        i = _this.getPositionById(id);
+        i = _this.getPositionById(id, attr);
         if (i !== undefined) {
             ret.push(i);
         }
@@ -36469,18 +36454,20 @@ Array.prototype.getPositionsByIds = function (ids) {
     return ret;
 };
 
-Array.prototype.getById = function (id) {
-    var i = this.getPositionById(id);
+Array.prototype.getById = function (id, attr) {
+    attr = attr ? attr : 'id';
+    var i = this.getPositionById(id, attr);
     return i === this.length ? undefined : this[i];
 };
 
-Array.prototype.getByIds = function (ids) {
+Array.prototype.getByIds = function (ids, attr) {
     var _this2 = this;
 
+    attr = attr ? attr : 'id';
     var ob = void 0;
     var ret = [];
     ids.forEach(function (id) {
-        ob = _this2.getById(id);
+        ob = _this2.getById(id, attr);
         if (i !== undefined) {
             ret.push(ob);
         }
@@ -51303,13 +51290,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var debug = true;
 
-var List = function List() {
-    _classCallCheck(this, List);
+var List = function () {
+    function List() {
+        _classCallCheck(this, List);
 
-    this.timestamp = null;
-    this.updating = false;
-    this.list = [];
-};
+        this.timestamp = null;
+        this.updating = false;
+        this.list = [];
+    }
+
+    _createClass(List, [{
+        key: 'getById',
+        value: function getById(id) {
+            return this.list.getById(id);
+        }
+    }]);
+
+    return List;
+}();
 
 var Model = function () {
     function Model(name, plural) {
@@ -51532,17 +51530,98 @@ var Model = function () {
         },
         unpickAllPeople: function unpickAllPeople(state) {
             state.models.vehicle.values.assign_people.people_id = [];
+        },
+
+        /**
+         * Adds a new job to the jobs list of the person's model
+         */
+        addJob: function addJob(state) {
+            state.models.person.values.working_information.jobs.push({
+                key: Date.now(),
+                company_id: '',
+                activity_id: '',
+                subactivities: [],
+                cards: [{ key: Date.now(), number: '', from: '', until: '' }]
+            });
+        },
+        /**
+         * Given a job of the jobs list of the person's model, updates its values.
+         */
+        updateJob: function updateJob(state, _ref15) {
+            var job = _ref15.job,
+                data = _ref15.data;
+
+            var pos = state.models.person.values.working_information.jobs.indexOf(job);
+            var ref = state.models.person.values.working_information.jobs[pos];
+            ref.company_id = data.company_id;
+            ref.activity_id = data.activity_id;
+            ref.subactivities = data.subactivities;
+        },
+        /**
+         * Given a job, removes it from the jobs list of the person's model.
+         */
+        deleteJob: function deleteJob(state, job) {
+            var pos = state.models.person.values.working_information.jobs.indexOf(job);
+            if (pos !== -1) {
+                state.models.person.values.working_information.jobs.splice(pos, 1);
+            }
+        },
+        /**
+         * Given a job, adds a new card to its cards list.
+         */
+        addCardToJob: function addCardToJob(state, job) {
+            var pos = state.models.person.values.working_information.jobs.indexOf(job);
+            if (pos !== -1) {
+                state.models.person.values.working_information.jobs[pos].cards.push({
+                    key: Date.now(),
+                    number: '',
+                    from: '',
+                    until: ''
+                });
+            }
+        },
+        editCardFromJob: function editCardFromJob(state, _ref16) {
+            var job = _ref16.job,
+                card = _ref16.card,
+                data = _ref16.data;
+
+            var pos = state.models.person.values.working_information.jobs.indexOf(job);
+            if (pos !== -1) {
+                var pos2 = state.models.person.values.working_information.jobs[pos].cards.indexOf(card);
+                if (pos2 !== -1) {
+                    var ref = state.models.person.values.working_information.jobs[pos].cards[pos2];
+                    ref.number = data.number;
+                    ref.from = data.from;
+                    ref.until = data.until;
+                }
+            }
+        },
+        /**
+         * Given a job and a card, removes the card from the card list of the job.
+         */
+        removeCardFromJob: function removeCardFromJob(state, _ref17) {
+            var job = _ref17.job,
+                card = _ref17.card;
+
+            var pos = state.models.person.values.working_information.jobs.indexOf(job);
+            if (pos !== -1) {
+                var pos2 = state.models.person.values.working_information.jobs[pos].cards.indexOf(card);
+                if (pos2 !== -1) {
+                    state.models.person.values.working_information.jobs[pos].cards.splice(pos2, 1);
+                }
+            }
         }
+
     },
     actions: {
         /**
          * UI actions.
          */
-        addNotification: function addNotification(_ref15, _ref16) {
-            var commit = _ref15.commit,
-                state = _ref15.state;
-            var type = _ref16.type,
-                message = _ref16.message;
+        addNotification: function addNotification(_ref18, _ref19) {
+            var commit = _ref18.commit,
+                state = _ref18.state;
+            var type = _ref19.type,
+                message = _ref19.message;
 
             var id = state.ui.notifications.next_id;
             commit('addNotification', { id: id, type: type, message: message });
@@ -51553,9 +51632,9 @@ var Model = function () {
         /**
          * Lists actions.
          */
-        fetchList: function fetchList(_ref17, what) {
-            var commit = _ref17.commit,
-                state = _ref17.state;
+        fetchList: function fetchList(_ref20, what) {
+            var commit = _ref20.commit,
+                state = _ref20.state;
 
             if (state.debug) console.log('Validating timestamps:', what);
             commit('updatingList', { what: what, value: true });
@@ -51582,12 +51661,12 @@ var Model = function () {
         /**
          * Models actions.
          */
-        fetchModel: function fetchModel(_ref18, _ref19) {
-            var getters = _ref18.getters,
-                commit = _ref18.commit,
-                state = _ref18.state;
-            var which = _ref19.which,
-                id = _ref19.id;
+        fetchModel: function fetchModel(_ref21, _ref22) {
+            var getters = _ref21.getters,
+                commit = _ref21.commit,
+                state = _ref21.state;
+            var which = _ref22.which,
+                id = _ref22.id;
 
             if (state.debug) console.log('Fetching', which, 'id', id);
             var model = getters[which];
@@ -51670,22 +51749,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 city: !debug ? '' : ''
             },
             working_information: {
+                risk: !debug ? '' : '',
                 art: !debug ? '' : '123456789',
                 pbip: !debug ? '' : '2020-01-01',
                 jobs: [{
+                    key: 0,
                     company_id: '',
                     activity_id: '',
-                    subactivities: []
+                    subactivities: ['hola'],
+                    cards: [{
+                        key: 0,
+                        number: '',
+                        from: '',
+                        until: ''
+                    }]
                 }]
             },
+            // Why not just an array instead of an object with an array.
             assign_vehicles: {
                 vehicles_id: []
-            },
-            first_card: {
-                number: !debug ? '' : '918273645',
-                risk: !debug ? '' : '1',
-                from: !debug ? '' : '2020-01-01',
-                until: !debug ? '' : '2020-01-02'
             },
             documentation: {}
         };
@@ -52104,8 +52186,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
-        console.log(this.value);
-
         var vm = this;
         var select = $(this.$el).select2({ data: this.options, placeholder: this.placeholder, tags: this.tags, color: 'red', theme: 'bootstrap' }).val(this.value).trigger('change');
         select.data('select2').$selection.css({
@@ -52133,7 +52213,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         //     $(this.$el).val(value);
         // },
         options: function options(_options) {
-            $(this.$el).empty().select2({ data: _options, placeholder: this.placeholder }).val(this.value).trigger('change');
+            // Maybe there is a way to change the options without restarting the select?
+            $(this.$el).select2({ data: this.options, placeholder: this.placeholder, tags: this.tags, color: 'red', theme: 'bootstrap' })
+            // .val(this.value) It's needed?
+            .data('select2').$selection.css({
+                'min-height': '37px'
+            });
         }
     }
 });
@@ -60127,11 +60212,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$store.commit('loading', { state: true, message: "Guardando..." });
 
             var onError = function onError(response) {
-                var errors = {};
+                var errors = [];
                 var results = {};
                 var r_errors = response.response.data.errors;
                 Object.keys(_this.values).forEach(function (key) {
-                    errors[key] = {};
+                    errors[key] = [];
                     Object.keys(r_errors).forEach(function (error) {
                         var attributes = Object.keys(_this.values[key]);
                         var found = false;
@@ -60141,14 +60226,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             }
                         });
                         if (found) {
-                            errors[key][error] = r_errors[error];
+                            var tokens = error.split('.');
+                            var aux = errors[key];
+                            for (var i = 0; i < tokens.length - 1; i++) {
+                                if (!aux[tokens[i]]) aux[tokens[i]] = [];
+                                aux = aux[tokens[i]];
+                            }
+                            aux[tokens[tokens.length - 1]] = r_errors[error];
                         }
                     });
                     results[key] = Object.keys(errors[key]).length > 0 ? false : true;
                 });
                 _this.$store.dispatch('addNotification', { type: 'danger', message: 'Corrija los errores antes de continuar.' });
                 _this.$emit('saveFailed', { errors: errors, step_validated: results });
-                console.log(r_errors);
                 console.log(errors);
             };
 
@@ -60429,7 +60519,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\nbutton.btn-link[data-v-723cfb00] {\n  text-decoration: none;\n  font-weight: bold;\n}\nbutton.btn-link.btn-cancel[data-v-723cfb00] {\n    color: red;\n}\nbutton.btn-link.btn-cancel[data-v-723cfb00]:hover {\n      color: white;\n      background-color: red;\n}\nbutton.btn-link.btn-confirm[data-v-723cfb00] {\n    color: #3F729B;\n}\nbutton.btn-link.btn-confirm[data-v-723cfb00]:hover {\n      color: white;\n      background-color: #3F729B;\n}\n", ""]);
+exports.push([module.i, "\nbutton.btn-link[data-v-723cfb00] {\n  text-decoration: none;\n  font-weight: bold;\n  padding: 5px;\n}\nbutton.btn-link.btn-cancel[data-v-723cfb00] {\n    color: red !important;\n}\nbutton.btn-link.btn-cancel[data-v-723cfb00]:hover {\n      color: white !important;\n      background-color: red;\n}\nbutton.btn-link.btn-confirm[data-v-723cfb00] {\n    color: #3F729B !important;\n}\nbutton.btn-link.btn-confirm[data-v-723cfb00]:hover {\n      color: white !important;\n      background-color: #3F729B;\n}\n", ""]);
 
 // exports
 
@@ -60440,6 +60530,7 @@ exports.push([module.i, "\nbutton.btn-link[data-v-723cfb00] {\n  text-decoration
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -61809,30 +61900,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
         'personal-information': __webpack_require__(126),
-        'working-information': __webpack_require__(129),
-        'assign-vehicles': __webpack_require__(132),
-        'first-card': __webpack_require__(137)
+        'working-information': __webpack_require__(194),
+        'assign-vehicles': __webpack_require__(132)
     },
     data: function data() {
         return {
             tab: 0,
             first_save: false,
-            errors: {
-                personal_information: {},
-                working_information: {},
-                assign_vehicles: {},
-                first_card: {},
-                documentation: {}
-            },
+            errors: [],
             step_validated: {
                 personal_information: null,
                 working_information: null,
@@ -61875,6 +61954,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 method: this.id ? 'put' : 'post',
                 url: this.id ? '/people/' + this.id : '/people'
             };
+        },
+        personal_information_errors: function personal_information_errors() {
+            return this.errors['personal_information'] ? this.errors['personal_information'] : [];
+        },
+        working_information_errors: function working_information_errors() {
+            return this.errors['working_information'] ? this.errors['working_information'] : [];
         }
     },
     methods: {
@@ -62057,7 +62142,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         errors: {
             required: true,
-            type: Object
+            type: Array
         }
     },
     data: function data() {
@@ -62564,245 +62649,8 @@ if (false) {
 }
 
 /***/ }),
-/* 129 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(191)
-}
-var normalizeComponent = __webpack_require__(0)
-/* script */
-var __vue_script__ = __webpack_require__(130)
-/* template */
-var __vue_template__ = __webpack_require__(193)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-92e42444"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/assets/js/components/people/create/partials/WorkingInformation.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-92e42444", Component.options)
-  } else {
-    hotAPI.reload("data-v-92e42444", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 130 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        values: {
-            required: true,
-            type: Object
-        },
-        errors: {
-            required: true,
-            type: Object
-        }
-    },
-    data: function data() {
-        return {
-            risk_levels: [{ id: 1, text: 'Nivel 1' }, { id: 2, text: 'Nivel 2' }, { id: 3, text: 'Nivel 3' }],
-            test: [{ id: 1, text: 'Nivel 1' }, { id: 2, text: 'Nivel 2' }, { id: 3, text: 'Nivel 3' }]
-        };
-    },
-    beforeMount: function beforeMount() {
-        this.$store.dispatch('fetchList', 'companies');
-        this.$store.dispatch('fetchList', 'activities');
-    },
-
-    methods: {
-        addJob: function addJob() {
-            var copy = this.clone(this.jobs);
-            copy.push({
-                company_id: '',
-                activity_id: '',
-                subactivities: []
-            });
-            this.jobs = copy;
-        },
-        removeJob: function removeJob(job) {
-            var pos = this.jobs.indexOf(job);
-            var copy = this.clone(this.jobs);
-            this.$delete(copy, pos);
-            this.jobs = copy;
-        },
-        editJob: function editJob(_ref) {
-            var key = _ref.key,
-                attribute = _ref.attribute,
-                value = _ref.value;
-
-            var copy = this.clone(this.jobs);
-            copy[key][attribute] = value;
-            this.jobs = copy;
-        },
-        update: function update(_ref2) {
-            var name = _ref2.name,
-                value = _ref2.value;
-
-            this.$store.commit('updateModel', { which: 'person', properties_path: 'values.working_information.' + name, value: value });
-        }
-    },
-    computed: {
-        company_id: function company_id() {
-            return this.values.company_id;
-        },
-        companies: function companies() {
-            return this.$store.getters.companies.list.map(function (company) {
-                return {
-                    id: company.id,
-                    text: company.name
-                };
-            });
-        },
-        activities: function activities() {
-            return this.$store.getters.activities.list.map(function (activity) {
-                return {
-                    id: activity.id,
-                    text: activity.name
-                };
-            });
-        },
-        jobs: {
-            get: function get() {
-                var obj = {
-                    company_id: '',
-                    activity_id: '',
-                    subactivities: []
-                };
-                return this.values.jobs.length > 0 ? this.values.jobs : [obj];
-            },
-            set: function set(value) {
-                this.$store.commit('updateModel', { which: 'person', properties_path: 'values.working_information.jobs', value: value });
-            }
-        },
-        jobs_errors: function jobs_errors() {
-            var _this = this;
-
-            var errors = {};
-            var keys = Object.keys(this.errors);
-            keys.forEach(function (error) {
-                if (error.startsWith('jobs.')) {
-                    var tokens = error.split('.');
-                    if (!errors[tokens[1]]) {
-                        errors[tokens[1]] = {};
-                    }
-                    errors[tokens[1]][tokens[2]] = _this.errors[error];
-                }
-            });
-            return errors;
-        }
-    }
-});
-
-/***/ }),
+/* 129 */,
+/* 130 */,
 /* 131 */,
 /* 132 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -63300,393 +63148,11 @@ if (false) {
 }
 
 /***/ }),
-/* 137 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(138)
-}
-var normalizeComponent = __webpack_require__(0)
-/* script */
-var __vue_script__ = __webpack_require__(140)
-/* template */
-var __vue_template__ = __webpack_require__(141)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-727746e6"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/assets/js/components/people/create/partials/FirstCard.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-727746e6", Component.options)
-  } else {
-    hotAPI.reload("data-v-727746e6", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 138 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(139);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("3c9aee27", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-727746e6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FirstCard.vue", function() {
-     var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-727746e6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FirstCard.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 139 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\ndiv.active-card[data-v-727746e6] {\n    display: inline-block;\n    width: 100%;\n    border-radius: 5px;\n    color: white;\n    background: -webkit-gradient(linear, left top, right top, from(#0d47a1) , to(#4285F4));\n    background: linear-gradient(to right, #0d47a1 , #4285F4);\n}\ndiv.active-card > hr[data-v-727746e6] {\n    height: 12px;\n    border: 0;\n    -webkit-box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);\n            box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);\n    margin: 0;\n}\ndiv.active-card > div.title[data-v-727746e6] {\n    padding: 5%;\n    padding-bottom: 5px;\n}\ndiv.active-card > div.title > h4[data-v-727746e6] {\n    display: inline-block;\n}\ndiv.active-card > div.info[data-v-727746e6] {\n    padding: 5%;\n    padding-top: 0;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 140 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        fullname: {
-            type: String,
-            required: false,
-            default: 'x, x'
-        },
-        companyname: {
-            type: String,
-            required: false,
-            default: 'x'
-        },
-        values: {
-            required: true,
-            type: Object
-        },
-        errors: {
-            required: true,
-            type: Object
-        }
-    },
-    data: function data() {
-        return {
-            risk_levels: [{ id: 1, text: 'Nivel 1' }, { id: 2, text: 'Nivel 2' }, { id: 3, text: 'Nivel 3' }]
-        };
-    },
-
-    methods: {
-        update: function update(_ref) {
-            var name = _ref.name,
-                value = _ref.value;
-
-            this.$store.commit('updateModel', { which: 'person', properties_path: 'values.first_card.' + name, value: value });
-        }
-    },
-    computed: {
-        validity_errors: function validity_errors() {
-            if (this.errors.from && this.errors.until) {
-                return this.errors.from.concat(this.errors.until);
-            } else if (this.errors.from) {
-                return this.errors.from;
-            } else if (this.errors.until) {
-                return this.errors.until;
-            } else {
-                return [];
-            }
-        }
-    }
-});
-
-/***/ }),
-/* 141 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "form-row d-flex align-items-center" }, [
-      _c(
-        "div",
-        { staticClass: "offset-1 col-4" },
-        [
-          _c("form-item", { attrs: { errors: _vm.errors.number } }, [
-            _c("input", {
-              staticClass: "form-control",
-              attrs: {
-                type: "text",
-                name: "number",
-                placeholder: "Número de tarjeta"
-              },
-              domProps: { value: _vm.values.number },
-              on: {
-                input: function(e) {
-                  return _vm.update(e.target)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "active-card" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c("hr"),
-            _vm._v(" "),
-            _c("div", { staticClass: "info" }, [
-              _c("h3", { attrs: { id: "display" } }, [
-                _vm._v(
-                  _vm._s(
-                    _vm.values.number !== ""
-                      ? _vm.values.number
-                      : "xxx-xxx-xxx-xxx"
-                  )
-                )
-              ]),
-              _vm._v(" "),
-              _c("small", [_c("b", [_vm._v(_vm._s(_vm.fullname))])]),
-              _vm._v(" "),
-              _c("br"),
-              _vm._v(" "),
-              _c("small", [_c("b", [_vm._v(_vm._s(_vm.companyname))])]),
-              _vm._v(" "),
-              _c("br")
-            ])
-          ])
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "offset-1 col-5" }, [
-        _c(
-          "div",
-          { staticClass: "form-row" },
-          [
-            _c(
-              "form-item",
-              { attrs: { label: "Riesgo", errors: _vm.errors.risk } },
-              [
-                _c(
-                  "div",
-                  { staticClass: "col" },
-                  [
-                    _c("select2", {
-                      attrs: {
-                        name: "risk",
-                        value: _vm.values.risk,
-                        placeholder: "Seleccione nivel de riesgo",
-                        options: _vm.risk_levels
-                      },
-                      on: {
-                        input: function(value) {
-                          return _vm.update({ name: "risk", value: value })
-                        }
-                      }
-                    })
-                  ],
-                  1
-                )
-              ]
-            )
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "form-row" },
-          [
-            _c(
-              "form-item",
-              { attrs: { label: "Validez", errors: _vm.validity_errors } },
-              [
-                _c("div", { staticClass: "col-6" }, [
-                  _c("small", [_vm._v("Desde:")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "date", name: "from" },
-                    domProps: { value: _vm.values.from },
-                    on: {
-                      input: function(e) {
-                        return _vm.update(e.target)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-6" }, [
-                  _c("small", [_vm._v("Hasta:")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "date", name: "until" },
-                    domProps: { value: _vm.values.until },
-                    on: {
-                      input: function(e) {
-                        return _vm.update(e.target)
-                      }
-                    }
-                  })
-                ])
-              ]
-            )
-          ],
-          1
-        )
-      ])
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "title" }, [
-      _c("h4", [_vm._v("Tarjeta de acceso")])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-727746e6", module.exports)
-  }
-}
-
-/***/ }),
+/* 137 */,
+/* 138 */,
+/* 139 */,
+/* 140 */,
+/* 141 */,
 /* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -63757,23 +63223,6 @@ var render = function() {
             {
               attrs: {
                 active: _vm.tab === 3,
-                "has-errors": _vm.step_validated.first_card,
-                icon: "fas fa-id-card"
-              },
-              nativeOn: {
-                click: function($event) {
-                  _vm.tab = 3
-                }
-              }
-            },
-            [_vm._v("\n            Tarjeta\n        ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "tab-item",
-            {
-              attrs: {
-                active: _vm.tab === 4,
                 "has-errors": _vm.step_validated.documentation,
                 icon: "fas fa-file-alt"
               },
@@ -63814,7 +63263,7 @@ var render = function() {
               }
             ],
             attrs: {
-              errors: _vm.errors.personal_information,
+              errors: _vm.personal_information_errors,
               values: _vm.values.personal_information
             }
           }),
@@ -63829,7 +63278,7 @@ var render = function() {
               }
             ],
             attrs: {
-              errors: _vm.errors.working_information,
+              errors: _vm.working_information_errors,
               values: _vm.values.working_information
             }
           }),
@@ -63849,23 +63298,6 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("first-card", {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.tab === 3,
-                expression: "tab === 3"
-              }
-            ],
-            attrs: {
-              errors: _vm.errors.first_card,
-              values: _vm.values.first_card,
-              fullname: _vm.full_name,
-              companyname: _vm.company_name
-            }
-          }),
-          _vm._v(" "),
           _c(
             "div",
             {
@@ -63873,8 +63305,8 @@ var render = function() {
                 {
                   name: "show",
                   rawName: "v-show",
-                  value: _vm.tab === 4,
-                  expression: "tab === 4"
+                  value: _vm.tab === 3,
+                  expression: "tab === 3"
                 }
               ]
             },
@@ -64711,7 +64143,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\na[data-v-1e9eafc2] {\n  color: black;\n}\na[data-v-1e9eafc2]:hover {\n    color: #3F729B;\n    text-decoration: none;\n}\n", ""]);
+exports.push([module.i, "\na[data-v-1e9eafc2] {\n  color: black;\n}\na[data-v-1e9eafc2]:hover {\n    color: #3F729B;\n    text-decoration: none;\n}\nlabel[data-v-1e9eafc2], small[data-v-1e9eafc2] {\n  display: block;\n}\n", ""]);
 
 // exports
 
@@ -64722,6 +64154,69 @@ exports.push([module.i, "\na[data-v-1e9eafc2] {\n  color: black;\n}\na[data-v-1e
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -64810,99 +64305,73 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c(
-      "div",
-      {
-        staticClass: "offset-1 col-5",
-        staticStyle: { "border-right": "1px solid grey" }
-      },
-      [
-        _c(
-          "a",
-          {
-            attrs: {
-              href: _vm.personCompany.company_url,
-              title: "Ver detalles"
-            }
-          },
-          [_c("h4", [_vm._v(_vm._s(_vm.personCompany.company_name))])]
-        ),
+  return _c("div", [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-3" }, [
+        _c("label", [_vm._v("Nivel de riesgo:")]),
         _vm._v(" "),
-        _c("br"),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-6" }, [
-            _c("small", [_vm._v("CUIT")]),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c("strong", [_vm._v(_vm._s(_vm.personCompany.company_cuit))])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-6" }, [
-            _c("small", [_vm._v("Sector")]),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c("strong", [_vm._v(_vm._s(_vm.personCompany.company_area))])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("br"),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-6" }, [
-            _c("small", [_vm._v("Actividad / Categoría")]),
-            _vm._v(" "),
-            _c("br"),
-            _vm._v(" "),
-            _c("strong", [_vm._v(_vm._s(_vm.personCompany.activity))])
-          ])
-        ])
-      ]
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "offset-1 col-5" }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-4" }, [
-          _c("small", [_vm._v("Aseguradora")]),
-          _vm._v(" "),
-          _c("br"),
-          _vm._v(" "),
-          _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_company))])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-4" }, [
-          _c("small", [_vm._v("Número")]),
-          _vm._v(" "),
-          _c("br"),
-          _vm._v(" "),
-          _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_number))])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-4" }, [
-          _c("small", [_vm._v("Vencimiento")]),
-          _vm._v(" "),
-          _c("br"),
-          _vm._v(" "),
-          _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_expiration))])
-        ])
+        _c("strong", [_vm._v(_vm._s(_vm.personCompany.risk))])
       ]),
       _vm._v(" "),
-      _c("br"),
+      _c("div", { staticClass: "col-3" }, [
+        _c("label", [_vm._v("Vencimiento  curso PBIP:")]),
+        _vm._v(" "),
+        _c("strong", [_vm._v(_vm._s(_vm.personCompany.pbip))])
+      ]),
       _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col" }, [
-          _vm._v("\n                Vencimiento curso PBIP\n                "),
-          _c("br"),
+      _c("div", { staticClass: "col-6" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-4" }, [
+            _c("small", [_vm._v("Aseguradora")]),
+            _vm._v(" "),
+            _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_company))])
+          ]),
           _vm._v(" "),
-          _c("strong", [_vm._v(_vm._s(_vm.personCompany.pbip))])
+          _c("div", { staticClass: "col-4" }, [
+            _c("small", [_vm._v("Número")]),
+            _vm._v(" "),
+            _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_number))])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-4" }, [
+            _c("small", [_vm._v("Vencimiento")]),
+            _vm._v(" "),
+            _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_expiration))])
+          ])
         ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _vm._m(1),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "row" },
+      _vm._l(_vm.personCompany.jobs, function(job, key) {
+        return _c("div", { key: key, staticClass: "col-4" }, [
+          _c("div", { staticClass: "alert alert-primary shadow-sm" }, [
+            _c("h5", [_vm._v(_vm._s(job.company_name))]),
+            _vm._v(
+              "\n                " + _vm._s(job.activity) + "\n                "
+            ),
+            _c(
+              "ul",
+              _vm._l(job.subactivities, function(subactivity, sub_key) {
+                return _c("li", { key: sub_key }, [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(subactivity) +
+                      "\n                    "
+                  )
+                ])
+              })
+            )
+          ])
+        ])
+      })
+    )
   ])
 }
 var staticRenderFns = [
@@ -64911,7 +64380,15 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col" }, [_vm._v("ART")])
+      _c("div", { staticClass: "col" }, [_c("label", [_vm._v("ART:")])])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col" }, [_c("hr")])
     ])
   }
 ]
@@ -67673,23 +67150,77 @@ if (false) {
 /* 188 */,
 /* 189 */,
 /* 190 */,
-/* 191 */
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(195)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(197)
+/* template */
+var __vue_template__ = __webpack_require__(198)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-d8a53f6a"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/people/create/partials/WorkingInformation/Layout.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d8a53f6a", Component.options)
+  } else {
+    hotAPI.reload("data-v-d8a53f6a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(192);
+var content = __webpack_require__(196);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("71201b43", content, false, {});
+var update = __webpack_require__(2)("38ff7036", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-92e42444\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./WorkingInformation.vue", function() {
-     var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-92e42444\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./WorkingInformation.vue");
+   module.hot.accept("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d8a53f6a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Layout.vue", function() {
+     var newContent = require("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d8a53f6a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Layout.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -67699,7 +67230,7 @@ if(false) {
 }
 
 /***/ }),
-/* 192 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -67707,13 +67238,164 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\ndiv.job-row i.delete-job[data-v-92e42444] {\n  position: absolute;\n  right: .5em;\n  color: #CC0000;\n  display: none;\n}\ndiv.job-row:hover i.delete-job[data-v-92e42444] {\n  display: inline;\n}\n", ""]);
+exports.push([module.i, "\ndiv.container.job[data-v-d8a53f6a] {\n  position: relative;\n  border-radius: 3px;\n  border: 1px solid #dedede;\n  padding: 1em;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 193 */
+/* 197 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    components: {
+        'job-data': __webpack_require__(205),
+        'job-cards': __webpack_require__(199)
+    },
+    props: {
+        values: {
+            required: true,
+            type: Object
+        },
+        errors: {
+            required: true,
+            type: Array
+        }
+    },
+    data: function data() {
+        return {
+            risk_levels: [{ id: 1, text: 'Nivel 1' }, { id: 2, text: 'Nivel 2' }, { id: 3, text: 'Nivel 3' }]
+        };
+    },
+    beforeMount: function beforeMount() {
+        this.$store.dispatch('fetchList', 'companies');
+        this.$store.dispatch('fetchList', 'activities');
+    },
+
+    methods: {
+        addJob: function addJob() {
+            this.$store.commit('addJob');
+        },
+        editJob: function editJob(job, data) {
+            this.$store.commit('updateJob', { job: job, data: data });
+        },
+        deleteJob: function deleteJob(job) {
+            this.$store.commit('deleteJob', job);
+        },
+        addCardToJob: function addCardToJob(job) {
+            this.$store.commit('addCardToJob', job);
+        },
+        editCardFromJob: function editCardFromJob(job, card, data) {
+            this.$store.commit('editCardFromJob', { job: job, card: card, data: data });
+        },
+        removeCardFromJob: function removeCardFromJob(job, card) {
+            this.$store.commit('removeCardFromJob', { job: job, card: card });
+        },
+        update: function update(_ref) {
+            var name = _ref.name,
+                value = _ref.value;
+
+            this.$store.commit('updateModel', { which: 'person', properties_path: 'values.working_information.' + name, value: value });
+        }
+    },
+    computed: {
+        companies: function companies() {
+            return this.$store.getters.companies.list.map(function (c) {
+                return { id: c.id, text: c.name };
+            });
+        },
+        activities: function activities() {
+            return this.$store.getters.activities.list.map(function (a) {
+                return { id: a.id, text: a.name };
+            });
+        },
+        jobs_errors: function jobs_errors() {
+            return this.errors['jobs'] ? this.errors['jobs'] : [];
+        }
+    }
+});
+
+/***/ }),
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -67733,7 +67415,9 @@ var render = function() {
               [
                 _c(
                   "form-item",
-                  { attrs: { label: "Riesgo", errors: _vm.errors.risk } },
+                  {
+                    attrs: { label: "Nivel de riesgo", errors: _vm.errors.risk }
+                  },
                   [
                     _c(
                       "div",
@@ -67818,168 +67502,113 @@ var render = function() {
               1
             ),
             _vm._v(" "),
-            _vm._l(_vm.jobs, function(job, key) {
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col" }, [
+                _c("h6", [_vm._v("Trabajos:")])
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.values.jobs, function(job, index) {
               return _c(
                 "div",
-                { key: key, staticClass: "form-row job-row" },
+                { key: job.key, staticClass: "container job mb-2" },
                 [
-                  _c("div", { staticClass: "col-12 text-right" }, [
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm.jobs.length > 1
-                      ? _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-link p-0",
-                            on: {
-                              click: function($event) {
-                                _vm.removeJob(job)
+                  _c("div", { staticClass: "row" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "col",
+                        staticStyle: { "text-align": "right" }
+                      },
+                      [
+                        _vm.values.jobs.length > 1
+                          ? _c("i", {
+                              staticClass: "btn-remove far fa-trash-alt",
+                              on: {
+                                click: function($event) {
+                                  _vm.deleteJob(job)
+                                }
                               }
-                            }
-                          },
-                          [
-                            _c("i", {
-                              staticClass: "fas fa-minus-circle delete-job"
                             })
-                          ]
-                        )
-                      : _vm._e()
+                          : _vm._e()
+                      ]
+                    )
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "form-item",
-                    {
-                      attrs: {
-                        col: "col-4",
-                        label: "Empresa",
-                        errors: _vm.jobs_errors[key]
-                          ? _vm.jobs_errors[key].company_id
-                          : []
-                      }
-                    },
-                    [
-                      _c(
-                        "div",
-                        { staticClass: "col" },
-                        [
-                          _c("select2", {
-                            attrs: {
-                              name: "company_id",
-                              value: job.company_id,
-                              placeholder: "Seleccione una empresa",
-                              options: _vm.companies
+                  _c("div", { staticClass: "row" }, [
+                    _c(
+                      "div",
+                      { staticClass: "col" },
+                      [
+                        _c("job-data", {
+                          attrs: {
+                            job: {
+                              company_id: job.company_id,
+                              activity_id: job.activity_id,
+                              subactivities: job.subactivities
                             },
-                            on: {
-                              input: function(value) {
-                                return _vm.editJob({
-                                  key: key,
-                                  attribute: "company_id",
-                                  value: value
-                                })
-                              }
+                            companies: _vm.companies,
+                            activities: _vm.activities,
+                            errors: _vm.jobs_errors[index] || []
+                          },
+                          on: {
+                            change: function(data) {
+                              return _vm.editJob(job, data)
                             }
-                          })
-                        ],
-                        1
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "form-item",
-                    {
-                      attrs: {
-                        col: "col-4",
-                        label: "Actividad",
-                        errors: _vm.jobs_errors[key]
-                          ? _vm.jobs_errors[key].activity_id
-                          : []
-                      }
-                    },
-                    [
-                      _c(
-                        "div",
-                        { staticClass: "col" },
-                        [
-                          _c("select2", {
-                            attrs: {
-                              placeholder: "Seleccione una actividad",
-                              name: "activity_id",
-                              value: job.activity_id,
-                              options: _vm.activities
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("h6", [_vm._v("Tarjetas:")]),
+                        _vm._v(" "),
+                        _c("job-cards", {
+                          attrs: {
+                            cards: job.cards,
+                            errors: _vm.jobs_errors[index]
+                              ? _vm.jobs_errors[index].cards
+                              : []
+                          },
+                          on: {
+                            change: function(data) {
+                              return _vm.editJobCards(job, data)
                             },
-                            on: {
-                              input: function(value) {
-                                return _vm.editJob({
-                                  key: key,
-                                  attribute: "activity_id",
-                                  value: value
-                                })
-                              }
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "form-item",
-                    {
-                      attrs: {
-                        col: "col-4",
-                        label: "Subactividad/es",
-                        errors: _vm.jobs_errors[key]
-                          ? _vm.jobs_errors[key].subactivities
-                          : []
-                      }
-                    },
-                    [
-                      _c(
-                        "div",
-                        { staticClass: "col" },
-                        [
-                          _c("select2", {
-                            attrs: {
-                              tags: true,
-                              placeholder: "Seleccione una actividad",
-                              name: "subactivities",
-                              multiple: true,
-                              options: _vm.test,
-                              value: [1, 2]
+                            add: function($event) {
+                              _vm.addCardToJob(job)
                             },
-                            on: {
-                              input: function(value) {
-                                return _vm.editJob({
-                                  key: key,
-                                  attribute: "subactivities",
-                                  value: value
-                                })
-                              }
+                            edit: function(ref) {
+                              var card = ref.card
+                              var data = ref.data
+
+                              return _vm.editCardFromJob(job, card, data)
+                            },
+                            remove: function(card) {
+                              return _vm.removeCardFromJob(job, card)
                             }
-                          })
-                        ],
-                        1
-                      )
-                    ]
-                  )
-                ],
-                1
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ])
+                ]
               )
             }),
             _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col text-right mt-2" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-link p-0",
-                    attrs: { title: "Añadir nueva empresa y actividad" },
-                    on: { click: _vm.addJob }
-                  },
-                  [_c("i", { staticClass: "fas fa-plus-circle fa-2x" })]
-                )
+            _c("div", { staticClass: "container mt-3" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col text-right" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-link",
+                      attrs: { title: "Añadir nueva empresa y actividad" },
+                      on: { click: _vm.addJob }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-plus" }),
+                      _vm._v(" Agregar trabajo\n                    ")
+                    ]
+                  )
+                ])
               ])
             ])
           ]
@@ -67993,9 +67622,526 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-92e42444", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-d8a53f6a", module.exports)
   }
 }
+
+/***/ }),
+/* 199 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(200)
+/* template */
+var __vue_template__ = __webpack_require__(201)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/people/create/partials/WorkingInformation/partials/Cards.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-43c15ff2", Component.options)
+  } else {
+    hotAPI.reload("data-v-43c15ff2", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 200 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        cards: {
+            type: Array,
+            required: true
+        },
+        errors: {
+            type: Array,
+            required: true
+        }
+    },
+    methods: {
+        addCard: function addCard() {
+            this.$emit('add');
+        },
+        editCard: function editCard(card, attribute, value) {
+            var data = {
+                number: attribute === 'number' ? value : card.number,
+                from: attribute === 'from' ? value : card.from,
+                until: attribute === 'until' ? value : card.until
+            };
+            this.$emit('edit', { card: card, data: data });
+        },
+        removeCard: function removeCard(card) {
+            this.$emit('remove', card);
+        }
+    }
+});
+
+/***/ }),
+/* 201 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _vm._l(_vm.cards, function(card, key) {
+        return _c(
+          "div",
+          { key: "card-" + card.key + "-data", staticClass: "row" },
+          [
+            _c(
+              "div",
+              { staticClass: "col-12", staticStyle: { "text-align": "right" } },
+              [
+                _vm.cards.length > 1
+                  ? _c("i", {
+                      staticClass: "btn-remove far fa-trash-alt",
+                      on: {
+                        click: function($event) {
+                          _vm.removeCard(card)
+                        }
+                      }
+                    })
+                  : _vm._e()
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "form-item",
+              {
+                attrs: {
+                  label: "Número de la tarjeta",
+                  errors: _vm.errors[key] ? _vm.errors[key]["number"] : []
+                }
+              },
+              [
+                _c("div", { staticClass: "col" }, [
+                  _c("input", {
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "number",
+                      placeholder: "Número de tarjeta"
+                    },
+                    domProps: { value: card.number },
+                    on: {
+                      input: function(e) {
+                        return _vm.editCard(card, "number", e.target.value)
+                      }
+                    }
+                  })
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "form-item",
+              {
+                attrs: {
+                  label: "Valida desde",
+                  errors: _vm.errors[key] ? _vm.errors[key]["from"] : []
+                }
+              },
+              [
+                _c("div", { staticClass: "col" }, [
+                  _c("input", {
+                    staticClass: "form-control",
+                    attrs: { type: "date", name: "from" },
+                    domProps: { value: card.from },
+                    on: {
+                      input: function(e) {
+                        return _vm.editCard(card, "from", e.target.value)
+                      }
+                    }
+                  })
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "form-item",
+              {
+                attrs: {
+                  label: "Valida hasta",
+                  errors: _vm.errors[key] ? _vm.errors[key]["until"] : []
+                }
+              },
+              [
+                _c("div", { staticClass: "col" }, [
+                  _c("input", {
+                    staticClass: "form-control",
+                    attrs: { type: "date", name: "until" },
+                    domProps: { value: card.until },
+                    on: {
+                      input: function(e) {
+                        return _vm.editCard(card, "until", e.target.value)
+                      }
+                    }
+                  })
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            key < _vm.cards.length - 1
+              ? _c("div", { staticClass: "col-12" }, [_c("hr")])
+              : _vm._e()
+          ],
+          1
+        )
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col text-right" }, [
+          _c(
+            "button",
+            { staticClass: "btn btn-link", on: { click: _vm.addCard } },
+            [
+              _c("i", { staticClass: "fas fa-plus" }),
+              _vm._v(" Agregar tarjeta\n            ")
+            ]
+          )
+        ])
+      ])
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-43c15ff2", module.exports)
+  }
+}
+
+/***/ }),
+/* 202 */,
+/* 203 */,
+/* 204 */,
+/* 205 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(207)
+/* template */
+var __vue_template__ = __webpack_require__(206)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/people/create/partials/WorkingInformation/partials/JobData.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-8141c6aa", Component.options)
+  } else {
+    hotAPI.reload("data-v-8141c6aa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 206 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "row" },
+    [
+      _c(
+        "form-item",
+        { attrs: { label: "Empresa", errors: _vm.company_errors } },
+        [
+          _c(
+            "div",
+            { staticClass: "col" },
+            [
+              _c("select2", {
+                attrs: {
+                  placeholder: "Seleccione una empresa",
+                  value: _vm.job.company_id,
+                  options: _vm.companies
+                },
+                on: {
+                  input: function(value) {
+                    return _vm.editJob("company_id", value)
+                  }
+                }
+              })
+            ],
+            1
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "form-item",
+        { attrs: { label: "Actividad", errors: _vm.activity_errors } },
+        [
+          _c(
+            "div",
+            { staticClass: "col" },
+            [
+              _c("select2", {
+                attrs: {
+                  placeholder: "Seleccione una actividad",
+                  value: _vm.job.activity_id,
+                  options: _vm.activities
+                },
+                on: {
+                  input: function(value) {
+                    return _vm.editJob("activity_id", value)
+                  }
+                }
+              })
+            ],
+            1
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "form-item",
+        {
+          attrs: { label: "Subactividad/es", errors: _vm.subactivities_errors }
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "col" },
+            [
+              _c("select2", {
+                attrs: {
+                  placeholder: "Seleccione subactividad/es",
+                  value: _vm.job.subactivities,
+                  options: _vm.subactivities_options,
+                  tags: true,
+                  name: "subactivities",
+                  multiple: true
+                },
+                on: {
+                  input: function(value) {
+                    return _vm.editJob("subactivities", value)
+                  }
+                }
+              })
+            ],
+            1
+          )
+        ]
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-8141c6aa", module.exports)
+  }
+}
+
+/***/ }),
+/* 207 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        job: {
+            type: Object,
+            required: true
+        },
+        errors: {
+            type: Array,
+            required: true
+        },
+        companies: {
+            type: Array,
+            required: false,
+            default: function _default() {
+                return [];
+            }
+        },
+        activities: {
+            type: Array,
+            required: false,
+            default: function _default() {
+                return [];
+            }
+        },
+        subactivities: {
+            type: Array,
+            required: false,
+            default: function _default() {
+                return [];
+            }
+        }
+    },
+    computed: {
+        company_errors: function company_errors() {
+            return this.errors['company_id'] || [];
+        },
+        activity_errors: function activity_errors() {
+            return this.errors['activity_id'] || [];
+        },
+        subactivities_errors: function subactivities_errors() {
+            return this.errors['subactivities'] || [];
+        },
+        subactivities_options: function subactivities_options() {
+            return this.subactivities.concat(this.job.subactivities.map(function (s) {
+                return { id: s, text: s };
+            }));
+        }
+    },
+    methods: {
+        editJob: function editJob(attribute, value) {
+            var data = {
+                company_id: attribute === 'company_id' ? value : this.job.company_id,
+                activity_id: attribute === 'activity_id' ? value : this.job.activity_id,
+                subactivities: attribute === 'subactivities' ? value : this.job.subactivities
+            };
+            this.$emit('change', data);
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

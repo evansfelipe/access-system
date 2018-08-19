@@ -161,7 +161,14 @@ return [
         'colour'            => 'Color',
         'insurance'         => 'Seguro',
         'vtv'               => 'VTV',
-
+        // Jobs
+        'jobs.*.company_id'  => 'Empresa',
+        'jobs.*.activity_id' => 'Actividad',
+        'jobs.*.subactivities' => 'Subactividad/es',
+        'jobs.*.subactivities.*' => 'Subactividad/es',
+        'jobs.*.cards.*.number' => 'Número de la tarjeta',
+        'jobs.*.cards.*.from' => 'Valido desde',
+        'jobs.*.cards.*.until' => 'Valido hasta',
     ],
 
 ];

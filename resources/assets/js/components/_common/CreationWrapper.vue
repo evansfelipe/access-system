@@ -51,11 +51,11 @@ export default {
             this.$store.commit('loading', { state: true, message: "Guardando..." });
 
             let onError = (response) => {
-                let errors = {};
+                let errors = [];
                 let results = {};
                 let r_errors = response.response.data.errors;
                 Object.keys(this.values).forEach(key => {
-                    errors[key] = {};
+                    errors[key] = [];
                     Object.keys(r_errors).forEach(error => {
                         let attributes = Object.keys(this.values[key]);
                         let found = false;
@@ -65,14 +65,19 @@ export default {
                             }
                         })
                         if(found) {
-                            errors[key][error] = r_errors[error];
+                            let tokens = error.split('.');
+                            let aux = errors[key];
+                            for (let i = 0; i < tokens.length - 1; i++) {
+                                if(!aux[tokens[i]]) aux[tokens[i]] = [];
+                                aux = aux[tokens[i]];
+                            }
+                            aux[tokens[tokens.length - 1]] = r_errors[error];
                         }
                     });
                     results[key] = Object.keys(errors[key]).length > 0 ? false : true;
                 });
                 this.$store.dispatch('addNotification', {type: 'danger', message: 'Corrija los errores antes de continuar.'});
                 this.$emit('saveFailed', {errors: errors, step_validated: results});
-                console.log(r_errors);
                 console.log(errors);
             }
             

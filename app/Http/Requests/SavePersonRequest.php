@@ -27,7 +27,7 @@ class SavePersonRequest extends FormRequest
         $residency_rules = Residency::getValidationRules();
         $working_information_rules = PersonCompany::getValidationRules();
         $assign_vehicles_rules = PersonVehicle::getVehiclesValidationRules();
-        $first_card_rules = Card::getValidationRules();
+        \Debugbar::info($working_information_rules);
 
         if($this->route()->getName() === 'people.update') {
             if($this->cuil === $this->person->cuil && ($key = array_search('unique:people', $person_rules['cuil'])) !== false) {
@@ -43,8 +43,7 @@ class SavePersonRequest extends FormRequest
             $person_rules, 
             $residency_rules, 
             $working_information_rules, 
-            $assign_vehicles_rules, 
-            $first_card_rules
+            $assign_vehicles_rules
         );
     }
 
@@ -55,7 +54,9 @@ class SavePersonRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $this->merge(['vehicles_id' => json_decode($this->vehicles_id)]);
-        $this->merge(['jobs' => json_decode($this->jobs, true)]);
+        $this->merge([
+            'vehicles_id'   => json_decode($this->vehicles_id),
+            'jobs'          => json_decode($this->jobs, true)
+        ]);
     }
 }

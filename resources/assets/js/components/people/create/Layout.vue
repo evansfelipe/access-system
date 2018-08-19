@@ -14,12 +14,8 @@
             <tab-item :active="tab === 2" @click.native="tab = 2" :has-errors="step_validated.assign_vehicles" icon="fas fa-car">
                 Asignar vehículos
             </tab-item>
-            <!-- First card tab -->
-            <tab-item :active="tab === 3" @click.native="tab = 3" :has-errors="step_validated.first_card" icon="fas fa-id-card">
-                Tarjeta
-            </tab-item>
             <!-- Documentation tab -->
-            <tab-item :active="tab === 4" @click.native="tab = 4" :has-errors="step_validated.documentation" icon="fas fa-file-alt">
+            <tab-item :active="tab === 3" @click.native="tab = 4" :has-errors="step_validated.documentation" icon="fas fa-file-alt">
                 Documentación
             </tab-item>
         </ul>
@@ -27,11 +23,10 @@
         <creation-wrapper   :updating="this.$store.getters.person.updating" :values="values" :route="route" 
                             @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel"
         >
-            <personal-information v-show="tab === 0" :errors="errors.personal_information" :values="values.personal_information"/>
-            <working-information  v-show="tab === 1" :errors="errors.working_information"  :values="values.working_information"/>
+            <personal-information v-show="tab === 0" :errors="personal_information_errors" :values="values.personal_information"/>
+            <working-information  v-show="tab === 1" :errors="working_information_errors"  :values="values.working_information"/>
             <assign-vehicles      v-show="tab === 2" :companyname="company_name" :companyid="parseInt(values.working_information.company_id)"/>
-            <first-card           v-show="tab === 3" :errors="errors.first_card" :values="values.first_card" :fullname="full_name" :companyname="company_name"/>
-            <div v-show="tab === 4">Documentación</div>
+            <div v-show="tab === 3">Documentación</div>
         </creation-wrapper>
     </div>
 </template>
@@ -40,21 +35,14 @@
     export default {
         components: {
             'personal-information': require('./partials/PersonalInformation.vue'),
-            'working-information':  require('./partials/WorkingInformation.vue'),
+            'working-information':  require('./partials/WorkingInformation/Layout.vue'),
             'assign-vehicles':      require('./partials/AssignVehicles.vue'),
-            'first-card':           require('./partials/FirstCard.vue'),
         },
         data: function() {
             return {
                 tab: 0,
                 first_save: false,
-                errors: {
-                    personal_information: {},
-                    working_information:  {},
-                    assign_vehicles:      {},
-                    first_card:           {},
-                    documentation:        {}
-                },
+                errors: [],
                 step_validated: {
                     personal_information: null,
                     working_information:  null,
@@ -94,6 +82,12 @@
                     url:    this.id ? `/people/${this.id}` : '/people'
                 }
             },
+            personal_information_errors: function() {
+                return this.errors['personal_information'] ? this.errors['personal_information'] : []; 
+            },
+            working_information_errors: function() {
+                return this.errors['working_information'] ? this.errors['working_information'] : []; 
+            }
         },
         methods: {
             saveSuccess: function(id) {

@@ -80,10 +80,17 @@ class PeopleController extends Controller
         $person->setContact($request->toArray());
         $person->residency_id = $residency->id;
         $person->save();
-        // Saves the person-company relationship
-        $person_company = new PersonCompany($request->toArray());
-        $person_company->person_id = $person->id;
-        $person_company->save();
+        // Saves each person-company relationship.
+        if(isset($request->jobs)) {
+            foreach ($request->jobs as $job) {
+                $person_company = new PersonCompany();
+                $person_company->person_id = $person->id;
+                $person_company->company_id = $job['company_id'];
+                $person_company->activity_id = $job['activity_id'];
+                $person_company->subactivities = json_encode($job['subactivities']);
+                $person_company->save();
+            }
+        }
         // Saves each person-vehicle relationship.
         if(isset($request->vehicles_id)) {
            foreach($request->vehicles_id as $vehicle_id) {
@@ -114,9 +121,7 @@ class PeopleController extends Controller
      */
     public function show(Person $person)
     {
-        $person_info = $person->toShowArray();
-        unset($person_info['index']);
-        return response($person_info, 200)->header('Content-Type', 'application/json');
+        return response($person->toShowJSON(), 200)->header('Content-Type', 'application/json');
     }
 
     /**

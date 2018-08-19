@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Card extends Model
 {
-    protected $fillable = ['number', 'risk', 'active', 'from', 'until'];
+    protected $fillable = ['number', 'active', 'from', 'until'];
     /**
      * Creates and returns an array with the validation rules for each attribute that can be
      * entered through an input (or other html component) by the user 
@@ -17,14 +17,6 @@ class Card extends Model
             'number' => [
                 'required',
                 'string',
-            ],
-            'person_id' => [
-                'integer',
-                'exists:people,id'
-            ],
-            'risk' => [
-                'required',
-                'integer',
             ],
             'from' => [
                 'required',

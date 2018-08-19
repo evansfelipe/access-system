@@ -1,33 +1,20 @@
-<?php
+<?php namespace App;
 
-namespace App;
-
+use App\Card;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class PersonCompany extends Pivot
 {
     protected $table = 'company_people';
-    protected $fillable = ['company_id','activity_id','art','pbip'];
+    protected $fillable = ['company_id', 'activity_id'];
 
 
     public const LENGTHS = [
-        'art' => ['max' => 50]
     ];
 
     public static function getValidationRules()
     {
         return [
-            'art' => [
-                'required',
-                'string',
-                'max:'.PersonCompany::LENGTHS['art']['max']
-            ],
-            'pbip' => [
-                'nullable',
-                'date',
-                "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", 
-                'after:'.date('Y-m-d'), 
-            ],
             'jobs' => [
                 'required',
                 'array',
@@ -47,7 +34,15 @@ class PersonCompany extends Pivot
             ],
             'jobs.*.subactivities.*' => [
                 'string'
-            ]
+            ],
+            'jobs.*.cards' => [
+                'required',
+                'array',
+                'min:1'
+            ],
+            'jobs.*.cards.*.number' => Card::getValidationRules()['number'],
+            'jobs.*.cards.*.from' => Card::getValidationRules()['from'],
+            'jobs.*.cards.*.until' => Card::getValidationRules()['until'],
         ];
     }
 

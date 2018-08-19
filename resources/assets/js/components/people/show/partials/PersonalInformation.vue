@@ -155,7 +155,6 @@ export default {
                 this.pictures.loading = false;
             })
             .catch(error => console.log(error))
-            
         }
     }
 }

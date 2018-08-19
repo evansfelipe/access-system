@@ -6,6 +6,10 @@ class List {
         this.updating  = false;
         this.list      = [];
     }
+
+    getById(id) {
+        return this.list.getById(id);
+    }
 }
 
 class Model {
@@ -191,7 +195,79 @@ export default {
         },
         unpickAllPeople: function(state) {
             state.models.vehicle.values.assign_people.people_id = [];
+        },
+
+
+        /**
+         * Adds a new job to the jobs list of the person's model
+         */
+        addJob: function(state) {
+            state.models.person.values.working_information.jobs.push({
+                key: Date.now(),
+                company_id: '',
+                activity_id: '',
+                subactivities: [],
+                cards: [{ key: Date.now(), number: '', from: '', until: '' }],
+            });
+        },
+        /**
+         * Given a job of the jobs list of the person's model, updates its values.
+         */
+        updateJob: function(state, {job, data}) {
+            let pos = state.models.person.values.working_information.jobs.indexOf(job);
+            let ref = state.models.person.values.working_information.jobs[pos];
+            ref.company_id = data.company_id;
+            ref.activity_id = data.activity_id;
+            ref.subactivities = data.subactivities;
+        },
+        /**
+         * Given a job, removes it from the jobs list of the person's model.
+         */
+        deleteJob: function(state, job) {
+            let pos = state.models.person.values.working_information.jobs.indexOf(job);
+            if(pos !== -1) {
+                state.models.person.values.working_information.jobs.splice(pos, 1);
+            }
+        },
+        /**
+         * Given a job, adds a new card to its cards list.
+         */
+        addCardToJob: function(state, job) {
+            let pos = state.models.person.values.working_information.jobs.indexOf(job);
+            if(pos !== -1) {
+                state.models.person.values.working_information.jobs[pos].cards.push({
+                    key: Date.now(),
+                    number: '',
+                    from: '',
+                    until: ''
+                });
+            }
+        },
+        editCardFromJob: function(state,{job, card, data}) {
+            let pos = state.models.person.values.working_information.jobs.indexOf(job);
+            if(pos !== -1) {
+                let pos2 = state.models.person.values.working_information.jobs[pos].cards.indexOf(card);
+                if(pos2 !== -1) {
+                    let ref = state.models.person.values.working_information.jobs[pos].cards[pos2];
+                    ref.number = data.number;
+                    ref.from = data.from;
+                    ref.until = data.until;
+                }
+            }
+        },
+        /**
+         * Given a job and a card, removes the card from the card list of the job.
+         */
+        removeCardFromJob: function(state, {job, card}) {
+            let pos = state.models.person.values.working_information.jobs.indexOf(job);
+            if(pos !== -1) {
+                let pos2 = state.models.person.values.working_information.jobs[pos].cards.indexOf(card);
+                if(pos2 !== -1) {
+                    state.models.person.values.working_information.jobs[pos].cards.splice(pos2, 1);
+                }
+            }
         }
+
     },
     actions: {
         /**

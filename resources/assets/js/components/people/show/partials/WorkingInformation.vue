@@ -6,11 +6,74 @@
             text-decoration: none;
         }
     }
+
+    label, small {
+        display: block;
+    }
 </style>
 
-
 <template>
-    <div class="row">
+    <div>
+        <!-- Basic information -->
+        <div class="row">
+            <div class="col-3">
+                <label>Nivel de riesgo:</label>
+                <strong>{{ personCompany.risk }}</strong>
+            </div>
+            <div class="col-3">
+                <label>Vencimiento  curso PBIP:</label>
+                <strong>{{ personCompany.pbip }}</strong>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col">
+                        <label>ART:</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <small>Aseguradora</small>
+                        <strong>{{ personCompany.art_company }}</strong>
+                    </div>
+                    <div class="col-4">
+                        <small>Número</small>
+                        <strong>{{ personCompany.art_number }}</strong>
+                    </div>
+                    <div class="col-4">
+                        <small>Vencimiento</small>
+                        <strong>{{ personCompany.art_expiration }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Separator -->
+        <div class="row">
+            <div class="col">
+                <hr>
+            </div>
+        </div>
+        <!-- Jobs list -->
+        <div class="row">
+            <div v-for="(job, key) in personCompany.jobs" :key="key" class="col-4">
+                <div class="alert alert-primary shadow-sm">
+                    <h5>{{ job.company_name }}</h5>
+                    {{ job.activity }}
+                    <ul>
+                        <li v-for="(subactivity, sub_key) in job.subactivities" :key="sub_key">
+                            {{ subactivity }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="row">
+
+
+
+
+
         <div class="offset-1 col-5" style="border-right: 1px solid grey">
             <a :href="personCompany.company_url" title="Ver detalles"><h4>{{ personCompany.company_name }}</h4></a>
             <br>
@@ -65,7 +128,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script>

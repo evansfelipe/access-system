@@ -24,24 +24,25 @@ export default {
                 city:            !debug ? '' : '',
             },
             working_information: {
+                risk:            !debug ? '' : '',
                 art:             !debug ? '' : '123456789',
                 pbip:            !debug ? '' : '2020-01-01',
-                jobs:            [
-                                    {
-                                        company_id: '',
-                                        activity_id: '',
-                                        subactivities: []
-                                    }
-                                ],
+                jobs: [{
+                    key: 0,
+                    company_id: '',
+                    activity_id: '',
+                    subactivities: ['hola'],
+                    cards: [{
+                        key: 0,
+                        number: '',
+                        from: '',
+                        until: '',
+                    }]
+                }],
             },
+            // Why not just an array instead of an object with an array.
             assign_vehicles: {
                 vehicles_id: []
-            },
-            first_card: {
-                number:          !debug ? '' : '918273645',
-                risk:            !debug ? '' : '1',
-                from:            !debug ? '' : '2020-01-01',
-                until:           !debug ? '' : '2020-01-02'
             },
             documentation: {
             }

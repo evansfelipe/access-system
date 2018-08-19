@@ -90,4 +90,16 @@ class Residency extends Model
         $string .= $this->cp        ? $this->checkIfFirst($string).strval($this->cp) : '';
         return $string;
     }
+
+    public function toArray()
+    {
+        return [
+            'address'   => $this->street       ?? '-',
+            'apartment' => $this->apartment    ?? '-',
+            'cp'        => $this->cp           ?? '-',
+            'city'      => $this->city         ?? '-',
+            'province'  => $this->province     ?? '-',
+            'country'   => $this->country      ?? '-',
+        ];
+    }
 }

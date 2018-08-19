@@ -2,17 +2,18 @@
     button.btn-link {
         text-decoration: none;
         font-weight: bold;
+        padding: 5px;
         &.btn-cancel { 
-            color: red; 
+            color: red !important; 
             &:hover {
-                color: white;
+                color: white !important;
                 background-color: red;
             }
         }
         &.btn-confirm {
-            color: #3F729B;
+            color: #3F729B !important;
             &:hover {
-                color: white;
+                color: white !important;
                 background-color: #3F729B;
             }
         }

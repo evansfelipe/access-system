@@ -44,8 +44,6 @@ export default {
         }
     },
     mounted() {
-        console.log(this.value);
-        
         let vm = this;
         let select = $(this.$el)
             .select2({ data: this.options, placeholder: this.placeholder, tags: this.tags, color: 'red', theme: 'bootstrap' })
@@ -74,11 +72,13 @@ export default {
         //     $(this.$el).val(value);
         // },
         options: function(options) {
+            // Maybe there is a way to change the options without restarting the select?
             $(this.$el)
-                .empty()
-                .select2({ data: options, placeholder: this.placeholder })
-                .val(this.value)
-                .trigger('change');
+                .select2({ data: this.options, placeholder: this.placeholder, tags: this.tags, color: 'red', theme: 'bootstrap' })
+                // .val(this.value) It's needed?
+                .data('select2').$selection.css({
+                    'min-height': '37px',
+                });
         }
     },
 }

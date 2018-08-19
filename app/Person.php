@@ -6,7 +6,7 @@ use App\{ Residency, Activity, Vehicle };
 
 class Person extends Model
 {
-    protected $fillable = ['name', 'last_name', 'document_type', 'document_number', 'sex', 'pna', 'cuil', 'birthday', 'blood_type'];
+    protected $fillable = ['name', 'last_name', 'document_type', 'document_number', 'sex', 'pna', 'cuil', 'birthday', 'blood_type', 'art', 'pbip', 'risk'];
 
     public const DNI = 0;
     public const PASSPORT = 1;
@@ -19,7 +19,8 @@ class Person extends Model
         'name' => ['max' => 50],
         'document_number' => ['min' => 7, 'max' => 12],
         'cuil' => ['max' => 15],
-        'pna' => ['min' => 10, 'max' => 15]
+        'pna' => ['min' => 10, 'max' => 15],
+        'art' => ['max' => 50]
     ];
 
     /**
@@ -100,7 +101,22 @@ class Person extends Model
             'fax' => [
                 'string',
                 'nullable'
-            ]
+            ],
+            'art' => [
+                'required',
+                'string',
+                'max:'.Person::LENGTHS['art']['max']
+            ],
+            'pbip' => [
+                'nullable',
+                'date',
+                "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", 
+                'after:'.date('Y-m-d'), 
+            ],
+            'risk' => [
+                'required',
+                'integer',
+            ],
         ];
     }
 
@@ -117,7 +133,7 @@ class Person extends Model
      */
     public function companies()
     {
-        return $this->belongsToMany('App\Company', 'company_people')->using('App\PersonCompany')->withPivot('activity_id','art','pbip');
+        return $this->belongsToMany('App\Company', 'company_people')->using('App\PersonCompany')->withPivot('activity_id','subactivities');
     }
 
     /**
@@ -170,6 +186,8 @@ class Person extends Model
                 return "Masculino";
             case "O":
                 return "Otro sexo";
+            default:
+                return "-";
         }
     }
 
@@ -220,6 +238,67 @@ class Person extends Model
     public function contactToObject()
     {
         return json_decode($this->contact);
+    }
+
+    public function contactToArray()
+    {
+        $contact = $this->contactToObject();
+        return [
+            'email'         => $contact->email          ?? '-',
+            'phone'         => $contact->home_phone     ?? '-',
+            'mobile_phone'  => $contact->mobile_phone   ?? '-',
+            'fax'           => $contact->fax            ?? '-',
+        ];
+    }
+
+    public function getStorageFolder()
+    {
+        return 'storage/documentation/'.$this->last_name[0].'/'.$this->id.'_'.$this->last_name.'_'.$this->name.'/';
+    }
+
+    public function getCurrentPicturePath()
+    {
+        return $this->getStorageFolder() . 'pictures/'.$this->picture_name;
+    }
+
+    public function toShowJSON() 
+    {
+        $jobs = [];
+        foreach ($this->companies as $company) {
+            array_push($jobs, [
+                'company_id'    => $company->id,
+                'company_name'  => $company->name,
+                'activity'      => Activity::findOrFail($company->pivot->activity_id)->name,
+                'subactivities' => json_decode($company->pivot->subactivities),    
+            ]);
+        }
+
+        return json_encode([
+            'personal_information'  => array_merge(
+                $this->residency->toArray(),
+                $this->contactToArray(),
+                [
+                    'full_name'         => $this->fullName(),
+                    'document_type'     => $this->documentTypeToString(),
+                    'document_number'   => $this->document_number,
+                    'sex'               => $this->sexToString(),
+                    'cuil'              => $this->cuil          ?? '-',
+                    'blood_type'        => $this->blood_type    ?? '-',
+                    'pna'               => $this->pna           ?? '-',
+                    'birthday'          => $this->birthday ? date('d-m-Y', strtotime($this->birthday)) : '-',
+                    'picture_path'      => $this->getCurrentPicturePath(),
+                ]
+            ),
+            'working_information'   => [
+                'jobs'          => $jobs,
+                'risk'          => $this->risk ?? '-',
+                'art_number'    => $this->art  ?? '-',
+                'pbip'          => $this->pbip ? date('d-m-Y', strtotime($this->pbip)) : '-',
+            ],
+            'vehicles'              => $this->vehicles->toArray(),
+            'active_card'           => $this->getActiveCard(),
+            'inactive_cards'        => $this->getInactiveCards(),
+        ]);
     }
 
     /**

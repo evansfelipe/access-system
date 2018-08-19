@@ -1,0 +1,69 @@
+<template>
+    <div>
+        <div v-for="(card, key) in cards" :key="`card-${card.key}-data`" class="row">
+            <div class="col-12" style="text-align: right">
+                <i class="btn-remove far fa-trash-alt" v-if="cards.length > 1" @click="removeCard(card)"></i>
+            </div>
+            <!-- Card number -->
+            <form-item label="Número de la tarjeta" :errors="errors[key] ? errors[key]['number'] : []">
+                <div class="col">
+                    <input  type="text" name="number" class="form-control"
+                            placeholder="Número de tarjeta" :value="card.number" @input="(e) => editCard(card, 'number', e.target.value)">
+                </div>
+            </form-item>
+            <!-- Card from -->
+            <form-item label="Valida desde" :errors="errors[key] ? errors[key]['from'] : []">
+                <div class="col">
+                    <input type="date" name="from" class="form-control" :value="card.from" @input="(e) => editCard(card, 'from', e.target.value)">
+                </div>
+            </form-item>
+            <!-- Card until -->
+            <form-item label="Valida hasta" :errors="errors[key] ? errors[key]['until'] : []">
+                <div class="col">
+                    <input type="date" name="until" class="form-control" :value="card.until" @input="(e) => editCard(card, 'until', e.target.value)">
+                </div>
+            </form-item>
+            <div v-if="key < cards.length - 1" class="col-12">
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right">
+                <button class="btn btn-link" @click="addCard">
+                    <i class="fas fa-plus"></i> Agregar tarjeta
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        cards: {
+            type: Array,
+            required: true
+        },
+        errors: {
+            type: Array,
+            required: true
+        }
+    },
+    methods: {
+        addCard: function() {
+            this.$emit('add');
+        },
+        editCard: function(card, attribute, value) {
+            let data = {
+                number: attribute === 'number'  ? value : card.number,
+                from:   attribute === 'from'    ? value : card.from,
+                until:  attribute === 'until'   ? value : card.until
+            };
+            this.$emit('edit', {card, data});
+        },
+        removeCard: function(card) {
+            this.$emit('remove', card);
+        }
+    },
+}
+</script>

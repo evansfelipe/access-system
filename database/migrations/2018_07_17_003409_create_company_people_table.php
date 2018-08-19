@@ -18,10 +18,9 @@ class CreateCompanyPeopleTable extends Migration
         Schema::create('company_people', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('person_id')->unsigned()->required();
-            $table->integer('company_id')->unsigned();
+            $table->integer('company_id')->unsigned()->nullable();
             $table->integer('activity_id')->unsigned()->required();
-            $table->string('art',PersonCompany::LENGTHS['art']['max'])->required();
-            $table->datetime('pbip')->nullable();
+            $table->json('subactivities');
             $table->unique(['person_id', 'company_id']);
             $table->timestamps();
         });
