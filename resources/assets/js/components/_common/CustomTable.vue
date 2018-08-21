@@ -55,6 +55,13 @@
                     </table>
                 </div>
             </div>
+            <!-- Selected vehicles count -->
+            <div v-if="pickable.active" class="row">
+                <div class="col text-center">
+                    <br>
+                    <span class="badge badge-light font-italic">{{ pickable.list.length }} seleccionados</span>
+                </div>
+            </div>
             <!-- Pagination -->
             <div class="row mt-3">
                 <div class="col-4">

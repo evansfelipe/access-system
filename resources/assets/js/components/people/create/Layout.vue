@@ -15,7 +15,7 @@
                 Asignar vehículos
             </tab-item>
             <!-- Documentation tab -->
-            <tab-item :active="tab === 3" @click.native="tab = 4" :has-errors="step_validated.documentation" icon="fas fa-file-alt">
+            <tab-item :active="tab === 3" @click.native="tab = 3" :has-errors="step_validated.documentation" icon="fas fa-file-alt">
                 Documentación
             </tab-item>
         </ul>
@@ -25,8 +25,8 @@
         >
             <personal-information v-show="tab === 0" :errors="personal_information_errors" :values="values.personal_information"/>
             <working-information  v-show="tab === 1" :errors="working_information_errors"  :values="values.working_information"/>
-            <assign-vehicles      v-show="tab === 2" :companyname="company_name" :companyid="parseInt(values.working_information.company_id)"/>
-            <div v-show="tab === 3">Documentación</div>
+            <assign-vehicles      v-show="tab === 2" :companyname="company_name" :assignedcompanies="assigned_companies"/>
+            <documentation        v-show="tab === 3" />
         </creation-wrapper>
     </div>
 </template>
@@ -37,6 +37,7 @@
             'personal-information': require('./partials/PersonalInformation.vue'),
             'working-information':  require('./partials/WorkingInformation/Layout.vue'),
             'assign-vehicles':      require('./partials/AssignVehicles.vue'),
+            'documentation':        require('./partials/Documentation/Layout.vue'),
         },
         data: function() {
             return {
@@ -63,12 +64,25 @@
              * Company's name associated with the company id stored in the component data.
              */
             company_name: function() {
-                let ret = '';
-                if(this.values.working_information.company_id && !this.$store.getters.companies.updating) {
-                    let val = this.$store.getters.companies.list.filter(company => company.id == this.values.working_information.company_id);
-                    return val.length > 0 ? val[0].name : '-';
+                let ret = '-';
+                if(!this.$store.getters.companies.updating) {
+                    let jobs = this.values.working_information.jobs;
+                    if(jobs.length === 1) {
+                        let val = this.$store.getters.companies.list.filter(company => company.id == jobs[0].company_id);
+                        ret = val.length > 0 ? val[0].name : '-';
+                    }
+                    else if (jobs.length > 1) {
+                        ret = 'Empresas asignadas';
+                    }
                 }
                 return ret;
+            },
+            assigned_companies: function() {
+                let ids = [];
+                this.values.working_information.jobs.forEach(job => {
+                    if(job.company_id !== '') ids.push(parseInt(job.company_id));
+                });
+                return ids;
             },
             id: function() {
                 return this.$store.getters.person.id;

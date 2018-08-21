@@ -17,7 +17,7 @@
         <template v-else>
             <!-- Options buttons -->
             <div class="row text-center mb-3">
-                <!-- Company vehicles list button -->
+                <!-- Company people list button -->
                 <div class="col-4">
                     <button type="button" :class="'font-weight-bold btn btn-block btn-' + (selected_list === 'company' ? 'outline-unique btn-static':'link')"
                             @click="selected_list = 'company'"
@@ -25,7 +25,7 @@
                         <abbreviation-text :text="companyname"/> <span class="badge badge-dark ml-1">{{ company_people.length }}</span>
                     </button>
                 </div>
-                <!-- Others vehicles list button -->
+                <!-- Other people list button -->
                 <div class="col-4">
                     <button type="button" :class="'font-weight-bold btn btn-block btn-' + (selected_list === 'others' ? 'outline-unique btn-static':'link')"
                             @click="selected_list = 'others'"
@@ -48,15 +48,11 @@
                         </a>
                         <!-- Options -->
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="more-options">
-                            <!-- New vehicle -->
+                            <!-- New person -->
                             <span class="dropdown-item">
-                                <i class="fas centered fa-plus"></i> Agregar nuevo vehículo
+                                <i class="fas centered fa-plus"></i> Agregar nueva persona
                             </span>
-                            <!-- Show or hide outdated vehicles -->
-                            <span class="dropdown-item" @click="show_outdated = !show_outdated">
-                                <i :class="'far centered fa-eye' + (show_outdated ? '-slash':'')"></i>
-                                {{ show_outdated ? 'Ocultar' : 'Mostrar' }} vehículos vencidos
-                            </span>
+                            <!-- Unselect all people -->
                             <span class="dropdown-item" @click="unpickAll">
                                 <i class="fas centered fa-ban"></i> Deseleccionar todos
                             </span>
@@ -66,7 +62,7 @@
                 <!-- /Extra options dropdown -->
             </div>
             <!-- /Options buttons -->
-            <!-- Vehicles list -->
+            <!-- People list -->
             <div class="row">
                 <div class="col-12 table-container">
                     <custom-table
@@ -81,15 +77,7 @@
                     />
                 </div>
             </div>
-            <!-- /Vehicles list -->
-            <!-- Selected vehicles count -->
-            <div class="row">
-                <div class="col text-center">
-                    <br>
-                    <span class="badge badge-light font-italic">{{ people_picked.length }} seleccionados</span>
-                </div>
-            </div>
-            <!-- /Selected vehicles count -->
+            <!-- /People list -->
         </template>
     </div>
 </template>

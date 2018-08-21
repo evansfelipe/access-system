@@ -82,14 +82,6 @@
                 </div>
             </div>
             <!-- /Vehicles list -->
-            <!-- Selected vehicles count -->
-            <div class="row">
-                <div class="col text-center">
-                    <br>
-                    <span class="badge badge-light font-italic">{{ vehicles_picked.length }} seleccionados</span>
-                </div>
-            </div>
-            <!-- /Selected vehicles count -->
         </template>
     </div>
 </template>
@@ -97,10 +89,10 @@
 <script>
 export default {
     props: {
-        companyid: { 
+        assignedcompanies: { 
             required: false,
-            type: Number,
-            default: -1
+            type: Array,
+            default: []
         },
         companyname: { 
             required: false,
@@ -130,7 +122,7 @@ export default {
     },
     beforeMount() {
         this.$store.dispatch('fetchList', 'vehicles');
-        this.splitLists(this.companyid);
+        this.splitLists();
     },
     computed: {
         vehicles: function() {
@@ -138,14 +130,31 @@ export default {
         },
         vehicles_picked: function() {
             return this.$store.getters.person.values.assign_vehicles.vehicles_id;
-        }
+        },
+
     }, 
     methods: {
-        splitLists(company_id) {
-            this.others_vehicles  = this.vehicles.filter(vehicle => vehicle.company_id !== company_id);
-            this.company_vehicles = this.vehicles.filter(vehicle => vehicle.company_id === company_id);
+        splitLists() {
+            this.company_vehicles = [];
+            this.others_vehicles = [];
+            this.vehicles.forEach(vehicle => {
+                if(this.assignedcompanies.includes(vehicle.company_id)) {
+                    this.company_vehicles.push(vehicle);
+                }
+                else {
+                    this.others_vehicles.push(vehicle);
+                }
+            });
             if(this.vehicles.length > 0) {
-                this.selected_list = this.company_vehicles.length > 0 ? 'company' : 'others';
+                if(this.company_vehicles.length > 0) {
+                    this.selected_list = 'company';
+                    this.vehicles_list = this.company_vehicles;
+                }
+                else {
+                    this.selected_list = 'others';
+                    this.vehicles_list = this.others_vehicles;
+                }
+                // this.selected_list = this.company_vehicles.length > 0 ? 'company' : 'others';
             }
         },
         unpickAll() {
@@ -157,10 +166,13 @@ export default {
     },
     watch: {
         vehicles: function() {
-            this.splitLists(this.companyid);
+            this.splitLists();
         },
-        companyid: function(value) {
-            this.splitLists(value);
+        assignedcompanies: {
+            handler: function() {
+                this.splitLists();
+            },
+            deep: true
         },
         selected_list: function(value) {
             this.vehicles_list = value === 'company' ? this.company_vehicles : this.others_vehicles;

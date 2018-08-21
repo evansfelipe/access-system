@@ -10,3 +10,9 @@ $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
 $unique-color: #3F729B;
+
+// Used to change the default languaje on bootstrap file selector
+$custom-file-text: (
+  en: "Browse",
+  es: "Elegir"
+);

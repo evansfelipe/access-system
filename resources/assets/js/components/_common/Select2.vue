@@ -46,7 +46,17 @@ export default {
     mounted() {
         let vm = this;
         let select = $(this.$el)
-            .select2({ data: this.options, placeholder: this.placeholder, tags: this.tags, color: 'red', theme: 'bootstrap' })
+            .select2({  data: this.options,
+                        placeholder: this.placeholder,
+                        tags: this.tags,
+                        color: 'red',
+                        theme: 'bootstrap',
+                        "language": {
+                            "noResults": function(){
+                                return "No hay resultados";
+                            }
+                        },
+                    })
             .val(this.value)
             .trigger('change');
         select.data('select2').$selection.css({

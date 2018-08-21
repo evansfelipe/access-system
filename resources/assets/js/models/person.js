@@ -41,6 +41,7 @@ export default {
                 }],
             },
             // Why not just an array instead of an object with an array.
+            // Because we did all the other ones that way.
             assign_vehicles: {
                 vehicles_id: []
             },
