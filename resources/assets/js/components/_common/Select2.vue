@@ -43,20 +43,26 @@ export default {
             default: false
         }
     },
+    computed: {
+        select2Options: function() {
+            return {  
+                data: this.options,
+                placeholder: this.placeholder,
+                tags: this.tags,
+                color: 'red',
+                theme: 'bootstrap',
+                "language": {
+                    "noResults": function(){
+                        return "No hay resultados";
+                    }
+                },
+            };
+        }
+    },
     mounted() {
         let vm = this;
         let select = $(this.$el)
-            .select2({  data: this.options,
-                        placeholder: this.placeholder,
-                        tags: this.tags,
-                        color: 'red',
-                        theme: 'bootstrap',
-                        "language": {
-                            "noResults": function(){
-                                return "No hay resultados";
-                            }
-                        },
-                    })
+            .select2(this.select2Options)
             .val(this.value)
             .trigger('change');
         select.data('select2').$selection.css({
@@ -84,7 +90,7 @@ export default {
         options: function(options) {
             // Maybe there is a way to change the options without restarting the select?
             $(this.$el)
-                .select2({ data: this.options, placeholder: this.placeholder, tags: this.tags, color: 'red', theme: 'bootstrap' })
+                .select2(this.select2Options)
                 // .val(this.value) It's needed?
                 .data('select2').$selection.css({
                     'min-height': '37px',

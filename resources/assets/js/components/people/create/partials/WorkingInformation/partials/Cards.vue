@@ -5,20 +5,20 @@
                 <i class="btn-remove far fa-trash-alt" v-if="cards.length > 1" @click="removeCard(card)"></i>
             </div>
             <!-- Card number -->
-            <form-item label="Número de la tarjeta" :errors="errors[key] ? errors[key]['number'] : []">
+            <form-item label="Número de la tarjeta" :errors="errors[card.key] ? errors[card.key]['number'] : []">
                 <div class="col">
                     <input  type="text" name="number" class="form-control"
                             placeholder="Número de tarjeta" :value="card.number" @input="(e) => editCard(card, 'number', e.target.value)">
                 </div>
             </form-item>
             <!-- Card from -->
-            <form-item label="Valida desde" :errors="errors[key] ? errors[key]['from'] : []">
+            <form-item label="Valida desde" :errors="errors[card.key] ? errors[card.key]['from'] : []">
                 <div class="col">
                     <input type="date" name="from" class="form-control" :value="card.from" @input="(e) => editCard(card, 'from', e.target.value)">
                 </div>
             </form-item>
             <!-- Card until -->
-            <form-item label="Valida hasta" :errors="errors[key] ? errors[key]['until'] : []">
+            <form-item label="Valida hasta" :errors="errors[card.key] ? errors[card.key]['until'] : []">
                 <div class="col">
                     <input type="date" name="until" class="form-control" :value="card.until" @input="(e) => editCard(card, 'until', e.target.value)">
                 </div>

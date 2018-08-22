@@ -24,4 +24,9 @@ trait Helpers {
             // }
         ];
     }
+
+    public static function timestampToDate($timestamp)
+    {
+        return $timestamp ? date('d-m-Y', strtotime($timestamp)) : '-';
+    }
 }

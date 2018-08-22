@@ -28,25 +28,20 @@ export default {
                 art:             !debug ? '' : '123456789',
                 pbip:            !debug ? '' : '2020-01-01',
                 jobs: [{
-                    key: 0,
+                    key: Date.now(),
                     company_id: '',
                     activity_id: '',
                     subactivities: ['hola'],
                     cards: [{
-                        key: 0,
+                        key: Date.now(),
                         number: '',
                         from: '',
                         until: '',
                     }]
                 }],
             },
-            // Why not just an array instead of an object with an array.
-            // Because we did all the other ones that way.
-            assign_vehicles: {
-                vehicles_id: []
-            },
-            documentation: {
-            }
+            assign_vehicles: { vehicles_id: [] },
+            documentation: { }
         }
     }
 };

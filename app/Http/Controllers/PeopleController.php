@@ -1,5 +1,4 @@
 <?php namespace App\Http\Controllers;
-
 use Storage;
 use App\Http\Requests\{ SavePersonRequest };
 use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle };
@@ -14,7 +13,8 @@ class PeopleController extends Controller
      */
     public function updated_at()
     {
-        return Person::select(['updated_at'])->orderBy('updated_at','desc')->first(); 
+        // Doing this way prevents Laravel to call toArray function, since the result of the query is a Collection.
+        return Person::select('updated_at')->orderBy('updated_at','desc')->first()->updated_at; 
     }
 
     /**
@@ -24,14 +24,16 @@ class PeopleController extends Controller
      */
     public function list()
     {
-        $people = Person::select(['id','last_name','name','cuil'])->orderBy('created_at','desc')
-            ->with('companies:name')->get()->map( function($person) {
-                $person->cuil = $person->cuil ?? '';
-                $person->company_name = $person->companies[0]->name;
-                unset($person->companies);
-                return $person;
-            });
-        
+        $people = Person::select('id', 'last_name', 'name', 'cuil')->orderBy('created_at','desc')->get()
+                        ->map(function($person) {
+                            return [
+                                'id'            => $person->id,
+                                'last_name'     => $person->last_name,
+                                'name'          => $person->name,
+                                'cuil'          => $person->cuil,
+                                'company_name'  => $person->companies()->select('name')->get()->implode('name', ' / ')
+                            ];
+                        });
         return response(json_encode($people))->header('Content-Type', 'application/json');        
     }
 
@@ -50,18 +52,6 @@ class PeopleController extends Controller
             }
         }
         return response(json_encode($pictures))->header('Content-Type', 'application/json');
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $people = Person::orderBy('created_at','desc')->get()->toArray();
-        foreach($people as $key => $value){ $people[$key] = $value['index']; }
-        return response(json_encode($people))->header('Content-Type', 'application/json');
     }
 
     /**
@@ -89,6 +79,14 @@ class PeopleController extends Controller
                 $person_company->activity_id = $job['activity_id'];
                 $person_company->subactivities = json_encode($job['subactivities']);
                 $person_company->save();
+                foreach ($job['cards'] as $c) {
+                    $card = new Card();
+                    $card->person_company_id = $person_company->id;
+                    $card->number = $c['number'];
+                    $card->from = $c['from'];
+                    $card->until = $c['until'];
+                    $card->save();
+                }
             }
         }
         // Saves each person-vehicle relationship.
@@ -98,12 +96,8 @@ class PeopleController extends Controller
                $person_vehicle->save();
            } 
         }
-        // Saves the card
-        $card = new Card($request->toArray());
-        $card->person_id = $person->id;
-        $card->save();
         // Saves the picture
-        $path = 'public/documentation/'.$person->last_name[0].'/'.$person->id.'_'.$person->last_name.'_'.$person->name;
+        $path = $person->getStorageFolder(true);
         $person->picture_name = time() . '.' . $request->file('picture')->guessExtension();
         Storage::putFileAs($path.'/pictures', $request->file('picture'), $person->picture_name);
         $person->save();
@@ -121,7 +115,7 @@ class PeopleController extends Controller
      */
     public function show(Person $person)
     {
-        return response($person->toShowJSON(), 200)->header('Content-Type', 'application/json');
+        return response($person->toJson(), 200)->header('Content-Type', 'application/json');
     }
 
     /**
@@ -133,15 +127,28 @@ class PeopleController extends Controller
     public function edit(Person $person)
     {
         $vehicles_id = [];
-        foreach($person->vehicles as $vehicle) { 
-            array_push($vehicles_id, $vehicle->id); 
-        }
-        $card = $person->getActiveCard();
+        foreach($person->vehicles as $vehicle) { array_push($vehicles_id, $vehicle->id); }
         $contact = $person->contactToObject();
-        $person_company = $person->workingInformation();
-        // Generates the json with the actual information of the person to send to the view.
-        $person_json = [
-            'id' => $person->id,
+
+        $jobs = $person->jobs()->map(function($job, $key) {
+            return [
+                'key'           =>  $key + 1, // We want the first key to be 1 and not 0 (0 may represent empty in some functions).
+                'company_id'    =>  $job->company_id,
+                'activity_id'   =>  $job->activity_id,
+                'subactivities' =>  $job->subactivities,
+                'cards'         =>  $job->cards->map(function($card, $key) {
+                                        return [
+                                            'key'    => $key + 1, // We want the first key to be 1 and not 0 (0 may represent empty in some functions).
+                                            'number' => $card->number,
+                                            'from'   => $card->from  ? date('Y-m-d', strtotime($card->from))  : '',
+                                            'until'  => $card->until ? date('Y-m-d', strtotime($card->until)) : '',
+                                        ]; 
+                                    })
+            ];
+        });
+
+        $data = [
+            'id'     => $person->id,
             'values' => [
                 'personal_information'  => [
                     // Basic information
@@ -166,32 +173,22 @@ class PeopleController extends Controller
                     'country'           => $person->residency->country,
                     'province'          => $person->residency->province,
                     'city'              => $person->residency->city,
-                    'picture_path'      => 'storage/documentation/'.$person->last_name[0].'/'.$person->id.'_'.$person->last_name.'_'.$person->name.'/pictures/'.$person->picture_name,
+                    'picture_path'      => $person->getCurrentPicturePath(),
                 ],
                 'working_information'   => [
-                    'company_id'        => $person->company()->id,
-                    'activity_id'       => $person_company->activity_id,
-                    'art'               => $person_company->art,
-                    'pbip'              => $person_company->pbip ? date('Y-m-d', strtotime($person_company->pbip)) : '',
-                    'jobs'              => []
+                    // Basic information
+                    'risk'              => $person->risk,
+                    'art'               => $person->art,
+                    'pbip'              => $person->pbip ? date('Y-m-d', strtotime($person->pbip)) : '',
+                    // Jobs array
+                    'jobs'              => $jobs
                 ],
-                'assign_vehicles'   => [
-                    'vehicles_id' => $vehicles_id
-                ],
-                'first_card'    => [
-                    'number'    => $card->number,
-                    'risk'      => $card->risk,
-                    'from'      => $card->from ? date('Y-m-d', strtotime($card->from)) : '',
-                    'until'     => $card->until ? date('Y-m-d', strtotime($card->until)) : ''
-                ],
-                'documentation' => [
-                ]
+                'assign_vehicles'       => ['vehicles_id' => $vehicles_id],
+                'documentation'         => []
             ],
         ];
 
-        \Debugbar::info($person_json);
-
-        return response(json_encode($person_json))->header('Content-Type', 'application/json');
+        return response(json_encode($data))->header('Content-Type', 'application/json');
     }
 
     /**

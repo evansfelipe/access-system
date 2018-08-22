@@ -49,8 +49,8 @@
                         <!-- Content for the tab number 2 -->
                         <ps-vehicles v-show="tab === 2" :vehicles="vehicles"/>
                         <!-- Content for the tab number 3 -->
-                        <ps-cards   v-show="tab === 3" :activeCard="active_card" :inactiveCards="inactive_cards"
-                                    :person="personal_information.full_name || ''" :company="working_information.company_name || ''"/>
+                        <!-- <ps-cards   v-show="tab === 3" :activeCard="active_card" :inactiveCards="inactive_cards"
+                                    :person="personal_information.full_name || ''" :company="working_information.company_name || ''"/> -->
                         <!-- Content for the tab number 4 -->
                         <ps-documentation v-show="tab === 4"/>
                     </div>

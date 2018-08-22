@@ -57,7 +57,7 @@
             <div v-for="(job, key) in personCompany.jobs" :key="key" class="col-4">
                 <div class="alert alert-primary shadow-sm">
                     <h5>{{ job.company_name }}</h5>
-                    {{ job.activity }}
+                    {{ job.activity_name }}
                     <ul>
                         <li v-for="(subactivity, sub_key) in job.subactivities" :key="sub_key">
                             {{ subactivity }}

@@ -131,7 +131,6 @@ export default {
         vehicles_picked: function() {
             return this.$store.getters.person.values.assign_vehicles.vehicles_id;
         },
-
     }, 
     methods: {
         splitLists() {
@@ -154,7 +153,6 @@ export default {
                     this.selected_list = 'others';
                     this.vehicles_list = this.others_vehicles;
                 }
-                // this.selected_list = this.company_vehicles.length > 0 ? 'company' : 'others';
             }
         },
         unpickAll() {

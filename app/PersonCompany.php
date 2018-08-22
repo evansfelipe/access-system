@@ -21,6 +21,7 @@ class PersonCompany extends Pivot
                 'min:1'
             ],
             'jobs.*.company_id' => [
+                'nullable',
                 'integer',
                 'exists:companies,id'
             ],
@@ -49,5 +50,10 @@ class PersonCompany extends Pivot
     public function activity()
     {
         return $this->hasOne('App\Activity');
+    }
+
+    public function cards()
+    {
+        return $this->hasMany('App\Card', 'person_company_id');
     }
 }

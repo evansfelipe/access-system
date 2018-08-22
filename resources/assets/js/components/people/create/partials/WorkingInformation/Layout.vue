@@ -38,7 +38,7 @@
                     <h6>Trabajos:</h6>
                 </div>
             </div>
-            <div class="container job mb-2" v-for="(job, index) in values.jobs" :key="job.key">
+            <div class="container job mb-2" v-for="job in values.jobs" :key="job.key">
                 <div class="row">
                     <div class="col" style="text-align: right">
                         <i class="btn-remove far fa-trash-alt" v-if="values.jobs.length > 1" @click="deleteJob(job)"></i>
@@ -48,14 +48,14 @@
                     <div class="col">
                         <!-- Company, Activity & Subactivities -->
                         <job-data   :job="{ company_id: job.company_id, activity_id: job.activity_id, subactivities: job.subactivities }" 
-                                    :companies="companies" :activities="activities" :errors="jobs_errors[index] || []"
+                                    :companies="companies" :activities="activities" :errors="jobs_errors[job.key] || []"
                                     @change="(data) => editJob(job, data)"
                         />
                         <!-- Card number, Card from & Card until -->
                         <h6>Tarjetas:</h6>
-                        <job-cards  :cards="job.cards" @change="(data) => editJobCards(job, data)"
-                                    @add="addCardToJob(job)" @edit="({card, data}) => editCardFromJob(job, card, data)" @remove="card => removeCardFromJob(job, card)"
-                                    :errors="jobs_errors[index] ? jobs_errors[index].cards : []"
+                        <job-cards  :cards="job.cards" :errors="jobs_errors[job.key] ? jobs_errors[job.key].cards : []"
+                                    @add="addCardToJob(job)" @edit="({card, data}) => editCardFromJob(job, card, data)"
+                                    @remove="card => removeCardFromJob(job, card)"
                         />
                     </div>
                 </div>
@@ -97,6 +97,7 @@ export default {
                 { id: 2, text: 'Nivel 2' },
                 { id: 3, text: 'Nivel 3' },
             ],
+            jobs_errors: [],
         }
     },
     beforeMount() {
@@ -124,7 +125,7 @@ export default {
         },
         update: function({name, value}) {
             this.$store.commit('updateModel', { which: 'person', properties_path: `values.working_information.${name}`, value: value });
-        },
+        }
     },
     computed: {
         companies: function() {
@@ -132,9 +133,45 @@ export default {
         },
         activities: function() {
             return this.$store.getters.activities.list.map(a => { return { id: a.id, text: a.name }});
-        },
-        jobs_errors: function() {
-            return this.errors['jobs'] ? this.errors['jobs'] : [];
+        }
+    },
+    watch: {
+        errors: {
+            handler: function() {
+                /**
+                 * The jobs error array is indexed using the position of each job within the array of jobs sent to the server.
+                 * This means that, for example, the error under index 2 corresponds to the job that is in position 2 of 
+                 * the jobs array. For the correct rendering, we need that the array of jobs errors is indexed using the key of
+                 * each job, instead of its position in the array of jobs (because this is the key we are using on v-for).
+                 * 
+                 * We don't need to update the jobs error array when a job is deleted (or created or updated) because, as we had mapped 
+                 * the index already, we can use the same array we created. When a job that had been validate is deleted, the validation
+                 * errors remains in the jobs errors array, but as the key of that job has been removed, that component of the jobs
+                 * erros arrays wont be accessed again. It is more, doing this brings mapping errors, since there would be more errors than
+                 * works to map.
+                 */
+                let errors = this.errors['jobs'] ? this.errors['jobs'] : [];
+                errors.forEach((e, index) => {
+                    if(this.values.jobs[index]) {
+                        let key = this.values.jobs[index].key;
+                        this.jobs_errors[key] = e;
+                        /**
+                         * The same happens with the cards errors of each job's error. We need to map that index to 
+                         * the correspondent card's key.
+                         */
+                        let cards_errors = [];
+                        e.cards.forEach((e2, i2) => {
+                            if(this.values.jobs[index].cards[i2]) {
+                                let k2 = this.values.jobs[index].cards[i2].key;
+                                cards_errors[k2] = e2;
+                            }
+                        });
+                        // Finally, we assign the new cards errors (with the keys mapped) to this job's errors array.
+                        this.jobs_errors[key].cards = cards_errors;
+                    }
+                });
+            },
+            deep: true
         }
     }
 }

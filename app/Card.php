@@ -33,19 +33,15 @@ class Card extends Model
         ];
     }
 
-    /**
-     * Get the card owner.
-     */
-    public function owner()
+    public function job()
     {
-        return $this->belongsTo('App\Person');
+        return $this->belongsTo('App\PersonCompany', 'person_company_id');
     }
 
     public function toArray()
     {
         return [
             'number' => $this->number,
-            'risk' => 'Nivel ' . $this->risk,
             'from' => date('d-m-Y', strtotime($this->from)),
             'until' => date('d-m-Y', strtotime($this->until))
         ];

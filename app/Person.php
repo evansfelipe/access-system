@@ -1,8 +1,9 @@
 <?php namespace App;
 
 use App\Http\Traits\Helpers;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-use App\{ Residency, Activity, Vehicle };
+use App\{ Card, Residency, Activity, Vehicle };
 
 class Person extends Model
 {
@@ -121,35 +122,38 @@ class Person extends Model
     }
 
     /**
-     * Gets each card associated with this person.
-     */
-    public function cards()
-    {
-        return $this->hasMany('App\Card');
-    }
-
-    /**
      * Gets each company associated with this person.
      */
     public function companies()
     {
-        return $this->belongsToMany('App\Company', 'company_people')->using('App\PersonCompany')->withPivot('activity_id','subactivities');
+        return $this->belongsToMany('App\Company', 'company_people', 'person_id', 'company_id')
+                    ->using('App\PersonCompany')
+                    ->withPivot('id','activity_id','subactivities');
     }
 
-    /**
-     * Gets the most recently company associated with this person.
-     */
-    public function company()
+    public function jobs()
     {
-        return $this->companies()->orderBy('created_at', 'desc')->first();
-    }
-
-    /**
-     * Gets the most recently company associated with this person.
-     */
-    public function workingInformation()
-    {
-        return $this->company()->pivot;
+        return  DB::table('company_people')
+                    ->where('person_id', $this->id)
+                    ->leftJoin('companies', 'company_people.company_id', '=', 'companies.id')
+                    ->join('activities', 'company_people.activity_id', '=', 'activities.id')
+                    ->select(
+                        'company_people.id              as id',
+                        'company_people.activity_id     as activity_id',
+                        'company_people.subactivities   as subactivities',
+                        'companies.id                   as company_id',
+                        'companies.name                 as company_name',
+                        'activities.name                as activity_name'               
+                    )
+                    ->get()
+                    ->map(function($job) {
+                        $job->company_name  = $job->company_name ?? 'Personal';
+                        $job->subactivities = json_decode($job->subactivities);
+                        $job->cards         = Card::where('person_company_id', $job->id)
+                                                    ->select('id', 'number', 'from', 'until', 'active')
+                                                    ->get();
+                        return $job;
+                    });
     }
 
     /**
@@ -160,17 +164,17 @@ class Person extends Model
         return $this->belongsTo('App\Residency');
     }
 
+    public function vehicles()
+    {
+        return $this->belongsToMany('\App\Vehicle', 'person_vehicle')->using('\App\PersonVehicle');
+    }
+
     /**
      * Creates and returns a string with the last name and the name of this person.
      */
     public function fullName() 
     {
         return $this->last_name . ', ' . $this->name;
-    }
-
-    public function vehicles()
-    {
-        return $this->belongsToMany('\App\Vehicle', 'person_vehicle')->using('\App\PersonVehicle');
     }
 
     /**
@@ -200,23 +204,6 @@ class Person extends Model
             case Person::PASSPORT:
                 return "Pasaporte";
         }
-    }
-
-    /**
-     * Gets the active card associated with this person. If there is an active card, it should be unique;
-     * this means a same person can not have more than one active card associated with him/her.
-     */
-    public function getActiveCard()
-    {
-        return $this->cards()->where('active','=',true)->first();
-    }
-
-    /**
-     * Gets an array with each inactive card associated with this person.
-     */
-    public function getInactiveCards()
-    {
-        return $this->cards()->where('active','=',false)->orderBy('updated_at','desc')->get();
     }
 
     /**
@@ -251,32 +238,21 @@ class Person extends Model
         ];
     }
 
-    public function getStorageFolder()
+    public function getStorageFolder($public = false)
     {
-        return 'storage/documentation/'.$this->last_name[0].'/'.$this->id.'_'.$this->last_name.'_'.$this->name.'/';
+        $root = $public ? 'public/' : ' storage/';
+        return $root . 'documentation/'.$this->last_name[0].'/'.$this->id.'_'.$this->last_name.'_'.$this->name.'/';
     }
 
-    public function getCurrentPicturePath()
+    public function getCurrentPicturePath($public = false)
     {
-        return $this->getStorageFolder() . 'pictures/'.$this->picture_name;
+        return $this->getStorageFolder($public) . 'pictures/'.$this->picture_name;
     }
 
-    public function toShowJSON() 
+    public function toArray() 
     {
-        $jobs = [];
-        foreach ($this->companies as $company) {
-            array_push($jobs, [
-                'company_id'    => $company->id,
-                'company_name'  => $company->name,
-                'activity'      => Activity::findOrFail($company->pivot->activity_id)->name,
-                'subactivities' => json_decode($company->pivot->subactivities),    
-            ]);
-        }
-
-        return json_encode([
+        return [
             'personal_information'  => array_merge(
-                $this->residency->toArray(),
-                $this->contactToArray(),
                 [
                     'full_name'         => $this->fullName(),
                     'document_type'     => $this->documentTypeToString(),
@@ -285,81 +261,19 @@ class Person extends Model
                     'cuil'              => $this->cuil          ?? '-',
                     'blood_type'        => $this->blood_type    ?? '-',
                     'pna'               => $this->pna           ?? '-',
-                    'birthday'          => $this->birthday ? date('d-m-Y', strtotime($this->birthday)) : '-',
+                    'birthday'          => Helpers::timestampToDate($this->birthday),
                     'picture_path'      => $this->getCurrentPicturePath(),
-                ]
+                ],
+                $this->residency ? $this->residency->toArray() : [],
+                $this->contactToArray()
             ),
             'working_information'   => [
-                'jobs'          => $jobs,
+                'jobs'          => $this->jobs(),
                 'risk'          => $this->risk ?? '-',
+                'pbip'          => Helpers::timestampToDate($this->pbip),
                 'art_number'    => $this->art  ?? '-',
-                'pbip'          => $this->pbip ? date('d-m-Y', strtotime($this->pbip)) : '-',
             ],
-            'vehicles'              => $this->vehicles->toArray(),
-            'active_card'           => $this->getActiveCard(),
-            'inactive_cards'        => $this->getInactiveCards(),
-        ]);
-    }
-
-    /**
-     * Returns an array (that can be encoded to a json) that contains the data needed to be shown on the views of the app.
-     */
-    public function toShowArray()
-    {
-        $contact = $this->contactToObject();
-        $residency = Residency::find($this->residency_id);
-        $company = $this->company();
-        $person_company = $this->workingInformation();
-        $activity = Activity::find($person_company->activity_id)->name;
-        $vehicles = [];
-        
-        return [
-            'personal_information' => [
-                'full_name' => $this->fullName(),
-                'document_type' => $this->documentTypeToString(),
-                'document_number' => $this->document_number,
-                'cuil' => $this->cuil,
-                'birthday' => $this->birthday ? date('d-m-Y', strtotime($this->birthday)) : '-',
-                'sex' => $this->sexToString() ?? '-',
-                'blood_type' => $this->blood_type ?? '-',
-                'pna' => $this->pna ?? '-',
-                'email' => $contact->email ?? '-',
-                'phone' => $contact->home_phone ?? '-',
-                'mobile_phone' => $contact->mobile_phone ?? '-',
-                'fax' => $contact->fax ?? '-',
-                'address' => $residency->street ?? '-',
-                'apartment' => $residency->apartment ?? '-',
-                'cp' => $residency->cp ?? '-',
-                'city' => $residency->city ?? '-',
-                'province' => $residency->province ?? '-',
-                'country' => $residency->country ?? '-',
-                'picture_path' => 'storage/documentation/'.$this->last_name[0].'/'.$this->id.'_'.$this->last_name.'_'.$this->name.'/pictures/'.$this->picture_name,
-            ],
-            'working_information' => [
-                'company_url' => route('companies.show', $company->id),
-                'company_name' => $company->name,
-                'company_area' => $company->area,
-                'company_cuit' => $company->cuit,
-                'activity' => $activity,
-                'art_company' => $person_company->art,
-                'pbip' => $person_company->pbip ? date('d-m-Y', strtotime($person_company->pbip)) : '-',
-            ],
-            'vehicles' => $this->vehicles->toArray(),
-            'active_card' => $this->getActiveCard(),
-            'inactive_cards' => $this->getInactiveCards(),
-            
-            //Index info
-            'index' => [
-                'id' => $this->id,
-                'last_name' => $this->last_name,
-                'name' => $this->name,
-                'cuil' => $this->cuil,
-                'company_name' => $this->company()->name,
-                'show_url' => route('people.show', $this->id),
-            ],
-            //Routes
-            'edit_url' => route('people.edit', $this->id)
-
+            'vehicles'          => $this->vehicles->toArray(),
         ];
     }
 }
