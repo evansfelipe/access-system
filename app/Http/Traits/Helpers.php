@@ -1,5 +1,9 @@
-<?php namespace App\Http\Traits;
+<?php
+
+namespace App\Http\Traits;
+
 use Illuminate\Http\Request;
+use Storage;
 
 trait Helpers {
     /**
@@ -28,5 +32,12 @@ trait Helpers {
     public static function timestampToDate($timestamp)
     {
         return $timestamp ? date('d-m-Y', strtotime($timestamp)) : '-';
+    }
+
+    public static function storeFile($path, $file)
+    {
+        $name = time() . '.' . $file->guessExtension();
+        Storage::putFileAs($path, $file, $name);
+        return $name;
     }
 }

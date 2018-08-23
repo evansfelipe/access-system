@@ -41,7 +41,22 @@ export default {
                 }],
             },
             assign_vehicles: { vehicles_id: [] },
-            documentation: { }
+            documentation: {
+                company_note:               '',
+                dni_copy:                   '',
+                pna_file:                   '',
+                driver_license:             '',
+                driver_license_expiraton:   '',
+                art_file:                   '',
+                art_file_expiration:        '',
+                acc_pers:                   '',
+                acc_pers_expiration:        '',
+                boarding_passbook:          '',
+                boarding_card:              '',
+                health_notebook:            '',
+                pbip_file:                  '',
+                pbip_file_expiration:       ''
+            }
         }
     }
 };

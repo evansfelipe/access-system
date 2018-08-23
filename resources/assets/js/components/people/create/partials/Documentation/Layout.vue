@@ -1,16 +1,36 @@
 <template>
     <div class="form-row">
         <div class="offset-1 col-10">
-            <expiration-file label="Nota de la empresa"/>
-            <expiration-file label="DNI"/>
-            <expiration-file label="Número de prontuario"/>
-            <expiration-file label="Registro de conducir"/>
-            <expiration-file label="Certificado de cobertura ART"/>
-            <expiration-file label="Certificado de cobertura Acc. Pers."/>
-            <expiration-file label="Libreta de embarque"/>
-            <expiration-file label="Cédula de embarque"/>
-            <expiration-file label="Libreta sanitaria"/>
-            <expiration-file label="Constancia de curso PBIP"/>
+            <expiration-file label="Nota de la empresa" name="company_note"
+                @updated="data => update(data)"
+            />
+            <expiration-file label="Documento de identidad" name="dni_copy"
+                @updated="data => update(data)"
+            />
+            <expiration-file label="Número de prontuario" name="pna_file"
+                @updated="data => update(data)"
+            />
+            <expiration-file label="Registro de conducir" name="driver_license" :expiration="true"
+                @updated="data => update(data)"
+            />
+            <expiration-file label="Certificado de cobertura ART" name="art_file" :expiration="true"
+                @updated="data => update(data)"
+            />
+            <expiration-file label="Certificado de cobertura Acc. Pers." name="acc_pers" :expiration="true"
+                @updated="data => update(data)"
+            />
+            <expiration-file label="Libreta de embarque" name="boarding_passbook"
+                @updated="data => update(data)"
+            />
+            <expiration-file label="Cédula de embarque" name="boarding_card"
+                @updated="data => update(data)"
+            />
+            <expiration-file label="Libreta sanitaria" name="health_notebook" :expiration="true"
+                @updated="data => update(data)"
+            />
+            <expiration-file label="Constancia de curso PBIP" name="pbip_file" :expiration="true"
+                @updated="data => update(data)"
+            />
         </div>
     </div>
 </template>
@@ -18,7 +38,12 @@
 <script>
 export default {
     components: {
-            'expiration-file': require('./partials/ExpirationFile.vue')
-        },
+        'expiration-file': require('./partials/ExpirationFile.vue')
+    },
+    methods: {
+        update: function({name, value}) {
+            this.$store.commit('updateModel', { which: 'person', properties_path: `values.documentation.${name}`, value: value });
+        }
+    }
 }
 </script>

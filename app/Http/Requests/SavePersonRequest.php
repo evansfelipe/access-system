@@ -36,7 +36,7 @@ class SavePersonRequest extends FormRequest
                 $person_rules['picture'] = array_merge(['nullable'], $person_rules['picture']);
             }
         }
-
+        // return []; // TO DELETE!
         return array_merge(
             $person_rules, 
             $residency_rules, 

@@ -1,7 +1,8 @@
 <?php namespace App\Http\Controllers;
 use Storage;
+use App\Http\Traits\Helpers;
 use App\Http\Requests\{ SavePersonRequest };
-use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle };
+use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle, PersonDocument};
 
 class PeopleController extends Controller
 {
@@ -96,14 +97,21 @@ class PeopleController extends Controller
                $person_vehicle->save();
            } 
         }
-        // Saves the picture
+        $files = $request->file();
         $path = $person->getStorageFolder(true);
-        $person->picture_name = time() . '.' . $request->file('picture')->guessExtension();
-        Storage::putFileAs($path.'/pictures', $request->file('picture'), $person->picture_name);
+        // Saves the picture
+        $person->picture_name = Helpers::storeFile($path.'/pictures', $files['picture']);
         $person->save();
-        /**
-         * TODO: store the documentation.
-         */
+        unset($files['picture']);
+        // Saves the documentation
+        foreach ($files as $key => $file) {
+            $person_document = new PersonDocument();
+            $person_document->person_id = $person->id;
+            $person_document->document_type = $person_document->getConst($key);
+            $person_document->document_name = Helpers::storeFile($path, $file);
+            $person_document->expiration = $request->{$key.'_expiration'};
+            $person_document->save();
+        }
         return response(json_encode(['id' => $person->id]), 200)->header('Content-Type', 'application/json');
     }
 
