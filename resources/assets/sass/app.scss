@@ -27,15 +27,6 @@ nav.navbar {
     }
 }
 
-.btn-remove {
-    padding: 5px;
-    color: #CC0000;
-    &:hover { 
-        color: #ff4444;
-        cursor: pointer;
-    }
-}
-
 main {
     position: absolute; 
     top: $navbar-height; 

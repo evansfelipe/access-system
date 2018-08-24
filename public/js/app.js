@@ -61975,8 +61975,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     components: {
         'personal-information': __webpack_require__(126),
         'working-information': __webpack_require__(129),
-        'assign-vehicles': __webpack_require__(140),
-        'documentation': __webpack_require__(145)
+        'assign-vehicles': __webpack_require__(142),
+        'documentation': __webpack_require__(147)
     },
     data: function data() {
         return {
@@ -62742,7 +62742,7 @@ var normalizeComponent = __webpack_require__(0)
 /* script */
 var __vue_script__ = __webpack_require__(132)
 /* template */
-var __vue_template__ = __webpack_require__(139)
+var __vue_template__ = __webpack_require__(141)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -62815,7 +62815,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\ndiv.container.job[data-v-d8a53f6a] {\n  position: relative;\n  border-radius: 3px;\n  border: 1px solid #dedede;\n  padding: 1em;\n}\n", ""]);
+exports.push([module.i, "\ndiv.container.job[data-v-d8a53f6a] {\n  position: relative;\n  border-radius: 3px;\n  border: 1px solid #dedede;\n  padding: 1em;\n}\n.job-enter-active[data-v-d8a53f6a], .job-leave-active[data-v-d8a53f6a] {\n  -webkit-transition: all .5s;\n  transition: all .5s;\n}\n.job-enter[data-v-d8a53f6a], .job-leave-to[data-v-d8a53f6a] {\n  opacity: 0;\n  -webkit-transform: translateY(-30px);\n          transform: translateY(-30px);\n}\n.btn-link[data-v-d8a53f6a] {\n  padding: 0;\n  text-decoration: none;\n}\n.btn-remove[data-v-d8a53f6a] {\n  position: absolute;\n  right: 15px;\n  z-index: 10;\n  cursor: pointer;\n  color: #CC0000;\n}\n", ""]);
 
 // exports
 
@@ -62826,6 +62826,29 @@ exports.push([module.i, "\ndiv.container.job[data-v-d8a53f6a] {\n  position: rel
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -63165,7 +63188,9 @@ var render = function() {
     [
       _c(
         "form-item",
-        { attrs: { label: "Empresa", errors: _vm.company_errors } },
+        {
+          attrs: { col: "col-4", label: "Empresa", errors: _vm.company_errors }
+        },
         [
           _c(
             "div",
@@ -63191,7 +63216,13 @@ var render = function() {
       _vm._v(" "),
       _c(
         "form-item",
-        { attrs: { label: "Actividad", errors: _vm.activity_errors } },
+        {
+          attrs: {
+            col: "col-4",
+            label: "Actividad",
+            errors: _vm.activity_errors
+          }
+        },
         [
           _c(
             "div",
@@ -63218,7 +63249,11 @@ var render = function() {
       _c(
         "form-item",
         {
-          attrs: { label: "Subactividad/es", errors: _vm.subactivities_errors }
+          attrs: {
+            col: "col-4",
+            label: "Subactividad/es",
+            errors: _vm.subactivities_errors
+          }
         },
         [
           _c(
@@ -63264,17 +63299,21 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(137)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(137)
+var __vue_script__ = __webpack_require__(139)
 /* template */
-var __vue_template__ = __webpack_require__(138)
+var __vue_template__ = __webpack_require__(140)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-43c15ff2"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -63308,10 +63347,74 @@ module.exports = Component.exports
 
 /***/ }),
 /* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(138);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("09402242", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-43c15ff2\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Cards.vue", function() {
+     var newContent = require("!!../../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-43c15ff2\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Cards.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.btn-link[data-v-43c15ff2] {\n  padding: 0;\n  text-decoration: none;\n}\n.btn-remove[data-v-43c15ff2] {\n  position: absolute;\n  right: 15px;\n  z-index: 10;\n  cursor: pointer;\n  color: #CC0000;\n}\n.cards-enter-active[data-v-43c15ff2], .cards-leave-active[data-v-43c15ff2] {\n  -webkit-transition: all .75s;\n  transition: all .75s;\n}\n.cards-enter[data-v-43c15ff2], .cards-leave-to[data-v-43c15ff2] {\n  opacity: 0;\n  -webkit-transform: translateY(-30px);\n          transform: translateY(-30px);\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -63382,7 +63485,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 138 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -63392,117 +63495,115 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm._l(_vm.cards, function(card, key) {
-        return _c(
-          "div",
-          { key: "card-" + card.key + "-data", staticClass: "row" },
-          [
-            _c(
-              "div",
-              { staticClass: "col-12", staticStyle: { "text-align": "right" } },
-              [
-                _vm.cards.length > 1
-                  ? _c("i", {
-                      staticClass: "btn-remove far fa-trash-alt",
+      _c(
+        "transition-group",
+        { attrs: { name: "cards" } },
+        _vm._l(_vm.cards, function(card, key) {
+          return _c(
+            "div",
+            { key: "card-" + card.key + "-data", staticClass: "row" },
+            [
+              _vm.cards.length > 1
+                ? _c("i", {
+                    staticClass: "btn-remove far fa-trash-alt",
+                    on: {
+                      click: function($event) {
+                        _vm.removeCard(card)
+                      }
+                    }
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "form-item",
+                {
+                  attrs: {
+                    label: "Número de la tarjeta",
+                    errors: _vm.errors[card.key]
+                      ? _vm.errors[card.key]["number"]
+                      : []
+                  }
+                },
+                [
+                  _c("div", { staticClass: "col" }, [
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        name: "number",
+                        placeholder: "Número de tarjeta"
+                      },
+                      domProps: { value: card.number },
                       on: {
-                        click: function($event) {
-                          _vm.removeCard(card)
+                        input: function(e) {
+                          return _vm.editCard(card, "number", e.target.value)
                         }
                       }
                     })
-                  : _vm._e()
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "form-item",
-              {
-                attrs: {
-                  label: "Número de la tarjeta",
-                  errors: _vm.errors[card.key]
-                    ? _vm.errors[card.key]["number"]
-                    : []
-                }
-              },
-              [
-                _c("div", { staticClass: "col" }, [
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      name: "number",
-                      placeholder: "Número de tarjeta"
-                    },
-                    domProps: { value: card.number },
-                    on: {
-                      input: function(e) {
-                        return _vm.editCard(card, "number", e.target.value)
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "form-item",
+                {
+                  attrs: {
+                    label: "Valida desde",
+                    errors: _vm.errors[card.key]
+                      ? _vm.errors[card.key]["from"]
+                      : []
+                  }
+                },
+                [
+                  _c("div", { staticClass: "col" }, [
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: { type: "date", name: "from" },
+                      domProps: { value: card.from },
+                      on: {
+                        input: function(e) {
+                          return _vm.editCard(card, "from", e.target.value)
+                        }
                       }
-                    }
-                  })
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "form-item",
-              {
-                attrs: {
-                  label: "Valida desde",
-                  errors: _vm.errors[card.key]
-                    ? _vm.errors[card.key]["from"]
-                    : []
-                }
-              },
-              [
-                _c("div", { staticClass: "col" }, [
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "date", name: "from" },
-                    domProps: { value: card.from },
-                    on: {
-                      input: function(e) {
-                        return _vm.editCard(card, "from", e.target.value)
+                    })
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "form-item",
+                {
+                  attrs: {
+                    label: "Valida hasta",
+                    errors: _vm.errors[card.key]
+                      ? _vm.errors[card.key]["until"]
+                      : []
+                  }
+                },
+                [
+                  _c("div", { staticClass: "col" }, [
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: { type: "date", name: "until" },
+                      domProps: { value: card.until },
+                      on: {
+                        input: function(e) {
+                          return _vm.editCard(card, "until", e.target.value)
+                        }
                       }
-                    }
-                  })
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "form-item",
-              {
-                attrs: {
-                  label: "Valida hasta",
-                  errors: _vm.errors[card.key]
-                    ? _vm.errors[card.key]["until"]
-                    : []
-                }
-              },
-              [
-                _c("div", { staticClass: "col" }, [
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "date", name: "until" },
-                    domProps: { value: card.until },
-                    on: {
-                      input: function(e) {
-                        return _vm.editCard(card, "until", e.target.value)
-                      }
-                    }
-                  })
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            key < _vm.cards.length - 1
-              ? _c("div", { staticClass: "col-12" }, [_c("hr")])
-              : _vm._e()
-          ],
-          1
-        )
-      }),
+                    })
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              key < _vm.cards.length - 1
+                ? _c("div", { staticClass: "col-12" }, [_c("hr")])
+                : _vm._e()
+            ],
+            1
+          )
+        })
+      ),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col text-right" }, [
@@ -63517,7 +63618,7 @@ var render = function() {
         ])
       ])
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -63531,7 +63632,7 @@ if (false) {
 }
 
 /***/ }),
-/* 139 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -63644,87 +63745,91 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _vm._l(_vm.values.jobs, function(job) {
-              return _c(
-                "div",
-                { key: job.key, staticClass: "container job mb-2" },
-                [
-                  _c("div", { staticClass: "row" }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "col",
-                        staticStyle: { "text-align": "right" }
-                      },
-                      [
-                        _vm.values.jobs.length > 1
-                          ? _c("i", {
-                              staticClass: "btn-remove far fa-trash-alt",
-                              on: {
-                                click: function($event) {
-                                  _vm.deleteJob(job)
+            _c(
+              "transition-group",
+              { attrs: { name: "job" } },
+              _vm._l(_vm.values.jobs, function(job) {
+                return _c(
+                  "div",
+                  { key: job.key, staticClass: "container job mb-2" },
+                  [
+                    _c("div", { staticClass: "row" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "col",
+                          staticStyle: { "text-align": "right" }
+                        },
+                        [
+                          _vm.values.jobs.length > 1
+                            ? _c("i", {
+                                staticClass: "btn-remove far fa-trash-alt",
+                                on: {
+                                  click: function($event) {
+                                    _vm.deleteJob(job)
+                                  }
                                 }
+                              })
+                            : _vm._e()
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c(
+                        "div",
+                        { staticClass: "col" },
+                        [
+                          _c("job-data", {
+                            attrs: {
+                              job: {
+                                company_id: job.company_id,
+                                activity_id: job.activity_id,
+                                subactivities: job.subactivities
+                              },
+                              companies: _vm.companies,
+                              activities: _vm.activities,
+                              errors: _vm.jobs_errors[job.key] || []
+                            },
+                            on: {
+                              change: function(data) {
+                                return _vm.editJob(job, data)
                               }
-                            })
-                          : _vm._e()
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "row" }, [
-                    _c(
-                      "div",
-                      { staticClass: "col" },
-                      [
-                        _c("job-data", {
-                          attrs: {
-                            job: {
-                              company_id: job.company_id,
-                              activity_id: job.activity_id,
-                              subactivities: job.subactivities
-                            },
-                            companies: _vm.companies,
-                            activities: _vm.activities,
-                            errors: _vm.jobs_errors[job.key] || []
-                          },
-                          on: {
-                            change: function(data) {
-                              return _vm.editJob(job, data)
                             }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("h6", [_vm._v("Tarjetas:")]),
-                        _vm._v(" "),
-                        _c("job-cards", {
-                          attrs: {
-                            cards: job.cards,
-                            errors: _vm.jobs_errors[job.key]
-                              ? _vm.jobs_errors[job.key].cards
-                              : []
-                          },
-                          on: {
-                            add: function($event) {
-                              _vm.addCardToJob(job)
+                          }),
+                          _vm._v(" "),
+                          _c("h6", [_vm._v("Tarjetas:")]),
+                          _vm._v(" "),
+                          _c("job-cards", {
+                            attrs: {
+                              cards: job.cards,
+                              errors: _vm.jobs_errors[job.key]
+                                ? _vm.jobs_errors[job.key].cards
+                                : []
                             },
-                            edit: function(ref) {
-                              var card = ref.card
-                              var data = ref.data
+                            on: {
+                              add: function($event) {
+                                _vm.addCardToJob(job)
+                              },
+                              edit: function(ref) {
+                                var card = ref.card
+                                var data = ref.data
 
-                              return _vm.editCardFromJob(job, card, data)
-                            },
-                            remove: function(card) {
-                              return _vm.removeCardFromJob(job, card)
+                                return _vm.editCardFromJob(job, card, data)
+                              },
+                              remove: function(card) {
+                                return _vm.removeCardFromJob(job, card)
+                              }
                             }
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  ])
-                ]
-              )
-            }),
+                          })
+                        ],
+                        1
+                      )
+                    ])
+                  ]
+                )
+              })
+            ),
             _vm._v(" "),
             _c("div", { staticClass: "container mt-3" }, [
               _c("div", { staticClass: "row" }, [
@@ -63760,19 +63865,19 @@ if (false) {
 }
 
 /***/ }),
-/* 140 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(141)
+  __webpack_require__(143)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(143)
+var __vue_script__ = __webpack_require__(145)
 /* template */
-var __vue_template__ = __webpack_require__(144)
+var __vue_template__ = __webpack_require__(146)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -63811,13 +63916,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 141 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(142);
+var content = __webpack_require__(144);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -63837,7 +63942,7 @@ if(false) {
 }
 
 /***/ }),
-/* 142 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -63851,7 +63956,7 @@ exports.push([module.i, "\n.dropdown-toggle[data-v-d3fd6d0e]::after {\n  display
 
 
 /***/ }),
-/* 143 */
+/* 145 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -64036,7 +64141,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 144 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -64252,13 +64357,13 @@ if (false) {
 }
 
 /***/ }),
-/* 145 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(146)
+var __vue_script__ = __webpack_require__(148)
 /* template */
 var __vue_template__ = __webpack_require__(152)
 /* template functional */
@@ -64299,7 +64404,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 146 */
+/* 148 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -64344,6 +64449,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
+<<<<<<< Updated upstream
         'expiration-file': __webpack_require__(147)
     },
     methods: {
@@ -64353,11 +64459,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.$store.commit('updateModel', { which: 'person', properties_path: 'values.documentation.' + name, value: value });
         }
+=======
+        'expiration-file': __webpack_require__(149)
+>>>>>>> Stashed changes
     }
 });
 
 /***/ }),
-/* 147 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -64408,6 +64517,7 @@ module.exports = Component.exports
 
 
 /***/ }),
+<<<<<<< Updated upstream
 /* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -64448,6 +64558,8 @@ exports.push([module.i, "\n.badge[data-v-81a27640] {\n  font-size: 100% !importa
 
 
 /***/ }),
+=======
+>>>>>>> Stashed changes
 /* 150 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -65775,7 +65887,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\na[data-v-1e9eafc2] {\n  color: black;\n}\na[data-v-1e9eafc2]:hover {\n    color: #3F729B;\n    text-decoration: none;\n}\nlabel[data-v-1e9eafc2], small[data-v-1e9eafc2] {\n  display: block;\n}\n", ""]);
+exports.push([module.i, "\na[data-v-1e9eafc2] {\n  color: black;\n}\na[data-v-1e9eafc2]:hover {\n    color: #3F729B;\n    text-decoration: none;\n}\nlabel[data-v-1e9eafc2], small[data-v-1e9eafc2] {\n  display: block;\n}\ndiv.active-card[data-v-1e9eafc2] {\n  display: inline-block;\n  width: 100%;\n  border-radius: 5px;\n  color: white;\n  background: -webkit-gradient(linear, left top, right top, from(#0d47a1), to(#4285F4));\n  background: linear-gradient(to right, #0d47a1, #4285F4);\n  margin-bottom: 5px;\n  margin-top: 5px;\n}\ndiv.active-card > hr[data-v-1e9eafc2] {\n  height: 12px;\n  border: 0;\n  -webkit-box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);\n          box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);\n  margin: 0;\n}\ndiv.active-card > div.title[data-v-1e9eafc2] {\n  padding: 5%;\n  padding-bottom: 5px;\n}\ndiv.active-card > div.title > h4[data-v-1e9eafc2] {\n  display: inline-block;\n}\ndiv.active-card > div.info[data-v-1e9eafc2] {\n  padding: 5%;\n  padding-top: 0;\n}\ndiv.table-container[data-v-1e9eafc2] {\n  height: 30vh;\n}\ndiv.job[data-v-1e9eafc2] {\n  border-radius: 3px;\n  border: 1px solid #dedede;\n  padding: 1em;\n}\n", ""]);
 
 // exports
 
@@ -65786,6 +65898,28 @@ exports.push([module.i, "\na[data-v-1e9eafc2] {\n  color: black;\n}\na[data-v-1e
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -65937,76 +66071,185 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-3" }, [
-        _c("label", [_vm._v("Nivel de riesgo:")]),
-        _vm._v(" "),
-        _c("strong", [_vm._v(_vm._s(_vm.personCompany.risk))])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-3" }, [
-        _c("label", [_vm._v("Vencimiento  curso PBIP:")]),
-        _vm._v(" "),
-        _c("strong", [_vm._v(_vm._s(_vm.personCompany.pbip))])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-6" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-4" }, [
-            _c("small", [_vm._v("Aseguradora")]),
-            _vm._v(" "),
-            _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_company))])
-          ]),
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "row d-flex align-items-center" }, [
+        _c("div", { staticClass: "col-3" }, [
+          _c("label", [_vm._v("Nivel de riesgo:")]),
           _vm._v(" "),
-          _c("div", { staticClass: "col-4" }, [
-            _c("small", [_vm._v("Número")]),
-            _vm._v(" "),
-            _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_number))])
-          ]),
+          _c("strong", [_vm._v(_vm._s(_vm.personCompany.risk))])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-3" }, [
+          _c("label", [_vm._v("Vencimiento  curso PBIP:")]),
           _vm._v(" "),
-          _c("div", { staticClass: "col-4" }, [
-            _c("small", [_vm._v("Vencimiento")]),
+          _c("strong", [_vm._v(_vm._s(_vm.personCompany.pbip))])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-6" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-4" }, [
+              _c("small", [_vm._v("Aseguradora")]),
+              _vm._v(" "),
+              _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_company))])
+            ]),
             _vm._v(" "),
-            _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_expiration))])
+            _c("div", { staticClass: "col-4" }, [
+              _c("small", [_vm._v("Número")]),
+              _vm._v(" "),
+              _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_number))])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-4" }, [
+              _c("small", [_vm._v("Vencimiento")]),
+              _vm._v(" "),
+              _c("strong", [_vm._v(_vm._s(_vm.personCompany.art_expiration))])
+            ])
           ])
         ])
-      ])
-    ]),
-    _vm._v(" "),
-    _vm._m(1),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "row" },
+      ]),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
       _vm._l(_vm.personCompany.jobs, function(job, key) {
-        return _c("div", { key: key, staticClass: "col-4" }, [
-          _c("div", { staticClass: "alert alert-primary shadow-sm" }, [
-            _c("h5", [_vm._v(_vm._s(job.company_name))]),
-            _vm._v(
-              "\n                " +
-                _vm._s(job.activity_name) +
-                "\n                "
-            ),
+        return _c("div", { key: key, staticClass: "job mb-3" }, [
+          _c("div", { staticClass: "row" }, [
             _c(
-              "ul",
-              _vm._l(job.subactivities, function(subactivity, sub_key) {
-                return _c("li", { key: sub_key }, [
-                  _vm._v(
-                    "\n                        " +
-                      _vm._s(subactivity) +
-                      "\n                    "
+              "div",
+              { staticClass: "col" },
+              [
+                _c(
+                  "h5",
+                  [
+                    job.company_id
+                      ? [
+                          _vm._v(
+                            "\n                        " +
+                              _vm._s(job.company_name) +
+                              " "
+                          ),
+                          _c("span", { staticStyle: { color: "lightgrey" } }, [
+                            _vm._v("|")
+                          ])
+                        ]
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("span", { staticStyle: { color: "grey" } }, [
+                      _vm._v(_vm._s(job.activity_name))
+                    ])
+                  ],
+                  2
+                ),
+                _vm._v(" "),
+                _vm._l(job.subactivities, function(subactivity, sub_key) {
+                  return _c(
+                    "span",
+                    { key: sub_key, staticClass: "badge badge-ligth mr-1" },
+                    [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(subactivity) +
+                          "\n                "
+                      )
+                    ]
                   )
-                ])
-              })
+                }),
+                _vm._v(" "),
+                _c("hr")
+              ],
+              2
             )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              { staticClass: "col-4 d-flex align-items-center" },
+              [
+                job.company_id
+                  ? [
+                      _c("table", [
+                        _c("tr", [
+                          _c("td", [_vm._v("Área:")]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "font-weight-bold" }, [
+                            _vm._v(_vm._s(job.company_area))
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c("td", [_vm._v("CUIT:")]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "font-weight-bold" }, [
+                            _vm._v(_vm._s(job.company_cuit))
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c("td", [_vm._v("Venc.:")]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "font-weight-bold" }, [
+                            _vm._v(_vm._s(job.company_expiration))
+                          ])
+                        ])
+                      ])
+                    ]
+                  : _c(
+                      "h6",
+                      {
+                        staticClass: "text-center",
+                        staticStyle: { color: "grey" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    No hay empresa asignada para esta actividad\n                "
+                        )
+                      ]
+                    )
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-8" }, [
+              _c(
+                "div",
+                { staticClass: "row" },
+                _vm._l(job.cards, function(card, key) {
+                  return _c("div", { key: key, staticClass: "col-6" }, [
+                    _c("div", { staticClass: "active-card shadow-sm" }, [
+                      _vm._m(2, true),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "info" }, [
+                        _c("h4", { attrs: { id: "display" } }, [
+                          _vm._v(_vm._s(card.number))
+                        ]),
+                        _vm._v(" "),
+                        _c("small", [
+                          _vm._v("Desde: "),
+                          _c("b", [_vm._v(_vm._s(card.from))])
+                        ]),
+                        _vm._v(" "),
+                        _c("small", [
+                          _vm._v("Hasta:  "),
+                          _c("b", [_vm._v(_vm._s(card.until))])
+                        ])
+                      ])
+                    ])
+                  ])
+                })
+              )
+            ])
           ])
         ])
       })
-    )
-  ])
+    ],
+    2
+  )
 }
 var staticRenderFns = [
   function() {
@@ -66023,6 +66266,14 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col" }, [_c("hr")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "title" }, [
+      _c("h5", [_vm._v("Tarjeta de acceso")])
     ])
   }
 ]

@@ -5,6 +5,27 @@
         border: 1px solid rgb(222,222,222);
         padding: 1em;
     }
+
+    .job-enter-active, .job-leave-active {
+        transition: all .5s;
+    }
+    .job-enter, .job-leave-to {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    .btn-link {
+        padding: 0;
+        text-decoration: none;
+    }
+
+    .btn-remove {
+        position: absolute;
+        right: 15px;
+        z-index: 10;
+        cursor: pointer;
+        color: #CC0000;
+    }
 </style>
 
 <template>
@@ -38,28 +59,30 @@
                     <h6>Trabajos:</h6>
                 </div>
             </div>
-            <div class="container job mb-2" v-for="job in values.jobs" :key="job.key">
-                <div class="row">
-                    <div class="col" style="text-align: right">
-                        <i class="btn-remove far fa-trash-alt" v-if="values.jobs.length > 1" @click="deleteJob(job)"></i>
+            <transition-group name="job">
+                <div class="container job mb-2" v-for="job in values.jobs" :key="job.key">
+                    <div class="row">
+                        <div class="col" style="text-align: right">
+                            <i class="btn-remove far fa-trash-alt" v-if="values.jobs.length > 1" @click="deleteJob(job)"></i>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <!-- Company, Activity & Subactivities -->
+                            <job-data   :job="{ company_id: job.company_id, activity_id: job.activity_id, subactivities: job.subactivities }" 
+                                        :companies="companies" :activities="activities" :errors="jobs_errors[job.key] || []"
+                                        @change="(data) => editJob(job, data)"
+                            />
+                            <!-- Card number, Card from & Card until -->
+                            <h6>Tarjetas:</h6>
+                            <job-cards  :cards="job.cards" :errors="jobs_errors[job.key] ? jobs_errors[job.key].cards : []"
+                                        @add="addCardToJob(job)" @edit="({card, data}) => editCardFromJob(job, card, data)"
+                                        @remove="card => removeCardFromJob(job, card)"
+                            />
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <!-- Company, Activity & Subactivities -->
-                        <job-data   :job="{ company_id: job.company_id, activity_id: job.activity_id, subactivities: job.subactivities }" 
-                                    :companies="companies" :activities="activities" :errors="jobs_errors[job.key] || []"
-                                    @change="(data) => editJob(job, data)"
-                        />
-                        <!-- Card number, Card from & Card until -->
-                        <h6>Tarjetas:</h6>
-                        <job-cards  :cards="job.cards" :errors="jobs_errors[job.key] ? jobs_errors[job.key].cards : []"
-                                    @add="addCardToJob(job)" @edit="({card, data}) => editCardFromJob(job, card, data)"
-                                    @remove="card => removeCardFromJob(job, card)"
-                        />
-                    </div>
-                </div>
-            </div>
+            </transition-group>
             <!-- Add job button -->
             <div class="container mt-3">
                 <div class="row">

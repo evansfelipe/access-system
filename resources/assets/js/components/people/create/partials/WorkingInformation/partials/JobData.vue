@@ -1,21 +1,21 @@
 <template>
     <div class="row">
         <!-- Company -->
-        <form-item label="Empresa" :errors="company_errors">
+        <form-item col="col-4" label="Empresa" :errors="company_errors">
             <div class="col">
                 <select2    placeholder="Seleccione una empresa" :value="job.company_id" :options="companies"
                             @input="(value) => editJob('company_id', value)"/>
             </div>
         </form-item>
         <!-- Activity -->
-        <form-item label="Actividad" :errors="activity_errors">
+        <form-item col="col-4" label="Actividad" :errors="activity_errors">
             <div class="col">
                 <select2    placeholder="Seleccione una actividad" :value="job.activity_id" :options="activities"
                             @input="(value) => editJob('activity_id', value)"/>
             </div>
         </form-item>
         <!-- Subactivities -->
-        <form-item label="Subactividad/es" :errors="subactivities_errors">
+        <form-item col="col-4" label="Subactividad/es" :errors="subactivities_errors">
             <div class="col">
                 <select2    placeholder="Seleccione subactividad/es" :value="job.subactivities" :options="subactivities_options"
                             :tags="true" :name="'subactivities'" :multiple="true"

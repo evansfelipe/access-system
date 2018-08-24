@@ -10493,16 +10493,6 @@ nav.navbar > div > a > .navbar-button:hover {
   opacity: .7;
 }
 
-.btn-remove {
-  padding: 5px;
-  color: #CC0000;
-}
-
-.btn-remove:hover {
-  color: #ff4444;
-  cursor: pointer;
-}
-
 main {
   position: absolute;
   top: 55px;

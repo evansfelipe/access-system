@@ -142,12 +142,16 @@ class Person extends Model
                         'company_people.activity_id     as activity_id',
                         'company_people.subactivities   as subactivities',
                         'companies.id                   as company_id',
-                        'companies.name                 as company_name',
+                        'companies.business_name        as company_name',
+                        'companies.area                 as company_area',
+                        'companies.cuit                 as company_cuit',
+                        'companies.expiration           as company_expiration',
                         'activities.name                as activity_name'               
                     )
                     ->get()
                     ->map(function($job) {
                         $job->company_name  = $job->company_name ?? 'Personal';
+                        $job->company_expiration = Helpers::timestampToDate($job->company_expiration);
                         $job->subactivities = json_decode($job->subactivities);
                         $job->cards         = Card::where('person_company_id', $job->id)
                                                     ->select('id', 'number', 'from', 'until', 'active')
@@ -269,7 +273,7 @@ class Person extends Model
             ),
             'working_information'   => [
                 'jobs'          => $this->jobs(),
-                'risk'          => $this->risk ?? '-',
+                'risk'          => 'Nivel ' . $this->risk,
                 'pbip'          => Helpers::timestampToDate($this->pbip),
                 'art_number'    => $this->art  ?? '-',
             ],
