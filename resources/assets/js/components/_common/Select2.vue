@@ -3,7 +3,7 @@
 </style>
 
 <template>
-    <select :name="`${name}${multiple ? '[]' : ''}`" :multiple="multiple" style="width: 100%; max-height: 50px !important">
+    <select :name="`${name}${multiple ? '[]' : ''}`" :multiple="multiple" class="form-control d-none">
         <slot/>
     </select>
 </template>

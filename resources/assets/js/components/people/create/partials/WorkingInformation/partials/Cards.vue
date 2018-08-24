@@ -12,20 +12,20 @@
         color: #CC0000;
     }
 
-    .cards-enter-active, .cards-leave-active {
-        transition: all .75s;
+    .card-enter-active, .card-leave-active { transition: all .5s }
+    .card-enter, .card-leave-to { opacity: 0 }
+    .card-enter { transform: translateX(-10px) }
+    .card-leave-active { max-height: 100vh }
+    .card-leave-to {
+        max-height: 0;
+        transform: translateX(10px);
     }
-    .cards-enter, .cards-leave-to {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-
 </style>
 
 <template>
     <div>
-        <transition-group name="cards">
-            <div v-for="(card, key) in cards" :key="`card-${card.key}-data`" class="row">
+        <transition-group name="card" tag="div">
+            <div v-for="(card, key) in cards" :key="`card-${card.key}`" class="row">
                 <i class="btn-remove far fa-trash-alt" v-if="cards.length > 1" @click="removeCard(card)"></i>
                 <!-- Card number -->
                 <form-item label="Número de la tarjeta" :errors="errors[card.key] ? errors[card.key]['number'] : []">

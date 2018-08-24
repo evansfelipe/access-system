@@ -6,12 +6,13 @@
         padding: 1em;
     }
 
-    .job-enter-active, .job-leave-active {
-        transition: all .5s;
-    }
-    .job-enter, .job-leave-to {
-        opacity: 0;
-        transform: translateY(-30px);
+    .job-enter-active, .job-leave-active { transition: all .5s }
+    .job-enter, .job-leave-to { opacity: 0 }
+    .job-enter { transform: translateX(-10px) }
+    .job-leave-active { max-height: 100vh }
+    .job-leave-to {
+        max-height: 0;
+        transform: translateX(10px);
     }
 
     .btn-link {
