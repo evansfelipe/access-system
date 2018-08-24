@@ -10,13 +10,10 @@
             <expiration-file label="Número de prontuario" name="pna_file"
                 @updated="data => update(data)"
             />
-            <expiration-file label="Registro de conducir" name="driver_license" :expiration="true"
+            <expiration-file label="Registro de conducir" name="driver_license"
                 @updated="data => update(data)"
             />
-            <expiration-file label="Certificado de cobertura ART" name="art_file" :expiration="true"
-                @updated="data => update(data)"
-            />
-            <expiration-file label="Certificado de cobertura Acc. Pers." name="acc_pers" :expiration="true"
+            <expiration-file label="Certificado de cobertura Acc. Pers." name="acc_pers"
                 @updated="data => update(data)"
             />
             <expiration-file label="Libreta de embarque" name="boarding_passbook"
@@ -25,10 +22,10 @@
             <expiration-file label="Cédula de embarque" name="boarding_card"
                 @updated="data => update(data)"
             />
-            <expiration-file label="Libreta sanitaria" name="health_notebook" :expiration="true"
+            <expiration-file label="Libreta sanitaria" name="health_notebook"
                 @updated="data => update(data)"
             />
-            <expiration-file label="Constancia de curso PBIP" name="pbip_file" :expiration="true"
+            <expiration-file label="Constancia de curso PBIP" name="pbip_file"
                 @updated="data => update(data)"
             />
         </div>

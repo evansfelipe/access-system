@@ -1,5 +1,8 @@
 <style lang="scss" scoped>
-
+span.select2.select2-container.select2-container--bootstrap.select2-container--below.select2-container--focus {
+    outline-style: solid !important;
+    outline-color: red !important;
+}
 </style>
 
 <template>
@@ -67,6 +70,8 @@ export default {
             .trigger('change');
         select.data('select2').$selection.css({
             'min-height': '37px',
+            'box-shadow' : '0 0 0 0',
+
         });
         select.on('change', function() {
             // As we need this to refer to select element, we can't use an arrow function
@@ -94,6 +99,7 @@ export default {
                 // .val(this.value) It's needed?
                 .data('select2').$selection.css({
                     'min-height': '37px',
+                    'box-shadow' : '0 0 0 0'
                 });
         }
     },

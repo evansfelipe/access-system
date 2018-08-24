@@ -32,6 +32,7 @@ class PeopleController extends Controller
                                 'last_name'     => $person->last_name,
                                 'name'          => $person->name,
                                 'cuil'          => $person->cuil,
+                                'companies'     => $person->companies()->select('companies.id')->get(),
                                 'company_name'  => $person->companies()->select('name')->get()->implode('name', ' / ')
                             ];
                         });

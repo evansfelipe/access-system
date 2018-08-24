@@ -41,9 +41,11 @@
                 </div>
             </div>
             <!-- Expiration date -->
-            <div class="col-4 text-center">
-                <input v-if="expiration" type="date" :name="name + '_expiration'" class="form-control" @input="e => updated(e.target.value)">
-                <span v-else class="no-expiration">Sin vencimiento</span>
+            <div class="col-3 text-center">
+                <input type="date" :name="name + '_expiration'" class="form-control" title="Vencimiento" @input="e => updated(e.target.value)">
+            </div>
+            <div class="col-1">
+                <input type="checkbox" :name="name + '_required'" title="¿Requerido?" :checked="checked">
             </div>
         </form-item>
     </div>
@@ -54,13 +56,14 @@ export default {
     props: {
         label: {
             type: String,
-            required: true
+            required: false,
+            default: null
         },
         name: {
             type: String,
             required: true
         },
-        expiration: {
+        checked: {
             type: Boolean,
             required: false,
             default: false

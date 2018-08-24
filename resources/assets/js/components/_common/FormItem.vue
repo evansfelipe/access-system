@@ -9,7 +9,7 @@
     .error-message:first-of-type {
         margin-top: 5px;
     }
-    .item-wrapper input, .item-wrapper select, .item-wrapper span{
+    .item-wrapper input, .item-wrapper select, .item-wrapper span {
         border-color: red !important;
     }
 </style>
