@@ -27,6 +27,22 @@
 <template>
     <div>
         <!-- Data situation -->
+        <div class="row mb-2">
+            <div class="col-4">
+                <input type="text" class="form-control form-control-sm" style="height: 28px" placeholder="Búsqueda" v-model="condition">
+            </div>
+            <!-- Search input -->
+            <div v-show="shown_rows.length > 0" class="offset-5 col-3 text-right">
+                Mostrar 
+                <select class="form-control form-control-sm" style="width: auto; display: inline" v-model.number="pagination.quantity">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select> 
+                filas
+            </div>
+        </div>
         <template v-if="shown_rows.length > 0">
             <!-- Data displayed on a table -->
             <div class="row">
@@ -55,26 +71,9 @@
                     </table>
                 </div>
             </div>
-            <!-- Selected vehicles count -->
-            <div v-if="pickable.active" class="row">
-                <div class="col text-center">
-                    <br>
-                    <span class="badge badge-light font-italic">{{ pickable.list.length }} seleccionados</span>
-                </div>
-            </div>
             <!-- Pagination -->
             <div class="row mt-3">
-                <div class="col-4">
-                    Mostrar 
-                    <select class="form-control form-control-sm" style="width: auto; display: inline" v-model.number="pagination.quantity">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select> 
-                    filas
-                </div>
-                <div class="col-8">
+                <div class="col">
                     <ul class="pagination justify-content-end" style="margin-bottom: 0px">
                         <li :class="`page-item ${pagination.current <= 0 ? 'disabled cursor-not-allowed' : ''}`" @click="changeToPage(pagination.current - 1)">
                             <a class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
@@ -90,7 +89,7 @@
             </div>
         </template>
         <!-- No data situation -->
-        <h3 v-else class="text-center m-0">No se encontraron coincidencias</h3>
+        <h3 v-else class="text-center mt-5 mb-5">No se encontraron coincidencias</h3>
     </div>
 </template>
 
@@ -129,6 +128,7 @@ export default {
     data() {
         return {
             shown_rows: this.clone(this.rows),
+            condition: '',
             sort: {
                 column: -1,
                 order: 0,
@@ -148,10 +148,17 @@ export default {
         rows: {
             handler: function() {
                 this.shown_rows = this.clone(this.rows);
+                this.sortColumn(this.sort.column, true);
+                this.filterRows();
             },
             deep: true
         },
+        condition: function() {
+            // Filters the table in the case that the condition inside the component is used.
+            this.filterRows();
+        },
         filter: {
+            // Filters the table in the case that the conditions to filter the table are sent.
             handler: function() {
                 this.shown_rows = this.clone(this.rows).filter(row => {
                     let ret = this.filter.strict ? true : false;
@@ -217,6 +224,7 @@ export default {
                 }
                 if(this.sort.order === 0 && !skipOrder) {
                     this.shown_rows = this.clone(this.rows);
+                    this.filterRows();
                 }
                 else {
                     let col_name = this.columns[key].name;
@@ -224,6 +232,19 @@ export default {
                 }
             }
             this.changeToPage(this.pagination.current);
+        },
+        filterRows: function() {
+            this.shown_rows = this.clone(this.rows).filter(row => {
+                let ret = false;
+                this.columns.forEach(column => {
+                    if(this.condition !== undefined) {
+                        let aux = typeof row[column.name] === 'String' ? row[column.name] : row[column.name].toString();
+                        ret = ret || aux.matches(this.condition);
+                    }
+                });
+                return ret;
+            });
+            this.sortColumn(this.sort.column, true);
         }
     }
 }

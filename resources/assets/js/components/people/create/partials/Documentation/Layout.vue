@@ -1,31 +1,31 @@
 <template>
     <div class="form-row">
         <div class="offset-1 col-10">
-            <expiration-file label="Nota de la empresa" name="company_note"
+            <expiration-file label="Nota de la empresa" name="company_note" :checked="false"
                 @updated="data => update(data)"
             />
-            <expiration-file label="Documento de identidad" name="dni_copy"
+            <expiration-file label="Documento de identidad" name="dni_copy" :checked="false"
                 @updated="data => update(data)"
             />
-            <expiration-file label="Número de prontuario" name="pna_file"
+            <expiration-file label="Número de prontuario" name="pna_file" :checked="false"
                 @updated="data => update(data)"
             />
-            <expiration-file label="Registro de conducir" name="driver_license"
+            <expiration-file label="Registro de conducir" name="driver_license" :checked="false"
                 @updated="data => update(data)"
             />
-            <expiration-file label="Certificado de cobertura Acc. Pers." name="acc_pers"
+            <expiration-file label="Certificado de cobertura Acc. Pers." name="acc_pers" :checked="false"
                 @updated="data => update(data)"
             />
-            <expiration-file label="Libreta de embarque" name="boarding_passbook"
+            <expiration-file label="Libreta de embarque" name="boarding_passbook" :checked="false"
                 @updated="data => update(data)"
             />
-            <expiration-file label="Cédula de embarque" name="boarding_card"
+            <expiration-file label="Cédula de embarque" name="boarding_card" :checked="false"
                 @updated="data => update(data)"
             />
-            <expiration-file label="Libreta sanitaria" name="health_notebook"
+            <expiration-file label="Libreta sanitaria" name="health_notebook" :checked="false"
                 @updated="data => update(data)"
             />
-            <expiration-file label="Constancia de curso PBIP" name="pbip_file"
+            <expiration-file label="Constancia de curso PBIP" name="pbip_file" :checked="false"
                 @updated="data => update(data)"
             />
         </div>

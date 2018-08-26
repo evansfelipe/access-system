@@ -138,17 +138,26 @@ span.select2.select2-container.select2-container--bootstrap.select2-container--a
 span.select2.select2-container.select2-container--bootstrap.select2-container--above.select2-container--open {
     box-shadow: 0 0 0 2pt rgb(206, 220, 218);
     border-radius: 3px;
+    transition: box-shadow 0.1s;
 }
 
 span.select2-dropdown.select2-dropdown--below {
-    box-shadow: 0 2pt 0 2pt #ced4da;
+    box-shadow: 0 2pt 0 2pt rgb(206, 220, 218);
     border-bottom-left-radius:3px;
     border-bottom-right-radius:3px;
+    transition: box-shadow 0.1s;
 }
 span.select2-dropdown.select2-dropdown--above {
-    box-shadow: 0 -2pt 0 2pt #ced4da;
+    box-shadow: 0 -2pt 0 2pt rgb(206, 220, 218);
     border-top-left-radius:3px;
     border-top-right-radius:3px;
+    transition: box-shadow 0.1s;
+}
+
+.form-control:focus {
+    outline: 0 none;
+    box-shadow: 0 0 0 2pt rgb(206, 220, 218);
+    transition: box-shadow 0.1s;
 }
 
 // Old table format

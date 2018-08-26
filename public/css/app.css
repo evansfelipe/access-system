@@ -10609,19 +10609,41 @@ span.select2.select2-container.select2-container--bootstrap.select2-container--a
   -webkit-box-shadow: 0 0 0 2pt #cedcda;
           box-shadow: 0 0 0 2pt #cedcda;
   border-radius: 3px;
+  -webkit-transition: -webkit-box-shadow 0.1s;
+  transition: -webkit-box-shadow 0.1s;
+  transition: box-shadow 0.1s;
+  transition: box-shadow 0.1s, -webkit-box-shadow 0.1s;
 }
 
 span.select2-dropdown.select2-dropdown--below {
-  -webkit-box-shadow: 0 2pt 0 2pt #ced4da;
-          box-shadow: 0 2pt 0 2pt #ced4da;
+  -webkit-box-shadow: 0 2pt 0 2pt #cedcda;
+          box-shadow: 0 2pt 0 2pt #cedcda;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
+  -webkit-transition: -webkit-box-shadow 0.1s;
+  transition: -webkit-box-shadow 0.1s;
+  transition: box-shadow 0.1s;
+  transition: box-shadow 0.1s, -webkit-box-shadow 0.1s;
 }
 
 span.select2-dropdown.select2-dropdown--above {
-  -webkit-box-shadow: 0 -2pt 0 2pt #ced4da;
-          box-shadow: 0 -2pt 0 2pt #ced4da;
+  -webkit-box-shadow: 0 -2pt 0 2pt #cedcda;
+          box-shadow: 0 -2pt 0 2pt #cedcda;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
+  -webkit-transition: -webkit-box-shadow 0.1s;
+  transition: -webkit-box-shadow 0.1s;
+  transition: box-shadow 0.1s;
+  transition: box-shadow 0.1s, -webkit-box-shadow 0.1s;
+}
+
+.form-control:focus {
+  outline: 0 none;
+  -webkit-box-shadow: 0 0 0 2pt #cedcda;
+          box-shadow: 0 0 0 2pt #cedcda;
+  -webkit-transition: -webkit-box-shadow 0.1s;
+  transition: -webkit-box-shadow 0.1s;
+  transition: box-shadow 0.1s;
+  transition: box-shadow 0.1s, -webkit-box-shadow 0.1s;
 }
 
