@@ -33,51 +33,31 @@
     <div>
         <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.activities.updating" message="Cargando..."/>
         <template v-else>
-            <!-- Risk , PBIP & ART -->
-            <div class="form-row">
-                <form-item label="Nivel de riesgo" :errors="errors.risk">
-                    <div class="col">
-                        <select2    name="risk" :value="values.risk" @input="(value) => update({name: 'risk', value: value})"
-                                    placeholder="Seleccione un nivel de riesgo" :options="risk_levels"/>
-                    </div>
-                </form-item>
-                <form-item col="col-6" label="Vencimiento PBIP" :errors="errors.pbip">
-                    <div class="col">
-                        <input  type="date" name="pbip" class="form-control" :value="values.pbip" @input="(e) => update(e.target)">
-                    </div>
-                </form-item>
-            </div>
-            <div class="row">
-                <form-item col="col-4" label="ART" :errors="errors.art">
-                    <div class="col">
-                        <input  type="text" name="art" class="form-control" :value="values.art" @input="(e) => update(e.target)">
-                    </div>
-                </form-item>
-            </div>
-            <!-- Jobs -->
-            <div class="row">
-                <div class="col">
-                    <h6>Trabajos:</h6>
-                </div>
-            </div>
-            <transition-group name="job">
+            <transition-group name="job" tag="div">
                 <div class="container job mb-2" v-for="job in values.jobs" :key="job.key">
-                    <div class="row">
+                    <div class="form-row">
                         <div class="col" style="text-align: right">
                             <i class="btn-remove far fa-trash-alt" v-if="values.jobs.length > 1" @click="deleteJob(job)"></i>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
+                    <div class="form-row">
+                        <div class="col-12">
                             <!-- Company, Activity & Subactivities -->
-                            <job-data   :job="{ company_id: job.company_id, activity_id: job.activity_id, subactivities: job.subactivities }" 
+                            <job-data   :job="job" 
                                         :companies="companies" :activities="activities" :errors="jobs_errors[job.key] || []"
-                                        @change="(data) => editJob(job, data)"
+                                        @change="({attribute, value}) => editJob(job, attribute, value)"
                             />
+                        </div>
+                        <div class="col-12">
+                            <span style="position: absolute; left: 1em; top: 4px; background-color: white;" class="px-1">
+                                Tarjeta{{ job.cards.length > 1 ? 's' : '' }}
+                            </span>
+                            <hr>
+                        </div>
+                        <div class="col-12">
                             <!-- Card number, Card from & Card until -->
-                            <h6>Tarjetas:</h6>
                             <job-cards  :cards="job.cards" :errors="jobs_errors[job.key] ? jobs_errors[job.key].cards : []"
-                                        @add="addCardToJob(job)" @edit="({card, data}) => editCardFromJob(job, card, data)"
+                                        @add="addCardToJob(job)" @edit="({card, attribute, value}) => editCardFromJob(job, card, attribute, value)"
                                         @remove="card => removeCardFromJob(job, card)"
                             />
                         </div>
@@ -88,7 +68,7 @@
             <div class="container mt-3">
                 <div class="row">
                     <div class="col text-right">
-                        <button class="btn btn-link" title="Añadir nueva empresa y actividad" @click="addJob">
+                        <button class="btn btn-link" @click="addJob">
                             <i class="fas fa-plus"></i> Agregar trabajo
                         </button>
                     </div>
@@ -116,11 +96,6 @@ export default {
     },
     data() {
         return {
-            risk_levels: [
-                { id: 1, text: 'Nivel 1' },
-                { id: 2, text: 'Nivel 2' },
-                { id: 3, text: 'Nivel 3' },
-            ],
             jobs_errors: [],
         }
     },
@@ -132,8 +107,8 @@ export default {
         addJob: function() {
             this.$store.commit('addJob');
         },
-        editJob: function(job, data) {
-            this.$store.commit('updateJob', {job, data});
+        editJob: function(job, attribute, value) {
+            this.$store.commit('updateJob', {job, attribute, value});
         },
         deleteJob: function(job) {
             this.$store.commit('deleteJob', job);
@@ -141,8 +116,8 @@ export default {
         addCardToJob: function(job) {
             this.$store.commit('addCardToJob', job);
         },
-        editCardFromJob: function(job, card, data) {
-            this.$store.commit('editCardFromJob', {job, card, data});
+        editCardFromJob: function(job, card, attribute, value) {
+            this.$store.commit('editCardFromJob', {job, card, attribute, value});
         },
         removeCardFromJob: function(job, card) {
             this.$store.commit('removeCardFromJob', {job, card});
@@ -174,7 +149,10 @@ export default {
                  * erros arrays wont be accessed again. It is more, doing this brings mapping errors, since there would be more errors than
                  * works to map.
                  */
+                this.jobs_errors = [];
                 let errors = this.errors['jobs'] ? this.errors['jobs'] : [];
+                console.log("ESTO", errors);
+                
                 errors.forEach((e, index) => {
                     if(this.values.jobs[index]) {
                         let key = this.values.jobs[index].key;

@@ -1,13 +1,17 @@
 <style lang="scss" scoped>
+    div.table-wrapper {
+        border: 1px solid rgb(222,222,222);
+        border-radius: 3px;
+    }
     table {
         width: 100%;
         cursor: pointer;
         & > thead > tr {
             border: 0;
-            border-bottom: 1px solid grey;
+            border-bottom: 1px solid rgb(222,222,222);
             & > th {
                 border: 0;
-                padding: 0.5em;
+                padding: 0.75em;
             }
         }
 
@@ -17,24 +21,24 @@
             }
             & > td {
                 border: 0;
-                border-bottom: 1px solid whitesmoke;
+                border-bottom: 1px solid rgba(222,222,222, .25);
                 padding: 0.5em;
             }
         }
+    }
+
+    .page-item.active > .page-link {
+        background-color: #3F729B;
+        &:hover { color: white }
     }
 </style>
 
 <template>
     <div>
-        <!-- Data situation -->
-        <div class="row mb-2">
+        <div class="row d-flex align-items-center mb-2">
             <div class="col-4">
-                <input type="text" class="form-control form-control-sm" style="height: 28px" placeholder="Búsqueda" v-model="condition">
-            </div>
-            <!-- Search input -->
-            <div v-show="shown_rows.length > 0" class="offset-5 col-3 text-right">
                 Mostrar 
-                <select class="form-control form-control-sm" style="width: auto; display: inline" v-model.number="pagination.quantity">
+                <select class="form-control form-control-sm d-inline" style="width: auto;" v-model.number="pagination.quantity">
                     <option value="10">10</option>
                     <option value="25">25</option>
                     <option value="50">50</option>
@@ -42,54 +46,59 @@
                 </select> 
                 filas
             </div>
+            <div class="offset-4 col-4">
+                <input type="text" class="form-control form-control-sm d-inline" placeholder="Buscar" v-model="condition">
+            </div>
         </div>
         <template v-if="shown_rows.length > 0">
             <!-- Data displayed on a table -->
             <div class="row">
                 <div class="col">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th v-if="pickable.active" class="pickable"></th>
-                                <th v-for="(column,key) in columns" :key="key" @click="sortColumn(key)" :style="'width: ' + 100/columns.length + '%'">
-                                    {{ column.text }}
-                                    <i v-if="sort.column === key && sort.order !== 0" :class="'float-right centered fas fa-sort-' + (sort.order === 1 ? 'up' :  'down' )"></i>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(row,key) in pagination.page" :key="key" @click="click(row)">
-                                <td v-if="pickable.active" class="pickable text-center" :key="key + '-pickable'">
-                                    <i v-if="pickable.list.includes(row.id)" class="far fa-check-square text-unique"></i>
-                                    <i v-else class="far fa-square" style="color: rgba(0,0,0,0.3)"></i>
-                                </td>
-                                <td v-for="(column,column_key) in columns" :key="column_key">
-                                    {{ row[column.name] }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <!-- Pagination -->
-            <div class="row mt-3">
-                <div class="col">
-                    <ul class="pagination justify-content-end" style="margin-bottom: 0px">
-                        <li :class="`page-item ${pagination.current <= 0 ? 'disabled cursor-not-allowed' : ''}`" @click="changeToPage(pagination.current - 1)">
-                            <a class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-                        </li>
-                        <li v-for="(i, key) in pagination.last" :key="key" :class="`page-item ${key === pagination.current ? 'active' : ''}`" @click="changeToPage(key)">
-                            <a class="page-link">{{ i }}</a>
-                        </li>
-                        <li :class="`page-item ${pagination.current >= this.pagination.last - 1 ? 'disabled cursor-not-allowed' : ''}`" @click="changeToPage(pagination.current + 1)">
-                            <a class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-                        </li>
-                    </ul>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th v-if="pickable.active" class="pickable"></th>
+                                    <th v-for="(column,key) in columns" :key="key" @click="sortColumn(key)" :style="'width: ' + 100/columns.length + '%'">
+                                        {{ column.text }}
+                                        <i v-if="sort.column === key && sort.order !== 0" :class="'float-right centered fas fa-sort-' + (sort.order === 1 ? 'up' :  'down' )"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(row,key) in pagination.page" :key="key" @click="click(row)">
+                                    <td v-if="pickable.active" class="pickable text-center" :key="key + '-pickable'">
+                                        <i v-if="pickable.list.includes(row.id)" class="far fa-check-square text-unique"></i>
+                                        <i v-else class="far fa-square" style="color: rgba(0,0,0,0.3)"></i>
+                                    </td>
+                                    <td v-for="(column,column_key) in columns" :key="column_key">
+                                        {{ row[column.name] }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </template>
         <!-- No data situation -->
         <h3 v-else class="text-center mt-5 mb-5">No se encontraron coincidencias</h3>
+        <!-- Pagination -->
+        <div class="row mt-2">
+            <div class="col-12">
+                <ul class="pagination justify-content-end" style="margin-bottom: 0px">
+                    <li :class="`page-item ${pagination.current <= 0 ? 'disabled' : ''}`" @click="changeToPage(pagination.current - 1)">
+                        <a class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                    </li>
+                    <li v-for="(i, key) in pagination.last" :key="key" :class="`page-item ${key === pagination.current ? 'active' : ''}`" @click="changeToPage(key)">
+                        <a class="page-link">{{ i }}</a>
+                    </li>
+                    <li :class="`page-item ${pagination.current >= this.pagination.last - 1 ? 'disabled' : ''}`" @click="changeToPage(pagination.current + 1)">
+                        <a class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </template>
 

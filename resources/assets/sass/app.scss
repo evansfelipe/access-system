@@ -54,6 +54,11 @@ body {
     }
 }
 
+.btn-link {
+    color: #3F729B !important;
+    text-decoration: none !important;
+}
+
 // .btn-link {
 //     padding: 0;
 //     color: #3E4551 !important;
@@ -102,8 +107,12 @@ i.fas.centered, i.far.centered {
 
 input[type="date"], input[type="datetime-local"], input[type="time"], input[type="month"], input[type="week"] { height: 37px }
 
-input {
+input.form-control {
     height: 37px;
+}
+
+input.form-control-sm {
+    height: auto;
 }
 
 .btn-circle {

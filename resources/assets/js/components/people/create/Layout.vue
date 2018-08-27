@@ -64,15 +64,12 @@
              * Company's name associated with the company id stored in the component data.
              */
             company_name: function() {
-                let ret = '-';
+                let ret = 'Empresas asignadas';
                 if(!this.$store.getters.companies.updating) {
                     let jobs = this.values.working_information.jobs;
-                    if(jobs.length === 1) {
+                    if(jobs.length === 1 && jobs[0].company_id) {
                         let val = this.$store.getters.companies.list.filter(company => company.id == jobs[0].company_id);
-                        ret = val.length > 0 ? val[0].name : '-';
-                    }
-                    else if (jobs.length > 1) {
-                        ret = 'Empresas asignadas';
+                        ret = val[0].name;
                     }
                 }
                 return ret;

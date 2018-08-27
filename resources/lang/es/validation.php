@@ -141,6 +141,9 @@ return [
         'country'           => 'País',
         'province'          => 'Provincia',
         'city'              => 'Ciudad',
+        'risk'              => 'Riesgo',
+        'homeland'          => 'Nacionalidad',
+        'register_number'   => 'Nº Legajo',
         // Person's working information
         'company_id'        => 'Empresa',
         'activity_id'       => 'Actividad',
@@ -148,7 +151,6 @@ return [
         'pbip'              => 'Vencimiento PBIP',
         // Person's first card
         'number'            => 'Número',
-        'risk'              => 'Riesgo',
         'from'              => 'Desde',
         'until'             => 'Hasta',
         // Vehicle's general information
@@ -162,13 +164,15 @@ return [
         'insurance'         => 'Seguro',
         'vtv'               => 'VTV',
         // Jobs
-        'jobs.*.company_id'  => 'Empresa',
-        'jobs.*.activity_id' => 'Actividad',
-        'jobs.*.subactivities' => 'Subactividad/es',
-        'jobs.*.subactivities.*' => 'Subactividad/es',
-        'jobs.*.cards.*.number' => 'Número de la tarjeta',
-        'jobs.*.cards.*.from' => 'Valido desde',
-        'jobs.*.cards.*.until' => 'Valido hasta',
+        'jobs.*.company_id'         => 'Empresa',
+        'jobs.*.activity_id'        => 'Actividad',
+        'jobs.*.subactivities'      => 'Subactividad/es',
+        'jobs.*.subactivities.*'    => 'Subactividad/es',
+        'jobs.*.art_company'        => 'Empresa ART',
+        'jobs.*.art_number'         => 'Número ART',
+        'jobs.*.cards.*.number'     => 'Número de la tarjeta',
+        'jobs.*.cards.*.from'       => 'Valido desde',
+        'jobs.*.cards.*.until'      => 'Valido hasta',
     ],
 
 ];

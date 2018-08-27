@@ -18,10 +18,10 @@
         </div>
         <!-- Country, Province & City -->
         <div class="form-row">
-            <form-item col="col-4" label="País" :errors="errors.country">
+            <form-item col="col-4" label="Ciudad" :errors="errors.city">
                 <div class="col">
-                    <select2    name="country" :value="values.country" @input="(value) => update({name: 'country', value: value})"
-                                placeholder="Seleccione un país" :options="options.country" :tags="true"/>                                
+                    <select2    name="city" :value="values.city" @input="(value) => update({name: 'city', value: value})"
+                                placeholder="Seleccione una ciudad" :options="options.city" :tags="true"/>
                 </div>
             </form-item>
             <form-item col="col-4" label="Provincia / Estado" :errors="errors.province">
@@ -30,10 +30,10 @@
                                 placeholder="Seleccione una provincia/estado" :options="options.province" :tags="true"/>
                 </div>
             </form-item>
-            <form-item col="col-4" label="Ciudad" :errors="errors.city">
+            <form-item col="col-4" label="País" :errors="errors.country">
                 <div class="col">
-                    <select2    name="city" :value="values.city" @input="(value) => update({name: 'city', value: value})"
-                                placeholder="Seleccione una ciudad" :options="options.city" :tags="true"/>
+                    <select2    name="country" :value="values.country" @input="(value) => update({name: 'country', value: value})"
+                                placeholder="Seleccione un país" :options="options.country" :tags="true"/>                                
                 </div>
             </form-item>          
         </div>

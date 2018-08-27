@@ -1,27 +1,61 @@
 <template>
-    <div class="row">
-        <!-- Company -->
-        <form-item col="col-4" label="Empresa" :errors="company_errors">
-            <div class="col">
-                <select2    placeholder="Seleccione una empresa" :value="job.company_id" :options="companies"
-                            @input="(value) => editJob('company_id', value)"/>
+    <div>
+        <div class="form-row">
+            <!-- Company -->
+            <form-item col="col-4" label="Empresa" :errors="company_errors">
+                <div class="col">
+                    <select2    placeholder="Seleccione una empresa" :value="job.company_id" :options="companies"
+                                @input="(value) => editJob('company_id', value)"/>
+                </div>
+            </form-item>
+            <!-- Activity -->
+            <form-item col="col-4" label="Actividad" :errors="activity_errors">
+                <div class="col">
+                    <select2    placeholder="Seleccione una actividad" :value="job.activity_id" :options="activities"
+                                @input="(value) => editJob('activity_id', value)"/>
+                </div>
+            </form-item>
+            <!-- Subactivities -->
+            <form-item col="col-4" label="Subactividad/es" :errors="subactivities_errors">
+                <div class="col">
+                    <select2    placeholder="Seleccione subactividad/es" :value="job.subactivities" :options="subactivities_options"
+                                :tags="true" :name="'subactivities'" :multiple="true"
+                                @input="(value) => editJob('subactivities', value)"/>
+                </div>
+            </form-item>
+        </div>
+
+        <div class="form-row">
+            <form-item col="col-12" label="Grupo/s" :errors="groups_errors">
+                <div class="col">
+                    <select2    placeholder="Seleccione grupo/s" :value="job.groups" :options="groups_options"
+                                :multiple="true" name="groups"
+                                @input="(value) => editJob('groups', value)"
+                    />
+                </div>
+            </form-item>
+        </div>
+
+        <div class="form-row">
+            <div class="col-12">
+                <span style="position: absolute; left: 1em; top: 4px; background-color: white;" class="px-1">ART</span>
+                <hr>
             </div>
-        </form-item>
-        <!-- Activity -->
-        <form-item col="col-4" label="Actividad" :errors="activity_errors">
-            <div class="col">
-                <select2    placeholder="Seleccione una actividad" :value="job.activity_id" :options="activities"
-                            @input="(value) => editJob('activity_id', value)"/>
-            </div>
-        </form-item>
-        <!-- Subactivities -->
-        <form-item col="col-4" label="Subactividad/es" :errors="subactivities_errors">
-            <div class="col">
-                <select2    placeholder="Seleccione subactividad/es" :value="job.subactivities" :options="subactivities_options"
-                            :tags="true" :name="'subactivities'" :multiple="true"
-                            @input="(value) => editJob('subactivities', value)"/>
-            </div>
-        </form-item>
+            <!-- ART Company -->
+            <form-item  label="Aseguradora" col="col-6" :errors="errors['art_company'] || []">
+                <div class="col">
+                    <input  type="text" class="form-control" :value="job.art_company"
+                            @input="(e) => editJob('art_company', e.target.value)">
+                </div>
+            </form-item>
+            <!-- ART Number -->
+            <form-item label="Número de socio" col="col-6" :errors="errors['art_number'] || []">
+                <div class="col">
+                    <input  type="number" class="form-control" :value="job.art_number"
+                            @input="(e) => editJob('art_number', e.target.value)">
+                </div>
+            </form-item>
+        </div>
     </div>
 </template>
 
@@ -64,16 +98,20 @@ export default {
         },
         subactivities_options: function() {
             return this.subactivities.concat(this.job.subactivities.map(s => { return { id: s, text: s } }));
+        },
+        groups_errors: function() {
+            return this.errors['groups'] || [];
+        },
+        groups_options: function() {
+            return [
+                {id: 1, text: 'Grupo 1'},
+                {id: 2, text: 'Grupo 2'}
+            ]
         }
     },
     methods: {
         editJob: function(attribute, value) {
-            let data = {
-                company_id:     attribute === 'company_id'      ? value : this.job.company_id,
-                activity_id:    attribute === 'activity_id'     ? value : this.job.activity_id,
-                subactivities:  attribute === 'subactivities'   ? value : this.job.subactivities,
-            }
-            this.$emit('change', data);
+            this.$emit('change', {attribute, value});
         }
     }
 }

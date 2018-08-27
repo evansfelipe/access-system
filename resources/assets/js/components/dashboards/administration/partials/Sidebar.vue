@@ -70,7 +70,10 @@
                     <!-- People Index -->
                     <router-link to="/people" class="btn-sidebar">Listado</router-link>
                     <!-- People creation -->
-                    <router-link to="/people/create" class="btn-sidebar">Crear</router-link>
+                    <router-link to="/people/create" class="btn-sidebar">
+                        {{ this.$store.getters.person.editing ? 'Editar' : 'Crear' }}
+                        <i v-if="$store.getters.person.modified" class="fas fa-exclamation centered"></i>
+                    </router-link>
                 </div>
             </div>
             <!-- Companies -->
@@ -81,7 +84,10 @@
                 </a>
                 <div class="items" v-if="group_active.companies">
                     <!-- Companies creation -->
-                    <router-link to="/companies/create" class="btn-sidebar">Crear</router-link>
+                    <router-link to="/companies/create" class="btn-sidebar">
+                        {{ this.$store.getters.company.editing ? 'Editar' : 'Crear' }}
+                        <i v-if="$store.getters.company.modified" class="fas fa-exclamation centered"></i>
+                    </router-link>
                 </div>
             </div>
             <!-- Vehicles -->
@@ -91,7 +97,10 @@
                     <i :class="'toggle-icon fas centered fa-caret-' + (group_active.vehicles ? 'up' : 'down')"></i>
                 </a>
                 <div class="items" v-if="group_active.vehicles">
-                    <router-link to="/vehicles/create" class="btn-sidebar">Crear</router-link>
+                    <router-link to="/vehicles/create" class="btn-sidebar">
+                        {{ this.$store.getters.vehicle.editing ? 'Editar' : 'Crear' }}
+                        <i v-if="$store.getters.vehicle.modified" class="fas fa-exclamation centered"></i>
+                    </router-link>
                 </div>
             </div>
 

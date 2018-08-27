@@ -3,11 +3,16 @@
         display:none;
     }
 
-    .btn-link {
+    .btn-list, .btn-list:disabled {
+        background-color: transparent;
+        font-weight: bold;
+        border: 1px solid grey;
         color: grey;
-        &:hover {
-            text-decoration: none;
-        }
+    }
+
+    .btn-list.selected {
+        border-color: #3F729B;
+        color: #3F729B;
     }
 </style>
 
@@ -17,11 +22,11 @@
         <template v-else>
             <!-- Options buttons -->
             <div class="row text-center mb-3">
-                <div class="col-11">
+                <div class="col-12">
                     <div class="row">
                         <!-- Company vehicles list button -->
                         <div class="col-4">
-                            <button type="button" :class="'font-weight-bold btn btn-block btn-' + (selected_list === 'company' ? 'outline-unique btn-static':'link')"
+                            <button type="button" :class="`btn btn-block btn-list ${selected_list === 'company' ? 'selected' : ''}`"
                                     @click="selected_list = 'company'"
                                     :disabled="company_vehicles.length <= 0">
                                 <span class="badge badge-dark ml-1">{{ company_vehicles.length }}</span> <abbreviation-text :text="companyname"/>
@@ -29,7 +34,7 @@
                         </div>
                         <!-- Others vehicles list button -->
                         <div class="col-4">
-                            <button type="button" :class="'font-weight-bold btn btn-block btn-' + (selected_list === 'others' ? 'outline-unique btn-static':'link')"
+                            <button type="button" :class="`btn btn-block btn-list ${selected_list === 'others' ? 'selected' : ''}`"
                                     @click="selected_list = 'others'"
                                     :disabled="others_vehicles.length <= 0">
                                 <span class="badge badge-dark ml-1">{{ others_vehicles.length }}</span> Otras empresas
@@ -37,7 +42,7 @@
                         </div>
                         <!-- Selected vehicles list button -->
                         <div class="col-4">
-                            <button type="button" :class="'font-weight-bold btn btn-block btn-' + (selected_list === 'picked' ? 'outline-unique btn-static':'link')"
+                            <button type="button" :class="`btn btn-block btn-list ${selected_list === 'picked' ? 'selected' : ''}`"
                                     @click="selected_list = 'picked'"
                                     :disabled="vehicles_picked.length <= 0">
                                 <span class="badge badge-dark ml-1">{{ vehicles_picked.length }}</span> Seleccionados
@@ -45,37 +50,9 @@
                         </div>
                     </div>
                 </div>
-                <!-- Extra options dropdown -->
-                <div class="col-1 pl-0">
-                    <div class="dropdown show">
-                        <!-- Open/Close button -->
-                        <a class="btn btn-link btn-block dropdown-toggle" role="button" id="more-options" 
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        title="Más opciones">
-                            <i class="fas fa-bars fa-lg"></i>
-                        </a>
-                        <!-- Options -->
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="more-options">
-                            <!-- New vehicle -->
-                            <span class="dropdown-item">
-                                <i class="fas centered fa-plus"></i> Agregar nuevo vehículo
-                            </span>
-                            <!-- Show or hide outdated vehicles -->
-                            <span class="dropdown-item" @click="show_outdated = !show_outdated">
-                                <i :class="'far centered fa-eye' + (show_outdated ? '-slash':'')"></i>
-                                {{ show_outdated ? 'Ocultar' : 'Mostrar' }} vehículos vencidos
-                            </span>
-                            <span class="dropdown-item" @click="unpickAll">
-                                <i class="fas centered fa-ban"></i> Deseleccionar todos
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <!-- /Extra options dropdown -->
             </div>
             <!-- /Options buttons -->
             <!-- Vehicles list -->
-            <hr>
             <div class="row">
                 <div class="col-12 table-container">
                     <custom-table
@@ -105,7 +82,7 @@ export default {
         companyname: { 
             required: false,
             type: String,
-            default: '-'
+            default: 'Empresas asignadas'
         }
     },
     data: function() {

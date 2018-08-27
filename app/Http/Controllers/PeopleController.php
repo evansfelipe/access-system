@@ -15,7 +15,8 @@ class PeopleController extends Controller
     public function updated_at()
     {
         // Doing this way prevents Laravel to call toArray function, since the result of the query is a Collection.
-        return Person::select('updated_at')->orderBy('updated_at','desc')->first()->updated_at; 
+        $person = Person::select('updated_at')->orderBy('updated_at','desc')->first();
+        return $person ? $person->updated_at : null; 
     }
 
     /**
@@ -80,6 +81,8 @@ class PeopleController extends Controller
                 $person_company->company_id = $job['company_id'];
                 $person_company->activity_id = $job['activity_id'];
                 $person_company->subactivities = json_encode($job['subactivities']);
+                $person_company->art_company = $job['art_company'];
+                $person_company->art_number = $job['art_number'];
                 $person_company->save();
                 foreach ($job['cards'] as $c) {
                     $card = new Card();

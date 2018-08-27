@@ -18,12 +18,16 @@ class Model {
         this.plural   = plural;
         this.name     = name;
         this.updating = false;
+        this.editing  = false;
+        this.modified = false;
         this.values   = require(`./models/${this.name}.js`).default.default(debug);
     }
 
     restart() {
         this.id       = null;
         this.updating = false;
+        this.editing  = false;
+        this.modified = false;
         this.values   = require(`./models/${this.name}.js`).default.default(false);
     }
 }
@@ -140,6 +144,7 @@ export default {
         },
         updateModel: function(state, {which, properties_path, value}) {
             if(state.debug) console.log('Updating model: ', which, properties_path, value);
+            state.models[which].modified = true;
             if(properties_path.trim().length < 1) {
                 state.models[which] = value;
             }
@@ -213,12 +218,10 @@ export default {
         /**
          * Given a job of the jobs list of the person's model, updates its values.
          */
-        updateJob: function(state, {job, data}) {
+        updateJob: function(state, {job, attribute, value}) {
             let pos = state.models.person.values.working_information.jobs.indexOf(job);
             let ref = state.models.person.values.working_information.jobs[pos];
-            ref.company_id = data.company_id;
-            ref.activity_id = data.activity_id;
-            ref.subactivities = data.subactivities;
+            ref[attribute] = value;
         },
         /**
          * Given a job, removes it from the jobs list of the person's model.
@@ -243,15 +246,13 @@ export default {
                 });
             }
         },
-        editCardFromJob: function(state,{job, card, data}) {
+        editCardFromJob: function(state, {job, card, attribute, value}) {
             let pos = state.models.person.values.working_information.jobs.indexOf(job);
             if(pos !== -1) {
                 let pos2 = state.models.person.values.working_information.jobs[pos].cards.indexOf(card);
                 if(pos2 !== -1) {
                     let ref = state.models.person.values.working_information.jobs[pos].cards[pos2];
-                    ref.number = data.number;
-                    ref.from = data.from;
-                    ref.until = data.until;
+                    ref[attribute] = value;
                 }
             }
         },
@@ -315,12 +316,14 @@ export default {
             if(state.debug) console.log('Fetching', which, 'id', id);
             let model = getters[which];
             commit('updateModel', { which: which, properties_path: 'updating', value: true });
+            commit('updateModel', {which: which, properties_path: 'editing', value: true });
             axios.get(`/${model.plural}/${id}/edit`)
             .then(response => {
                 commit('updateModel', {which: which, properties_path: 'id', value: response.data.id });
                 commit('updateModel', {which: which, properties_path: 'values', value: response.data.values });
             })
             .catch(error => {
+                commit('updateModel', {which: which, properties_path: 'editing', value: false });
                 console.log(error);
             })
             .finally(() => commit('updateModel', { which: which, properties_path: 'updating', value: false }));

@@ -6,10 +6,19 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class PersonCompany extends Pivot
 {
     protected $table = 'company_people';
-    protected $fillable = ['company_id', 'activity_id'];
+    protected $fillable = [
+        'company_id',
+        'activity_id',
+        'subactivities',
+        'art_company',
+        'art_number',
+        'groups'
+    ];
 
 
     public const LENGTHS = [
+        'art_company' => ['max' => 50],
+        'art_number'  => ['max' => 50],
     ];
 
     public static function getValidationRules()
@@ -17,8 +26,7 @@ class PersonCompany extends Pivot
         return [
             'jobs' => [
                 'required',
-                'array',
-                'min:1'
+                'array'
             ],
             'jobs.*.company_id' => [
                 'nullable',
@@ -36,14 +44,37 @@ class PersonCompany extends Pivot
             'jobs.*.subactivities.*' => [
                 'string'
             ],
+            'jobs.*.groups' => [
+                'array',
+            ],
+            'jobs.*.groups.*' => [
+                'integer',
+                // 'exists:groups,id' TODO: Create groups table
+            ],
+            'jobs.*.art_company' => [
+                'required',
+                'string'
+            ],
+            'jobs.*.art_number' => [
+                'required',
+                'numeric',
+            ],
             'jobs.*.cards' => [
                 'required',
-                'array',
-                'min:1'
+                'array'
             ],
             'jobs.*.cards.*.number' => Card::getValidationRules()['number'],
-            'jobs.*.cards.*.from' => Card::getValidationRules()['from'],
-            'jobs.*.cards.*.until' => Card::getValidationRules()['until'],
+            'jobs.*.cards.*.from'   => [
+                'required',
+                'date',
+                "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", 
+                'after_or_equal:'.date('Y-m-d'), 
+            ],
+            'jobs.*.cards.*.until'  => [
+                'required',
+                'date',
+                "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",
+            ],
         ];
     }
 

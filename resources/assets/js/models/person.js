@@ -22,16 +22,19 @@ export default {
                 country:         !debug ? '' : '',
                 province:        !debug ? '' : '',
                 city:            !debug ? '' : '',
+                risk:            !debug ? '' : '',
+                homeland:        !debug ? '' : '',
+                register_number: !debug ? '' : '123450999'
             },
             working_information: {
-                risk:            !debug ? '' : '',
-                art:             !debug ? '' : '123456789',
-                pbip:            !debug ? '' : '2020-01-01',
                 jobs: [{
                     key: Date.now(),
                     company_id: '',
                     activity_id: '',
                     subactivities: ['hola'],
+                    groups: [1, 2],
+                    art_company: 'ART Test',
+                    art_number: '123456',
                     cards: [{
                         key: Date.now(),
                         number: '',

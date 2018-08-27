@@ -57,18 +57,36 @@
             </div>
             <!-- PNA & email -->
             <div class="form-row">
-                <form-item col="col-6" label="Prontuario PNA" :errors="errors.pna">
+                <form-item col="col-6" label="Nacionalidad" :errors="errors.homeland">
                     <div class="col">
-                        <input type="text" name="pna" class="form-control" :value="values.pna" @input="(e) => update(e.target)">
+                        <select2 :tags="true" name="homeland" class="form-control" :value="values.homeland" @input="(value) => update({name: 'homeland', value: value})"/>
                     </div>
                 </form-item>
-                <form-item col="col-6" label="Email" :errors="errors.email">
+                <form-item col="col-6" label="Nivel de riesgo" :errors="errors.risk">
                     <div class="col">
-                        <input  type="email" name="email" class="form-control" :value="values.email" @input="(e) => update(e.target)">
-                    </div>                    
+                        <select2    name="risk" :value="values.risk" @input="(value) => update({name: 'risk', value: value})"
+                                    placeholder="Seleccione un nivel de riesgo" :options="options.risk_levels"/>
+                    </div>
                 </form-item>
             </div>
         </div>
+    </div>
+    <div class="form-row">
+        <form-item col="col-4" label="Nº Legajo" :errors="errors.register_number">
+            <div class="col">
+                <input type="text" name="register_number" class="form-control" :value="values.register_number" @input="(e) => update(e.target)">
+            </div>
+        </form-item>
+        <form-item col="col-4" label="Nº Prontuario PNA" :errors="errors.pna">
+            <div class="col">
+                <input type="text" name="pna" class="form-control" :value="values.pna" @input="(e) => update(e.target)">
+            </div>
+        </form-item>
+        <form-item col="col-4" label="Email" :errors="errors.email">
+            <div class="col">
+                <input  type="email" name="email" class="form-control" :value="values.email" @input="(e) => update(e.target)">
+            </div>                    
+        </form-item>
     </div>
     <hr>
     <!-- Home phone, mobile phone & fax -->
@@ -127,7 +145,12 @@ export default {
                     {id: "B+", text: "B+"},
                     {id: "AB-", text: "AB-"},
                     {id: "AB+", text: "AB+"},   
-                ]
+                ],
+                risk_levels: [
+                    { id: 1, text: 'Nivel 1' },
+                    { id: 2, text: 'Nivel 2' },
+                    { id: 3, text: 'Nivel 3' },
+                ],
             },
         }
     },

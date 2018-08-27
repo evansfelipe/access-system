@@ -25,13 +25,13 @@
 <template>
     <div>
         <transition-group name="card" tag="div">
-            <div v-for="(card, key) in cards" :key="`card-${card.key}`" class="row">
+            <div v-for="card in cards" :key="`card-${card.key}`" class="form-row">
                 <i class="btn-remove far fa-trash-alt" v-if="cards.length > 1" @click="removeCard(card)"></i>
                 <!-- Card number -->
-                <form-item label="Número de la tarjeta" :errors="errors[card.key] ? errors[card.key]['number'] : []">
+                <form-item label="Número" :errors="errors[card.key] ? errors[card.key]['number'] : []">
                     <div class="col">
                         <input  type="text" name="number" class="form-control"
-                                placeholder="Número de tarjeta" :value="card.number" @input="(e) => editCard(card, 'number', e.target.value)">
+                                :value="card.number" @input="(e) => editCard(card, 'number', e.target.value)">
                     </div>
                 </form-item>
                 <!-- Card from -->
@@ -46,9 +46,6 @@
                         <input type="date" name="until" class="form-control" :value="card.until" @input="(e) => editCard(card, 'until', e.target.value)">
                     </div>
                 </form-item>
-                <div v-if="key < cards.length - 1" class="col-12">
-                    <hr>
-                </div>
             </div>
         </transition-group>
         <div class="row">
@@ -78,12 +75,7 @@ export default {
             this.$emit('add');
         },
         editCard: function(card, attribute, value) {
-            let data = {
-                number: attribute === 'number'  ? value : card.number,
-                from:   attribute === 'from'    ? value : card.from,
-                until:  attribute === 'until'   ? value : card.until
-            };
-            this.$emit('edit', {card, data});
+            this.$emit('edit', {card, attribute, value});
         },
         removeCard: function(card) {
             this.$emit('remove', card);

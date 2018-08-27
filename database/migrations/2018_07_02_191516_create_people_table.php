@@ -24,13 +24,11 @@ class CreatePeopleTable extends Migration
             $table->string('cuil', Person::LENGTHS['cuil']['max'])->unique()->nullable();
             $table->datetime('birthday')->nullable();
             $table->char('sex', 1)->nullable();
-            $table->string('blood_type',3)->nullable();
+            $table->string('blood_type', 3)->nullable();
             $table->string('picture_name')->default('');
             $table->string('pna', Person::LENGTHS['pna']['max'])->nullable();
             $table->json('contact')->nullable();
             $table->integer('residency_id')->unsigned()->nullable();
-            $table->string('art',Person::LENGTHS['art']['max'])->required();
-            $table->datetime('pbip')->nullable();
             $table->integer('risk')->unsigned()->required();
             $table->timestamps();
         });

@@ -21,7 +21,6 @@ class Person extends Model
         'document_number' => ['min' => 7, 'max' => 12],
         'cuil' => ['max' => 15],
         'pna' => ['min' => 10, 'max' => 15],
-        'art' => ['max' => 50]
     ];
 
     /**
@@ -103,20 +102,28 @@ class Person extends Model
                 'string',
                 'nullable'
             ],
-            'art' => [
-                'required',
-                'string',
-                'max:'.Person::LENGTHS['art']['max']
-            ],
-            'pbip' => [
-                'nullable',
-                'date',
-                "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", 
-                'after:'.date('Y-m-d'), 
-            ],
+            // 'art' => [
+            //     'required',
+            //     'string',
+            //     'max:'.Person::LENGTHS['art']['max']
+            // ],
+            // 'pbip' => [
+            //     'nullable',
+            //     'date',
+            //     "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", 
+            //     'after:'.date('Y-m-d'), 
+            // ],
             'risk' => [
                 'required',
                 'integer',
+            ],
+            'register_number' => [
+                'required',
+                'integer'
+            ],
+            'homeland' => [
+                'required',
+                'string'
             ],
         ];
     }
@@ -140,6 +147,8 @@ class Person extends Model
                     ->select(
                         'company_people.id              as id',
                         'company_people.activity_id     as activity_id',
+                        'company_people.art_company     as art_company',
+                        'company_people.art_number      as art_number',
                         'company_people.subactivities   as subactivities',
                         'companies.id                   as company_id',
                         'companies.business_name        as company_name',

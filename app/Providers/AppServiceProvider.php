@@ -4,6 +4,7 @@ namespace App\Providers;
 use Laravel\Dusk\DuskServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
