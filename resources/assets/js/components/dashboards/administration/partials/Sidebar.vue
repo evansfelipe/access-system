@@ -84,6 +84,7 @@
                 </a>
                 <div class="items" v-if="group_active.companies">
                     <!-- Companies creation -->
+                    <router-link to="/companies" class="btn-sidebar">Listado</router-link>
                     <router-link to="/companies/create" class="btn-sidebar">
                         {{ this.$store.getters.company.editing ? 'Editar' : 'Crear' }}
                         <i v-if="$store.getters.company.modified" class="fas fa-exclamation centered"></i>
@@ -97,6 +98,7 @@
                     <i :class="'toggle-icon fas centered fa-caret-' + (group_active.vehicles ? 'up' : 'down')"></i>
                 </a>
                 <div class="items" v-if="group_active.vehicles">
+                    <router-link to="/vehicles" class="btn-sidebar">Listado</router-link>
                     <router-link to="/vehicles/create" class="btn-sidebar">
                         {{ this.$store.getters.vehicle.editing ? 'Editar' : 'Crear' }}
                         <i v-if="$store.getters.vehicle.modified" class="fas fa-exclamation centered"></i>

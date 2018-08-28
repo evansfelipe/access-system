@@ -111,8 +111,8 @@ input.form-control {
     height: 37px;
 }
 
-input.form-control-sm {
-    height: auto;
+.form-control-sm {
+    height: 28px !important;
 }
 
 .btn-circle {
@@ -168,6 +168,11 @@ span.select2-dropdown.select2-dropdown--above {
     box-shadow: 0 0 0 2pt rgb(206, 220, 218);
     transition: box-shadow 0.1s;
 }
+
+// Style for the appearence of the advanced search in the people/vehicles/companies index
+.advanced-search-enter-active, .advanced-search-leave-active { transition: all .3s }
+.advanced-search-enter, .advanced-search-leave-to { opacity: 0; max-height: 0; }
+.advanced-search-enter-to, .advanced-search-leave { opacity: 1; max-height: 100vh; }
 
 // Old table format
 //     display: flex;

@@ -47,7 +47,7 @@
                 filas
             </div>
             <div class="offset-4 col-4">
-                <input type="text" class="form-control form-control-sm d-inline" placeholder="Buscar" v-model="condition">
+                <input type="text" class="form-control form-control-sm d-inline" placeholder="Buscar" v-model="condition" :disabled="advancedsearch">
             </div>
         </div>
         <template v-if="shown_rows.length > 0">
@@ -113,6 +113,11 @@ export default {
             type: Array,
             required: true
         },
+        advancedsearch: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         filter: {
             type: Object,
             required: false,
@@ -174,7 +179,7 @@ export default {
                     if(this.filter.strict) {
                         this.columns.forEach(column => {
                             if(this.filter.conditions[column.name])
-                                ret = ret && row[column.name].matches(this.filter.conditions[column.name]);
+                                ret = ret && row[column.name].toString().matches(this.filter.conditions[column.name]);
                         });
                     }
                     else {
@@ -197,6 +202,10 @@ export default {
         'pagination.quantity': function() {
             this.paginate();
         },
+        advancedsearch: function() {
+            this.condition = '';
+            this.shown_rows = this.clone(this.rows);
+        }
     },
     methods: {
         paginate: function() {

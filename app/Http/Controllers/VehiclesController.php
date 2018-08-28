@@ -17,7 +17,11 @@ class VehiclesController extends Controller
 
     public function list()
     {
-        $vehicles = Vehicle::all(['id','plate','brand','model','year','colour','company_id']);
+        $vehicles = Vehicle::select(['id','plate','brand','model','year','colour','company_id'])->with('company:id,name')->get()->map(function($vehicle) {
+            $vehicle->company_name = $vehicle->company->name;
+            unset($vehicle->company);
+            return $vehicle;
+        });
         return response(json_encode($vehicles))->header('Content-Type', 'application/json');        
     }
 

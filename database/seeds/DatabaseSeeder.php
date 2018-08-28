@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         factory(App\Company::class, 10)->create();
-        factory(App\Vehicle::class, 30)->create();
+        factory(App\Vehicle::class, 100)->create();
         // factory(App\Person::class, 5)->create();
         DB::table('users')->insert([
             'name' => 'Root',

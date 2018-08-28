@@ -23,7 +23,8 @@ class CompaniesController extends Controller
 
     public function list()
     {
-        return response(json_encode(Company::all(['id','name'])))->header('Content-Type', 'application/json');        
+        return  response(json_encode(Company::all(['id','business_name','name','area','cuit'])))
+                ->header('Content-Type', 'application/json');        
     }
 
     /**

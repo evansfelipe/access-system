@@ -86,4 +86,9 @@ class Vehicle extends Model
     {
         return $this->belongsToMany('\App\Person', 'person_vehicle')->using('\App\PersonVehicle');
     }
+
+    public function company()
+    {
+        return $this->belongsTo('App\Company');
+    }
 }

@@ -88,4 +88,9 @@ class Company extends Model
         return $this->belongsToMany('App\Person', 'company_people')->using('App\PersonCompany')->withPivot('activity_id','art','pbip');
     }
 
+    public function vehicles()
+    {
+        return $this->hasMany('App\Vehicle');
+    }
+
 }

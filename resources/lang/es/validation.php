@@ -153,6 +153,20 @@ return [
         'number'            => 'Número',
         'from'              => 'Desde',
         'until'             => 'Hasta',
+        // Jobs
+        'jobs.*.company_id'  => 'Empresa',
+        'jobs.*.activity_id' => 'Actividad',
+        'jobs.*.subactivities' => 'Subactividad/es',
+        'jobs.*.subactivities.*' => 'Subactividad/es',
+        'jobs.*.cards.*.number' => 'Número de la tarjeta',
+        'jobs.*.cards.*.from' => 'Valido desde',
+        'jobs.*.cards.*.until' => 'Valido hasta',
+        // Company's general information
+        'buisness_name'     => 'Razón social',
+        'area'              => 'Rubro',
+        'cuit'              => 'CUIT',
+        'expiration'        => 'Vencimiento',
+        'web'               => 'Página web',
         // Vehicle's general information
         'type'              => 'Tipo',
         'plate'             => 'Patente',
