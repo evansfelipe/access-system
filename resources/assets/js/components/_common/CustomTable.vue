@@ -80,25 +80,38 @@
                     </div>
                 </div>
             </div>
+            <!-- Pagination -->
+            <div class="row mt-2">
+                <div class="col-12">
+                    <ul class="pagination justify-content-end" style="margin-bottom: 0px">
+                        <li :class="`page-item ${pagination.current <= 0 ? 'disabled' : ''}`" @click="changeToPage(pagination.current - 1)">
+                            <a class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                        </li>
+                        <li :key="0" :class="`page-item ${ pagination.current === 0 ? 'active' : ''}`" @click="changeToPage(0)">
+                            <a class="page-link">1</a>
+                        </li>
+                        <li v-if="range.length > 0 && range[0] !== 1" class="page-item disabled">
+                            <a class="page-link"><span aria-hidden="true">...</span></a>
+                        </li>
+                        <li v-for="page in range" :key="page" :class="`page-item ${pagination.current === page ? 'active' : ''}`" @click="changeToPage(page)">
+                            <a class="page-link">{{ page+1 }}</a>
+                        </li>
+                        <li v-if="range.length > 0 && range[range.length-1] !== pagination.last-2" class="page-item disabled">
+                            <a class="page-link"><span aria-hidden="true">...</span></a>
+                        </li>
+                        <li v-if="pagination.last-1 !== 0" :key="pagination.last-1" :class="`page-item ${ pagination.current === pagination.last-1 ? 'active' : ''}`" @click="changeToPage(pagination.last-1)">
+                            <a class="page-link">{{ pagination.last }}</a>
+                        </li>
+                        <li :class="`page-item ${pagination.current >= this.pagination.last - 1 ? 'disabled' : ''}`" @click="changeToPage(pagination.current + 1)">
+                            <a class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </template>
         <!-- No data situation -->
         <h3 v-else class="text-center mt-5 mb-5">No se encontraron coincidencias</h3>
-        <!-- Pagination -->
-        <div class="row mt-2">
-            <div class="col-12">
-                <ul class="pagination justify-content-end" style="margin-bottom: 0px">
-                    <li :class="`page-item ${pagination.current <= 0 ? 'disabled' : ''}`" @click="changeToPage(pagination.current - 1)">
-                        <a class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-                    </li>
-                    <li v-for="(i, key) in pagination.last" :key="key" :class="`page-item ${key === pagination.current ? 'active' : ''}`" @click="changeToPage(key)">
-                        <a class="page-link">{{ i }}</a>
-                    </li>
-                    <li :class="`page-item ${pagination.current >= this.pagination.last - 1 ? 'disabled' : ''}`" @click="changeToPage(pagination.current + 1)">
-                        <a class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        
     </div>
 </template>
 
@@ -157,6 +170,38 @@ export default {
     },
     mounted() {
         this.paginate();
+    },
+    computed: {
+        /**
+         * Array that has the range of buttons for the navigation pages.
+         */
+        range: function () {
+            let first = (this.pagination.current - 2 < 1) ? 1 : this.pagination.current - 2;
+            let last = (this.pagination.current + 2 < this.pagination.last - 2) ? this.pagination.current + 2 : this.pagination.last - 2;
+            let range = [];
+            switch (first) {
+                case 1: 
+                    last = (this.pagination.last - 2 > 6) ? 6 : this.pagination.last - 2;
+                    break;
+                case 2:
+                    first = 1;
+                    last = (this.pagination.last - 2 > 6) ? 6 : this.pagination.last - 2;
+                    break;
+            }
+            switch (last) {
+                case this.pagination.last - 2:
+                    first = (this.pagination.last - 7 > 1) ? this.pagination.last - 7 : 1;
+                    break;
+                case this.pagination.last-3:
+                    first = (this.pagination.last - 7 > 1) ? this.pagination.last - 7 : 1;
+                    last = this.pagination.last - 2;
+                    break;
+            }
+            for (let i = first; i <= last; i++) {
+                range.push(i);
+            }
+            return range;
+        },
     },
     watch: {
         rows: {

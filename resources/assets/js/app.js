@@ -39,6 +39,7 @@ Vue.component('abbreviation-text' , require('./components/_common/AbbreviationTe
 Vue.component('confirmable-button', require('./components/_common/ConfirmableButton.vue'));
 // Dashboards
 Vue.component('administration-dashboard', require('./components/dashboards/administration/Layout.vue'));
+Vue.component('security-dashboard', require('./components/dashboards/security/Layout.vue'));
 
 const router = new VueRouter({
     routes: [

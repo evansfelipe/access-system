@@ -78,6 +78,16 @@ class PersonCompany extends Pivot
         ];
     }
 
+    public function person()
+    {
+        return $this->hasOne('App\Person', 'id', 'person_id');
+    }
+
+    public function company()
+    {
+        return $this->hasOne('App\Company');
+    }
+
     public function activity()
     {
         return $this->hasOne('App\Activity');

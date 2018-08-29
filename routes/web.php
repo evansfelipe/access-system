@@ -36,6 +36,8 @@ Route::middleware(['auth','administration'])->group(function() {
     Route::get('/activities/updated_at', 'ActivitiesController@updated_at');
     Route::get('/activities/list', 'ActivitiesController@list');
     Route::resource('/activities', 'ActivitiesController');
+    // Security
+    Route::get('/security/person/{card_number}', 'SecurityController@personInfo');
 });
 
 
