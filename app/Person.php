@@ -7,7 +7,18 @@ use App\{ Card, Residency, Activity, Vehicle };
 
 class Person extends Model
 {
-    protected $fillable = ['name', 'last_name', 'document_type', 'document_number', 'sex', 'pna', 'cuil', 'birthday', 'blood_type', 'art', 'pbip', 'risk'];
+    protected $fillable = [
+        'name', 'last_name', 
+        'document_type', 'document_number',
+        'cuil', 
+        'birthday',
+        'sex',
+        'blood_type',
+        'homeland',
+        'risk',
+        'register_number',
+        'pna'
+    ];
 
     public const DNI = 0;
     public const PASSPORT = 1;
@@ -30,6 +41,11 @@ class Person extends Model
     public static function getValidationRules()
     {
         return [
+            'picture' => [
+                'required',
+                'image', 
+                'mimes:jpeg,jpg,png'
+            ],
             'last_name' => [
                 'required',
                 'string',
@@ -75,10 +91,17 @@ class Person extends Model
                 'in:0-,0+,A-,A+,B-,B+,AB-,AB+', 
                 'nullable'
             ],
-            'picture' => [
+            'homeland' => [
+                'nullable',
+                'string'
+            ],
+            'risk' => [
                 'required',
-                'image', 
-                'mimes:jpeg,jpg,png'
+                'integer',
+            ],
+            'register_number' => [
+                'nullable',
+                'integer'
             ],
             'pna' => [
                 'string', 
@@ -101,29 +124,6 @@ class Person extends Model
             'fax' => [
                 'string',
                 'nullable'
-            ],
-            // 'art' => [
-            //     'required',
-            //     'string',
-            //     'max:'.Person::LENGTHS['art']['max']
-            // ],
-            // 'pbip' => [
-            //     'nullable',
-            //     'date',
-            //     "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", 
-            //     'after:'.date('Y-m-d'), 
-            // ],
-            'risk' => [
-                'required',
-                'integer',
-            ],
-            'register_number' => [
-                'required',
-                'integer'
-            ],
-            'homeland' => [
-                'required',
-                'string'
             ],
         ];
     }
@@ -267,24 +267,24 @@ class Person extends Model
         return [
             'personal_information'  => array_merge(
                 [
+                    'picture_path'      => $this->getCurrentPicturePath(),
                     'full_name'         => $this->fullName(),
                     'document_type'     => $this->documentTypeToString(),
                     'document_number'   => $this->document_number,
-                    'sex'               => $this->sexToString(),
                     'cuil'              => $this->cuil          ?? '-',
-                    'blood_type'        => $this->blood_type    ?? '-',
-                    'pna'               => $this->pna           ?? '-',
                     'birthday'          => Helpers::timestampToDate($this->birthday),
-                    'picture_path'      => $this->getCurrentPicturePath(),
+                    'sex'               => $this->sexToString(),
+                    'blood_type'        => $this->blood_type    ?? '-',
+                    'homeland'          => $this->homeland,
+                    'risk'              => 'Nivel '.$this->risk,
+                    'register_number'   => $this->register_number,
+                    'pna'               => $this->pna           ?? '-',
                 ],
-                $this->residency ? $this->residency->toArray() : [],
-                $this->contactToArray()
+                $this->contactToArray(),
+                $this->residency ? $this->residency->toArray() : []
             ),
             'working_information'   => [
                 'jobs'          => $this->jobs(),
-                'risk'          => 'Nivel ' . $this->risk,
-                'pbip'          => Helpers::timestampToDate($this->pbip),
-                'art_number'    => $this->art  ?? '-',
             ],
             'vehicles'          => $this->vehicles->toArray(),
         ];

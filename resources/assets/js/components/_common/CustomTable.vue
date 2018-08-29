@@ -20,9 +20,12 @@
                 background-color: rgb(240, 240, 240);
             }
             & > td {
-                border: 0;
                 border-bottom: 1px solid rgba(222,222,222, .25);
                 padding: 0.5em;
+            }
+
+            &:last-of-type > td {
+                border-bottom: 0;
             }
         }
     }

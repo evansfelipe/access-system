@@ -16,12 +16,8 @@
             <div class="col-md-8">
                 <!-- Last name & name -->
                 <h3 class="mb-3">{{ person.full_name }}</h3>
-                <!-- Record, document & cuil -->
+                <!-- document, cuil & birthday -->
                 <div class="row">
-                    <div class="col-4">
-                        <small>Legajo</small>
-                        <strong>{{ person.record }}</strong>
-                    </div>
                     <div class="col-4">
                         <small>{{ person.document_type }}</small>
                         <strong>{{ person.document_number }}</strong>
@@ -30,32 +26,44 @@
                         <small>CUIL / CUIT</small>
                         <strong>{{ person.cuil }}</strong>
                     </div>
-                </div>
-                <!-- Birthday, birth country & sex -->
-                <div class="row">
                     <div class="col-4">
                         <small>Fecha de nacimiento</small>
                         <strong>{{ person.birthday }}</strong>
                     </div>
-                    <div class="col-4">
-                        <small>Nacionalidad</small>
-                        <strong>{{ person.birth_country }}</strong>
-                    </div>
+                </div>
+                <!-- Sex, blood type & homeland -->
+                <div class="row">
                     <div class="col-4">
                         <small>Género</small>
                         <strong>{{ person.sex }}</strong>
                     </div>
-                </div>
-                <!-- Blood type, pna & email -->
-                <div class="row">
                     <div class="col-4">
                         <small>Grupo y factor sanguíneo</small>
                         <strong>{{ person.blood_type }}</strong>
                     </div>
                     <div class="col-4">
+                        <small>Nacionalidad</small>
+                        <strong>{{ person.homeland }}</strong>
+                    </div>
+                </div>
+                <!-- Risk, register number & PNA -->
+                <div class="row">
+                    <div class="col-4">
+                        <small>Nivel de riesgo</small>
+                        <strong>{{ person.risk }}</strong>
+                    </div>
+                    <div class="col-4">
+                        <small>Legajo</small>
+                        <strong>{{ person.register_number }}</strong>
+                    </div>
+
+                    <div class="col-4">
                         <small>Prontuario PNA</small>
                         <strong>{{ person.pna }}</strong>
                     </div>
+                </div>
+                <!-- Email -->
+                <div class="row">
                     <div class="col-4">
                         <small>Email</small>
                         <strong>{{ person.email }}</strong>

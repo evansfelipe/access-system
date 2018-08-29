@@ -24,16 +24,17 @@ import store from './store.js';
  */
 
 // Common components that are re-usable across all components
-Vue.component('modal-wrapper'     , require('./components/_common/partials/Modal.vue'));
 Vue.component('select2'           , require('./components/_common/Select2.vue'));
-Vue.component('switch-box'           , require('./components/_common/SwitchBox.vue'));
-Vue.component('cuil-cuit'           , require('./components/_common/CuilCuit.vue'));
-Vue.component('residency-input'   , require('./components/_common/ResidencyInput.vue'));
 Vue.component('tab-item'          , require('./components/_common/TabItem.vue'));
+Vue.component('cuil-cuit'         , require('./components/_common/CuilCuit.vue'));
 Vue.component('form-item'         , require('./components/_common/FormItem.vue'));
 Vue.component('web-camera'        , require('./components/_common/WebCamera.vue'));
+Vue.component('switch-box'        , require('./components/_common/SwitchBox.vue'));
+Vue.component('access-card'       , require('./components/_common/AccessCard.vue'));
 Vue.component('custom-table'      , require('./components/_common/CustomTable.vue'));
 Vue.component('loading-cover'     , require('./components/_common/LoadingCover.vue'));
+Vue.component('residency-input'   , require('./components/_common/ResidencyInput.vue'));
+Vue.component('modal-wrapper'     , require('./components/_common/partials/Modal.vue'));
 Vue.component('creation-wrapper'  , require('./components/_common/CreationWrapper.vue'));
 Vue.component('abbreviation-text' , require('./components/_common/AbbreviationText.vue'));
 Vue.component('confirmable-button', require('./components/_common/ConfirmableButton.vue'));

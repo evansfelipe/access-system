@@ -17,6 +17,7 @@ class CreatePeopleTable extends Migration
     {
         Schema::create('people', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('picture_name')->default('');
             $table->string('last_name', Person::LENGTHS['last_name']['max'])->required();
             $table->string('name', Person::LENGTHS['name']['max'])->required();
             $table->integer('document_type')->unsigned()->required();
@@ -25,11 +26,12 @@ class CreatePeopleTable extends Migration
             $table->datetime('birthday')->nullable();
             $table->char('sex', 1)->nullable();
             $table->string('blood_type', 3)->nullable();
-            $table->string('picture_name')->default('');
+            $table->string('homeland')->nullable();
+            $table->integer('risk')->unsigned()->required();
+            $table->integer('register_number')->unsigned()->nullable();
             $table->string('pna', Person::LENGTHS['pna']['max'])->nullable();
             $table->json('contact')->nullable();
             $table->integer('residency_id')->unsigned()->nullable();
-            $table->integer('risk')->unsigned()->required();
             $table->timestamps();
         });
     }
