@@ -19,8 +19,8 @@
             <form-item col="col-4" label="Subactividad/es" :errors="subactivities_errors">
                 <div class="col">
                     <select2    placeholder="Seleccione subactividad/es" :value="job.subactivities" :options="subactivities_options"
-                                :tags="true" :name="'subactivities'" :multiple="true"
-                                @input="(value) => editJob('subactivities', value)"/>
+                                :tags="true" name="subactivities" :multiple="true"
+                                @input="value => editJob('subactivities', value)"/>
                 </div>
             </form-item>
         </div>
@@ -29,8 +29,7 @@
             <form-item col="col-12" label="Grupo/s" :errors="groups_errors">
                 <div class="col">
                     <select2    placeholder="Seleccione grupo/s" :value="job.groups" :options="groups_options"
-                                :multiple="true" name="groups"
-                                @input="(value) => editJob('groups', value)"
+                                :multiple="true" name="groups"   @input="value => editJob('groups', value)"
                     />
                 </div>
             </form-item>

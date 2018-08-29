@@ -3,11 +3,16 @@
         display:none;
     }
 
-    .btn-link {
+    .btn-list, .btn-list:disabled {
+        background-color: transparent;
+        font-weight: bold;
+        border: 1px solid grey;
         color: grey;
-        &:hover {
-            text-decoration: none;
-        }
+    }
+
+    .btn-list.selected {
+        border-color: #3F729B;
+        color: #3F729B;
     }
 </style>
 
@@ -19,7 +24,7 @@
             <div class="row text-center mb-3">
                 <!-- Company people list button -->
                 <div class="col-4">
-                    <button type="button" :class="'font-weight-bold btn btn-block btn-' + (selected_list === 'company' ? 'outline-unique btn-static':'link')"
+                    <button type="button" :class="`btn btn-block btn-list ${selected_list === 'company' ? 'selected' : ''}`"
                             @click="selected_list = 'company'"
                             :disabled="company_people.length <= 0">
                         <abbreviation-text :text="companyname"/> <span class="badge badge-dark ml-1">{{ company_people.length }}</span>
@@ -27,7 +32,7 @@
                 </div>
                 <!-- Other people list button -->
                 <div class="col-4">
-                    <button type="button" :class="'font-weight-bold btn btn-block btn-' + (selected_list === 'others' ? 'outline-unique btn-static':'link')"
+                    <button type="button" :class="`btn btn-block btn-list ${selected_list === 'others' ? 'selected' : ''}`"
                             @click="selected_list = 'others'"
                             :disabled="other_people.length <= 0">
                         Otras empresas <span class="badge badge-dark ml-1">{{ other_people.length }}</span>

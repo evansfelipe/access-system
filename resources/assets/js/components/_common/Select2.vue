@@ -71,7 +71,6 @@ export default {
         select.data('select2').$selection.css({
             'min-height': '37px',
             'box-shadow' : '0 0 0 0',
-
         });
         select.on('change', function() {
             // As we need this to refer to select element, we can't use an arrow function
@@ -92,16 +91,16 @@ export default {
         // value: function(value) {
         //     $(this.$el).val(value);
         // },
-        options: function(options) {
-            // Maybe there is a way to change the options without restarting the select?
-            $(this.$el)
-                .select2(this.select2Options)
-                // .val(this.value) It's needed?
-                .data('select2').$selection.css({
-                    'min-height': '37px',
-                    'box-shadow' : '0 0 0 0'
-                });
-        }
+        // options: function(options) {
+        //     // Maybe there is a way to change the options without restarting the select?
+        //     $(this.$el)
+        //         .select2(this.select2Options)
+        //         // .val(this.value) It's needed?
+        //         .data('select2').$selection.css({
+        //             'min-height': '37px',
+        //             'box-shadow' : '0 0 0 0'
+        //         });
+        // }
     },
 }
 </script>
