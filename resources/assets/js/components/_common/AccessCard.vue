@@ -28,7 +28,7 @@
 </style>
 
 <template>
-    <div class="active-card shadow-sm">
+    <div class="active-card">
         <div class="title">
             <h5>Tarjeta de acceso</h5>
         </div>

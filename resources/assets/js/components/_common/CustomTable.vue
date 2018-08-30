@@ -50,7 +50,7 @@
                 filas
             </div>
             <div class="offset-4 col-4">
-                <input type="text" class="form-control form-control-sm d-inline" placeholder="Buscar" v-model="condition" :disabled="advancedsearch">
+                <input type="text" class="form-control form-control-sm d-inline" placeholder="Búsqueda" v-model="condition" :disabled="advancedsearch">
             </div>
         </div>
         <template v-if="shown_rows.length > 0">

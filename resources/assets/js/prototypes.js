@@ -1,5 +1,5 @@
 String.prototype.matches = function(other) { 
-    return this.toUpperCase().includes(other.toString().toUpperCase())
+    return this.toUpperCase().includes(other.toString().toUpperCase().trim())
 };
 
 Array.prototype.getPositionById = function(id, attr) {
