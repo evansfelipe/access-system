@@ -15,7 +15,7 @@
         <creation-wrapper   :updating="this.$store.getters.vehicle.updating" :values="values" :route="route" 
                             @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel">
             <general-information v-show="tab === 0" :errors="errors.general_information" :values="values.general_information"/>
-            <assign-people v-show="tab === 1" :errors="errors.assign_people" :values="values.assign_people" :companyname="company_name"/>
+            <assign-people v-show="tab === 1" :errors="errors.assign_people" :values="values.assign_people" :companyid="company_id" :companyname="company_name"/>
         </creation-wrapper>
     </div>
 </template>
@@ -52,6 +52,13 @@ export default {
                 method: this.id ? 'put' : 'post',
                 url:    this.id ? `/vehicles/${this.id}` : '/vehicles'
             }
+        },
+        company_id: function() {
+            let ret = null;
+            if(this.values.general_information.company_id && !this.$store.getters.companies.updating) {
+                ret = this.values.general_information.company_id;
+            }
+            return parseInt(ret);
         },
         company_name: function() {
             let ret = '';

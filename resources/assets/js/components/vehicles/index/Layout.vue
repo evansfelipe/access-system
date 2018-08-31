@@ -46,11 +46,11 @@ export default {
     data: function() {
         return {
             columns: [
-                {name: 'plate',        text: 'Patente'},
-                {name: 'brand',        text: 'Marca'},
-                {name: 'model',        text: 'Modelo'},
-                {name: 'year',         text: 'Año'},
-                {name: 'company_name', text: 'Empresa'},
+                {name: 'plate',        text: 'Patente', width: '15'},
+                {name: 'brand',        text: 'Marca',   width: '20'},
+                {name: 'model',        text: 'Modelo',  width: '20'},
+                {name: 'year',         text: 'Año',     width: '10'},
+                {name: 'company_name', text: 'Empresa', width: '35'},
             ],
             filter: {
                 strict: true,

@@ -33,7 +33,9 @@ class PeopleController extends Controller
                                 'last_name'     => $person->last_name,
                                 'name'          => $person->name,
                                 'cuil'          => $person->cuil,
-                                'companies'     => $person->companies()->select('companies.id')->get(),
+                                'companies'     => $person->companies()->select('companies.id')->get()->map(function($job) {
+                                                        return $job->id;
+                                                    }),
                                 'company_name'  => $person->companies()->select('name')->get()->implode('name', ' / ')
                             ];
                         });

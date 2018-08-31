@@ -38,7 +38,7 @@
 
 <template>
     <div>
-        <div class="row d-flex align-items-center mb-2">
+        <div v-if="rowsquantity === null" class="row d-flex align-items-center mb-2">
             <div class="col-4">
                 Mostrar 
                 <select class="form-control form-control-sm d-inline" style="width: auto;" v-model.number="pagination.quantity">
@@ -62,7 +62,9 @@
                             <thead>
                                 <tr>
                                     <th v-if="pickable.active" class="pickable"></th>
-                                    <th v-for="(column,key) in columns" :key="key" @click="sortColumn(key)" :style="'width: ' + 100/columns.length + '%'">
+                                    <th v-for="(column,key) in columns" :key="key" @click="sortColumn(key)"
+                                        :style="`width: ${column.hasOwnProperty('width')? column.width : (100/columns.length)}%`"
+                                    >
                                         {{ column.text }}
                                         <i v-if="sort.column === key && sort.order !== 0" :class="'float-right centered fas fa-sort-' + (sort.order === 1 ? 'up' :  'down' )"></i>
                                     </th>
@@ -85,7 +87,10 @@
             </div>
             <!-- Pagination -->
             <div class="row mt-2">
-                <div class="col-12">
+                <div v-if="rowsquantity !== null" class="col-4">
+                    <input type="text" class="form-control d-inline" placeholder="Buscar" v-model="condition" :disabled="advancedsearch">
+                </div>
+                <div :class="`col-${rowsquantity !== null? '8' : '12'}`">
                     <ul class="pagination justify-content-end" style="margin-bottom: 0px">
                         <li :class="`page-item ${pagination.current <= 0 ? 'disabled' : ''}`" @click="changeToPage(pagination.current - 1)">
                             <a class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
@@ -129,6 +134,11 @@ export default {
             type: Array,
             required: true
         },
+        rowsquantity: {
+            type: Number,
+            required: false,
+            default: null
+        },
         advancedsearch: {
             type: Boolean,
             required: false,
@@ -156,6 +166,7 @@ export default {
         }
     },
     data() {
+        let rows_q = (this.rowsquantity !== null) ? this.rowsquantity : 10;
         return {
             shown_rows: this.clone(this.rows),
             condition: '',
@@ -164,9 +175,9 @@ export default {
                 order: 0,
             },
             pagination: {
-                quantity: 10,
+                quantity: rows_q,
                 current: 0,
-                last: Math.ceil((this.rows.length) / 10),
+                last: Math.ceil((this.rows.length) / rows_q),
                 page: [],
             }
         }
@@ -179,26 +190,34 @@ export default {
          * Array that has the range of buttons for the navigation pages.
          */
         range: function () {
-            let first = (this.pagination.current - 2 < 1) ? 1 : this.pagination.current - 2;
-            let last = (this.pagination.current + 2 < this.pagination.last - 2) ? this.pagination.current + 2 : this.pagination.last - 2;
             let range = [];
-            switch (first) {
-                case 1: 
-                    last = (this.pagination.last - 2 > 6) ? 6 : this.pagination.last - 2;
-                    break;
-                case 2:
-                    first = 1;
-                    last = (this.pagination.last - 2 > 6) ? 6 : this.pagination.last - 2;
-                    break;
+            let first;
+            let last;
+            if(this.pagination.last === 9) {
+                first = 1;
+                last = 7;
             }
-            switch (last) {
-                case this.pagination.last - 2:
-                    first = (this.pagination.last - 7 > 1) ? this.pagination.last - 7 : 1;
-                    break;
-                case this.pagination.last-3:
-                    first = (this.pagination.last - 7 > 1) ? this.pagination.last - 7 : 1;
-                    last = this.pagination.last - 2;
-                    break;
+            else {
+                first = (this.pagination.current - 2 < 1) ? 1 : this.pagination.current - 2;
+                last = (this.pagination.current + 2 < this.pagination.last - 2) ? this.pagination.current + 2 : this.pagination.last - 2;
+                switch (first) {
+                    case 1: 
+                        last = (this.pagination.last - 2 > 6) ? 6 : this.pagination.last - 2;
+                        break;
+                    case 2:
+                        first = 1;
+                        last = (this.pagination.last - 2 > 6) ? 6 : this.pagination.last - 2;
+                        break;
+                }
+                switch (last) {
+                    case this.pagination.last - 2:
+                        first = (this.pagination.last - 7 > 1) ? this.pagination.last - 7 : 1;
+                        break;
+                    case this.pagination.last-3:
+                        first = (this.pagination.last - 7 > 1) ? this.pagination.last - 7 : 1;
+                        last = this.pagination.last - 2;
+                        break;
+                }
             }
             for (let i = first; i <= last; i++) {
                 range.push(i);

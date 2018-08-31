@@ -56,14 +56,6 @@
                         <select2    name="company_id" :value="values.company_id" @input="(value) => update({name: 'company_id', value: value})"
                                     placeholder="Seleccione una empresa" :options="companies"/>
                     </div>
-                    <div class="col-1 d-flex align-items-center justify-content-center">
-                        <strong>o</strong>
-                    </div>
-                    <div class="col-5">
-                        <button type="button" class="btn btn-block btn-outline-unique">
-                            Cree una nueva empresa
-                        </button>
-                    </div>
                 </form-item>
             </div>
             <hr>

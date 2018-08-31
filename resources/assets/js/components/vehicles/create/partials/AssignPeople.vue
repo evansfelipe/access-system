@@ -22,49 +22,34 @@
         <template v-else>
             <!-- Options buttons -->
             <div class="row text-center mb-3">
-                <!-- Company people list button -->
-                <div class="col-4">
-                    <button type="button" :class="`btn btn-block btn-list ${selected_list === 'company' ? 'selected' : ''}`"
-                            @click="selected_list = 'company'"
-                            :disabled="company_people.length <= 0">
-                        <abbreviation-text :text="companyname"/> <span class="badge badge-dark ml-1">{{ company_people.length }}</span>
-                    </button>
-                </div>
-                <!-- Other people list button -->
-                <div class="col-4">
-                    <button type="button" :class="`btn btn-block btn-list ${selected_list === 'others' ? 'selected' : ''}`"
-                            @click="selected_list = 'others'"
-                            :disabled="other_people.length <= 0">
-                        Otras empresas <span class="badge badge-dark ml-1">{{ other_people.length }}</span>
-                    </button>
-                </div>
-                <!-- Search input -->
-                <div class="col-3">
-                    <input type="text" class="form-control" v-model="filter.conditions.all" placeholder="Búsqueda">
-                </div>
-                <!-- Extra options dropdown -->
-                <div class="col-1 pl-0">
-                    <div class="dropdown show">
-                        <!-- Open/Close button -->
-                        <a class="btn btn-link btn-block dropdown-toggle" role="button" id="more-options" 
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        title="Más opciones">
-                            <i class="fas fa-bars fa-lg"></i>
-                        </a>
-                        <!-- Options -->
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="more-options">
-                            <!-- New person -->
-                            <span class="dropdown-item">
-                                <i class="fas centered fa-plus"></i> Agregar nueva persona
-                            </span>
-                            <!-- Unselect all people -->
-                            <span class="dropdown-item" @click="unpickAll">
-                                <i class="fas centered fa-ban"></i> Deseleccionar todos
-                            </span>
+                <div class="col-12">
+                    <div class="row">
+                        <!-- Company people list button -->
+                        <div class="col-4">
+                            <button type="button" :class="`btn btn-block btn-list ${selected_list === 'company' ? 'selected' : ''}`"
+                                    @click="selected_list = 'company'"
+                                    :disabled="company_people.length <= 0">
+                                <span class="badge badge-dark ml-1">{{ company_people.length }}</span> <abbreviation-text :text="companyname"/>
+                            </button>
+                        </div>
+                        <!-- other people list button -->
+                        <div class="col-4">
+                            <button type="button" :class="`btn btn-block btn-list ${selected_list === 'other' ? 'selected' : ''}`"
+                                    @click="selected_list = 'other'"
+                                    :disabled="other_people.length <= 0">
+                                <span class="badge badge-dark ml-1">{{ other_people.length }}</span> Otras empresas
+                            </button>
+                        </div>
+                        <!-- Selected people list button -->
+                        <div class="col-4">
+                            <button type="button" :class="`btn btn-block btn-list ${selected_list === 'picked' ? 'selected' : ''}`"
+                                    @click="selected_list = 'picked'"
+                                    :disabled="people_picked.length <= 0">
+                                <span class="badge badge-dark ml-1">{{ people_picked.length }}</span> Seleccionados
+                            </button>
                         </div>
                     </div>
                 </div>
-                <!-- /Extra options dropdown -->
             </div>
             <!-- /Options buttons -->
             <!-- People list -->
@@ -73,7 +58,6 @@
                     <custom-table
                         :columns="columns"
                         :rows="people_list"
-                        :filter="filter"
                         :pickable="{
                             active: true,
                             list: people_picked
@@ -90,49 +74,64 @@
 <script>
 export default {
     props: {
+        companyid: { 
+            required: false,
+            type: Number,
+            default: null
+        },
         companyname: { 
             required: false,
             type: String,
-            default: '-'
+            default: 'Empresas asignadas'
         }
     },
     data: function() {
         return {
             people_list: [],
-            others_people: [],
+            other_people: [],
             company_people: [],
-            selected_list: "",
+            selected_list: '',
             show_outdated: false,
             columns: [ 
                 {name: 'last_name', text: 'Apellido'},
-                {name: 'name', text: 'Nombre'},
-                {name: 'cuil', text: 'CUIL / CUIT'}
-            ],
-            filter: {
-                strict: false,
-                conditions: { all: "" }
-            }
+                {name: 'name',      text: 'Nombre'},
+                {name: 'cuil',      text: 'CUIL / CUIT'}
+            ]
         };
     },
     beforeMount() {
         this.$store.dispatch('fetchList', 'people');
-        this.splitLists(this.companyname);
+        this.splitList();
     },
-    computed: { 
+    computed: {
         people: function() {
             return this.$store.getters.people.list;
         },
         people_picked: function() {
             return this.$store.getters.vehicle.values.assign_people.people_id;
+        },
+        picked_list: function() {
+            let list = [];
+            this.people_picked.forEach(person_id => {
+                list.push(this.$store.getters.people.getById(person_id));
+            });
+            return list;
         }
     }, 
     methods: {
-        splitLists(company_name) {
-            this.other_people  = this.people.filter(person => person.company_name !== company_name);
-            this.company_people = this.people.filter(person => person.company_name === company_name);
-            if(this.people.length > 0) {
-                this.selected_list = this.company_people.length > 0 ? 'company' : 'others';
-            }
+        splitList() {
+            this.company_people = [];
+            this.other_people = [];
+            this.people.forEach(person => {
+                if( person.companies.includes(this.companyid) ) {
+                    this.company_people.push(person);
+                }
+                else {
+                    this.other_people.push(person);
+                }
+            });
+            this.selected_list = this.company_people.length > 0 ? 'company' : 'other';
+            this.people_list = this.company_people.length > 0 ? this.company_people : this.other_people;
         },
         unpickAll() {
             this.$store.getters.people.list.forEach(person => this.$store.commit('pickPerson', { id: person.id, value: false }));
@@ -142,14 +141,22 @@ export default {
         }
     },
     watch: {
-        people: function() {
-            this.splitLists(this.companyname);
+        companyid: function() {
+            this.splitList();
         },
-        companyname: function(value) {
-            this.splitLists(value);
+        people: function() {
+            this.splitList();
         },
         selected_list: function(value) {
-            this.people_list = value === 'company' ? this.company_people : this.other_people;
+            if( value === 'company' ) {
+                this.people_list = this.company_people;
+            }
+            else if( value === 'other' ) {
+                this.people_list = this.other_people;
+            }
+            else if( value === 'picked' ) {
+                this.people_list = this.picked_list;
+            }
         }
     }
 }
