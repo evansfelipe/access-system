@@ -184,7 +184,9 @@ input.vehicles-search {
                                         <button class="btn btn-outline-success btn-block mt-1">Enviar</button>
                                     </div>
                                     <div class="col-8">
-                                        <custom-table :columns="observations_columns" :rows="person.values.observations" @rowclicked="toggleObservation"/>
+                                        <custom-table   :columns="observations_columns" :rows="person.values.observations" :rowsquantity="5" 
+                                                        @rowclicked="toggleObservation"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -261,8 +263,8 @@ export default {
             tab: 0,
 
             observations_columns: [
-                {name: 'user', text: 'Usuario'},
-                {name: 'text', text: 'Texto'}
+                {name: 'user', text: 'Usuario', width: '25'},
+                {name: 'text', text: 'Texto',   width: '75'}
             ]
         };
     },
@@ -296,6 +298,8 @@ export default {
                     // Gets the data associated with the card number.
                     axios.get('security/person/' + object.card_number)
                     .then(response => {
+                        console.log(response.data);
+                        
                         let person = new Person(response.data);
                         this.person = person;
                         this.people.push(person);
