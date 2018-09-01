@@ -1,8 +1,10 @@
 <?php namespace App\Http\Controllers;
 use Storage;
+use Auth;
 use App\Http\Traits\Helpers;
+use Illuminate\Http\Request;
 use App\Http\Requests\{ SavePersonRequest };
-use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle, PersonDocument};
+use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle, PersonDocument, Observation};
 
 class PeopleController extends Controller
 {
@@ -57,6 +59,18 @@ class PeopleController extends Controller
             }
         }
         return response(json_encode($pictures))->header('Content-Type', 'application/json');
+    }
+
+    /**
+     * Stores a new observation and returns it
+     */
+    public function newObservation(Request $request, $person_id)
+    {
+        $observation = new Observation($request->toArray());
+        $observation->person_id = intval($person_id);
+        $observation->user_id = Auth::user()->id;
+        $observation->save();
+        return response(json_encode($observation))->header('Content-Type', 'application/json');        
     }
 
     /**

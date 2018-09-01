@@ -31609,7 +31609,7 @@ module.exports = function(module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap v4.1.1 (https://getbootstrap.com/)
+  * Bootstrap v4.1.2 (https://getbootstrap.com/)
   * Copyright 2011-2018 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
@@ -31680,7 +31680,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): util.js
+   * Bootstrap (v4.1.2): util.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31757,8 +31757,7 @@ module.exports = function(module) {
         }
 
         try {
-          var $selector = $$$1(document).find(selector);
-          return $selector.length > 0 ? selector : null;
+          return document.querySelector(selector) ? selector : null;
         } catch (err) {
           return null;
         }
@@ -31813,7 +31812,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): alert.js
+   * Bootstrap (v4.1.2): alert.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31825,7 +31824,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'alert';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.alert';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -31888,7 +31887,7 @@ module.exports = function(module) {
         var parent = false;
 
         if (selector) {
-          parent = $$$1(selector)[0];
+          parent = document.querySelector(selector);
         }
 
         if (!parent) {
@@ -31988,7 +31987,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): button.js
+   * Bootstrap (v4.1.2): button.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32000,7 +31999,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'button';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.button';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32045,14 +32044,14 @@ module.exports = function(module) {
         var rootElement = $$$1(this._element).closest(Selector.DATA_TOGGLE)[0];
 
         if (rootElement) {
-          var input = $$$1(this._element).find(Selector.INPUT)[0];
+          var input = this._element.querySelector(Selector.INPUT);
 
           if (input) {
             if (input.type === 'radio') {
-              if (input.checked && $$$1(this._element).hasClass(ClassName.ACTIVE)) {
+              if (input.checked && this._element.classList.contains(ClassName.ACTIVE)) {
                 triggerChangeEvent = false;
               } else {
-                var activeElement = $$$1(rootElement).find(Selector.ACTIVE)[0];
+                var activeElement = rootElement.querySelector(Selector.ACTIVE);
 
                 if (activeElement) {
                   $$$1(activeElement).removeClass(ClassName.ACTIVE);
@@ -32065,7 +32064,7 @@ module.exports = function(module) {
                 return;
               }
 
-              input.checked = !$$$1(this._element).hasClass(ClassName.ACTIVE);
+              input.checked = !this._element.classList.contains(ClassName.ACTIVE);
               $$$1(input).trigger('change');
             }
 
@@ -32075,7 +32074,7 @@ module.exports = function(module) {
         }
 
         if (addAriaPressed) {
-          this._element.setAttribute('aria-pressed', !$$$1(this._element).hasClass(ClassName.ACTIVE));
+          this._element.setAttribute('aria-pressed', !this._element.classList.contains(ClassName.ACTIVE));
         }
 
         if (triggerChangeEvent) {
@@ -32152,7 +32151,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): carousel.js
+   * Bootstrap (v4.1.2): carousel.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32164,7 +32163,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'carousel';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.carousel';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32243,7 +32242,7 @@ module.exports = function(module) {
         this.touchTimeout = null;
         this._config = this._getConfig(config);
         this._element = $$$1(element)[0];
-        this._indicatorsElement = $$$1(this._element).find(Selector.INDICATORS)[0];
+        this._indicatorsElement = this._element.querySelector(Selector.INDICATORS);
 
         this._addEventListeners();
       } // Getters
@@ -32277,7 +32276,7 @@ module.exports = function(module) {
           this._isPaused = true;
         }
 
-        if ($$$1(this._element).find(Selector.NEXT_PREV)[0]) {
+        if (this._element.querySelector(Selector.NEXT_PREV)) {
           Util.triggerTransitionEnd(this._element);
           this.cycle(true);
         }
@@ -32304,7 +32303,7 @@ module.exports = function(module) {
       _proto.to = function to(index) {
         var _this = this;
 
-        this._activeElement = $$$1(this._element).find(Selector.ACTIVE_ITEM)[0];
+        this._activeElement = this._element.querySelector(Selector.ACTIVE_ITEM);
 
         var activeIndex = this._getItemIndex(this._activeElement);
 
@@ -32410,7 +32409,7 @@ module.exports = function(module) {
       };
 
       _proto._getItemIndex = function _getItemIndex(element) {
-        this._items = $$$1.makeArray($$$1(element).parent().find(Selector.ITEM));
+        this._items = element && element.parentNode ? [].slice.call(element.parentNode.querySelectorAll(Selector.ITEM)) : [];
         return this._items.indexOf(element);
       };
 
@@ -32435,7 +32434,7 @@ module.exports = function(module) {
       _proto._triggerSlideEvent = function _triggerSlideEvent(relatedTarget, eventDirectionName) {
         var targetIndex = this._getItemIndex(relatedTarget);
 
-        var fromIndex = this._getItemIndex($$$1(this._element).find(Selector.ACTIVE_ITEM)[0]);
+        var fromIndex = this._getItemIndex(this._element.querySelector(Selector.ACTIVE_ITEM));
 
         var slideEvent = $$$1.Event(Event.SLIDE, {
           relatedTarget: relatedTarget,
@@ -32449,7 +32448,8 @@ module.exports = function(module) {
 
       _proto._setActiveIndicatorElement = function _setActiveIndicatorElement(element) {
         if (this._indicatorsElement) {
-          $$$1(this._indicatorsElement).find(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
+          var indicators = [].slice.call(this._indicatorsElement.querySelectorAll(Selector.ACTIVE));
+          $$$1(indicators).removeClass(ClassName.ACTIVE);
 
           var nextIndicator = this._indicatorsElement.children[this._getItemIndex(element)];
 
@@ -32462,7 +32462,7 @@ module.exports = function(module) {
       _proto._slide = function _slide(direction, element) {
         var _this3 = this;
 
-        var activeElement = $$$1(this._element).find(Selector.ACTIVE_ITEM)[0];
+        var activeElement = this._element.querySelector(Selector.ACTIVE_ITEM);
 
         var activeElementIndex = this._getItemIndex(activeElement);
 
@@ -32628,11 +32628,13 @@ module.exports = function(module) {
 
     $$$1(document).on(Event.CLICK_DATA_API, Selector.DATA_SLIDE, Carousel._dataApiClickHandler);
     $$$1(window).on(Event.LOAD_DATA_API, function () {
-      $$$1(Selector.DATA_RIDE).each(function () {
-        var $carousel = $$$1(this);
+      var carousels = [].slice.call(document.querySelectorAll(Selector.DATA_RIDE));
+
+      for (var i = 0, len = carousels.length; i < len; i++) {
+        var $carousel = $$$1(carousels[i]);
 
         Carousel._jQueryInterface.call($carousel, $carousel.data());
-      });
+      }
     });
     /**
      * ------------------------------------------------------------------------
@@ -32653,7 +32655,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): collapse.js
+   * Bootstrap (v4.1.2): collapse.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32665,7 +32667,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'collapse';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.collapse';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32713,14 +32715,17 @@ module.exports = function(module) {
         this._isTransitioning = false;
         this._element = element;
         this._config = this._getConfig(config);
-        this._triggerArray = $$$1.makeArray($$$1("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
-        var tabToggles = $$$1(Selector.DATA_TOGGLE);
+        this._triggerArray = $$$1.makeArray(document.querySelectorAll("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
+        var toggleList = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE));
 
-        for (var i = 0; i < tabToggles.length; i++) {
-          var elem = tabToggles[i];
+        for (var i = 0, len = toggleList.length; i < len; i++) {
+          var elem = toggleList[i];
           var selector = Util.getSelectorFromElement(elem);
+          var filterElement = [].slice.call(document.querySelectorAll(selector)).filter(function (foundElem) {
+            return foundElem === element;
+          });
 
-          if (selector !== null && $$$1(selector).filter(element).length > 0) {
+          if (selector !== null && filterElement.length > 0) {
             this._selector = selector;
 
             this._triggerArray.push(elem);
@@ -32761,7 +32766,9 @@ module.exports = function(module) {
         var activesData;
 
         if (this._parent) {
-          actives = $$$1.makeArray($$$1(this._parent).find(Selector.ACTIVES).filter("[data-parent=\"" + this._config.parent + "\"]"));
+          actives = [].slice.call(this._parent.querySelectorAll(Selector.ACTIVES)).filter(function (elem) {
+            return elem.getAttribute('data-parent') === _this._config.parent;
+          });
 
           if (actives.length === 0) {
             actives = null;
@@ -32796,7 +32803,7 @@ module.exports = function(module) {
         $$$1(this._element).removeClass(ClassName.COLLAPSE).addClass(ClassName.COLLAPSING);
         this._element.style[dimension] = 0;
 
-        if (this._triggerArray.length > 0) {
+        if (this._triggerArray.length) {
           $$$1(this._triggerArray).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
         }
 
@@ -32837,14 +32844,15 @@ module.exports = function(module) {
         this._element.style[dimension] = this._element.getBoundingClientRect()[dimension] + "px";
         Util.reflow(this._element);
         $$$1(this._element).addClass(ClassName.COLLAPSING).removeClass(ClassName.COLLAPSE).removeClass(ClassName.SHOW);
+        var triggerArrayLength = this._triggerArray.length;
 
-        if (this._triggerArray.length > 0) {
-          for (var i = 0; i < this._triggerArray.length; i++) {
+        if (triggerArrayLength > 0) {
+          for (var i = 0; i < triggerArrayLength; i++) {
             var trigger = this._triggerArray[i];
             var selector = Util.getSelectorFromElement(trigger);
 
             if (selector !== null) {
-              var $elem = $$$1(selector);
+              var $elem = $$$1([].slice.call(document.querySelectorAll(selector)));
 
               if (!$elem.hasClass(ClassName.SHOW)) {
                 $$$1(trigger).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
@@ -32905,11 +32913,12 @@ module.exports = function(module) {
             parent = this._config.parent[0];
           }
         } else {
-          parent = $$$1(this._config.parent)[0];
+          parent = document.querySelector(this._config.parent);
         }
 
         var selector = "[data-toggle=\"collapse\"][data-parent=\"" + this._config.parent + "\"]";
-        $$$1(parent).find(selector).each(function (i, element) {
+        var children = [].slice.call(parent.querySelectorAll(selector));
+        $$$1(children).each(function (i, element) {
           _this3._addAriaAndCollapsedClass(Collapse._getTargetFromElement(element), [element]);
         });
         return parent;
@@ -32919,7 +32928,7 @@ module.exports = function(module) {
         if (element) {
           var isOpen = $$$1(element).hasClass(ClassName.SHOW);
 
-          if (triggerArray.length > 0) {
+          if (triggerArray.length) {
             $$$1(triggerArray).toggleClass(ClassName.COLLAPSED, !isOpen).attr('aria-expanded', isOpen);
           }
         }
@@ -32928,7 +32937,7 @@ module.exports = function(module) {
 
       Collapse._getTargetFromElement = function _getTargetFromElement(element) {
         var selector = Util.getSelectorFromElement(element);
-        return selector ? $$$1(selector)[0] : null;
+        return selector ? document.querySelector(selector) : null;
       };
 
       Collapse._jQueryInterface = function _jQueryInterface(config) {
@@ -32986,7 +32995,8 @@ module.exports = function(module) {
 
       var $trigger = $$$1(this);
       var selector = Util.getSelectorFromElement(this);
-      $$$1(selector).each(function () {
+      var selectors = [].slice.call(document.querySelectorAll(selector));
+      $$$1(selectors).each(function () {
         var $target = $$$1(this);
         var data = $target.data(DATA_KEY);
         var config = data ? 'toggle' : $trigger.data();
@@ -33013,7 +33023,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): dropdown.js
+   * Bootstrap (v4.1.2): dropdown.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -33025,7 +33035,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'dropdown';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.dropdown';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -33234,14 +33244,16 @@ module.exports = function(module) {
         if (!this._menu) {
           var parent = Dropdown._getParentFromElement(this._element);
 
-          this._menu = $$$1(parent).find(Selector.MENU)[0];
+          if (parent) {
+            this._menu = parent.querySelector(Selector.MENU);
+          }
         }
 
         return this._menu;
       };
 
       _proto._getPlacement = function _getPlacement() {
-        var $parentDropdown = $$$1(this._element).parent();
+        var $parentDropdown = $$$1(this._element.parentNode);
         var placement = AttachmentMap.BOTTOM; // Handle dropup
 
         if ($parentDropdown.hasClass(ClassName.DROPUP)) {
@@ -33329,15 +33341,19 @@ module.exports = function(module) {
           return;
         }
 
-        var toggles = $$$1.makeArray($$$1(Selector.DATA_TOGGLE));
+        var toggles = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE));
 
-        for (var i = 0; i < toggles.length; i++) {
+        for (var i = 0, len = toggles.length; i < len; i++) {
           var parent = Dropdown._getParentFromElement(toggles[i]);
 
           var context = $$$1(toggles[i]).data(DATA_KEY);
           var relatedTarget = {
             relatedTarget: toggles[i]
           };
+
+          if (event && event.type === 'click') {
+            relatedTarget.clickEvent = event;
+          }
 
           if (!context) {
             continue;
@@ -33377,7 +33393,7 @@ module.exports = function(module) {
         var selector = Util.getSelectorFromElement(element);
 
         if (selector) {
-          parent = $$$1(selector)[0];
+          parent = document.querySelector(selector);
         }
 
         return parent || element.parentNode;
@@ -33409,7 +33425,7 @@ module.exports = function(module) {
 
         if (!isActive && (event.which !== ESCAPE_KEYCODE || event.which !== SPACE_KEYCODE) || isActive && (event.which === ESCAPE_KEYCODE || event.which === SPACE_KEYCODE)) {
           if (event.which === ESCAPE_KEYCODE) {
-            var toggle = $$$1(parent).find(Selector.DATA_TOGGLE)[0];
+            var toggle = parent.querySelector(Selector.DATA_TOGGLE);
             $$$1(toggle).trigger('focus');
           }
 
@@ -33417,7 +33433,7 @@ module.exports = function(module) {
           return;
         }
 
-        var items = $$$1(parent).find(Selector.VISIBLE_ITEMS).get();
+        var items = [].slice.call(parent.querySelectorAll(Selector.VISIBLE_ITEMS));
 
         if (items.length === 0) {
           return;
@@ -33495,7 +33511,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): modal.js
+   * Bootstrap (v4.1.2): modal.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -33507,7 +33523,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'modal';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.modal';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -33551,8 +33567,7 @@ module.exports = function(module) {
       DATA_TOGGLE: '[data-toggle="modal"]',
       DATA_DISMISS: '[data-dismiss="modal"]',
       FIXED_CONTENT: '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top',
-      STICKY_CONTENT: '.sticky-top',
-      NAVBAR_TOGGLER: '.navbar-toggler'
+      STICKY_CONTENT: '.sticky-top'
       /**
        * ------------------------------------------------------------------------
        * Class Definition
@@ -33567,7 +33582,7 @@ module.exports = function(module) {
       function Modal(element, config) {
         this._config = this._getConfig(config);
         this._element = element;
-        this._dialog = $$$1(element).find(Selector.DIALOG)[0];
+        this._dialog = element.querySelector(Selector.DIALOG);
         this._backdrop = null;
         this._isShown = false;
         this._isBodyOverflowing = false;
@@ -33824,7 +33839,7 @@ module.exports = function(module) {
           this._backdrop.className = ClassName.BACKDROP;
 
           if (animate) {
-            $$$1(this._backdrop).addClass(animate);
+            this._backdrop.classList.add(animate);
           }
 
           $$$1(this._backdrop).appendTo(document.body);
@@ -33918,23 +33933,19 @@ module.exports = function(module) {
         if (this._isBodyOverflowing) {
           // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
           //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
-          // Adjust fixed content padding
-          $$$1(Selector.FIXED_CONTENT).each(function (index, element) {
-            var actualPadding = $$$1(element)[0].style.paddingRight;
+          var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
+          var stickyContent = [].slice.call(document.querySelectorAll(Selector.STICKY_CONTENT)); // Adjust fixed content padding
+
+          $$$1(fixedContent).each(function (index, element) {
+            var actualPadding = element.style.paddingRight;
             var calculatedPadding = $$$1(element).css('padding-right');
             $$$1(element).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + _this9._scrollbarWidth + "px");
           }); // Adjust sticky content margin
 
-          $$$1(Selector.STICKY_CONTENT).each(function (index, element) {
-            var actualMargin = $$$1(element)[0].style.marginRight;
+          $$$1(stickyContent).each(function (index, element) {
+            var actualMargin = element.style.marginRight;
             var calculatedMargin = $$$1(element).css('margin-right');
             $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) - _this9._scrollbarWidth + "px");
-          }); // Adjust navbar-toggler margin
-
-          $$$1(Selector.NAVBAR_TOGGLER).each(function (index, element) {
-            var actualMargin = $$$1(element)[0].style.marginRight;
-            var calculatedMargin = $$$1(element).css('margin-right');
-            $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) + _this9._scrollbarWidth + "px");
           }); // Adjust body padding
 
           var actualPadding = document.body.style.paddingRight;
@@ -33945,15 +33956,15 @@ module.exports = function(module) {
 
       _proto._resetScrollbar = function _resetScrollbar() {
         // Restore fixed content padding
-        $$$1(Selector.FIXED_CONTENT).each(function (index, element) {
+        var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
+        $$$1(fixedContent).each(function (index, element) {
           var padding = $$$1(element).data('padding-right');
+          $$$1(element).removeData('padding-right');
+          element.style.paddingRight = padding ? padding : '';
+        }); // Restore sticky content
 
-          if (typeof padding !== 'undefined') {
-            $$$1(element).css('padding-right', padding).removeData('padding-right');
-          }
-        }); // Restore sticky content and navbar-toggler margin
-
-        $$$1(Selector.STICKY_CONTENT + ", " + Selector.NAVBAR_TOGGLER).each(function (index, element) {
+        var elements = [].slice.call(document.querySelectorAll("" + Selector.STICKY_CONTENT));
+        $$$1(elements).each(function (index, element) {
           var margin = $$$1(element).data('margin-right');
 
           if (typeof margin !== 'undefined') {
@@ -33962,10 +33973,8 @@ module.exports = function(module) {
         }); // Restore body padding
 
         var padding = $$$1(document.body).data('padding-right');
-
-        if (typeof padding !== 'undefined') {
-          $$$1(document.body).css('padding-right', padding).removeData('padding-right');
-        }
+        $$$1(document.body).removeData('padding-right');
+        document.body.style.paddingRight = padding ? padding : '';
       };
 
       _proto._getScrollbarWidth = function _getScrollbarWidth() {
@@ -34030,7 +34039,7 @@ module.exports = function(module) {
       var selector = Util.getSelectorFromElement(this);
 
       if (selector) {
-        target = $$$1(selector)[0];
+        target = document.querySelector(selector);
       }
 
       var config = $$$1(target).data(DATA_KEY) ? 'toggle' : _objectSpread({}, $$$1(target).data(), $$$1(this).data());
@@ -34073,7 +34082,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): tooltip.js
+   * Bootstrap (v4.1.2): tooltip.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34085,7 +34094,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'tooltip';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.tooltip';
     var EVENT_KEY = "." + DATA_KEY;
     var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -34295,7 +34304,7 @@ module.exports = function(module) {
           var attachment = this._getAttachment(placement);
 
           this.addAttachmentClass(attachment);
-          var container = this.config.container === false ? document.body : $$$1(this.config.container);
+          var container = this.config.container === false ? document.body : $$$1(document).find(this.config.container);
           $$$1(tip).data(this.constructor.DATA_KEY, this);
 
           if (!$$$1.contains(this.element.ownerDocument.documentElement, this.tip)) {
@@ -34434,9 +34443,9 @@ module.exports = function(module) {
       };
 
       _proto.setContent = function setContent() {
-        var $tip = $$$1(this.getTipElement());
-        this.setElementContent($tip.find(Selector.TOOLTIP_INNER), this.getTitle());
-        $tip.removeClass(ClassName.FADE + " " + ClassName.SHOW);
+        var tip = this.getTipElement();
+        this.setElementContent($$$1(tip.querySelectorAll(Selector.TOOLTIP_INNER)), this.getTitle());
+        $$$1(tip).removeClass(ClassName.FADE + " " + ClassName.SHOW);
       };
 
       _proto.setElementContent = function setElementContent($element, content) {
@@ -34629,15 +34638,18 @@ module.exports = function(module) {
         var $tip = $$$1(this.getTipElement());
         var tabClass = $tip.attr('class').match(BSCLS_PREFIX_REGEX);
 
-        if (tabClass !== null && tabClass.length > 0) {
+        if (tabClass !== null && tabClass.length) {
           $tip.removeClass(tabClass.join(''));
         }
       };
 
-      _proto._handlePopperPlacementChange = function _handlePopperPlacementChange(data) {
+      _proto._handlePopperPlacementChange = function _handlePopperPlacementChange(popperData) {
+        var popperInstance = popperData.instance;
+        this.tip = popperInstance.popper;
+
         this._cleanTipClass();
 
-        this.addAttachmentClass(this._getAttachment(data.placement));
+        this.addAttachmentClass(this._getAttachment(popperData.placement));
       };
 
       _proto._fixTransition = function _fixTransition() {
@@ -34740,7 +34752,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): popover.js
+   * Bootstrap (v4.1.2): popover.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34752,7 +34764,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'popover';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.popover';
     var EVENT_KEY = "." + DATA_KEY;
     var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -34937,7 +34949,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): scrollspy.js
+   * Bootstrap (v4.1.2): scrollspy.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34949,7 +34961,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'scrollspy';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.scrollspy';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -35031,13 +35043,13 @@ module.exports = function(module) {
         this._offsets = [];
         this._targets = [];
         this._scrollHeight = this._getScrollHeight();
-        var targets = $$$1.makeArray($$$1(this._selector));
+        var targets = [].slice.call(document.querySelectorAll(this._selector));
         targets.map(function (element) {
           var target;
           var targetSelector = Util.getSelectorFromElement(element);
 
           if (targetSelector) {
-            target = $$$1(targetSelector)[0];
+            target = document.querySelector(targetSelector);
           }
 
           if (target) {
@@ -35134,7 +35146,9 @@ module.exports = function(module) {
           return;
         }
 
-        for (var i = this._offsets.length; i--;) {
+        var offsetLength = this._offsets.length;
+
+        for (var i = offsetLength; i--;) {
           var isActiveTarget = this._activeTarget !== this._targets[i] && scrollTop >= this._offsets[i] && (typeof this._offsets[i + 1] === 'undefined' || scrollTop < this._offsets[i + 1]);
 
           if (isActiveTarget) {
@@ -35154,7 +35168,7 @@ module.exports = function(module) {
         queries = queries.map(function (selector) {
           return selector + "[data-target=\"" + target + "\"]," + (selector + "[href=\"" + target + "\"]");
         });
-        var $link = $$$1(queries.join(','));
+        var $link = $$$1([].slice.call(document.querySelectorAll(queries.join(','))));
 
         if ($link.hasClass(ClassName.DROPDOWN_ITEM)) {
           $link.closest(Selector.DROPDOWN).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
@@ -35175,7 +35189,8 @@ module.exports = function(module) {
       };
 
       _proto._clear = function _clear() {
-        $$$1(this._selector).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
+        var nodes = [].slice.call(document.querySelectorAll(this._selector));
+        $$$1(nodes).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
       }; // Static
 
 
@@ -35222,9 +35237,10 @@ module.exports = function(module) {
 
 
     $$$1(window).on(Event.LOAD_DATA_API, function () {
-      var scrollSpys = $$$1.makeArray($$$1(Selector.DATA_SPY));
+      var scrollSpys = [].slice.call(document.querySelectorAll(Selector.DATA_SPY));
+      var scrollSpysLength = scrollSpys.length;
 
-      for (var i = scrollSpys.length; i--;) {
+      for (var i = scrollSpysLength; i--;) {
         var $spy = $$$1(scrollSpys[i]);
 
         ScrollSpy._jQueryInterface.call($spy, $spy.data());
@@ -35249,7 +35265,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): tab.js
+   * Bootstrap (v4.1.2): tab.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -35261,7 +35277,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'tab';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.tab';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -35343,7 +35359,7 @@ module.exports = function(module) {
         }
 
         if (selector) {
-          target = $$$1(selector)[0];
+          target = document.querySelector(selector);
         }
 
         this._activate(this._element, listElement);
@@ -35425,7 +35441,8 @@ module.exports = function(module) {
           var dropdownElement = $$$1(element).closest(Selector.DROPDOWN)[0];
 
           if (dropdownElement) {
-            $$$1(dropdownElement).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
+            var dropdownToggleList = [].slice.call(dropdownElement.querySelectorAll(Selector.DROPDOWN_TOGGLE));
+            $$$1(dropdownToggleList).addClass(ClassName.ACTIVE);
           }
 
           element.setAttribute('aria-expanded', true);
@@ -35497,7 +35514,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): index.js
+   * Bootstrap (v4.1.2): index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -52071,32 +52088,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
- * Select2 4.0.2
+ * Select2 4.0.6-rc.1
  * https://select2.github.io
  *
  * Released under the MIT license
  * https://github.com/select2/select2/blob/master/LICENSE.md
  */
-(function (factory) {
+;(function (factory) {
   if (true) {
     // AMD. Register as an anonymous module.
     !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(5)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-  } else if (typeof exports === 'object') {
+  } else if (typeof module === 'object' && module.exports) {
     // Node/CommonJS
-    factory(require('jquery'));
+    module.exports = function (root, jQuery) {
+      if (jQuery === undefined) {
+        // require('jQuery') returns a factory that requires window to
+        // build a jQuery instance, we normalize how we use modules
+        // that require this pattern but the window provided is a noop
+        // if it's defined (how jquery works)
+        if (typeof window !== 'undefined') {
+          jQuery = require('jquery');
+        }
+        else {
+          jQuery = require('jquery')(root);
+        }
+      }
+      factory(jQuery);
+      return jQuery;
+    };
   } else {
     // Browser globals
     factory(jQuery);
   }
-}(function (jQuery) {
+} (function (jQuery) {
   // This is needed so we can catch the AMD loader configuration and use it
   // The inner file should be wrapped (by `banner.start.js`) in a function that
   // returns the AMD loader references.
-  var S2 =
-(function () {
+  var S2 =(function () {
   // Restore the Select2 AMD loader so it can be used
   // Needed mostly in the language files, where the loader is not inserted
   if (jQuery && jQuery.fn && jQuery.fn.select2 && jQuery.fn.select2.amd) {
@@ -52105,13 +52136,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 var S2;(function () { if (!S2 || !S2.requirejs) {
 if (!S2) { S2 = {}; } else { require = S2; }
 /**
- * @license almond 0.3.1 Copyright (c) 2011-2014, The Dojo Foundation All Rights Reserved.
- * Available via the MIT or new BSD license.
- * see: http://github.com/jrburke/almond for details
+ * @license almond 0.3.3 Copyright jQuery Foundation and other contributors.
+ * Released under MIT license, http://github.com/requirejs/almond/LICENSE
  */
 //Going sloppy to avoid 'use strict' string cost, but strict practices should
 //be followed.
-/*jslint sloppy: true */
 /*global setTimeout: false */
 
 var requirejs, require, define;
@@ -52139,60 +52168,58 @@ var requirejs, require, define;
      */
     function normalize(name, baseName) {
         var nameParts, nameSegment, mapValue, foundMap, lastIndex,
-            foundI, foundStarMap, starI, i, j, part,
+            foundI, foundStarMap, starI, i, j, part, normalizedBaseParts,
             baseParts = baseName && baseName.split("/"),
             map = config.map,
             starMap = (map && map['*']) || {};
 
         //Adjust any relative paths.
-        if (name && name.charAt(0) === ".") {
-            //If have a base name, try to normalize against it,
-            //otherwise, assume it is a top-level require that will
-            //be relative to baseUrl in the end.
-            if (baseName) {
-                name = name.split('/');
-                lastIndex = name.length - 1;
+        if (name) {
+            name = name.split('/');
+            lastIndex = name.length - 1;
 
-                // Node .js allowance:
-                if (config.nodeIdCompat && jsSuffixRegExp.test(name[lastIndex])) {
-                    name[lastIndex] = name[lastIndex].replace(jsSuffixRegExp, '');
-                }
+            // If wanting node ID compatibility, strip .js from end
+            // of IDs. Have to do this here, and not in nameToUrl
+            // because node allows either .js or non .js to map
+            // to same file.
+            if (config.nodeIdCompat && jsSuffixRegExp.test(name[lastIndex])) {
+                name[lastIndex] = name[lastIndex].replace(jsSuffixRegExp, '');
+            }
 
-                //Lop off the last part of baseParts, so that . matches the
-                //"directory" and not name of the baseName's module. For instance,
-                //baseName of "one/two/three", maps to "one/two/three.js", but we
-                //want the directory, "one/two" for this normalization.
-                name = baseParts.slice(0, baseParts.length - 1).concat(name);
+            // Starts with a '.' so need the baseName
+            if (name[0].charAt(0) === '.' && baseParts) {
+                //Convert baseName to array, and lop off the last part,
+                //so that . matches that 'directory' and not name of the baseName's
+                //module. For instance, baseName of 'one/two/three', maps to
+                //'one/two/three.js', but we want the directory, 'one/two' for
+                //this normalization.
+                normalizedBaseParts = baseParts.slice(0, baseParts.length - 1);
+                name = normalizedBaseParts.concat(name);
+            }
 
-                //start trimDots
-                for (i = 0; i < name.length; i += 1) {
-                    part = name[i];
-                    if (part === ".") {
-                        name.splice(i, 1);
-                        i -= 1;
-                    } else if (part === "..") {
-                        if (i === 1 && (name[2] === '..' || name[0] === '..')) {
-                            //End of the line. Keep at least one non-dot
-                            //path segment at the front so it can be mapped
-                            //correctly to disk. Otherwise, there is likely
-                            //no path mapping for a path starting with '..'.
-                            //This can still fail, but catches the most reasonable
-                            //uses of ..
-                            break;
-                        } else if (i > 0) {
-                            name.splice(i - 1, 2);
-                            i -= 2;
-                        }
+            //start trimDots
+            for (i = 0; i < name.length; i++) {
+                part = name[i];
+                if (part === '.') {
+                    name.splice(i, 1);
+                    i -= 1;
+                } else if (part === '..') {
+                    // If at the start, or previous value is still ..,
+                    // keep them so that when converted to a path it may
+                    // still work when converted to a path, even though
+                    // as an ID it is less than ideal. In larger point
+                    // releases, may be better to just kick out an error.
+                    if (i === 0 || (i === 1 && name[2] === '..') || name[i - 1] === '..') {
+                        continue;
+                    } else if (i > 0) {
+                        name.splice(i - 1, 2);
+                        i -= 2;
                     }
                 }
-                //end trimDots
-
-                name = name.join("/");
-            } else if (name.indexOf('./') === 0) {
-                // No baseName, so this is ID is resolved relative
-                // to baseUrl, pull off the leading dot.
-                name = name.substring(2);
             }
+            //end trimDots
+
+            name = name.join('/');
         }
 
         //Apply map config if available.
@@ -52305,32 +52332,39 @@ var requirejs, require, define;
         return [prefix, name];
     }
 
+    //Creates a parts array for a relName where first part is plugin ID,
+    //second part is resource ID. Assumes relName has already been normalized.
+    function makeRelParts(relName) {
+        return relName ? splitPrefix(relName) : [];
+    }
+
     /**
      * Makes a name map, normalizing the name, and using a plugin
      * for normalization if necessary. Grabs a ref to plugin
      * too, as an optimization.
      */
-    makeMap = function (name, relName) {
+    makeMap = function (name, relParts) {
         var plugin,
             parts = splitPrefix(name),
-            prefix = parts[0];
+            prefix = parts[0],
+            relResourceName = relParts[1];
 
         name = parts[1];
 
         if (prefix) {
-            prefix = normalize(prefix, relName);
+            prefix = normalize(prefix, relResourceName);
             plugin = callDep(prefix);
         }
 
         //Normalize according
         if (prefix) {
             if (plugin && plugin.normalize) {
-                name = plugin.normalize(name, makeNormalize(relName));
+                name = plugin.normalize(name, makeNormalize(relResourceName));
             } else {
-                name = normalize(name, relName);
+                name = normalize(name, relResourceName);
             }
         } else {
-            name = normalize(name, relName);
+            name = normalize(name, relResourceName);
             parts = splitPrefix(name);
             prefix = parts[0];
             name = parts[1];
@@ -52377,13 +52411,14 @@ var requirejs, require, define;
     };
 
     main = function (name, deps, callback, relName) {
-        var cjsModule, depName, ret, map, i,
+        var cjsModule, depName, ret, map, i, relParts,
             args = [],
             callbackType = typeof callback,
             usingExports;
 
         //Use name if no relName
         relName = relName || name;
+        relParts = makeRelParts(relName);
 
         //Call the callback to define the module, if necessary.
         if (callbackType === 'undefined' || callbackType === 'function') {
@@ -52392,7 +52427,7 @@ var requirejs, require, define;
             //Default to [require, exports, module] if no deps
             deps = !deps.length && callback.length ? ['require', 'exports', 'module'] : deps;
             for (i = 0; i < deps.length; i += 1) {
-                map = makeMap(deps[i], relName);
+                map = makeMap(deps[i], relParts);
                 depName = map.f;
 
                 //Fast path CommonJS standard dependencies.
@@ -52448,7 +52483,7 @@ var requirejs, require, define;
             //deps arg is the module name, and second arg (if passed)
             //is just the relName.
             //Normalize module name, if it contains . or ..
-            return callDep(makeMap(deps, callback).f);
+            return callDep(makeMap(deps, makeRelParts(callback)).f);
         } else if (!deps.splice) {
             //deps is a config object, not an array.
             config = deps;
@@ -52631,10 +52666,10 @@ S2.define('select2/utils',[
     DecoratedClass.prototype = new ctr();
 
     for (var m = 0; m < superMethods.length; m++) {
-        var superMethod = superMethods[m];
+      var superMethod = superMethods[m];
 
-        DecoratedClass.prototype[superMethod] =
-          SuperClass.prototype[superMethod];
+      DecoratedClass.prototype[superMethod] =
+        SuperClass.prototype[superMethod];
     }
 
     var calledMethod = function (methodName) {
@@ -52681,8 +52716,22 @@ S2.define('select2/utils',[
 
   Observable.prototype.trigger = function (event) {
     var slice = Array.prototype.slice;
+    var params = slice.call(arguments, 1);
 
     this.listeners = this.listeners || {};
+
+    // Params should always come in as an array
+    if (params == null) {
+      params = [];
+    }
+
+    // If there are no arguments to the event, use a temporary object
+    if (params.length === 0) {
+      params.push({});
+    }
+
+    // Set the `_type` of the first object to the event
+    params[0]._type = event;
 
     if (event in this.listeners) {
       this.invoke(this.listeners[event], slice.call(arguments, 1));
@@ -52815,6 +52864,67 @@ S2.define('select2/utils',[
     $element.append($nodes);
   };
 
+  // Cache objects in Utils.__cache instead of $.data (see #4346)
+  Utils.__cache = {};
+
+  var id = 0;
+  Utils.GetUniqueElementId = function (element) {
+    // Get a unique element Id. If element has no id, 
+    // creates a new unique number, stores it in the id 
+    // attribute and returns the new id. 
+    // If an id already exists, it simply returns it.
+
+    var select2Id = element.getAttribute('data-select2-id');
+    if (select2Id == null) {
+      // If element has id, use it.
+      if (element.id) {
+        select2Id = element.id;
+        element.setAttribute('data-select2-id', select2Id);
+      } else {
+        element.setAttribute('data-select2-id', ++id);
+        select2Id = id.toString();
+      }
+    }
+    return select2Id;
+  };
+
+  Utils.StoreData = function (element, name, value) {
+    // Stores an item in the cache for a specified element.
+    // name is the cache key.    
+    var id = Utils.GetUniqueElementId(element);
+    if (!Utils.__cache[id]) {
+      Utils.__cache[id] = {};
+    }
+
+    Utils.__cache[id][name] = value;
+  };
+
+  Utils.GetData = function (element, name) {
+    // Retrieves a value from the cache by its key (name)
+    // name is optional. If no name specified, return 
+    // all cache items for the specified element.
+    // and for a specified element.
+    var id = Utils.GetUniqueElementId(element);
+    if (name) {
+      if (Utils.__cache[id]) {
+        return Utils.__cache[id][name] != null ? 
+	      Utils.__cache[id][name]:
+	      $(element).data(name); // Fallback to HTML5 data attribs.
+      }
+      return $(element).data(name); // Fallback to HTML5 data attribs.
+    } else {
+      return Utils.__cache[id];			   
+    }
+  };
+
+  Utils.RemoveData = function (element) {
+    // Removes all cached items for a specified element.
+    var id = Utils.GetUniqueElementId(element);
+    if (Utils.__cache[id] != null) {
+      delete Utils.__cache[id];
+    }
+  };
+
   return Utils;
 });
 
@@ -52917,6 +53027,25 @@ S2.define('select2/results',[
     return sorter(data);
   };
 
+  Results.prototype.highlightFirstItem = function () {
+    var $options = this.$results
+      .find('.select2-results__option[aria-selected]');
+
+    var $selected = $options.filter('[aria-selected=true]');
+
+    // Check if there are any selected options
+    if ($selected.length > 0) {
+      // If there are selected options, highlight the first
+      $selected.first().trigger('mouseenter');
+    } else {
+      // If there are no selected options, highlight the first option
+      // in the dropdown
+      $options.first().trigger('mouseenter');
+    }
+
+    this.ensureHighlightVisible();
+  };
+
   Results.prototype.setClasses = function () {
     var self = this;
 
@@ -52931,7 +53060,7 @@ S2.define('select2/results',[
       $options.each(function () {
         var $option = $(this);
 
-        var item = $.data(this, 'data');
+        var item = Utils.GetData(this, 'data');
 
         // id needs to be converted to a string when comparing
         var id = '' + item.id;
@@ -52944,17 +53073,6 @@ S2.define('select2/results',[
         }
       });
 
-      var $selected = $options.filter('[aria-selected=true]');
-
-      // Check if there are any selected options
-      if ($selected.length > 0) {
-        // If there are selected options, highlight the first
-        $selected.first().trigger('mouseenter');
-      } else {
-        // If there are no selected options, highlight the first option
-        // in the dropdown
-        $options.first().trigger('mouseenter');
-      }
     });
   };
 
@@ -53047,7 +53165,7 @@ S2.define('select2/results',[
       this.template(data, option);
     }
 
-    $.data(option, 'data', data);
+    Utils.StoreData(option, 'data', data);
 
     return option;
   };
@@ -53065,6 +53183,7 @@ S2.define('select2/results',[
 
       if (container.isOpen()) {
         self.setClasses();
+        self.highlightFirstItem();
       }
     });
 
@@ -53087,6 +53206,7 @@ S2.define('select2/results',[
       }
 
       self.setClasses();
+      self.highlightFirstItem();
     });
 
     container.on('unselect', function () {
@@ -53095,6 +53215,7 @@ S2.define('select2/results',[
       }
 
       self.setClasses();
+      self.highlightFirstItem();
     });
 
     container.on('open', function () {
@@ -53130,7 +53251,7 @@ S2.define('select2/results',[
         return;
       }
 
-      var data = $highlighted.data('data');
+      var data = Utils.GetData($highlighted[0], 'data');
 
       if ($highlighted.attr('aria-selected') == 'true') {
         self.trigger('close', {});
@@ -53149,7 +53270,8 @@ S2.define('select2/results',[
       var currentIndex = $options.index($highlighted);
 
       // If we are already at te top, don't move further
-      if (currentIndex === 0) {
+      // If no options, currentIndex will be -1
+      if (currentIndex <= 0) {
         return;
       }
 
@@ -53242,7 +53364,7 @@ S2.define('select2/results',[
       function (evt) {
       var $this = $(this);
 
-      var data = $this.data('data');
+      var data = Utils.GetData(this, 'data');
 
       if ($this.attr('aria-selected') === 'true') {
         if (self.options.get('multiple')) {
@@ -53265,7 +53387,7 @@ S2.define('select2/results',[
 
     this.$results.on('mouseenter', '.select2-results__option[aria-selected]',
       function (evt) {
-      var data = $(this).data('data');
+      var data = Utils.GetData(this, 'data');
 
       self.getHighlightedResults()
           .removeClass('select2-results__option--highlighted');
@@ -53380,8 +53502,8 @@ S2.define('select2/selection/base',[
 
     this._tabindex = 0;
 
-    if (this.$element.data('old-tabindex') != null) {
-      this._tabindex = this.$element.data('old-tabindex');
+    if (Utils.GetData(this.$element[0], 'old-tabindex') != null) {
+      this._tabindex = Utils.GetData(this.$element[0], 'old-tabindex');
     } else if (this.$element.attr('tabindex') != null) {
       this._tabindex = this.$element.attr('tabindex');
     }
@@ -53441,6 +53563,9 @@ S2.define('select2/selection/base',[
       self.$selection.removeAttr('aria-owns');
 
       self.$selection.focus();
+      window.setTimeout(function () {
+        self.$selection.focus();
+      }, 0);
 
       self._detachCloseHandler(container);
     });
@@ -53489,7 +53614,7 @@ S2.define('select2/selection/base',[
           return;
         }
 
-        var $element = $this.data('element');
+        var $element = Utils.GetData(this, 'element');
 
         $element.select2('close');
       });
@@ -53550,7 +53675,10 @@ S2.define('select2/selection/single',[
 
     var id = container.id + '-container';
 
-    this.$selection.find('.select2-selection__rendered').attr('id', id);
+    this.$selection.find('.select2-selection__rendered')
+      .attr('id', id)
+      .attr('role', 'textbox')
+      .attr('aria-readonly', 'true');
     this.$selection.attr('aria-labelledby', id);
 
     this.$selection.on('mousedown', function (evt) {
@@ -53572,13 +53700,17 @@ S2.define('select2/selection/single',[
       // User exits the container
     });
 
-    container.on('selection:update', function (params) {
-      self.update(params.data);
+    container.on('focus', function (evt) {
+      if (!container.isOpen()) {
+        self.$selection.focus();
+      }
     });
   };
 
   SingleSelection.prototype.clear = function () {
-    this.$selection.find('.select2-selection__rendered').empty();
+    var $rendered = this.$selection.find('.select2-selection__rendered');
+    $rendered.empty();
+    $rendered.removeAttr('title'); // clear tooltip on empty
   };
 
   SingleSelection.prototype.display = function (data, container) {
@@ -53604,7 +53736,7 @@ S2.define('select2/selection/single',[
     var formatted = this.display(selection, $rendered);
 
     $rendered.empty().append(formatted);
-    $rendered.prop('title', selection.title || selection.text);
+    $rendered.attr('title', selection.title || selection.text);
   };
 
   return SingleSelection;
@@ -53656,7 +53788,7 @@ S2.define('select2/selection/multiple',[
         var $remove = $(this);
         var $selection = $remove.parent();
 
-        var data = $selection.data('data');
+        var data = Utils.GetData($selection[0], 'data');
 
         self.trigger('unselect', {
           originalEvent: evt,
@@ -53667,7 +53799,9 @@ S2.define('select2/selection/multiple',[
   };
 
   MultipleSelection.prototype.clear = function () {
-    this.$selection.find('.select2-selection__rendered').empty();
+    var $rendered = this.$selection.find('.select2-selection__rendered');
+    $rendered.empty();
+    $rendered.removeAttr('title');
   };
 
   MultipleSelection.prototype.display = function (data, container) {
@@ -53705,9 +53839,9 @@ S2.define('select2/selection/multiple',[
       var formatted = this.display(selection, $selection);
 
       $selection.append(formatted);
-      $selection.prop('title', selection.title || selection.text);
+      $selection.attr('title', selection.title || selection.text);
 
-      $selection.data('data', selection);
+      Utils.StoreData($selection[0], 'data', selection);
 
       $selections.push($selection);
     }
@@ -53772,8 +53906,9 @@ S2.define('select2/selection/placeholder',[
 
 S2.define('select2/selection/allowClear',[
   'jquery',
-  '../keys'
-], function ($, KEYS) {
+  '../keys',
+  '../utils'
+], function ($, KEYS, Utils) {
   function AllowClear () { }
 
   AllowClear.prototype.bind = function (decorated, container, $container) {
@@ -53815,10 +53950,22 @@ S2.define('select2/selection/allowClear',[
 
     evt.stopPropagation();
 
-    var data = $clear.data('data');
+    var data = Utils.GetData($clear[0], 'data');
+
+    var previousVal = this.$element.val();
+    this.$element.val(this.placeholder.id);
+
+    var unselectData = {
+      data: data
+    };
+    this.trigger('clear', unselectData);
+    if (unselectData.prevented) {
+      this.$element.val(previousVal);
+      return;
+    }
 
     for (var d = 0; d < data.length; d++) {
-      var unselectData = {
+      unselectData = {
         data: data[d]
       };
 
@@ -53828,11 +53975,12 @@ S2.define('select2/selection/allowClear',[
 
       // If the event was prevented, don't clear it out.
       if (unselectData.prevented) {
+        this.$element.val(previousVal);
         return;
       }
     }
 
-    this.$element.val(this.placeholder.id).trigger('change');
+    this.$element.trigger('change');
 
     this.trigger('toggle', {});
   };
@@ -53860,7 +54008,7 @@ S2.define('select2/selection/allowClear',[
         '&times;' +
       '</span>'
     );
-    $remove.data('data', data);
+    Utils.StoreData($remove[0], 'data', data);
 
     this.$selection.find('.select2-selection__rendered').prepend($remove);
   };
@@ -53881,7 +54029,7 @@ S2.define('select2/selection/search',[
     var $search = $(
       '<li class="select2-search select2-search--inline">' +
         '<input class="select2-search__field" type="search" tabindex="-1"' +
-        ' autocomplete="off" autocorrect="off" autocapitalize="off"' +
+        ' autocomplete="off" autocorrect="off" autocapitalize="none"' +
         ' spellcheck="false" role="textbox" aria-autocomplete="list" />' +
       '</li>'
     );
@@ -53951,7 +54099,7 @@ S2.define('select2/selection/search',[
           .prev('.select2-selection__choice');
 
         if ($previousChoice.length > 0) {
-          var item = $previousChoice.data('data');
+          var item = Utils.GetData($previousChoice[0], 'data');
 
           self.searchRemoveChoice(item);
 
@@ -54045,7 +54193,13 @@ S2.define('select2/selection/search',[
 
     this.resizeSearch();
     if (searchHadFocus) {
-      this.$search.focus();
+      var isTagInput = this.$element.find('[data-select2-tag]').length;
+      if (isTagInput) {
+        // fix IE11 bug where tag input lost focus
+        this.$element.focus();
+      } else {
+        this.$search.focus();
+      }
     }
   };
 
@@ -54102,10 +54256,13 @@ S2.define('select2/selection/eventRelay',[
       'open', 'opening',
       'close', 'closing',
       'select', 'selecting',
-      'unselect', 'unselecting'
+      'unselect', 'unselecting',
+      'clear', 'clearing'
     ];
 
-    var preventableEvents = ['opening', 'closing', 'selecting', 'unselecting'];
+    var preventableEvents = [
+      'opening', 'closing', 'selecting', 'unselecting', 'clearing'
+    ];
 
     decorated.call(this, container, $container);
 
@@ -55184,7 +55341,7 @@ S2.define('select2/data/select',[
     // Remove anything added to child elements
     this.$element.find('*').each(function () {
       // Remove any custom data set by Select2
-      $.removeData(this, 'data');
+      Utils.RemoveData(this);
     });
   };
 
@@ -55235,7 +55392,7 @@ S2.define('select2/data/select',[
       }
     }
 
-    if (data.id) {
+    if (data.id !== undefined) {
       option.value = data.id;
     }
 
@@ -55257,7 +55414,7 @@ S2.define('select2/data/select',[
     normalizedData.element = option;
 
     // Override the option's data with the combined data
-    $.data(option, 'data', normalizedData);
+    Utils.StoreData(option, 'data', normalizedData);
 
     return $option;
   };
@@ -55265,7 +55422,7 @@ S2.define('select2/data/select',[
   SelectAdapter.prototype.item = function ($option) {
     var data = {};
 
-    data = $.data($option[0], 'data');
+    data = Utils.GetData($option[0], 'data');
 
     if (data != null) {
       return data;
@@ -55303,13 +55460,13 @@ S2.define('select2/data/select',[
     data = this._normalizeItem(data);
     data.element = $option[0];
 
-    $.data($option[0], 'data', data);
+    Utils.StoreData($option[0], 'data', data);
 
     return data;
   };
 
   SelectAdapter.prototype._normalizeItem = function (item) {
-    if (!$.isPlainObject(item)) {
+    if (item !== Object(item)) {
       item = {
         id: item,
         text: item
@@ -55511,6 +55668,13 @@ S2.define('select2/data/ajax',[
 
         callback(results);
       }, function () {
+        // Attempt to detect if a request was aborted
+        // Only works if the transport exposes a status property
+        if ('status' in $request &&
+            ($request.status === 0 || $request.status === '0')) {
+          return;
+        }
+
         self.trigger('results:message', {
           message: 'errorLoading'
         });
@@ -55519,7 +55683,7 @@ S2.define('select2/data/ajax',[
       self._request = $request;
     }
 
-    if (this.ajaxOptions.delay && params.term !== '') {
+    if (this.ajaxOptions.delay && params.term != null) {
       if (this._queryTimeout) {
         window.clearTimeout(this._queryTimeout);
       }
@@ -55588,7 +55752,10 @@ S2.define('select2/data/tags',[
           }, true)
         );
 
-        var checkText = option.text === params.term;
+        var optionText = (option.text || '').toUpperCase();
+        var paramsTerm = (params.term || '').toUpperCase();
+
+        var checkText = optionText === paramsTerm;
 
         if (checkText || checkChildren) {
           if (child) {
@@ -55682,6 +55849,29 @@ S2.define('select2/data/tokenizer',[
   Tokenizer.prototype.query = function (decorated, params, callback) {
     var self = this;
 
+    function createAndSelect (data) {
+      // Normalize the data object so we can use it for checks
+      var item = self._normalizeItem(data);
+
+      // Check if the data object already exists as a tag
+      // Select it if it doesn't
+      var $existingOptions = self.$element.find('option').filter(function () {
+        return $(this).val() === item.id;
+      });
+
+      // If an existing option wasn't found for it, create the option
+      if (!$existingOptions.length) {
+        var $option = self.option(item);
+        $option.attr('data-select2-tag', true);
+
+        self._removeOldTags();
+        self.addOptions([$option]);
+      }
+
+      // Select the item, now that we know there is an option for it
+      select(item);
+    }
+
     function select (data) {
       self.trigger('select', {
         data: data
@@ -55690,7 +55880,7 @@ S2.define('select2/data/tokenizer',[
 
     params.term = params.term || '';
 
-    var tokenData = this.tokenizer(params, this.options, select);
+    var tokenData = this.tokenizer(params, this.options, createAndSelect);
 
     if (tokenData.term !== params.term) {
       // Replace the search term if we have the search box
@@ -55903,7 +56093,7 @@ S2.define('select2/dropdown/search',[
     var $search = $(
       '<span class="select2-search select2-search--dropdown">' +
         '<input class="select2-search__field" type="search" tabindex="-1"' +
-        ' autocomplete="off" autocorrect="off" autocapitalize="off"' +
+        ' autocomplete="off" autocorrect="off" autocapitalize="none"' +
         ' spellcheck="false" role="textbox" />' +
       '</span>'
     );
@@ -55953,6 +56143,13 @@ S2.define('select2/dropdown/search',[
       self.$search.attr('tabindex', -1);
 
       self.$search.val('');
+      self.$search.blur();
+    });
+
+    container.on('focus', function () {
+      if (!container.isOpen()) {
+        self.$search.focus();
+      }
     });
 
     container.on('results:all', function (params) {
@@ -56212,14 +56409,14 @@ S2.define('select2/dropdown/attachBody',[
 
     var $watchers = this.$container.parents().filter(Utils.hasScroll);
     $watchers.each(function () {
-      $(this).data('select2-scroll-position', {
+      Utils.StoreData(this, 'select2-scroll-position', {
         x: $(this).scrollLeft(),
         y: $(this).scrollTop()
       });
     });
 
     $watchers.on(scrollEvent, function (ev) {
-      var position = $(this).data('select2-scroll-position');
+      var position = Utils.GetData(this, 'select2-scroll-position');
       $(this).scrollTop(position.y);
     });
 
@@ -56304,7 +56501,7 @@ S2.define('select2/dropdown/attachBody',[
 
     if (newDirection == 'above' ||
       (isCurrentlyAbove && newDirection !== 'below')) {
-      css.top = container.top - dropdown.height;
+      css.top = container.top - parentOffset.top - dropdown.height;
     }
 
     if (newDirection != null) {
@@ -56326,6 +56523,7 @@ S2.define('select2/dropdown/attachBody',[
 
     if (this.options.get('dropdownAutoWidth')) {
       css.minWidth = css.width;
+      css.position = 'relative';
       css.width = 'auto';
     }
 
@@ -56383,8 +56581,8 @@ S2.define('select2/dropdown/minimumResultsForSearch',[
 });
 
 S2.define('select2/dropdown/selectOnClose',[
-
-], function () {
+  '../utils'
+], function (Utils) {
   function SelectOnClose () { }
 
   SelectOnClose.prototype.bind = function (decorated, container, $container) {
@@ -56392,12 +56590,22 @@ S2.define('select2/dropdown/selectOnClose',[
 
     decorated.call(this, container, $container);
 
-    container.on('close', function () {
-      self._handleSelectOnClose();
+    container.on('close', function (params) {
+      self._handleSelectOnClose(params);
     });
   };
 
-  SelectOnClose.prototype._handleSelectOnClose = function () {
+  SelectOnClose.prototype._handleSelectOnClose = function (_, params) {
+    if (params && params.originalSelect2Event != null) {
+      var event = params.originalSelect2Event;
+
+      // Don't select an item if the close event was triggered from a select or
+      // unselect event
+      if (event._type === 'select' || event._type === 'unselect') {
+        return;
+      }
+    }
+
     var $highlightedResults = this.getHighlightedResults();
 
     // Only select highlighted results
@@ -56405,7 +56613,7 @@ S2.define('select2/dropdown/selectOnClose',[
       return;
     }
 
-    var data = $highlightedResults.data('data');
+    var data = Utils.GetData($highlightedResults[0], 'data');
 
     // Don't re-select already selected resulte
     if (
@@ -56450,7 +56658,10 @@ S2.define('select2/dropdown/closeOnSelect',[
       return;
     }
 
-    this.trigger('close', {});
+    this.trigger('close', {
+      originalEvent: originalEvent,
+      originalSelect2Event: evt
+    });
   };
 
   return CloseOnSelect;
@@ -56890,7 +57101,7 @@ S2.define('select2/defaults',[
 
     var convertedData = Utils._convertData(data);
 
-    $.extend(this.defaults, convertedData);
+    $.extend(true, this.defaults, convertedData);
   };
 
   var defaults = new Defaults();
@@ -56955,7 +57166,7 @@ S2.define('select2/options',[
     $e.prop('disabled', this.options.disabled);
     $e.prop('multiple', this.options.multiple);
 
-    if ($e.data('select2Tags')) {
+    if (Utils.GetData($e[0], 'select2Tags')) {
       if (this.options.debug && window.console && console.warn) {
         console.warn(
           'Select2: The `data-select2-tags` attribute has been changed to ' +
@@ -56964,11 +57175,11 @@ S2.define('select2/options',[
         );
       }
 
-      $e.data('data', $e.data('select2Tags'));
-      $e.data('tags', true);
+      Utils.StoreData($e[0], 'data', Utils.GetData($e[0], 'select2Tags'));
+      Utils.StoreData($e[0], 'tags', true);
     }
 
-    if ($e.data('ajaxUrl')) {
+    if (Utils.GetData($e[0], 'ajaxUrl')) {
       if (this.options.debug && window.console && console.warn) {
         console.warn(
           'Select2: The `data-ajax-url` attribute has been changed to ' +
@@ -56977,8 +57188,9 @@ S2.define('select2/options',[
         );
       }
 
-      $e.attr('ajax--url', $e.data('ajaxUrl'));
-      $e.data('ajax--url', $e.data('ajaxUrl'));
+      $e.attr('ajax--url', Utils.GetData($e[0], 'ajaxUrl'));
+      Utils.StoreData($e[0], 'ajax-Url', Utils.GetData($e[0], 'ajaxUrl'));
+	  
     }
 
     var dataset = {};
@@ -56986,9 +57198,9 @@ S2.define('select2/options',[
     // Prefer the element's `dataset` attribute if it exists
     // jQuery 1.x does not correctly handle data attributes with multiple dashes
     if ($.fn.jquery && $.fn.jquery.substr(0, 2) == '1.' && $e[0].dataset) {
-      dataset = $.extend(true, {}, $e[0].dataset, $e.data());
+      dataset = $.extend(true, {}, $e[0].dataset, Utils.GetData($e[0]));
     } else {
-      dataset = $e.data();
+      dataset = Utils.GetData($e[0]);
     }
 
     var data = $.extend(true, {}, dataset);
@@ -57028,8 +57240,8 @@ S2.define('select2/core',[
   './keys'
 ], function ($, Options, Utils, KEYS) {
   var Select2 = function ($element, options) {
-    if ($element.data('select2') != null) {
-      $element.data('select2').destroy();
+    if (Utils.GetData($element[0], 'select2') != null) {
+      Utils.GetData($element[0], 'select2').destroy();
     }
 
     this.$element = $element;
@@ -57045,7 +57257,7 @@ S2.define('select2/core',[
     // Set up the tabindex
 
     var tabindex = $element.attr('tabindex') || 0;
-    $element.data('old-tabindex', tabindex);
+    Utils.StoreData($element[0], 'old-tabindex', tabindex);
     $element.attr('tabindex', '-1');
 
     // Set up containers and adapters
@@ -57106,6 +57318,9 @@ S2.define('select2/core',[
     // Synchronize any monitored attributes
     this._syncAttributes();
 
+    Utils.StoreData($element[0], 'select2', this);
+
+    // Ensure backwards compatibility with $element.data('select2').
     $element.data('select2', this);
   };
 
@@ -57204,10 +57419,15 @@ S2.define('select2/core',[
       });
     });
 
-    this._sync = Utils.bind(this._syncAttributes, this);
+    this.$element.on('focus.select2', function (evt) {
+      self.trigger('focus', evt);
+    });
+
+    this._syncA = Utils.bind(this._syncAttributes, this);
+    this._syncS = Utils.bind(this._syncSubtree, this);
 
     if (this.$element[0].attachEvent) {
-      this.$element[0].attachEvent('onpropertychange', this._sync);
+      this.$element[0].attachEvent('onpropertychange', this._syncA);
     }
 
     var observer = window.MutationObserver ||
@@ -57217,14 +57437,30 @@ S2.define('select2/core',[
 
     if (observer != null) {
       this._observer = new observer(function (mutations) {
-        $.each(mutations, self._sync);
+        $.each(mutations, self._syncA);
+        $.each(mutations, self._syncS);
       });
       this._observer.observe(this.$element[0], {
         attributes: true,
+        childList: true,
         subtree: false
       });
     } else if (this.$element[0].addEventListener) {
-      this.$element[0].addEventListener('DOMAttrModified', self._sync, false);
+      this.$element[0].addEventListener(
+        'DOMAttrModified',
+        self._syncA,
+        false
+      );
+      this.$element[0].addEventListener(
+        'DOMNodeInserted',
+        self._syncS,
+        false
+      );
+      this.$element[0].addEventListener(
+        'DOMNodeRemoved',
+        self._syncS,
+        false
+      );
     }
   };
 
@@ -57369,6 +57605,46 @@ S2.define('select2/core',[
     }
   };
 
+  Select2.prototype._syncSubtree = function (evt, mutations) {
+    var changed = false;
+    var self = this;
+
+    // Ignore any mutation events raised for elements that aren't options or
+    // optgroups. This handles the case when the select element is destroyed
+    if (
+      evt && evt.target && (
+        evt.target.nodeName !== 'OPTION' && evt.target.nodeName !== 'OPTGROUP'
+      )
+    ) {
+      return;
+    }
+
+    if (!mutations) {
+      // If mutation events aren't supported, then we can only assume that the
+      // change affected the selections
+      changed = true;
+    } else if (mutations.addedNodes && mutations.addedNodes.length > 0) {
+      for (var n = 0; n < mutations.addedNodes.length; n++) {
+        var node = mutations.addedNodes[n];
+
+        if (node.selected) {
+          changed = true;
+        }
+      }
+    } else if (mutations.removedNodes && mutations.removedNodes.length > 0) {
+      changed = true;
+    }
+
+    // Only re-pull the data if we think there is a change
+    if (changed) {
+      this.dataAdapter.current(function (currentData) {
+        self.trigger('selection:update', {
+          data: currentData
+        });
+      });
+    }
+  };
+
   /**
    * Override the trigger method to automatically trigger pre-events when
    * there are events that can be prevented.
@@ -57379,7 +57655,8 @@ S2.define('select2/core',[
       'open': 'opening',
       'close': 'closing',
       'select': 'selecting',
-      'unselect': 'unselecting'
+      'unselect': 'unselecting',
+      'clear': 'clearing'
     };
 
     if (args === undefined) {
@@ -57515,7 +57792,7 @@ S2.define('select2/core',[
     this.$container.remove();
 
     if (this.$element[0].detachEvent) {
-      this.$element[0].detachEvent('onpropertychange', this._sync);
+      this.$element[0].detachEvent('onpropertychange', this._syncA);
     }
 
     if (this._observer != null) {
@@ -57523,16 +57800,23 @@ S2.define('select2/core',[
       this._observer = null;
     } else if (this.$element[0].removeEventListener) {
       this.$element[0]
-        .removeEventListener('DOMAttrModified', this._sync, false);
+        .removeEventListener('DOMAttrModified', this._syncA, false);
+      this.$element[0]
+        .removeEventListener('DOMNodeInserted', this._syncS, false);
+      this.$element[0]
+        .removeEventListener('DOMNodeRemoved', this._syncS, false);
     }
 
-    this._sync = null;
+    this._syncA = null;
+    this._syncS = null;
 
     this.$element.off('.select2');
-    this.$element.attr('tabindex', this.$element.data('old-tabindex'));
+    this.$element.attr('tabindex',
+    Utils.GetData(this.$element[0], 'old-tabindex'));
 
     this.$element.removeClass('select2-hidden-accessible');
     this.$element.attr('aria-hidden', 'false');
+    Utils.RemoveData(this.$element[0]);
     this.$element.removeData('select2');
 
     this.dataAdapter.destroy();
@@ -57560,7 +57844,7 @@ S2.define('select2/core',[
 
     this.$container.addClass('select2-container--' + this.options.get('theme'));
 
-    $container.data('element', this.$element);
+    Utils.StoreData($container[0], 'element', this.$element);
 
     return $container;
   };
@@ -57580,8 +57864,9 @@ S2.define('jquery.select2',[
   'jquery-mousewheel',
 
   './select2/core',
-  './select2/defaults'
-], function ($, _, Select2, Defaults) {
+  './select2/defaults',
+  './select2/utils'
+], function ($, _, Select2, Defaults, Utils) {
   if ($.fn.select2 == null) {
     // All methods that should return the element
     var thisMethods = ['open', 'close', 'destroy'];
@@ -57599,9 +57884,10 @@ S2.define('jquery.select2',[
         return this;
       } else if (typeof options === 'string') {
         var ret;
+        var args = Array.prototype.slice.call(arguments, 1);
 
         this.each(function () {
-          var instance = $(this).data('select2');
+          var instance = Utils.GetData(this, 'select2');
 
           if (instance == null && window.console && console.error) {
             console.error(
@@ -57609,8 +57895,6 @@ S2.define('jquery.select2',[
               'element that is not using Select2.'
             );
           }
-
-          var args = Array.prototype.slice.call(arguments, 1);
 
           ret = instance[options].apply(instance, args);
         });
@@ -59042,7 +59326,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\ndiv.table-wrapper[data-v-bbd64c1e] {\n  border: 1px solid #dedede;\n  border-radius: 3px;\n}\ntable[data-v-bbd64c1e] {\n  width: 100%;\n  cursor: pointer;\n}\ntable > thead > tr[data-v-bbd64c1e] {\n    border: 0;\n    border-bottom: 1px solid #dedede;\n}\ntable > thead > tr > th[data-v-bbd64c1e] {\n      border: 0;\n      padding: 0.75em;\n}\ntable > tbody > tr[data-v-bbd64c1e]:hover {\n    background-color: #f0f0f0;\n}\ntable > tbody > tr > td[data-v-bbd64c1e] {\n    border-bottom: 1px solid rgba(222, 222, 222, 0.25);\n    padding: 0.5em;\n}\ntable > tbody > tr:last-of-type > td[data-v-bbd64c1e] {\n    border-bottom: 0;\n}\n.page-item.active > .page-link[data-v-bbd64c1e] {\n  background-color: #3F729B;\n}\n.page-item.active > .page-link[data-v-bbd64c1e]:hover {\n    color: white;\n}\n", ""]);
+exports.push([module.i, "\ndiv.table-wrapper[data-v-bbd64c1e] {\n  border: 1px solid #dedede;\n  border-radius: 3px;\n}\ntable[data-v-bbd64c1e] {\n  width: 100%;\n  cursor: pointer;\n}\ntable > thead > tr[data-v-bbd64c1e] {\n    border: 0;\n    border-bottom: 1px solid #dedede;\n}\ntable > thead > tr > th[data-v-bbd64c1e] {\n      border: 0;\n      padding: 0.75em;\n}\ntable > tbody > tr[data-v-bbd64c1e]:hover {\n    background-color: #f0f0f0;\n}\ntable > tbody > tr > td[data-v-bbd64c1e] {\n    border-bottom: 1px solid rgba(222, 222, 222, 0.25);\n    padding: 0.5em;\n}\ntable > tbody > tr:last-of-type > td[data-v-bbd64c1e] {\n    border-bottom: 0;\n}\n.page-item.active > .page-link[data-v-bbd64c1e] {\n  background-color: #3F729B;\n}\n.page-item.active > .page-link[data-v-bbd64c1e]:hover {\n    color: white;\n}\ninput.search-input[data-v-bbd64c1e] {\n  width: auto;\n  border: 0;\n  border-bottom: 1px solid #dedede;\n  outline: none;\n  padding-left: 0.5em;\n  padding-bottom: 0.25em;\n  margin-right: 3px;\n}\n", ""]);
 
 // exports
 
@@ -59053,6 +59337,20 @@ exports.push([module.i, "\ndiv.table-wrapper[data-v-bbd64c1e] {\n  border: 1px s
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -59455,7 +59753,7 @@ var render = function() {
               _vm._v(" \n            filas\n        ")
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "offset-4 col-4" }, [
+            _c("div", { staticClass: "offset-4 col-4 text-right" }, [
               _c("input", {
                 directives: [
                   {
@@ -59465,7 +59763,7 @@ var render = function() {
                     expression: "condition"
                   }
                 ],
-                staticClass: "form-control form-control-sm d-inline",
+                staticClass: "search-input",
                 attrs: {
                   type: "text",
                   placeholder: "Búsqueda",
@@ -59480,7 +59778,9 @@ var render = function() {
                     _vm.condition = $event.target.value
                   }
                 }
-              })
+              }),
+              _vm._v(" "),
+              _c("i", { staticClass: "fas fa-search" })
             ])
           ])
         : _vm._e(),
@@ -59596,6 +59896,8 @@ var render = function() {
             _c("div", { staticClass: "row mt-2" }, [
               _vm.rowsquantity !== null
                 ? _c("div", { staticClass: "col-4" }, [
+                    _c("i", { staticClass: "fas fa-search" }),
+                    _vm._v(" "),
                     _c("input", {
                       directives: [
                         {
@@ -59605,10 +59907,10 @@ var render = function() {
                           expression: "condition"
                         }
                       ],
-                      staticClass: "form-control d-inline",
+                      staticClass: "search-input d-inline",
                       attrs: {
                         type: "text",
-                        placeholder: "Buscar",
+                        placeholder: "Búsqueda",
                         disabled: _vm.advancedsearch
                       },
                       domProps: { value: _vm.condition },
@@ -62326,13 +62628,16 @@ var Person = function () {
 
         this.step = 0;
         this.vehicle = null;
-        this.observations = [];
     }
 
     _createClass(Person, [{
         key: "addObservation",
         value: function addObservation(observation) {
-            this.observations.push(observation);
+            observation.collapsed = true;
+            observation.original = observation.text;
+            observation.abbreviated = observation.text.length > 100 ? observation.text.substring(0, 99) + '...' : observation.text;
+            observation.text = observation.abbreviated;
+            this.values.observations.unshift(observation);
         }
     }, {
         key: "selectVehicle",
@@ -62363,7 +62668,7 @@ var Person = function () {
             person: null,
             tab: 0,
 
-            observations_columns: [{ name: 'user', text: 'Usuario', width: '25' }, { name: 'text', text: 'Texto', width: '75' }]
+            observations_columns: [{ name: 'date', text: 'Fecha', width: '15' }, { name: 'user', text: 'Usuario', width: '15' }, { name: 'text', text: 'Texto', width: '60' }]
         };
     },
 
@@ -62442,18 +62747,28 @@ var Person = function () {
             this.people.splice(key, 1);
             this.person = this.people[this.tab];
         },
+        newObservation: function newObservation() {
+            var _this2 = this;
+
+            axios.post("/security/person/" + this.person.values.id + "/new-observation", { text: this.person.textarea }).then(function (response) {
+                _this2.person.textarea = '';
+                _this2.person.addObservation(response.data);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        },
         toggleObservation: function toggleObservation(observation) {
             observation.text = observation.collapsed ? observation.original : observation.abbreviated;
             observation.collapsed = !observation.collapsed;
         },
         toggleVehicleSearch: function toggleVehicleSearch() {
-            var _this2 = this;
+            var _this3 = this;
 
             this.person.vehicles_search = !this.person.vehicles_search;
             this.person.vehicles_search_input = "";
             if (this.person.vehicles_search) {
                 this.$nextTick(function () {
-                    return _this2.$refs.vehicles_search.focus();
+                    return _this3.$refs.vehicles_search.focus();
                 });
             }
         }
@@ -62722,10 +63037,19 @@ var render = function() {
                                     })
                                   : _vm._e(),
                                 _vm._v(" "),
-                                _c("i", {
-                                  staticClass: "fas fa-search cursor-pointer",
-                                  on: { click: _vm.toggleVehicleSearch }
-                                })
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "d-inline cursor-pointer",
+                                    on: { click: _vm.toggleVehicleSearch }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass:
+                                        "fas fa-search cursor-pointer"
+                                    })
+                                  ]
+                                )
                               ]
                             )
                           : _vm._e(),
@@ -62839,6 +63163,7 @@ var render = function() {
                                       }
                                     ],
                                     staticClass: "form-control",
+                                    staticStyle: { resize: "none" },
                                     attrs: {
                                       rows: "4",
                                       placeholder: "Nueva observación"
@@ -62862,7 +63187,8 @@ var render = function() {
                                     "button",
                                     {
                                       staticClass:
-                                        "btn btn-outline-success btn-block mt-1"
+                                        "btn btn-outline-success btn-block mt-1",
+                                      on: { click: _vm.newObservation }
                                     },
                                     [_vm._v("Enviar")]
                                   )
@@ -66831,13 +67157,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
         'ps-personal-information': __webpack_require__(175),
         'ps-working-information': __webpack_require__(180),
         'ps-vehicles': __webpack_require__(185),
-        'ps-documentation': __webpack_require__(190)
+        'ps-documentation': __webpack_require__(190),
+        'ps-observations': __webpack_require__(220)
     },
     data: function data() {
         return {
@@ -66848,7 +67176,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             working_information: {},
             vehicles: [],
             active_card: {},
-            inactive_cards: []
+            inactive_cards: [],
+            observations: []
         };
     },
     beforeMount: function beforeMount() {
@@ -66863,6 +67192,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             _this.vehicles = person_info.vehicles;
             _this.active_card = person_info.active_card;
             _this.inactive_cards = person_info.inactive_cards;
+            _this.observations = person_info.observations;
         }).catch(function (error) {
             console.log(error);
         });
@@ -68085,7 +68415,7 @@ var render = function() {
         _c(
           "tab-item",
           {
-            attrs: { active: _vm.tab === 4, icon: "fas fa-file-alt" },
+            attrs: { active: _vm.tab === 4, icon: "fas fa-eye" },
             nativeOn: {
               click: function($event) {
                 _vm.tab = 4
@@ -68154,6 +68484,18 @@ var render = function() {
                     expression: "tab === 3"
                   }
                 ]
+              }),
+              _vm._v(" "),
+              _c("ps-observations", {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.tab === 4,
+                    expression: "tab === 4"
+                  }
+                ],
+                attrs: { personObservations: _vm.observations }
               })
             ],
             1
@@ -70839,6 +71181,215 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 217 */,
+/* 218 */,
+/* 219 */,
+/* 220 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(222)
+/* template */
+var __vue_template__ = __webpack_require__(221)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/people/show/partials/Observations.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-07a03fab", Component.options)
+  } else {
+    hotAPI.reload("data-v-07a03fab", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 221 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "form-row" }, [
+      _c("div", { staticClass: "col-10" }, [
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.observation,
+              expression: "observation"
+            }
+          ],
+          staticClass: "form-control",
+          staticStyle: { resize: "none" },
+          attrs: { rows: "2", placeholder: "Nueva observación" },
+          domProps: { value: _vm.observation },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.observation = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-2" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-block btn-outline-success",
+            staticStyle: { height: "100%" },
+            on: { click: _vm.newObservation }
+          },
+          [_vm._v("Enviar")]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row mt-3" }, [
+      _c(
+        "div",
+        { staticClass: "col" },
+        [
+          _c("custom-table", {
+            attrs: {
+              columns: _vm.columns,
+              rows: _vm.observations,
+              rowsquantity: 5
+            },
+            on: { rowclicked: _vm.toggleObservation }
+          })
+        ],
+        1
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-07a03fab", module.exports)
+  }
+}
+
+/***/ }),
+/* 222 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        personObservations: {
+            type: Array,
+            required: true
+        }
+    },
+    data: function data() {
+        return {
+            observation: '',
+            observations: this.personObservations,
+            columns: [{ name: 'date', text: 'Fecha', width: '15' }, { name: 'user', text: 'Usuario', width: '15' }, { name: 'text', text: 'Texto', width: '70' }]
+        };
+    },
+    mounted: function mounted() {
+        this.setObservations();
+    },
+
+    watch: {
+        personObservations: function personObservations() {
+            this.observations = this.personObservations;
+            this.setObservations();
+        }
+    },
+    methods: {
+        setObservations: function setObservations() {
+            this.observations.forEach(function (observation) {
+                observation.original = observation.text;
+                observation.collapsed = true;
+                observation.abbreviated = observation.text.length > 100 ? observation.text.substring(0, 99) + '...' : observation.text;
+                observation.text = observation.abbreviated;
+            });
+        },
+        toggleObservation: function toggleObservation(observation) {
+            observation.text = observation.collapsed ? observation.original : observation.abbreviated;
+            observation.collapsed = !observation.collapsed;
+        },
+        newObservation: function newObservation() {
+            var _this = this;
+
+            var person_id = this.$route.params.id;
+            axios.post('/people/' + person_id + '/new-observation', { text: this.observation }).then(function (response) {
+                _this.observation = '';
+                _this.observations.unshift(response.data);
+                console.log(_this.observations);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

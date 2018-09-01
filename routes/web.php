@@ -23,6 +23,7 @@ Route::middleware(['auth','administration'])->group(function() {
     Route::get('/people/updated_at', 'PeopleController@updated_at');
     Route::get('/people/list', 'PeopleController@list');
     Route::get('/people/{person}/pictures', 'PeopleController@pictures');
+    Route::post('/people/{person}/new-observation', 'PeopleController@newObservation');
     Route::resource('/people', 'PeopleController');
     Route::get('/companies/updated_at', 'CompaniesController@updated_at');
     Route::get('/companies/list', 'CompaniesController@list');
@@ -40,3 +41,4 @@ Route::middleware(['auth','administration'])->group(function() {
 
 // Security
 Route::get('/security/person/{card_number}', 'SecurityController@personInfo');
+Route::post('/security/person/{person}/new-observation', 'PeopleController@newObservation');

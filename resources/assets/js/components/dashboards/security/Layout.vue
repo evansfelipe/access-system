@@ -156,7 +156,7 @@ input.vehicles-search {
                             Vehículos
                             <div v-if="person.step === 1 && person.values.vehicles.length" class="d-inline-block float-right">
                                 <input v-if="person.vehicles_search" v-model="person.vehicles_search_input" type="text" placeholder="Búsqueda" class="vehicles-search" ref="vehicles_search">
-                                <i class="fas fa-search cursor-pointer" @click="toggleVehicleSearch"></i>
+                                <div class="d-inline cursor-pointer" @click="toggleVehicleSearch"><i class="fas fa-search cursor-pointer"></i></div>
                             </div>
                             <div v-if="person.step === 1" class="content">
                                 <div v-if="vehicles_filtered.length" class="row">
@@ -180,8 +180,8 @@ input.vehicles-search {
                             <div v-if="person.step === 2" class="content">
                                 <div class="row">
                                     <div class="col-4">
-                                        <textarea class="form-control" rows="4" placeholder="Nueva observación" v-model="person.textarea"></textarea>
-                                        <button class="btn btn-outline-success btn-block mt-1">Enviar</button>
+                                        <textarea class="form-control" rows="4" placeholder="Nueva observación" v-model="person.textarea" style="resize:none"></textarea>
+                                        <button class="btn btn-outline-success btn-block mt-1" @click="newObservation">Enviar</button>
                                     </div>
                                     <div class="col-8">
                                         <custom-table   :columns="observations_columns" :rows="person.values.observations" :rowsquantity="5" 
@@ -233,11 +233,14 @@ class Person {
 
         this.step = 0;
         this.vehicle = null;
-        this.observations = [];
     }
 
     addObservation(observation) {
-        this.observations.push(observation);
+        observation.collapsed = true;
+        observation.original = observation.text;
+        observation.abbreviated = observation.text.length > 100 ? observation.text.substring(0, 99) + '...': observation.text;
+        observation.text = observation.abbreviated;
+        this.values.observations.unshift(observation);
     }
 
     selectVehicle(id) {
@@ -263,8 +266,9 @@ export default {
             tab: 0,
 
             observations_columns: [
-                {name: 'user', text: 'Usuario', width: '25'},
-                {name: 'text', text: 'Texto',   width: '75'}
+                {name: 'date', text: 'Fecha',   width: '15'},
+                {name: 'user', text: 'Usuario', width: '15'},
+                {name: 'text', text: 'Texto',   width: '60'}
             ]
         };
     },
@@ -342,6 +346,14 @@ export default {
             }
             this.people.splice(key, 1);
             this.person = this.people[this.tab];
+        },
+        newObservation: function() {
+            axios.post(`/security/person/${this.person.values.id}/new-observation`, {text: this.person.textarea})
+                .then(response => {
+                    this.person.textarea = '';
+                    this.person.addObservation(response.data);
+                })
+                .catch(error => console.log(error));
         },
         toggleObservation: function(observation) {
             observation.text = observation.collapsed ? observation.original : observation.abbreviated;

@@ -182,6 +182,11 @@ class Person extends Model
         return $this->belongsToMany('\App\Vehicle', 'person_vehicle')->using('\App\PersonVehicle');
     }
 
+    public function observations()
+    {
+        return $this->hasMany('App\Observation')->orderBy('created_at', 'desc');
+    }
+
     /**
      * Creates and returns a string with the last name and the name of this person.
      */
@@ -287,6 +292,7 @@ class Person extends Model
                 'jobs'          => $this->jobs(),
             ],
             'vehicles'          => $this->vehicles->toArray(),
+            'observations'      => $this->observations->toArray()
         ];
     }
 }

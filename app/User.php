@@ -31,4 +31,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function observations()
+    {
+        return $this->hasMany('App\Observation');
+    }
+
 }

@@ -28,7 +28,7 @@
                 Documentación
             </tab-item>
             <!-- Observations tab -->
-            <tab-item :active="tab === 4" @click.native="tab = 4" icon="fas fa-file-alt">
+            <tab-item :active="tab === 4" @click.native="tab = 4" icon="fas fa-eye">
                 Observaciones
             </tab-item>
         </ul>
@@ -42,6 +42,7 @@
                         <ps-working-information v-show="tab === 1" :personCompany="working_information"/>
                         <ps-vehicles v-show="tab === 2" :vehicles="vehicles"/>
                         <ps-documentation v-show="tab === 3"/>
+                        <ps-observations v-show="tab === 4" :personObservations="observations"/>
                     </div>
                     <div class="col-1 text-right">
                         <!-- Edit button -->
@@ -63,6 +64,7 @@
             'ps-working-information': require('./partials/WorkingInformation.vue'),
             'ps-vehicles': require('./partials/Vehicles.vue'),
             'ps-documentation': require('./partials/Documentation.vue'),
+            'ps-observations': require('./partials/Observations.vue'),
         },
         data: function() {
             return {
@@ -73,7 +75,8 @@
                 working_information: {},
                 vehicles: [],
                 active_card: {},
-                inactive_cards: []
+                inactive_cards: [],
+                observations: []
             };
         },
         beforeMount() {
@@ -87,6 +90,7 @@
                 this.vehicles = person_info.vehicles;
                 this.active_card = person_info.active_card;
                 this.inactive_cards = person_info.inactive_cards;
+                this.observations = person_info.observations;
             })
             .catch(error => {
                 console.log(error);

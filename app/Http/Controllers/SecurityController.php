@@ -26,6 +26,7 @@ class SecurityController extends Controller
 
         
         $response = [
+            'id'                => $person->id,
             'full_name'         => $person->fullName(),
             'risk'              => 'Nivel ' . $person->risk,
             'document_type'     => $person->documentTypeToString(),
@@ -36,16 +37,7 @@ class SecurityController extends Controller
             'activity'          => $card->job->activity->name,
             'subactivities'     => json_decode($card->job->subactivities),
             'vehicles'          => $vehicles,
-            'observations'      => [
-                [
-                    'user' => "Gabriel",
-                    'text' => "Observación de prueba"
-                ],
-                [
-                    'user' => "Bruno",
-                    'text' => "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Harum placeat qui repellat, nostrum repudiandae perspiciatis enim voluptatibus unde et exercitationem quis hic. Possimus dicta eos earum, iste voluptatum cupiditate error!"
-                ],
-            ]
+            'observations'      => $person->observations->toArray()
         ];
 
         return response(json_encode($response))->header('Content-Type', 'application/json');
