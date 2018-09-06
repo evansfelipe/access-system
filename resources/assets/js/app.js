@@ -37,6 +37,7 @@ Vue.component('residency-input'   , require('./components/_common/ResidencyInput
 Vue.component('modal-wrapper'     , require('./components/_common/partials/Modal.vue'));
 Vue.component('creation-wrapper'  , require('./components/_common/CreationWrapper.vue'));
 Vue.component('abbreviation-text' , require('./components/_common/AbbreviationText.vue'));
+Vue.component('hr-label' ,          require('./components/_common/HrLabel.vue'));
 Vue.component('confirmable-button', require('./components/_common/ConfirmableButton.vue'));
 // Dashboards
 Vue.component('administration-dashboard', require('./components/dashboards/administration/Layout.vue'));
@@ -45,15 +46,17 @@ Vue.component('security-dashboard', require('./components/dashboards/security/La
 const router = new VueRouter({
     routes: [
         // People
-        { path: '/people',          component: require('./components/people/index/Layout.vue')  },
-        { path: '/people/create',   component: require('./components/people/create/Layout.vue') },
-        { path: '/people/show/:id', component: require('./components/people/show/Layout.vue')   },
+        { path: '/people',              component: require('./components/people/index/Layout.vue')  },
+        { path: '/people/create',       component: require('./components/people/create/Layout.vue') },
+        { path: '/people/show/:id',     component: require('./components/people/show/Layout.vue')   },
         // Companies
-        { path: '/companies', component: require('./components/companies/index/Layout.vue') },
-        { path: '/companies/create', component: require('./components/companies/create/Layout.vue') },
+        { path: '/companies',           component: require('./components/companies/index/Layout.vue') },
+        { path: '/companies/create',    component: require('./components/companies/create/Layout.vue') },
+        { path: '/companies/show/:id',  component: require('./components/companies/show/Layout.vue') },
         // Vehicles
-        { path: '/vehicles',        component: require('./components/vehicles/index/Layout.vue') },
-        { path: '/vehicles/create', component: require('./components/vehicles/create/Layout.vue') },
+        { path: '/vehicles',            component: require('./components/vehicles/index/Layout.vue') },
+        { path: '/vehicles/create',     component: require('./components/vehicles/create/Layout.vue') },
+        { path: '/vehicles/show/:id',   component: require('./components/vehicles/show/Layout.vue') },
         // Extra
         { path: '/bar', component: { template: '<div>Test route</div>' } },
     ]

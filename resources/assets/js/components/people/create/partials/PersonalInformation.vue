@@ -101,7 +101,7 @@
                 <input type="text" name="mobile_phone" class="form-control" :value="values.mobile_phone" @input="(e) => update(e.target)">
             </div>            
         </form-item>
-        <form-item col="col-4" label="FAX" :errors="errors.fax">
+        <form-item col="col-4" label="Fax" :errors="errors.fax">
             <div class="col">
                 <input type="text" name="fax" class="form-control" :value="values.fax" @input="(e) => update(e.target)">
             </div>

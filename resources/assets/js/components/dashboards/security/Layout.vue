@@ -116,7 +116,7 @@ input.vehicles-search {
                     <ul class="steps-vertical">
                         <li :class="person.step === 0 ? 'active' : (person.step > 0 ? 'completed' : '')">
                             Reconocimiento
-                            <div v-if="person.step === 0" class="content">
+                            <div class="content">
                                 <h3 class="text-center">{{ person.values.full_name }}</h3>
                                 <div class="row d-flex align-items-center justify-content-center">
                                     <div class="col-3">
@@ -154,7 +154,7 @@ input.vehicles-search {
                         </li>
                         <li :class="person.step === 1 ? 'active' : (person.step > 1 ? 'completed' : '')">
                             Vehículos
-                            <div v-if="person.step === 1 && person.values.vehicles.length" class="d-inline-block float-right">
+                            <div class="d-inline-block float-right">
                                 <input v-if="person.vehicles_search" v-model="person.vehicles_search_input" type="text" placeholder="Búsqueda" class="vehicles-search" ref="vehicles_search">
                                 <div class="d-inline cursor-pointer" @click="toggleVehicleSearch"><i class="fas fa-search cursor-pointer"></i></div>
                             </div>
@@ -177,7 +177,7 @@ input.vehicles-search {
                         </li>
                         <li :class="person.step === 2 ? 'active' : (person.step > 2 ? 'completed' : '')">
                             Observaciones
-                            <div v-if="person.step === 2" class="content">
+                            <div class="content">
                                 <div class="row">
                                     <div class="col-4">
                                         <textarea class="form-control" rows="4" placeholder="Nueva observación" v-model="person.textarea" style="resize:none"></textarea>

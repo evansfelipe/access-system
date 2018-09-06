@@ -258,8 +258,9 @@ class Person extends Model
 
     public function getStorageFolder($public = false)
     {
-        $root = $public ? 'public/' : ' storage/';
-        return $root . 'documentation/'.$this->last_name[0].'/'.$this->id.'_'.$this->last_name.'_'.$this->name.'/';
+        $root = $public ? 'public/' : 'storage/';
+        $mod = $this->id % 10;
+        return $root . 'documentation/'.$mod.'/'.$this->id.'/';
     }
 
     public function getCurrentPicturePath($public = false)
@@ -267,7 +268,7 @@ class Person extends Model
         return $this->getStorageFolder($public) . 'pictures/'.$this->picture_name;
     }
 
-    public function toArray() 
+    public function toShowArray() 
     {
         return [
             'personal_information'  => array_merge(

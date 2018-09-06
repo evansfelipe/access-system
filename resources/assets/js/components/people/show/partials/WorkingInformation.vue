@@ -39,7 +39,7 @@
                                 <td class="font-weight-bold">{{ job.company_cuit }}</td>
                             </tr>
                         </table>
-                        <a href="https://google.com"><small>Más información de la empresa</small></a>
+                        <small class="text-link" @click="$router.push(`/companies/show/${job.company_id}`)">Más información de la empresa</small>
                         <hr>
                     </template>
                     <!-- ART -->

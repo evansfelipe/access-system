@@ -10591,7 +10591,10 @@ input.form-control {
 }
 
 .btn-circle {
+  margin-bottom: 0.5em;
   border-radius: 100%;
+  height: 3em;
+  width: 3em;
 }
 
 .btn-unique {
@@ -10614,6 +10617,11 @@ input.form-control {
   border-color: #3F729B;
   color: #3F729B;
   background-color: transparent;
+}
+
+.text-link:hover {
+  color: #3F729B;
+  cursor: pointer;
 }
 
 span.select2.select2-container.select2-container--bootstrap.select2-container--below.select2-container--focus,

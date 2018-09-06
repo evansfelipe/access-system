@@ -1,12 +1,3 @@
-<style lang="scss" scoped>
-    .btn-circle {
-        margin-bottom: 0.5em;
-        border-radius: 100%;
-        height: 3em;
-        width: 3em;
-    }
-</style>
-
 <template>
     <div>
         <!-- Tabs -->

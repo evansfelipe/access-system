@@ -80,17 +80,52 @@ class Company extends Model
         return json_decode($this->contact);
     }
 
+    public function contactToArray()
+    {
+        $contact = $this->contactToObject();
+        return [
+            'phone' => $contact->phone,
+            'email' => $contact->email,
+            'web'   => $contact->web    ?? '-',
+            'fax'   => $contact->fax    ?? '-',
+        ];
+    }
+
     /**
      * Gets each person associated with this company.
      */
     public function people()
     {
-        return $this->belongsToMany('App\Person', 'company_people')->using('App\PersonCompany')->withPivot('activity_id','art','pbip');
+        return $this->belongsToMany('App\Person', 'company_people')->using('App\PersonCompany');
     }
 
     public function vehicles()
     {
         return $this->hasMany('App\Vehicle');
+    }
+
+    public function residency()
+    {
+        return $this->belongsTo('App\Residency');
+    }
+
+    public function toShowArray()
+    {
+        return [
+            'general_information'   => 
+                array_merge([
+                    'id'            => $this->id,
+                    'business_name' => $this->business_name,
+                    'name'          => $this->name,
+                    'area'          => $this->area,
+                    'cuit'          => $this->cuit,
+                    'expiration'    => $this->expiration,
+                ],
+                $this->residency->toArray(),
+                $this->contactToArray()),
+            'assigned_people'       => $this->people()->select('people.id','last_name','name','cuil')->get(),
+            'assigned_vehicles'     => $this->vehicles
+        ];
     }
 
 }

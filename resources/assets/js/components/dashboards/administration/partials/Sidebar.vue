@@ -126,10 +126,10 @@ export default {
     data() {
         return {
             group_active: {
-                people: true,
-                companies: true,
-                vehicles: true,
-                expiration: true,
+                people: false,
+                companies: false,
+                vehicles: false,
+                expiration: false,
             }
         };
     }

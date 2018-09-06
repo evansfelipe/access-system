@@ -132,7 +132,7 @@
             </div>
         </template>
         <!-- No data situation -->
-        <h3 v-else class="text-center mt-5 mb-5">No se encontraron coincidencias</h3>
+        <h3 v-else class="text-center mt-5 mb-5">No se encontraron resultados</h3>
         
     </div>
 </template>

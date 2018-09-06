@@ -47,7 +47,7 @@
         </div>
         <!-- Mail & web -->
         <div class="row">
-            <form-item col="col-6" label="Mail" :errors="errors.email">
+            <form-item col="col-6" label="Email" :errors="errors.email">
                 <div class="col">
                     <input type="email" name="email" class="form-control" :value="values.email" @input="(e) => update(e.target)">
                 </div>

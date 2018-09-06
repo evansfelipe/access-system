@@ -80,7 +80,7 @@
                         <strong>{{ person.mobile_phone }}</strong>
                     </div>
                     <div class="col-4">
-                        <small>FAX</small>
+                        <small>Fax</small>
                         <strong>{{ person.fax }}</strong>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                 <div class="row">
                     <div class="col-4">
                         <small>Dirección</small>
-                        <strong>{{ person.address }}</strong>
+                        <strong>{{ person.street }}</strong>
                     </div>
                     <div class="col-4">
                         <small>Departmaneto</small>
