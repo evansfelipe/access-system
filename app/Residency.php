@@ -94,7 +94,7 @@ class Residency extends Model
     public function toArray()
     {
         return [
-            'address'   => $this->street       ?? '-',
+            'street'    => $this->street       ?? '-',
             'apartment' => $this->apartment    ?? '-',
             'cp'        => $this->cp           ?? '-',
             'city'      => $this->city         ?? '-',

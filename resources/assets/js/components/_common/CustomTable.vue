@@ -87,7 +87,7 @@
             </div>
             <!-- Pagination -->
             <div class="row mt-2">
-                <div v-if="rowsquantity !== null" class="col-4 text-right">
+                <div v-if="rowsquantity !== null" class="col-4">
                     <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" :disabled="advancedsearch">
                 </div>
                 <div :class="`col-${rowsquantity !== null? '8' : '12'}`">
@@ -118,7 +118,7 @@
             </div>
         </template>
         <!-- No data situation -->
-        <h3 v-else class="text-center mt-5 mb-5">No se encontraron coincidencias</h3>
+        <h3 v-else class="text-center mt-5 mb-5">No se encontraron resultados</h3>
         
     </div>
 </template>

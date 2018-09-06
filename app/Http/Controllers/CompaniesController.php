@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use View;
 use Illuminate\Http\Request;
-
 use App\Http\Requests\SaveCompanyRequest;
-
-use App\{Company, Residency};
 
 use App\Http\Traits\{ SaveResidencyTrait };
 
+use App\{Company, Residency};
 
 class CompaniesController extends Controller
 {
@@ -23,28 +21,8 @@ class CompaniesController extends Controller
 
     public function list()
     {
-        return  response(json_encode(Company::all(['id','business_name','name','area','cuit'])))
-                ->header('Content-Type', 'application/json');        
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return View::make('companies.create')->render();
+        $companies = Company::select('id','business_name','name','area','cuit')->orderBy('created_at','desc')->get();
+        return  response(json_encode($companies))->header('Content-Type', 'application/json');        
     }
 
     /**
@@ -77,9 +55,10 @@ class CompaniesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Company $company)
     {
-        //
+        return response(json_encode($company->toShowArray()), 200)->header('Content-Type', 'application/json');
+        
     }
 
     /**

@@ -12,12 +12,13 @@ class VehiclesController extends Controller
 
     public function updated_at()
     {
-        return Vehicle::select(['updated_at'])->orderBy('updated_at','desc')->first();        
+        $vehicle = Vehicle::select(['updated_at'])->orderBy('updated_at','desc')->first();
+        return $vehicle? $vehicle->updated_at : null;        
     }
 
     public function list()
     {
-        $vehicles = Vehicle::select(['id','plate','brand','model','year','colour','company_id'])->with('company:id,name')->get()->map(function($vehicle) {
+        $vehicles = Vehicle::select(['id','plate','brand','model','year','colour','company_id'])->orderBy('created_at','desc')->with('company:id,name')->get()->map(function($vehicle) {
             $vehicle->company_name = $vehicle->company->name;
             unset($vehicle->company);
             return $vehicle;
@@ -74,7 +75,7 @@ class VehiclesController extends Controller
      */
     public function show(Vehicle $vehicle)
     {
-        //
+        return response(json_encode($vehicle->toShowArray()), 200)->header('Content-Type', 'application/json');        
     }
 
     /**

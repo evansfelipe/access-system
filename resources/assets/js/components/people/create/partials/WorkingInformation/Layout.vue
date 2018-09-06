@@ -49,10 +49,7 @@
                             />
                         </div>
                         <div class="col-12">
-                            <span style="position: absolute; left: 1em; top: 4px; background-color: white;" class="px-1">
-                                Tarjeta{{ job.cards.length > 1 ? 's' : '' }}
-                            </span>
-                            <hr>
+                            <hr-label>Tarjeta{{ job.cards.length > 1 ? 's' : '' }}</hr-label>
                         </div>
                         <div class="col-12">
                             <!-- Card number, Card from & Card until -->

@@ -37,8 +37,7 @@
 
         <div class="form-row">
             <div class="col-12">
-                <span style="position: absolute; left: 1em; top: 4px; background-color: white;" class="px-1">ART</span>
-                <hr>
+                <hr-label>ART</hr-label>
             </div>
             <!-- ART Company -->
             <form-item  label="Aseguradora" col="col-6" :errors="errors['art_company'] || []">

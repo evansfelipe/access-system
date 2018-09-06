@@ -87,7 +87,7 @@
                     <ul class="steps-vertical">
                         <li :class="person.step === 0 ? 'active' : (person.step > 0 ? 'completed' : '')">
                             Reconocimiento
-                            <div v-if="person.step === 0" class="content">
+                            <div class="content">
                                 <h3 class="text-center">{{ person.values.full_name }}</h3>
                                 <div class="row d-flex align-items-center justify-content-center">
                                     <div class="col-3">
@@ -140,7 +140,7 @@
                         </li>
                         <li :class="person.step === 2 ? 'active' : (person.step > 2 ? 'completed' : '')">
                             Observaciones
-                            <div v-if="person.step === 2" class="content">
+                            <div class="content">
                                 <div class="row">
                                     <div class="col-4">
                                         <textarea class="form-control" rows="4" placeholder="Nueva observación" v-model="person.textarea" style="resize:none"></textarea>

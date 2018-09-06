@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Traits\Helpers;
 
 class Vehicle extends Model
 {
@@ -90,5 +91,34 @@ class Vehicle extends Model
     public function company()
     {
         return $this->belongsTo('App\Company');
+    }
+
+    public function toShowArray()
+    {
+        return [
+            'id'                => $this->id,
+            'company'           => [
+                'id'    => $this->company->id,
+                'name'  => $this->company->name
+            ],
+            'plate'             => $this->plate,
+            'owner'             => $this->owner,
+            'type'              => $this->type,
+            'brand'             => $this->brand,
+            'model'             => $this->model,
+            'year'              => $this->year,
+            'colour'            => $this->colour,
+            'insurance'         => Helpers::timestampToDate($this->insurance),
+            'vtv'               => Helpers::timestampToDate($this->vtv),
+            'assigned_people'   => $this->people()->select('people.id','last_name','name','cuil')->get()
+                                        ->map(function($person) {
+                                            return [
+                                                'id'            => $person->id,
+                                                'full_name'     => $person->fullName(),
+                                                'cuil'          => $person->cuil,
+                                                'company_name'  => $person->companies()->select('name')->get()->implode('name', ' / ')
+                                            ];
+                                        })
+        ];
     }
 }

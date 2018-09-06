@@ -51,7 +51,7 @@ class PeopleController extends Controller
      */
     public function pictures(Person $person)
     {
-        $path = 'storage/documentation/'.$person->last_name[0].'/'.$person->id.'_'.$person->last_name.'_'.$person->name.'/pictures';
+        $path = $person->getStorageFolder().'pictures';
         $pictures = [];
         foreach(scandir($path, 1) as $file) {
             if($file !== '.' && $file !== '..') {
@@ -143,7 +143,7 @@ class PeopleController extends Controller
      */
     public function show(Person $person)
     {
-        return response($person->toJson(), 200)->header('Content-Type', 'application/json');
+        return response(json_encode($person->toShowArray()), 200)->header('Content-Type', 'application/json');
     }
 
     /**
