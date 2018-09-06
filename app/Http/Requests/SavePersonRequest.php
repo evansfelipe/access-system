@@ -1,7 +1,10 @@
 <?php namespace App\Http\Requests;
 use Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use App\{ User, Person, Residency, PersonCompany, PersonVehicle, Card };
+
+use ArrayObject;
 
 class SavePersonRequest extends FormRequest
 {
@@ -53,16 +56,36 @@ class SavePersonRequest extends FormRequest
             }
         }
 
+        $card_numbers = [];
+        foreach($this->jobs as $job) {
+            foreach($job['cards'] as $card) {
+                array_push($card_numbers, $card['number']);
+            }
+        }
+
         foreach ($this->jobs as $jk => $job) {
             foreach ($job['cards'] as $ck => $card) {
                 $working_information_rules['jobs.'.$jk.'.cards.'.$ck.'.until'] = array_merge(
                     $working_information_rules['jobs.*.cards.*.until'],
                     ['after_or_equal:'.'jobs.'.$jk.'.cards.'.$ck.'.from']
                 );
+
+                $card_numbers_copy = $card_numbers;
+                if(($key = array_search($card['number'], $card_numbers_copy)) !== false) {
+                    unset($card_numbers_copy[$key]);
+                }
+
+                $working_information_rules['jobs.'.$jk.'.cards.'.$ck.'.number'] = array_merge(
+                    $working_information_rules['jobs.*.cards.*.number'],
+                    ['not_in:'.implode(',', $card_numbers_copy)]
+                );
             }
         }
 
-        unset($working_information_rules['jobs.*.cards.*.until']);
+        unset(
+            $working_information_rules['jobs.*.cards.*.until'], 
+            $working_information_rules['jobs.*.cards.*.number']
+        );
 
         $rules = array_merge(
             $person_rules, 
@@ -86,6 +109,10 @@ class SavePersonRequest extends FormRequest
             'jobs.*.cards.*.until.date'             => 'El campo Valido hasta debe ser una fecha.',
             'jobs.*.cards.*.until.regex'            => 'El campo Valido hasta tiene un formato no valido.',
             'jobs.*.cards.*.until.after_or_equal'   => 'El campo Valido hasta debe ser posterior al campo Valido desde.',
+            'jobs.*.cards.*.number.unique'          => 'El valor del campo Número de tarjeta ya está en uso dentro del sistema.',
+            'jobs.*.cards.*.number.not_in'          => 'Número de tarjeta repetido en este formulario.',
+            'jobs.*.cards.*.number.required'        => 'El campo Número de tarjeta es obligatorio.',
+            'jobs.*.cards.*.number.string'          => 'El campo Número de tarjeta debe ser una cadena de caracteres.',
         ];
     }
 }

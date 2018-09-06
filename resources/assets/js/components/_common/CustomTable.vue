@@ -34,16 +34,6 @@
         background-color: #3F729B;
         &:hover { color: white }
     }
-
-    input.search-input {
-        width: auto;
-        border: 0;
-        border-bottom: 1px solid rgb(222,222,222);
-        outline: none;
-        padding-left: 0.5em;
-        padding-bottom: 0.25em;
-        margin-right: 3px;
-    }
 </style>
 
 <template>
@@ -60,9 +50,7 @@
                 filas
             </div>
             <div class="offset-4 col-4 text-right">
-                <input v-model="condition" type="text" class="search-input" placeholder="Búsqueda" :disabled="advancedsearch">
-                <i class="fas fa-search"></i>
-                <!-- <input type="text" class="form-control form-control-sm d-inline" placeholder="Búsqueda" v-model="condition" :disabled="advancedsearch"> -->
+                <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" :disabled="advancedsearch">
             </div>
         </div>
         <template v-if="shown_rows.length > 0">
@@ -99,10 +87,8 @@
             </div>
             <!-- Pagination -->
             <div class="row mt-2">
-                <div v-if="rowsquantity !== null" class="col-4">
-                    <i class="fas fa-search"></i>
-                    <input v-model="condition" type="text" class="search-input d-inline" placeholder="Búsqueda" :disabled="advancedsearch">
-                    <!-- <input type="text" class="form-control d-inline" placeholder="Buscar" v-model="condition" :disabled="advancedsearch"> -->
+                <div v-if="rowsquantity !== null" class="col-4 text-right">
+                    <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" :disabled="advancedsearch">
                 </div>
                 <div :class="`col-${rowsquantity !== null? '8' : '12'}`">
                     <ul class="pagination justify-content-end" style="margin-bottom: 0px">

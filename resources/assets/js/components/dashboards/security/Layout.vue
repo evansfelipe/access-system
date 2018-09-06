@@ -1,107 +1,78 @@
 <style lang="scss" scoped>
-ul.steps-vertical {
-  list-style-type: none;
-  counter-reset: steps;
-  margin: 0;
-  padding: 0;
-  & > li {
-    padding: 0 0 20px 50px;
-    position: relative;
-    margin: 0;
-
-    & > div.content {
-        margin-top: .8em;
-        border: 1px solid rgb(222,222,222);
-        padding: 1em;
-        border-radius: 5px;
-    }
-  }
-}
-
-ul.steps-vertical li.completed:after {
-  background-color: #00695c;
-}
-
-ul.steps-vertical li.active:after {
-    background-color: #3F729B;
-}
-
-ul.steps-vertical li:after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    content: counter(steps);
-    counter-increment: steps;
-    background-color: #9e9e9e;
-    border-radius: 50%;
-    display: inline-block;
-    height: 1.5em;
-    width: 1.5em;
-    text-align: center;
-    color: white;
-    font-weight: bold;
-    outline: 5px solid white;
-}
-ul.steps-vertical li:before {
-  position: absolute;
-  left: 0.75em;
-  top: 0;
-  content: "";
-  height: 100%;
-  width: 0;
-  border-left: 1px solid rgb(202, 202, 202);
-}
-ul.steps-vertical li:last-of-type:before {
-  border: none;
-}
-
-td.small {
-    padding-right: 0.5em;
-    font-size: 75%;
-}
-
-td.strong {
-    font-weight: bold;
-}
-
-div.vehicle-card {
-    background-color: whitesmoke;
-    border: 1px solid rgb(215, 215, 215);
-    border-radius: 4px;
-    padding: 1em;
-    padding-left: 1.5em;
-    cursor: pointer;
-    & > h6 {
-        font-weight: normal;
-    }
-    &:hover {
-        background-color: rgb(230, 230, 230);
-    }
-    &.selected {
-        & > h6 {
-            font-weight: bold;
-        }
-        background-color: #4285F4;
-        border-color: rgb(61, 123, 223);
-        color: white;
-        &:hover {
-            background-color: rgb(61, 123, 223);
+    ul.steps-vertical {
+        // Removes ul style.
+        list-style-type: none;
+        margin: 0; padding: 0;
+        // Number of items counter.
+        counter-reset: steps;
+        // Style for each li.
+        & > li {
+            position: relative;
+            padding: 0 0 20px 50px;
+            margin: 0;
+            // Circle with the number of the li inside the ul.
+            &:after {
+                // Position & Display
+                position: absolute;
+                top: 0; left: 0;
+                display: inline-block;
+                // Item number.
+                content: counter(steps);
+                counter-increment: steps;
+                // Fixed size and border radius to make a perfect circle.
+                height: 1.5em; width: 1.5em;
+                border-radius: 50%;
+                // Font style.
+                color: white;
+                text-align: center;
+                font-weight: bold;
+                // Item style.
+                background-color: #9e9e9e;
+                outline: 5px solid white;
+            }
+            // Changes the color of the circle when the item is active or completed.
+            &.active:after { background-color: #3F729B }
+            &.completed:after { background-color: #00695c }
+            // Line within two consecutive circles.
+            &:before {
+                position: absolute;
+                left: 0.75em;
+                top: 0;
+                content: "";
+                height: 100%;
+                width: 0;
+                border-left: 1px solid rgb(202, 202, 202);
+            }
+            &:last-of-type:before { border: none }
+            // Style for the content of a item.
+            & > div.content {
+                margin-top: .8em;
+                border: 1px solid rgb(222,222,222);
+                padding: 1em;
+                border-radius: 5px;
+            }
         }
     }
-}
 
-input.vehicles-search {
-    height: 20px;
-    border: 0;
-    border-bottom: 1px solid rgb(222,222,222);
-    outline: none;
-    margin-right: 3px;
-}
+    td.small {
+        padding-right: 0.5em;
+        font-size: 75%;
+    }
+
+    td.strong {
+        font-weight: bold;
+    }
 
 </style>
 
 <template>
     <div class="container">
+
+        <div v-if="disconnected" class="alert alert-danger">
+            Se ha perdido la conexión con el servidor. {{ this.connecting_attempts }}º intento de reconección. <i class="fas fa-spinner fa-spin fa-lg centered"></i>
+            <button class="btn btn-link" @click="forceReconnectionMQTT">Reconectar manualmente</button>
+        </div>
+
         <loading-cover v-if="connecting" message="Cargando..."/>
         <ul class="nav nav-tabs">
             <tab-item v-for="(p,key) in people" :key="key" :active="tab === key" @click.native="changeTab(key)">
@@ -154,26 +125,18 @@ input.vehicles-search {
                         </li>
                         <li :class="person.step === 1 ? 'active' : (person.step > 1 ? 'completed' : '')">
                             Vehículos
-                            <div v-if="person.step === 1 && person.values.vehicles.length" class="d-inline-block float-right">
-                                <input v-if="person.vehicles_search" v-model="person.vehicles_search_input" type="text" placeholder="Búsqueda" class="vehicles-search" ref="vehicles_search">
-                                <div class="d-inline cursor-pointer" @click="toggleVehicleSearch"><i class="fas fa-search cursor-pointer"></i></div>
-                            </div>
-                            <div v-if="person.step === 1" class="content">
-                                <div v-if="vehicles_filtered.length" class="row">
-                                    <div v-for="(vehicle, key) in vehicles_filtered" :key="key" class="col-3">
-                                        <div :class="`vehicle-card ${vehicle.id === person.vehicle ? 'selected' : ''}`" @click="person.selectVehicle(vehicle.id)">
-                                            <i v-if="vehicle.id === person.vehicle" class="fas fa-check-circle float-right"></i>
-                                            <i v-else class="far fa-circle float-right"></i>
-                                            <h6>{{ vehicle.type }}</h6>
-                                            <h6>{{ vehicle.plate }}</h6>
-                                            <h6>{{ vehicle.brand + ', ' + vehicle.model }}</h6>
-                                            <h6>{{ vehicle.year }}</h6>
-                                            <h6>{{ vehicle.colour }}</h6>
-                                        </div>
-                                    </div>
+                            <template v-if="person.step === 1">
+                                <div class="d-inline-block float-right">
+                                    <input v-if="person.vehicles_search" v-model="person.vehicles_search_input" type="text" placeholder="Búsqueda" class="md-input" ref="vehicles_search">
+                                    <div class="d-inline cursor-pointer" @click="toggleVehicleSearch"><i class="fas fa-search cursor-pointer"></i></div>
                                 </div>
-                                <h4 v-else class="text-center">No hay nada para mostrar</h4>
-                            </div>
+                                <div class="content">
+                                    <p-vehicles :vehicles="person.values.vehicles" 
+                                                :filter="person.vehicles_search_input"
+                                                @selection="id => person.selectVehicle(id)"
+                                    />
+                                </div>
+                            </template>
                         </li>
                         <li :class="person.step === 2 ? 'active' : (person.step > 2 ? 'completed' : '')">
                             Observaciones
@@ -257,9 +220,14 @@ class Person {
 }
 
 export default {
+    components: {
+        'p-vehicles': require('./partials/Vehicles')
+    },
     data() {
         return {
-            connecting: false,
+            connecting: true,
+            connecting_attempts: 0,
+            disconnected: true,
             client: null,
             people: [],
             person: null,
@@ -272,67 +240,72 @@ export default {
             ]
         };
     },
-    computed: {
-        vehicles_filtered: function() {
-            let search = this.person.vehicles_search_input;
-            return this.person.values.vehicles.filter(({plate, brand, model, type, colour, year}) => {
-                return  plate.matches(search) || brand.matches(search) || model.matches(search) ||
-                        type.matches(search) || colour.matches(search) || year.toString().matches(search);
-            });
-        }
-    },
     mounted() {
-        this.create();
+        this.connectMQTT();
     },
     methods: {
-        create: function() {
-            this.client = new Messaging.Client(
-                "mqtt.fi.mdp.edu.ar",
-                9001,
-                "myclientid_" + parseInt(Math.random() * 100, 10)
-            );
-            this.client.onConnectionLost = (response) => {};
+        createMQTT: function() {
+            if(this.client === null) {
+                this.client = new Messaging.Client(
+                    "mqtt.fi.mdp.edu.ar",
+                    9001,
+                    "myclientid_" + parseInt(Math.random() * 100, 10)
+                );
 
+                this.client.onConnectionLost = (response) => {
+                    this.disconnected = true;
+                    this.connectMQTT();
+                };
 
-            this.client.onMessageArrived = (message) => {
-                // Parses the JSON message.
-                let object = JSON.parse(message.payloadString);
-                // Checks if the message has the correct format.
-                if(object.hasOwnProperty('card_number') && object.card_number) {
-                    // Gets the data associated with the card number.
-                    axios.get('security/person/' + object.card_number)
-                    .then(response => {
-                        console.log(response.data);
-                        
-                        let person = new Person(response.data);
-                        this.person = person;
-                        this.people.push(person);
+                this.client.onMessageArrived = (message) => {
+                    // Parses the JSON message.
+                    let object = JSON.parse(message.payloadString);
+                    // Checks if the message has the correct format.
+                    if(object.hasOwnProperty('card_number') && object.card_number) {
+                        // Gets the data associated with the card number.
+                        axios.get('security/person/' + object.card_number)
+                        .then(response => {
+                            console.log(response.data);
+                            
+                            let person = new Person(response.data);
+                            this.person = person;
+                            this.people.push(person);
 
-                        this.tab = this.people.length - 1;
+                            this.tab = this.people.length - 1;
 
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-                }
-            };
-
-            this.connecting = true;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                    }
+                };
+            }
+        },
+        connectMQTT: function() {
+            this.createMQTT();
 
             this.client.connect({
                 timeout: 3,
-                //Gets Called if the connection has sucessfully been established
                 onSuccess: () => {
                     this.client.subscribe('testtopic/Usuario', {qos: 2});
+                    this.disconnected = false;
                     this.connecting = false;
+                    this.connecting_attempts = 0;
                 },
-                //Gets Called if the connection could not be established
                 onFailure: (message) => {
+                    this.disconnected = true;
                     this.connecting = false;
+                    this.connecting_attempts++;
+                    setTimeout(() => {
+                        this.connectMQTT()
+                    }, 60000);
                 }
             });
         },
-
+        forceReconnectionMQTT: function() {
+            this.client = null;
+            this.connectMQTT();
+        },
         changeTab: function(key) {
             this.tab = key;
             this.person = this.people[key];

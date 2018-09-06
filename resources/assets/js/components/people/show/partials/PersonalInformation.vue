@@ -10,7 +10,9 @@
                 <div class="offset-1 col-10">
                     <img class="img-fluid rounded-circle shadow-sm" :src="person.picture_path">
                     <br>
-                    <button class="btn mt-2 btn-sm btn-outline-info" @click="showPictures">Ver más</button>
+                    <button class="btn btn-link mt-2" @click="showPictures">
+                        <i class="fas fa-images"></i> Ver más
+                    </button>
                 </div>
             </div>
             <div class="col-md-8">
@@ -91,7 +93,7 @@
                         <strong>{{ person.address }}</strong>
                     </div>
                     <div class="col-4">
-                        <small>Departmaneto</small>
+                        <small>Departamento</small>
                         <strong>{{ person.apartment }}</strong>
                     </div>
                     <div class="col-4">
@@ -117,21 +119,9 @@
             </div>
         </div>
         <!-- Pictures panel -->
-        <modal-wrapper :visible="pictures.opened" @closed="pictures.opened = false">
+        <modal-wrapper :visible="pictures.opened" @closed="pictures.opened = false" :title="`Imágenes de ${person.full_name}`">
             <loading-cover v-if="pictures.loading" message="Cargando..."/>
-            <div id="pictures-carousel" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <div v-for="(picture, key) in pictures.list" :key="key" :class="`carousel-item ${key === 0 ? 'active' : ''}`">
-                        <img class="d-block w-100" :src="picture">
-                    </div>
-                </div>
-                <a class="carousel-control-prev" href="#pictures-carousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                </a>
-                <a class="carousel-control-next" href="#pictures-carousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                </a>
-            </div>
+            <pictures-gallery :links="pictures.list"/>
         </modal-wrapper>
     </div>
 </template>

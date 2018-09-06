@@ -38,6 +38,7 @@ Vue.component('modal-wrapper'     , require('./components/_common/partials/Modal
 Vue.component('creation-wrapper'  , require('./components/_common/CreationWrapper.vue'));
 Vue.component('abbreviation-text' , require('./components/_common/AbbreviationText.vue'));
 Vue.component('confirmable-button', require('./components/_common/ConfirmableButton.vue'));
+Vue.component('pictures-gallery', require('./components/_common/PicturesGallery.vue'));
 // Dashboards
 Vue.component('administration-dashboard', require('./components/dashboards/administration/Layout.vue'));
 Vue.component('security-dashboard', require('./components/dashboards/security/Layout.vue'));
@@ -63,7 +64,7 @@ Vue.mixin({
     methods: {
         clone: function(object) {
             return JSON.parse(JSON.stringify(object));
-        }
+        },
     }
 });
 

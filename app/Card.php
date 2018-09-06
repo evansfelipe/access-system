@@ -17,6 +17,7 @@ class Card extends Model
             'number' => [
                 'required',
                 'string',
+                'unique:cards,number'
             ],
             'from' => [
                 'required',

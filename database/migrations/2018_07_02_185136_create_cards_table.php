@@ -15,7 +15,7 @@ class CreateCardsTable extends Migration
     {
         Schema::create('cards', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('number')->required();
+            $table->string('number')->required()->unique();
             $table->integer('person_company_id')->unsigned()->required();
             $table->boolean('active')->required()->default(true);
             $table->datetime('from')->required();
