@@ -15,7 +15,7 @@
                 <custom-table
                     :columns="columns"
                     :rows="vehicles"
-                    @rowclicked="showVehicle"
+                    @rowclicked="({id}) => $router.push(`/vehicles/show/${id}`)"
                 />
             </div>
         </div>

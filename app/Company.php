@@ -119,7 +119,7 @@ class Company extends Model
                     'name'          => $this->name,
                     'area'          => $this->area,
                     'cuit'          => $this->cuit,
-                    'expiration'    => $this->expiration,
+                    'expiration'    => Helpers::timestampToDate($this->expiration),
                 ],
                 $this->residency->toArray(),
                 $this->contactToArray()),

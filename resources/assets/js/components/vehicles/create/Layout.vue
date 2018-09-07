@@ -71,7 +71,10 @@ export default {
     },
     methods: {
         saveSuccess: function(id) {
-            console.log('Vehicle create:', id);
+            this.$router.push(`/vehicles/show/${id}`);
+            this.$store.dispatch('addNotification', {type: 'success', message: `Vehículo ${this.id ? 'editado' : 'creado'} exitosamente.`});
+            this.$store.commit('resetModel', 'person');
+            this.first_save = true;
         },
         saveFailed: function({ errors, step_validated }) {
             this.errors = errors;

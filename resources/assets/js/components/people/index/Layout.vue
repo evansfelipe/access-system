@@ -43,10 +43,10 @@ export default {
     data: function() {
         return {
             columns: [
-                { name: 'last_name',    text: 'Apellido'    },
-                { name: 'name',         text: 'Nombre'      },
-                { name: 'cuil',         text: 'CUIL / CUIT' },
-                { name: 'company_name', text: 'Empresa'     }
+                { name: 'last_name',    text: 'Apellido',    width:'20'},
+                { name: 'name',         text: 'Nombre',      width:'20'},
+                { name: 'cuil',         text: 'CUIL / CUIT', width:'20'},
+                { name: 'company_name', text: 'Empresa',     width:'40'}
             ],
             filter: {
                 strict: true,

@@ -46,8 +46,7 @@ export default {
     },
     methods: {
         saveSuccess: function(id) {
-            console.log("Redirigir a vista show de company");
-            // this.$router.push(`/companies/show/${id}`);
+            this.$router.push(`/companies/show/${id}`);
             this.$store.dispatch('addNotification', {type: 'success', message: `Empresa ${this.id ? 'editada' : 'creada'} exitosamente.`});
             this.$store.commit('resetModel', 'company');
             this.first_save = true;
