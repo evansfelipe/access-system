@@ -148,7 +148,6 @@ export default {
                  */
                 this.jobs_errors = [];
                 let errors = this.errors['jobs'] ? this.errors['jobs'] : [];
-                console.log("ESTO", errors);
                 
                 errors.forEach((e, index) => {
                     if(this.values.jobs[index]) {
@@ -159,12 +158,14 @@ export default {
                          * the correspondent card's key.
                          */
                         let cards_errors = [];
-                        e.cards.forEach((e2, i2) => {
-                            if(this.values.jobs[index].cards[i2]) {
-                                let k2 = this.values.jobs[index].cards[i2].key;
-                                cards_errors[k2] = e2;
-                            }
-                        });
+                        if(e.cards) {
+                            e.cards.forEach((e2, i2) => {
+                                if(this.values.jobs[index].cards[i2]) {
+                                    let k2 = this.values.jobs[index].cards[i2].key;
+                                    cards_errors[k2] = e2;
+                                }
+                            });
+                        }
                         // Finally, we assign the new cards errors (with the keys mapped) to this job's errors array.
                         this.jobs_errors[key].cards = cards_errors;
                     }

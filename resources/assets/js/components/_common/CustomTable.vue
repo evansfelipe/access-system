@@ -40,7 +40,7 @@
     <div>
         <div v-if="rowsquantity === null" class="row d-flex align-items-center mb-2">
             <div class="col-4">
-                Mostrar 
+                Mostrar
                 <select class="form-control form-control-sm d-inline" style="width: auto;" v-model.number="pagination.quantity">
                     <option value="10">10</option>
                     <option value="25">25</option>

@@ -51,7 +51,7 @@
                 </form-item>
                 <form-item col="col-3" label="Grupo Sanguíneo" :errors="errors.blood_type">
                     <div class="col">
-                        <select2 placeholder="Grupo y factor" name="blood_type" class="form-control" :value="values.blood_type" @input="(value) => update({name: 'blood_type', value: value})" :options="options.blood_type"/>
+                        <select2 placeholder="Grupo y factor" name="blood_type" :value="values.blood_type" @input="(value) => update({name: 'blood_type', value: value})" :options="options.blood_type"/>
                     </div>
                 </form-item>
             </div>
@@ -59,7 +59,8 @@
             <div class="form-row">
                 <form-item col="col-6" label="Nacionalidad" :errors="errors.homeland">
                     <div class="col">
-                        <select2 :tags="true" name="homeland" class="form-control" :value="values.homeland" @input="(value) => update({name: 'homeland', value: value})"/>
+                        <select2    :tags="true" name="homeland" :value="values.homeland" @input="(value) => update({name: 'homeland', value: value})"
+                                    :options="options.homeland"/>
                     </div>
                 </form-item>
                 <form-item col="col-6" label="Nivel de riesgo" :errors="errors.risk">
@@ -147,12 +148,23 @@ export default {
                     {id: "AB+", text: "AB+"},   
                 ],
                 risk_levels: [
-                    { id: 1, text: 'Nivel 1' },
-                    { id: 2, text: 'Nivel 2' },
-                    { id: 3, text: 'Nivel 3' },
+                    { id: '1', text: 'Nivel 1' },
+                    { id: '2', text: 'Nivel 2' },
+                    { id: '3', text: 'Nivel 3' },
                 ],
+                homeland: []
             },
         }
+    },
+    mounted() {
+        axios.get('locations/countries')
+        .then(response => this.options.homeland = response.data.map(country => {
+            return {
+                id: country.name,
+                text: country.name,
+            };
+        }))
+        .catch(error => console.log(error));
     },
     methods: {
         update: function({name, value}) {

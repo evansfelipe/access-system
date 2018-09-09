@@ -1,14 +1,24 @@
 <style lang="scss" scoped>
-span.select2.select2-container.select2-container--bootstrap.select2-container--below.select2-container--focus {
-    outline-style: solid !important;
-    outline-color: red !important;
-}
 </style>
 
+
 <template>
-    <select :name="`${name}${multiple ? '[]' : ''}`" :multiple="multiple" class="form-control d-none">
-        <slot/>
-    </select>
+    <el-select  style="width: 100%" 
+                v-model="input_value"   :disabled="disabled || loading"
+                :name="name"            :placeholder="!loading ? placeholder : 'Cargando valores...'"
+                :multiple="multiple"    :allow-create="tags"
+                filterable              default-first-option
+                clearable               :size="size"
+                :loading="loading"      loading-text="Cargando..." auto-complete="nope"
+    >
+        <el-option
+            v-for="(item, key) in options"
+            :key="key"
+            :value="item.id"
+            :label="item.text"
+        >
+        </el-option>
+    </el-select>
 </template>
 
 <script>
@@ -16,6 +26,11 @@ import Select2 from 'select2';
 
 export default {
     props: {
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         options: {
             type: Array,
             required: false,
@@ -44,64 +59,31 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        size: {
+            type: String,
+            required: false,
+            default: ''
+        },
+        loading: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
-    computed: {
-        select2Options: function() {
-            return {  
-                data: this.options,
-                placeholder: this.placeholder,
-                tags: this.tags,
-                color: 'red',
-                theme: 'bootstrap',
-                "language": {
-                    "noResults": function(){
-                        return "No hay resultados";
-                    }
-                },
-            };
-        }
-    },
-    mounted() {
-        let vm = this;
-        let select = $(this.$el)
-            .select2(this.select2Options)
-            .val(this.value)
-            .trigger('change');
-        select.data('select2').$selection.css({
-            'min-height': '37px',
-            'box-shadow' : '0 0 0 0',
-        });
-        select.on('change', function() {
-            // As we need this to refer to select element, we can't use an arrow function
-            // and we need to use the vm variable to refer the component's this.
-            if(this.multiple) {
-                vm.$emit('input', $(vm.$el).select2('data').map(el => el.id));
-            }
-            else {
-                vm.$emit('input', this.value);
-            }
-        });
-    },
-    destroyed() {
-        $(this.$el).off().select2('destroy');
+    data() {
+        return {
+            input_value: this.value
+        };
     },
     watch: {
-        // For outside component changes
-        // value: function(value) {
-        //     $(this.$el).val(value);
-        // },
-        // options: function(options) {
-        //     // Maybe there is a way to change the options without restarting the select?
-        //     $(this.$el)
-        //         .select2(this.select2Options)
-        //         // .val(this.value) It's needed?
-        //         .data('select2').$selection.css({
-        //             'min-height': '37px',
-        //             'box-shadow' : '0 0 0 0'
-        //         });
-        // }
-    },
+        value: function() {
+            this.input_value = this.value;
+        },
+        input_value: function() {
+            this.$emit('input', this.input_value);            
+        }
+    }
 }
 </script>
 

@@ -69,7 +69,7 @@
                     let jobs = this.values.working_information.jobs;
                     if(jobs.length === 1 && jobs[0].company_id) {
                         let val = this.$store.getters.companies.list.filter(company => company.id == jobs[0].company_id);
-                        ret = val[0].name;
+                        ret = val[0] ? val[0].name : ret;
                     }
                 }
                 return ret;

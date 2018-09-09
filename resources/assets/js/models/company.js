@@ -12,8 +12,8 @@ export default {
                 email:          !debug ? '' : 'example@company.com',
                 web:            !debug ? '' : 'www.company.com',
                 street:         !debug ? '' : 'Example street',
-                apartment:      !debug ? '' : '',
-                cp:             !debug ? '' : '8888',
+                apartment:      !debug ? '' : '2º B',
+                cp:             !debug ? '' : '7600',
                 country:        !debug ? '' : '',
                 province:       !debug ? '' : '',
                 city:           !debug ? '' : ''

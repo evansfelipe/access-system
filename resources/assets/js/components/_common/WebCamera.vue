@@ -3,7 +3,7 @@
         <!-- Photo -->
         <div class="row">
             <div class="offset-1 col-10">
-                <img class="img-fluid rounded-circle shadow-sm" :src="dataURI || img"/>
+                <img class="img-fluid rounded-circle" :src="dataURI || img"/>
             </div>
         </div>
         <!-- Buttons -->

@@ -51,7 +51,7 @@ export default {
             people:     new List(),
             vehicles:   new List(),
             companies:  new List(),
-            activities: new List(),
+            activities: new List()
         },
         models: {
             person:  new Model('person', 'people'),
@@ -212,6 +212,9 @@ export default {
                 company_id: '',
                 activity_id: '',
                 subactivities: [],
+                groups: [],
+                art_company: 'ART Test',
+                art_number: '123456',
                 cards: [{ key: Date.now(), number: '', from: '', until: '' }],
             });
         },

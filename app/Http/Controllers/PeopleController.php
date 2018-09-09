@@ -84,6 +84,7 @@ class PeopleController extends Controller
         // Saves the residency
         $residency = new Residency($request->toArray());
         $residency->save();
+        Helpers::storeLocation($residency->city, $residency->province, $residency->country);
         // Saves the person
         $person = new Person($request->toArray());
         $person->setContact($request->toArray());

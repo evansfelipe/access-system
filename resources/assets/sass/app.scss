@@ -68,6 +68,27 @@ body {
 //     }
 // }
 
+.form-control:disabled {
+    background-color: #f5f7fa;
+}
+
+.el-input.el-input--suffix {
+    & > input {
+        &::placeholder {
+            color: grey;
+        }
+        border-color: #ced4da;
+        &:hover {
+            border-color: #ced4da;
+        }
+    }
+}
+.el-input.el-input--suffix.is-focus {
+    box-shadow: 0 0 0 2pt rgb(206, 220, 218);
+    border-radius: 3px;
+    transition: box-shadow 0.1s;
+}
+ 
 .cursor-pointer {
     cursor: pointer;
 }
@@ -90,25 +111,26 @@ i.fas.centered, i.far.centered {
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: whitesmoke; 
+    background: transparent; 
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #888;
+    background-color: rgba(144,147,153,.3);
+    border-radius: 4px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #555; 
+    background-color: rgba(144,147,153,.5);
 }
 
 .text-unique { color: $unique-color }
 
-input[type="date"], input[type="datetime-local"], input[type="time"], input[type="month"], input[type="week"] { height: 37px }
+input[type="date"], input[type="datetime-local"], input[type="time"], input[type="month"], input[type="week"] { height: 40px }
 
 input.form-control {
-    height: 37px;
+    height: 40px;
 }
 
 .form-control-sm {
@@ -147,6 +169,10 @@ input.form-control {
 .text-link:hover {
     color: #3F729B;
     cursor: pointer;
+}
+
+.el-input__inner {
+    border-color: red;
 }
 
 span.select2.select2-container.select2-container--bootstrap.select2-container--below.select2-container--focus,

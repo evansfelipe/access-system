@@ -5,7 +5,37 @@ namespace App\Http\Traits;
 use Illuminate\Http\Request;
 use Storage;
 
+use App\Location\{ City, Province, Country };
+
 trait Helpers {
+
+    public static function storeLocation($p_city, $p_province, $p_country)
+    {
+        if($p_country) {
+            $country = Country::where('name', $p_country)->first();
+            if(!$country) {
+                $country = new Country(['name' => $p_country]);
+                $country->save();
+            }
+
+            if($p_province) {
+                $province = Province::where('name', $p_province)->where('country_id', $country->id)->first();
+                if(!$province) {
+                    $province = new Province(['name' => $p_province, 'country_id' => $country->id]);
+                    $province->save();
+                }
+
+                if($p_city) {
+                    $city = City::where('name', $p_city)->where('province_id', $province->id)->first();
+                    if(!$city) {
+                        $city = new City(['name' => $p_city, 'province_id' => $province->id]);
+                        $city->save();
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * 
      */

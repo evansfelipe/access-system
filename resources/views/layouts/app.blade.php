@@ -80,7 +80,6 @@
                         @endforeach
                     </div>
                 @endif
-
                 @yield('content')
             </main>
         </div>

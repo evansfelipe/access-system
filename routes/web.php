@@ -37,6 +37,11 @@ Route::middleware(['auth','administration'])->group(function() {
     Route::get('/activities/updated_at', 'ActivitiesController@updated_at');
     Route::get('/activities/list', 'ActivitiesController@list');
     Route::resource('/activities', 'ActivitiesController');
+
+    Route::get('/locations/countries', 'LocationsController@countries');
+    Route::get('/locations/provinces/{country_id?}', 'LocationsController@provinces');
+    Route::get('/locations/cities/{province_id?}', 'LocationsController@cities');
+
 });
 
 // Security

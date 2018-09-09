@@ -18,24 +18,33 @@
         </div>
         <!-- Country, Province & City -->
         <div class="form-row">
-            <form-item col="col-4" label="Ciudad" :errors="errors.city">
-                <div class="col">
-                    <select2    name="city" :value="values.city" @input="(value) => update({name: 'city', value: value})"
-                                placeholder="Seleccione una ciudad" :options="options.city" :tags="true"/>
-                </div>
-            </form-item>
-            <form-item col="col-4" label="Provincia / Estado" :errors="errors.province">
-                <div class="col">
-                    <select2    name="province" :value="values.province" @input="(value) => update({name: 'province', value: value})"
-                                placeholder="Seleccione una provincia/estado" :options="options.province" :tags="true"/>
-                </div>
-            </form-item>
             <form-item col="col-4" label="País" :errors="errors.country">
                 <div class="col">
-                    <select2    name="country" :value="values.country" @input="(value) => update({name: 'country', value: value})"
-                                placeholder="Seleccione un país" :options="options.country" :tags="true"/>                                
+                    <select2    name="country" placeholder="Seleccione un país" :options="countries"
+                                :loading="raw_countries.loading"
+                                :value="values.country" :tags="true"
+                                @input="(value) => update({name: 'country', value: value})"
+                    />
                 </div>
-            </form-item>          
+            </form-item> 
+            <form-item col="col-4" label="Provincia / Estado" :errors="errors.province">
+                <div class="col">
+                    <select2    name="province" placeholder="Seleccione una provincia/estado" :options="provinces" 
+                                :disabled="values.country ? false : true" :loading="raw_provinces.loading"
+                                :value="values.province" :tags="true"
+                                @input="(value) => update({name: 'province', value: value})"
+                    />
+                </div>
+            </form-item>
+            <form-item col="col-4" label="Ciudad" :errors="errors.city">
+                <div class="col">
+                    <select2    name="city" placeholder="Seleccione una ciudad" :options="cities"
+                                :disabled="values.province ? false : true" :loading="raw_cities.loading"
+                                :value="values.city" :tags="true"
+                                @input="(value) => update({name: 'city', value: value})"
+                    />
+                </div>
+            </form-item>        
         </div>
     </div>
 </template>
@@ -54,25 +63,89 @@ export default {
     },
     data() {
         return {
-            options: {
-                country: [
-                    {id: 0, text: 'Argentina'},
-                    {id: 1, text: 'Brasil'}                    
-                ],
-                province: [
-                    {id: 0, text: 'Buenos Aires'},
-                    {id: 1, text: 'Salta'}                    
-                ],
-                city: [
-                    {id: 0, text: 'Mar del Plata'},
-                    {id: 1, text: 'Balcarce'}                    
-                ]
+            raw_countries: {
+                list: [],
+                loading: false
             },
+            raw_provinces: {
+                list: [],
+                loading: false
+            },
+            raw_cities: {
+                list: [],
+                loading: false
+            }
+        }
+    },
+    mounted() {
+        this.raw_countries.loading = true;
+        axios.get('locations/countries')
+        .then(response => this.raw_countries.list = response.data)
+        .catch(error =>   this.raw_countries.list = [])
+        .finally(() => this.raw_countries.loading = false);
+    },
+    computed: {
+        countries: function() {
+            return this.raw_countries.list.map(country => {
+                return {
+                    id: country.name,
+                    text: country.name
+                };
+            });
+        },
+        provinces: function() {
+            return this.raw_provinces.list.map(province => {
+                return {
+                    id: province.name,
+                    text: province.name
+                };
+            });
+        },
+        cities: function() {
+            return this.raw_cities.list.map(city => {
+                return {
+                    id: city.name,
+                    text: city.name
+                };
+            });
         }
     },
     methods: {
         update: function({name, value}) {
             this.$emit('input', {name, value});
+        }
+    },
+    watch: {
+        'values.country': function() {
+            // Removes the selected values for province and city because they will have no sense when the list change.
+            this.update({name: 'province', value: ''});
+            this.update({name: 'city', value: ''});
+            // Gets the country associated with the selected country value.
+            let country = this.raw_countries.list.filter(country => country.name === this.values.country)[0];
+            // If there is a country associated with the selected value, then requests the list of provinces of this country.
+            this.raw_provinces.list = [];
+            if(country) {
+                this.raw_provinces.loading = true;
+                axios.get(`locations/provinces/${country.id}`)
+                .then(response => this.raw_provinces.list = response.data)
+                .catch(error => console.log(error))
+                .finally(() => this.raw_provinces.loading = false);
+            }
+        },
+        'values.province': function() {
+            // Removes the selected value for the city because it will have no sense when the list change.
+            this.update({name: 'city', value: ''});
+            // Gets the province associated with the selected province value.
+            let province = this.raw_provinces.list.filter(province => province.name === this.values.province)[0];
+            // If there is a province associated with the selected value, then requests the list of cities of this province.
+            this.raw_cities.list = [];
+            if(province) {
+                this.raw_cities.loading = true
+                axios.get(`locations/cities/${province.id}`)
+                .then(response => this.raw_cities.list = response.data)
+                .catch(error => console.log(error))
+                .finally(() => this.raw_cities.loading = false);
+            }
         }
     }
 }

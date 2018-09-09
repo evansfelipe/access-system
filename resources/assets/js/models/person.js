@@ -2,7 +2,7 @@ export default {
     default: (debug = false) => { 
         return {
             personal_information: {
-                picture:         '',
+                picture:         !debug ? '' : '',
                 last_name:       !debug ? '' : 'Example',
                 name:            !debug ? '' : 'Example',
                 document_type:   !debug ? '' : '1',
@@ -16,30 +16,30 @@ export default {
                 home_phone:      !debug ? '' : '2231234567',
                 mobile_phone:    !debug ? '' : '223123652643',
                 fax:             !debug ? '' : '2237654321',
-                street:          !debug ? '' : '',
-                apartment:       !debug ? '' : '',
-                cp:              !debug ? '' : '',
+                street:          !debug ? '' : 'Calle falsa',
+                apartment:       !debug ? '' : '1º A',
+                cp:              !debug ? '' : '123',
                 country:         !debug ? '' : '',
                 province:        !debug ? '' : '',
                 city:            !debug ? '' : '',
-                risk:            !debug ? '' : '',
+                risk:            !debug ? '' : '1',
                 homeland:        !debug ? '' : '',
                 register_number: !debug ? '' : '123450999'
             },
             working_information: {
                 jobs: [{
                     key: Date.now(),
-                    company_id: '',
-                    activity_id: '',
-                    subactivities: ['hola'],
-                    groups: [1, 2],
-                    art_company: 'ART Test',
-                    art_number: '123456',
+                    company_id:     !debug ? '' : 5,
+                    activity_id:    !debug ? '' : 1,
+                    subactivities:  !debug ? [] : ['hola'],
+                    groups:         !debug ? [] : [2],
+                    art_company:    !debug ? '' : 'ART Test',
+                    art_number:     !debug ? '' : '123456',
                     cards: [{
                         key: Date.now(),
-                        number: '',
-                        from: '',
-                        until: '',
+                        number:     !debug ? '' :  Date.now().toString(),
+                        from:       !debug ? '' : '2020-01-01',
+                        until:      !debug ? '' : '2020-01-02',
                     }]
                 }],
             },
