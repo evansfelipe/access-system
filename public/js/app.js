@@ -23897,7 +23897,20 @@ exports.default = function (target) {
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< Updated upstream
 "use strict";
+=======
+/*!
+  * Bootstrap v4.1.2 (https://getbootstrap.com/)
+  * Copyright 2011-2018 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  */
+(function (global, factory) {
+   true ? factory(exports, __webpack_require__(5), __webpack_require__(7)) :
+  typeof define === 'function' && define.amd ? define(['exports', 'jquery', 'popper.js'], factory) :
+  (factory((global.bootstrap = {}),global.jQuery,global.Popper));
+}(this, (function (exports,$,Popper) { 'use strict';
+>>>>>>> Stashed changes
 
 
 exports.__esModule = true;
@@ -23962,12 +23975,40 @@ exports.default = {
     }
   },
 
+<<<<<<< Updated upstream
   data: function data() {
     return {
       showPopper: false,
       currentPlacement: ''
     };
   },
+=======
+    return target;
+  }
+
+  function _inheritsLoose(subClass, superClass) {
+    subClass.prototype = Object.create(superClass.prototype);
+    subClass.prototype.constructor = subClass;
+    subClass.__proto__ = superClass;
+  }
+
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.1.2): util.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  var Util = function ($$$1) {
+    /**
+     * ------------------------------------------------------------------------
+     * Private TransitionEnd Helpers
+     * ------------------------------------------------------------------------
+     */
+    var TRANSITION_END = 'transitionend';
+    var MAX_UID = 1000000;
+    var MILLISECONDS_MULTIPLIER = 1000; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
+>>>>>>> Stashed changes
 
 
   watch: {
@@ -24068,12 +24109,19 @@ exports.default = {
         return;
       }
 
+<<<<<<< Updated upstream
       this.appended = true;
 
       for (var item in element.attributes) {
         if (/^_v-/.test(element.attributes[item].name)) {
           hash = element.attributes[item].name;
           break;
+=======
+        try {
+          return document.querySelector(selector) ? selector : null;
+        } catch (err) {
+          return null;
+>>>>>>> Stashed changes
         }
       }
 
@@ -24107,8 +24155,47 @@ exports.default = {
 /* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< Updated upstream
 "use strict";
 
+=======
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.1.2): alert.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  var Alert = function ($$$1) {
+    /**
+     * ------------------------------------------------------------------------
+     * Constants
+     * ------------------------------------------------------------------------
+     */
+    var NAME = 'alert';
+    var VERSION = '4.1.2';
+    var DATA_KEY = 'bs.alert';
+    var EVENT_KEY = "." + DATA_KEY;
+    var DATA_API_KEY = '.data-api';
+    var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
+    var Selector = {
+      DISMISS: '[data-dismiss="alert"]'
+    };
+    var Event = {
+      CLOSE: "close" + EVENT_KEY,
+      CLOSED: "closed" + EVENT_KEY,
+      CLICK_DATA_API: "click" + EVENT_KEY + DATA_API_KEY
+    };
+    var ClassName = {
+      ALERT: 'alert',
+      FADE: 'fade',
+      SHOW: 'show'
+      /**
+       * ------------------------------------------------------------------------
+       * Class Definition
+       * ------------------------------------------------------------------------
+       */
+>>>>>>> Stashed changes
 
 exports.__esModule = true;
 
@@ -24148,9 +24235,15 @@ var scrollBarWidth = void 0;
 
 ;
 
+<<<<<<< Updated upstream
 /***/ }),
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
+=======
+        if (selector) {
+          parent = document.querySelector(selector);
+        }
+>>>>>>> Stashed changes
 
 /* eslint-disable no-undefined */
 
@@ -24247,6 +24340,7 @@ var removeResizeListener = exports.removeResizeListener = function removeResizeL
 
 exports.__esModule = true;
 
+<<<<<<< Updated upstream
 exports.default = function (ref) {
   return {
     methods: {
@@ -24258,6 +24352,47 @@ exports.default = function (ref) {
 };
 
 ;
+=======
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.1.2): button.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  var Button = function ($$$1) {
+    /**
+     * ------------------------------------------------------------------------
+     * Constants
+     * ------------------------------------------------------------------------
+     */
+    var NAME = 'button';
+    var VERSION = '4.1.2';
+    var DATA_KEY = 'bs.button';
+    var EVENT_KEY = "." + DATA_KEY;
+    var DATA_API_KEY = '.data-api';
+    var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
+    var ClassName = {
+      ACTIVE: 'active',
+      BUTTON: 'btn',
+      FOCUS: 'focus'
+    };
+    var Selector = {
+      DATA_TOGGLE_CARROT: '[data-toggle^="button"]',
+      DATA_TOGGLE: '[data-toggle="buttons"]',
+      INPUT: 'input',
+      ACTIVE: '.active',
+      BUTTON: '.btn'
+    };
+    var Event = {
+      CLICK_DATA_API: "click" + EVENT_KEY + DATA_API_KEY,
+      FOCUS_BLUR_DATA_API: "focus" + EVENT_KEY + DATA_API_KEY + " " + ("blur" + EVENT_KEY + DATA_API_KEY)
+      /**
+       * ------------------------------------------------------------------------
+       * Class Definition
+       * ------------------------------------------------------------------------
+       */
+>>>>>>> Stashed changes
 
 /***/ }),
 /* 39 */
@@ -24331,6 +24466,7 @@ module.exports = $export;
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< Updated upstream
 // 7.1.1 ToPrimitive(input [, PreferredType])
 var isObject = __webpack_require__(19);
 // instead of the ES6 spec version, we didn't implement @@toPrimitive case
@@ -24344,6 +24480,17 @@ module.exports = function (it, S) {
   throw TypeError("Can't convert object to primitive value");
 };
 
+=======
+        if (rootElement) {
+          var input = this._element.querySelector(Selector.INPUT);
+
+          if (input) {
+            if (input.type === 'radio') {
+              if (input.checked && this._element.classList.contains(ClassName.ACTIVE)) {
+                triggerChangeEvent = false;
+              } else {
+                var activeElement = rootElement.querySelector(Selector.ACTIVE);
+>>>>>>> Stashed changes
 
 /***/ }),
 /* 41 */
@@ -24355,17 +24502,29 @@ module.exports = function (it) {
   return it;
 };
 
+<<<<<<< Updated upstream
+=======
+              input.checked = !this._element.classList.contains(ClassName.ACTIVE);
+              $$$1(input).trigger('change');
+            }
+>>>>>>> Stashed changes
 
 /***/ }),
 /* 42 */
 /***/ (function(module, exports) {
 
+<<<<<<< Updated upstream
 // 7.1.4 ToInteger
 var ceil = Math.ceil;
 var floor = Math.floor;
 module.exports = function (it) {
   return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
 };
+=======
+        if (addAriaPressed) {
+          this._element.setAttribute('aria-pressed', !this._element.classList.contains(ClassName.ACTIVE));
+        }
+>>>>>>> Stashed changes
 
 
 /***/ }),
@@ -24418,8 +24577,31 @@ exports.f = Object.getOwnPropertySymbols;
 /* 47 */
 /***/ (function(module, exports) {
 
+<<<<<<< Updated upstream
 module.exports = {};
 
+=======
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.1.2): carousel.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  var Carousel = function ($$$1) {
+    /**
+     * ------------------------------------------------------------------------
+     * Constants
+     * ------------------------------------------------------------------------
+     */
+    var NAME = 'carousel';
+    var VERSION = '4.1.2';
+    var DATA_KEY = 'bs.carousel';
+    var EVENT_KEY = "." + DATA_KEY;
+    var DATA_API_KEY = '.data-api';
+    var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
+    var ARROW_LEFT_KEYCODE = 37; // KeyboardEvent.which value for left arrow key
+>>>>>>> Stashed changes
 
 /***/ }),
 /* 48 */
@@ -24434,9 +24616,25 @@ module.exports = function (it, tag, stat) {
 };
 
 
+<<<<<<< Updated upstream
 /***/ }),
 /* 49 */
 /***/ (function(module, exports, __webpack_require__) {
+=======
+    var Carousel =
+    /*#__PURE__*/
+    function () {
+      function Carousel(element, config) {
+        this._items = null;
+        this._interval = null;
+        this._activeElement = null;
+        this._isPaused = false;
+        this._isSliding = false;
+        this.touchTimeout = null;
+        this._config = this._getConfig(config);
+        this._element = $$$1(element)[0];
+        this._indicatorsElement = this._element.querySelector(Selector.INDICATORS);
+>>>>>>> Stashed changes
 
 exports.f = __webpack_require__(17);
 
@@ -24488,6 +24686,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  */
 var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
 
+<<<<<<< Updated upstream
 var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
 var timeoutDuration = 0;
 for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
@@ -24496,6 +24695,12 @@ for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
     break;
   }
 }
+=======
+        if (this._element.querySelector(Selector.NEXT_PREV)) {
+          Util.triggerTransitionEnd(this._element);
+          this.cycle(true);
+        }
+>>>>>>> Stashed changes
 
 function microtaskDebounce(fn) {
   var called = false;
@@ -24549,6 +24754,7 @@ function isFunction(functionToCheck) {
   return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
 
+<<<<<<< Updated upstream
 /**
  * Get CSS computed property of the given element
  * @method
@@ -24564,6 +24770,9 @@ function getStyleComputedProperty(element, property) {
   var css = getComputedStyle(element, null);
   return property ? css[property] : css;
 }
+=======
+        this._activeElement = this._element.querySelector(Selector.ACTIVE_ITEM);
+>>>>>>> Stashed changes
 
 /**
  * Returns the parentNode or the host of the element
@@ -24691,8 +24900,15 @@ function getRoot(node) {
     return getRoot(node.parentNode);
   }
 
+<<<<<<< Updated upstream
   return node;
 }
+=======
+      _proto._getItemIndex = function _getItemIndex(element) {
+        this._items = element && element.parentNode ? [].slice.call(element.parentNode.querySelectorAll(Selector.ITEM)) : [];
+        return this._items.indexOf(element);
+      };
+>>>>>>> Stashed changes
 
 /**
  * Finds the offset parent common to the two provided nodes
@@ -24729,6 +24945,7 @@ function findCommonOffsetParent(element1, element2) {
     return getOffsetParent(commonAncestorContainer);
   }
 
+<<<<<<< Updated upstream
   // one of the nodes is inside shadowDOM, find which one
   var element1root = getRoot(element1);
   if (element1root.host) {
@@ -24737,6 +24954,9 @@ function findCommonOffsetParent(element1, element2) {
     return findCommonOffsetParent(element1, getRoot(element2).host);
   }
 }
+=======
+        var fromIndex = this._getItemIndex(this._element.querySelector(Selector.ACTIVE_ITEM));
+>>>>>>> Stashed changes
 
 /**
  * Gets the scroll value of the given element in the given side (top and left)
@@ -24749,8 +24969,15 @@ function findCommonOffsetParent(element1, element2) {
 function getScroll(element) {
   var side = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'top';
 
+<<<<<<< Updated upstream
   var upperSide = side === 'top' ? 'scrollTop' : 'scrollLeft';
   var nodeName = element.nodeName;
+=======
+      _proto._setActiveIndicatorElement = function _setActiveIndicatorElement(element) {
+        if (this._indicatorsElement) {
+          var indicators = [].slice.call(this._indicatorsElement.querySelectorAll(Selector.ACTIVE));
+          $$$1(indicators).removeClass(ClassName.ACTIVE);
+>>>>>>> Stashed changes
 
   if (nodeName === 'BODY' || nodeName === 'HTML') {
     var html = element.ownerDocument.documentElement;
@@ -24773,6 +25000,7 @@ function getScroll(element) {
 function includeScroll(rect, element) {
   var subtract = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
+<<<<<<< Updated upstream
   var scrollTop = getScroll(element, 'top');
   var scrollLeft = getScroll(element, 'left');
   var modifier = subtract ? -1 : 1;
@@ -24782,6 +25010,9 @@ function includeScroll(rect, element) {
   rect.right += scrollLeft * modifier;
   return rect;
 }
+=======
+        var activeElement = this._element.querySelector(Selector.ACTIVE_ITEM);
+>>>>>>> Stashed changes
 
 /*
  * Helper to detect borders of a given element
@@ -24994,6 +25225,7 @@ function getOffsetRectRelativeToArbitraryNode(children, parent) {
   return offsets;
 }
 
+<<<<<<< Updated upstream
 function getViewportOffsetRectRelativeToArtbitraryNode(element) {
   var excludeScroll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
@@ -25001,6 +25233,23 @@ function getViewportOffsetRectRelativeToArtbitraryNode(element) {
   var relativeOffset = getOffsetRectRelativeToArbitraryNode(element, html);
   var width = Math.max(html.clientWidth, window.innerWidth || 0);
   var height = Math.max(html.clientHeight, window.innerHeight || 0);
+=======
+    $$$1(document).on(Event.CLICK_DATA_API, Selector.DATA_SLIDE, Carousel._dataApiClickHandler);
+    $$$1(window).on(Event.LOAD_DATA_API, function () {
+      var carousels = [].slice.call(document.querySelectorAll(Selector.DATA_RIDE));
+
+      for (var i = 0, len = carousels.length; i < len; i++) {
+        var $carousel = $$$1(carousels[i]);
+
+        Carousel._jQueryInterface.call($carousel, $carousel.data());
+      }
+    });
+    /**
+     * ------------------------------------------------------------------------
+     * jQuery
+     * ------------------------------------------------------------------------
+     */
+>>>>>>> Stashed changes
 
   var scrollTop = !excludeScroll ? getScroll(html) : 0;
   var scrollLeft = !excludeScroll ? getScroll(html, 'left') : 0;
@@ -25015,6 +25264,7 @@ function getViewportOffsetRectRelativeToArtbitraryNode(element) {
   return getClientRect(offset);
 }
 
+<<<<<<< Updated upstream
 /**
  * Check if the given element is fixed or is inside a fixed parent
  * @method
@@ -25041,6 +25291,60 @@ function isFixed(element) {
  * @argument {Element} element
  * @returns {Element} first transformed parent or documentElement
  */
+=======
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.1.2): collapse.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  var Collapse = function ($$$1) {
+    /**
+     * ------------------------------------------------------------------------
+     * Constants
+     * ------------------------------------------------------------------------
+     */
+    var NAME = 'collapse';
+    var VERSION = '4.1.2';
+    var DATA_KEY = 'bs.collapse';
+    var EVENT_KEY = "." + DATA_KEY;
+    var DATA_API_KEY = '.data-api';
+    var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
+    var Default = {
+      toggle: true,
+      parent: ''
+    };
+    var DefaultType = {
+      toggle: 'boolean',
+      parent: '(string|element)'
+    };
+    var Event = {
+      SHOW: "show" + EVENT_KEY,
+      SHOWN: "shown" + EVENT_KEY,
+      HIDE: "hide" + EVENT_KEY,
+      HIDDEN: "hidden" + EVENT_KEY,
+      CLICK_DATA_API: "click" + EVENT_KEY + DATA_API_KEY
+    };
+    var ClassName = {
+      SHOW: 'show',
+      COLLAPSE: 'collapse',
+      COLLAPSING: 'collapsing',
+      COLLAPSED: 'collapsed'
+    };
+    var Dimension = {
+      WIDTH: 'width',
+      HEIGHT: 'height'
+    };
+    var Selector = {
+      ACTIVES: '.show, .collapsing',
+      DATA_TOGGLE: '[data-toggle="collapse"]'
+      /**
+       * ------------------------------------------------------------------------
+       * Class Definition
+       * ------------------------------------------------------------------------
+       */
+>>>>>>> Stashed changes
 
 function getFixedPositionOffsetParent(element) {
   // This check is needed to avoid errors in case one of the elements isn't defined for any reason
@@ -25054,6 +25358,7 @@ function getFixedPositionOffsetParent(element) {
   return el || document.documentElement;
 }
 
+<<<<<<< Updated upstream
 /**
  * Computed the boundaries limits and return them
  * @method
@@ -25072,6 +25377,27 @@ function getBoundaries(popper, reference, padding, boundariesElement) {
 
   var boundaries = { top: 0, left: 0 };
   var offsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, reference);
+=======
+    var Collapse =
+    /*#__PURE__*/
+    function () {
+      function Collapse(element, config) {
+        this._isTransitioning = false;
+        this._element = element;
+        this._config = this._getConfig(config);
+        this._triggerArray = $$$1.makeArray(document.querySelectorAll("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
+        var toggleList = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE));
+
+        for (var i = 0, len = toggleList.length; i < len; i++) {
+          var elem = toggleList[i];
+          var selector = Util.getSelectorFromElement(elem);
+          var filterElement = [].slice.call(document.querySelectorAll(selector)).filter(function (foundElem) {
+            return foundElem === element;
+          });
+
+          if (selector !== null && filterElement.length > 0) {
+            this._selector = selector;
+>>>>>>> Stashed changes
 
   // Handle viewport case
   if (boundariesElement === 'viewport') {
@@ -25140,7 +25466,14 @@ function computeAutoPlacement(placement, refRect, popper, reference, boundariesE
     return placement;
   }
 
+<<<<<<< Updated upstream
   var boundaries = getBoundaries(popper, reference, padding, boundariesElement);
+=======
+        if (this._parent) {
+          actives = [].slice.call(this._parent.querySelectorAll(Selector.ACTIVES)).filter(function (elem) {
+            return elem.getAttribute('data-parent') === _this._config.parent;
+          });
+>>>>>>> Stashed changes
 
   var rects = {
     top: {
@@ -25219,6 +25552,7 @@ function getOuterSizes(element) {
   return result;
 }
 
+<<<<<<< Updated upstream
 /**
  * Get the opposite placement of the given one
  * @method
@@ -25232,6 +25566,11 @@ function getOppositePlacement(placement) {
     return hash[matched];
   });
 }
+=======
+        if (this._triggerArray.length) {
+          $$$1(this._triggerArray).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
+        }
+>>>>>>> Stashed changes
 
 /**
  * Get offsets to the popper
@@ -25315,6 +25654,7 @@ function findIndex(arr, prop, value) {
   return arr.indexOf(match);
 }
 
+<<<<<<< Updated upstream
 /**
  * Loop trough the list of modifiers and run them in order,
  * each of them will then edit the data object.
@@ -25344,6 +25684,20 @@ function runModifiers(modifiers, data, ends) {
       data = fn(data, modifier);
     }
   });
+=======
+        this._element.style[dimension] = this._element.getBoundingClientRect()[dimension] + "px";
+        Util.reflow(this._element);
+        $$$1(this._element).addClass(ClassName.COLLAPSING).removeClass(ClassName.COLLAPSE).removeClass(ClassName.SHOW);
+        var triggerArrayLength = this._triggerArray.length;
+
+        if (triggerArrayLength > 0) {
+          for (var i = 0; i < triggerArrayLength; i++) {
+            var trigger = this._triggerArray[i];
+            var selector = Util.getSelectorFromElement(trigger);
+
+            if (selector !== null) {
+              var $elem = $$$1([].slice.call(document.querySelectorAll(selector)));
+>>>>>>> Stashed changes
 
   return data;
 }
@@ -25386,10 +25740,27 @@ function update() {
   // compute the popper offsets
   data.offsets.popper = getPopperOffsets(this.popper, data.offsets.reference, data.placement);
 
+<<<<<<< Updated upstream
   data.offsets.popper.position = this.options.positionFixed ? 'fixed' : 'absolute';
 
   // run the modifiers
   data = runModifiers(this.modifiers, data);
+=======
+          if (typeof this._config.parent.jquery !== 'undefined') {
+            parent = this._config.parent[0];
+          }
+        } else {
+          parent = document.querySelector(this._config.parent);
+        }
+
+        var selector = "[data-toggle=\"collapse\"][data-parent=\"" + this._config.parent + "\"]";
+        var children = [].slice.call(parent.querySelectorAll(selector));
+        $$$1(children).each(function (i, element) {
+          _this3._addAriaAndCollapsedClass(Collapse._getTargetFromElement(element), [element]);
+        });
+        return parent;
+      };
+>>>>>>> Stashed changes
 
   // the first `update` will call `onCreate` callback
   // the other ones will call `onUpdate` callback
@@ -25401,6 +25772,7 @@ function update() {
   }
 }
 
+<<<<<<< Updated upstream
 /**
  * Helper used to know if the given modifier is enabled.
  * @method
@@ -25414,6 +25786,13 @@ function isModifierEnabled(modifiers, modifierName) {
     return enabled && name === modifierName;
   });
 }
+=======
+          if (triggerArray.length) {
+            $$$1(triggerArray).toggleClass(ClassName.COLLAPSED, !isOpen).attr('aria-expanded', isOpen);
+          }
+        }
+      }; // Static
+>>>>>>> Stashed changes
 
 /**
  * Get the prefixed supported property name
@@ -25426,6 +25805,7 @@ function getSupportedPropertyName(property) {
   var prefixes = [false, 'ms', 'Webkit', 'Moz', 'O'];
   var upperProp = property.charAt(0).toUpperCase() + property.slice(1);
 
+<<<<<<< Updated upstream
   for (var i = 0; i < prefixes.length; i++) {
     var prefix = prefixes[i];
     var toCheck = prefix ? '' + prefix + upperProp : property;
@@ -25435,6 +25815,12 @@ function getSupportedPropertyName(property) {
   }
   return null;
 }
+=======
+      Collapse._getTargetFromElement = function _getTargetFromElement(element) {
+        var selector = Util.getSelectorFromElement(element);
+        return selector ? document.querySelector(selector) : null;
+      };
+>>>>>>> Stashed changes
 
 /**
  * Destroy the popper
@@ -25507,6 +25893,7 @@ function setupEventListeners(reference, options, state, updateBound) {
   return state;
 }
 
+<<<<<<< Updated upstream
 /**
  * It will add resize/scroll events and start recalculating
  * position of the popper element when they are triggered.
@@ -25518,6 +25905,15 @@ function enableEventListeners() {
     this.state = setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
   }
 }
+=======
+      var $trigger = $$$1(this);
+      var selector = Util.getSelectorFromElement(this);
+      var selectors = [].slice.call(document.querySelectorAll(selector));
+      $$$1(selectors).each(function () {
+        var $target = $$$1(this);
+        var data = $target.data(DATA_KEY);
+        var config = data ? 'toggle' : $trigger.data();
+>>>>>>> Stashed changes
 
 /**
  * Remove event listeners used to update the popper position
@@ -25556,6 +25952,7 @@ function disableEventListeners() {
   }
 }
 
+<<<<<<< Updated upstream
 /**
  * Tells if a given input is a number
  * @method
@@ -25585,6 +25982,28 @@ function setStyles(element, styles) {
     element.style[prop] = styles[prop] + unit;
   });
 }
+=======
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.1.2): dropdown.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  var Dropdown = function ($$$1) {
+    /**
+     * ------------------------------------------------------------------------
+     * Constants
+     * ------------------------------------------------------------------------
+     */
+    var NAME = 'dropdown';
+    var VERSION = '4.1.2';
+    var DATA_KEY = 'bs.dropdown';
+    var EVENT_KEY = "." + DATA_KEY;
+    var DATA_API_KEY = '.data-api';
+    var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
+    var ESCAPE_KEYCODE = 27; // KeyboardEvent.which value for Escape (Esc) key
+>>>>>>> Stashed changes
 
 /**
  * Set the attributes to the given popper
@@ -25864,8 +26283,15 @@ function arrow(data, options) {
   data.arrowElement = arrowElement;
   data.offsets.arrow = (_data$offsets$arrow = {}, defineProperty(_data$offsets$arrow, side, Math.round(sideValue)), defineProperty(_data$offsets$arrow, altSide, ''), _data$offsets$arrow);
 
+<<<<<<< Updated upstream
   return data;
 }
+=======
+          if (parent) {
+            this._menu = parent.querySelector(Selector.MENU);
+          }
+        }
+>>>>>>> Stashed changes
 
 /**
  * Get the opposite placement variation of the given one
@@ -25883,6 +26309,7 @@ function getOppositeVariation(variation) {
   return variation;
 }
 
+<<<<<<< Updated upstream
 /**
  * List of accepted placements to use as values of the `placement` option.<br />
  * Valid placements are:
@@ -25915,6 +26342,11 @@ function getOppositeVariation(variation) {
  * @memberof Popper
  */
 var placements = ['auto-start', 'auto', 'auto-end', 'top-start', 'top', 'top-end', 'right-start', 'right', 'right-end', 'bottom-end', 'bottom', 'bottom-start', 'left-end', 'left', 'left-start'];
+=======
+      _proto._getPlacement = function _getPlacement() {
+        var $parentDropdown = $$$1(this._element.parentNode);
+        var placement = AttachmentMap.BOTTOM; // Handle dropup
+>>>>>>> Stashed changes
 
 // Get rid of `auto` `auto-start` and `auto-end`
 var validPlacements = placements.slice(3);
@@ -26013,6 +26445,7 @@ function flip(data, options) {
       // this boolean to detect any flip loop
       data.flipped = true;
 
+<<<<<<< Updated upstream
       if (overlapsRef || overflowsBoundaries) {
         placement = flipOrder[index + 1];
       }
@@ -26020,12 +26453,28 @@ function flip(data, options) {
       if (flippedVariation) {
         variation = getOppositeVariation(variation);
       }
+=======
+        var toggles = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE));
+
+        for (var i = 0, len = toggles.length; i < len; i++) {
+          var parent = Dropdown._getParentFromElement(toggles[i]);
+>>>>>>> Stashed changes
 
       data.placement = placement + (variation ? '-' + variation : '');
 
+<<<<<<< Updated upstream
       // this object contains `position`, we want to preserve it along with
       // any additional property we may add in the future
       data.offsets.popper = _extends({}, data.offsets.popper, getPopperOffsets(data.instance.popper, data.offsets.reference, data.placement));
+=======
+          if (event && event.type === 'click') {
+            relatedTarget.clickEvent = event;
+          }
+
+          if (!context) {
+            continue;
+          }
+>>>>>>> Stashed changes
 
       data = runModifiers(data.instance.modifiers, data, 'flip');
     }
@@ -26115,6 +26564,7 @@ function toValue(str, measurement, popperOffsets, referenceOffsets) {
   }
 }
 
+<<<<<<< Updated upstream
 /**
  * Parse an `offset` string to extrapolate `x` and `y` numeric offsets.
  * @function
@@ -26128,6 +26578,11 @@ function toValue(str, measurement, popperOffsets, referenceOffsets) {
  */
 function parseOffset(offset, popperOffsets, referenceOffsets, basePlacement) {
   var offsets = [0, 0];
+=======
+        if (selector) {
+          parent = document.querySelector(selector);
+        }
+>>>>>>> Stashed changes
 
   // Use height if placement is left or right and index is 0 otherwise use width
   // in this way the first offset will use an axis and the second one
@@ -26193,6 +26648,7 @@ function parseOffset(offset, popperOffsets, referenceOffsets, basePlacement) {
   return offsets;
 }
 
+<<<<<<< Updated upstream
 /**
  * @function
  * @memberof Modifiers
@@ -26208,15 +26664,26 @@ function offset(data, _ref) {
       _data$offsets = data.offsets,
       popper = _data$offsets.popper,
       reference = _data$offsets.reference;
+=======
+        if (!isActive && (event.which !== ESCAPE_KEYCODE || event.which !== SPACE_KEYCODE) || isActive && (event.which === ESCAPE_KEYCODE || event.which === SPACE_KEYCODE)) {
+          if (event.which === ESCAPE_KEYCODE) {
+            var toggle = parent.querySelector(Selector.DATA_TOGGLE);
+            $$$1(toggle).trigger('focus');
+          }
+>>>>>>> Stashed changes
 
   var basePlacement = placement.split('-')[0];
 
+<<<<<<< Updated upstream
   var offsets = void 0;
   if (isNumeric(+offset)) {
     offsets = [+offset, 0];
   } else {
     offsets = parseOffset(offset, popper, reference, basePlacement);
   }
+=======
+        var items = [].slice.call(parent.querySelectorAll(Selector.VISIBLE_ITEMS));
+>>>>>>> Stashed changes
 
   if (basePlacement === 'left') {
     popper.top += offsets[0];
@@ -26307,6 +26774,7 @@ function preventOverflow(data, options) {
   return data;
 }
 
+<<<<<<< Updated upstream
 /**
  * @function
  * @memberof Modifiers
@@ -26328,14 +26796,99 @@ function shift(data) {
     var isVertical = ['bottom', 'top'].indexOf(basePlacement) !== -1;
     var side = isVertical ? 'left' : 'top';
     var measurement = isVertical ? 'width' : 'height';
+=======
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.1.2): modal.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  var Modal = function ($$$1) {
+    /**
+     * ------------------------------------------------------------------------
+     * Constants
+     * ------------------------------------------------------------------------
+     */
+    var NAME = 'modal';
+    var VERSION = '4.1.2';
+    var DATA_KEY = 'bs.modal';
+    var EVENT_KEY = "." + DATA_KEY;
+    var DATA_API_KEY = '.data-api';
+    var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
+    var ESCAPE_KEYCODE = 27; // KeyboardEvent.which value for Escape (Esc) key
+
+    var Default = {
+      backdrop: true,
+      keyboard: true,
+      focus: true,
+      show: true
+    };
+    var DefaultType = {
+      backdrop: '(boolean|string)',
+      keyboard: 'boolean',
+      focus: 'boolean',
+      show: 'boolean'
+    };
+    var Event = {
+      HIDE: "hide" + EVENT_KEY,
+      HIDDEN: "hidden" + EVENT_KEY,
+      SHOW: "show" + EVENT_KEY,
+      SHOWN: "shown" + EVENT_KEY,
+      FOCUSIN: "focusin" + EVENT_KEY,
+      RESIZE: "resize" + EVENT_KEY,
+      CLICK_DISMISS: "click.dismiss" + EVENT_KEY,
+      KEYDOWN_DISMISS: "keydown.dismiss" + EVENT_KEY,
+      MOUSEUP_DISMISS: "mouseup.dismiss" + EVENT_KEY,
+      MOUSEDOWN_DISMISS: "mousedown.dismiss" + EVENT_KEY,
+      CLICK_DATA_API: "click" + EVENT_KEY + DATA_API_KEY
+    };
+    var ClassName = {
+      SCROLLBAR_MEASURER: 'modal-scrollbar-measure',
+      BACKDROP: 'modal-backdrop',
+      OPEN: 'modal-open',
+      FADE: 'fade',
+      SHOW: 'show'
+    };
+    var Selector = {
+      DIALOG: '.modal-dialog',
+      DATA_TOGGLE: '[data-toggle="modal"]',
+      DATA_DISMISS: '[data-dismiss="modal"]',
+      FIXED_CONTENT: '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top',
+      STICKY_CONTENT: '.sticky-top'
+      /**
+       * ------------------------------------------------------------------------
+       * Class Definition
+       * ------------------------------------------------------------------------
+       */
+>>>>>>> Stashed changes
 
     var shiftOffsets = {
       start: defineProperty({}, side, reference[side]),
       end: defineProperty({}, side, reference[side] + reference[measurement] - popper[measurement])
     };
 
+<<<<<<< Updated upstream
     data.offsets.popper = _extends({}, popper, shiftOffsets[shiftvariation]);
   }
+=======
+    var Modal =
+    /*#__PURE__*/
+    function () {
+      function Modal(element, config) {
+        this._config = this._getConfig(config);
+        this._element = element;
+        this._dialog = element.querySelector(Selector.DIALOG);
+        this._backdrop = null;
+        this._isShown = false;
+        this._isBodyOverflowing = false;
+        this._ignoreBackdropClick = false;
+        this._scrollbarWidth = 0;
+      } // Getters
+
+
+      var _proto = Modal.prototype;
+>>>>>>> Stashed changes
 
   return data;
 }
@@ -26991,6 +27544,12 @@ Popper.Defaults = Defaults;
 
 "use strict";
 
+<<<<<<< Updated upstream
+=======
+          if (animate) {
+            this._backdrop.classList.add(animate);
+          }
+>>>>>>> Stashed changes
 
 module.exports = function bind(fn, thisArg) {
   return function wrap() {
@@ -27180,6 +27739,7 @@ process.emit = noop;
 process.prependListener = noop;
 process.prependOnceListener = noop;
 
+<<<<<<< Updated upstream
 process.listeners = function (name) { return [] }
 
 process.binding = function (name) {
@@ -27191,14 +27751,48 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 process.umask = function() { return 0; };
+=======
+        if (this._isBodyOverflowing) {
+          // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
+          //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
+          var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
+          var stickyContent = [].slice.call(document.querySelectorAll(Selector.STICKY_CONTENT)); // Adjust fixed content padding
+
+          $$$1(fixedContent).each(function (index, element) {
+            var actualPadding = element.style.paddingRight;
+            var calculatedPadding = $$$1(element).css('padding-right');
+            $$$1(element).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + _this9._scrollbarWidth + "px");
+          }); // Adjust sticky content margin
+
+          $$$1(stickyContent).each(function (index, element) {
+            var actualMargin = element.style.marginRight;
+            var calculatedMargin = $$$1(element).css('margin-right');
+            $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) - _this9._scrollbarWidth + "px");
+          }); // Adjust body padding
+>>>>>>> Stashed changes
 
 
+<<<<<<< Updated upstream
 /***/ }),
 /* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+=======
+      _proto._resetScrollbar = function _resetScrollbar() {
+        // Restore fixed content padding
+        var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
+        $$$1(fixedContent).each(function (index, element) {
+          var padding = $$$1(element).data('padding-right');
+          $$$1(element).removeData('padding-right');
+          element.style.paddingRight = padding ? padding : '';
+        }); // Restore sticky content
+
+        var elements = [].slice.call(document.querySelectorAll("" + Selector.STICKY_CONTENT));
+        $$$1(elements).each(function (index, element) {
+          var margin = $$$1(element).data('margin-right');
+>>>>>>> Stashed changes
 
 var utils = __webpack_require__(5);
 var settle = __webpack_require__(91);
@@ -27208,6 +27802,7 @@ var isURLSameOrigin = __webpack_require__(95);
 var createError = __webpack_require__(55);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(96);
 
+<<<<<<< Updated upstream
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
     var requestData = config.data;
@@ -27216,6 +27811,12 @@ module.exports = function xhrAdapter(config) {
     if (utils.isFormData(requestData)) {
       delete requestHeaders['Content-Type']; // Let the browser set it
     }
+=======
+        var padding = $$$1(document.body).data('padding-right');
+        $$$1(document.body).removeData('padding-right');
+        document.body.style.paddingRight = padding ? padding : '';
+      };
+>>>>>>> Stashed changes
 
     var request = new XMLHttpRequest();
     var loadEvent = 'onreadystatechange';
@@ -27295,6 +27896,7 @@ module.exports = function xhrAdapter(config) {
       reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED',
         request));
 
+<<<<<<< Updated upstream
       // Clean up request
       request = null;
     };
@@ -27312,6 +27914,10 @@ module.exports = function xhrAdapter(config) {
 
       if (xsrfValue) {
         requestHeaders[config.xsrfHeaderName] = xsrfValue;
+=======
+      if (selector) {
+        target = document.querySelector(selector);
+>>>>>>> Stashed changes
       }
     }
 
@@ -27380,11 +27986,104 @@ module.exports = function xhrAdapter(config) {
 };
 
 
+<<<<<<< Updated upstream
 /***/ }),
 /* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+=======
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.1.2): tooltip.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  var Tooltip = function ($$$1) {
+    /**
+     * ------------------------------------------------------------------------
+     * Constants
+     * ------------------------------------------------------------------------
+     */
+    var NAME = 'tooltip';
+    var VERSION = '4.1.2';
+    var DATA_KEY = 'bs.tooltip';
+    var EVENT_KEY = "." + DATA_KEY;
+    var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
+    var CLASS_PREFIX = 'bs-tooltip';
+    var BSCLS_PREFIX_REGEX = new RegExp("(^|\\s)" + CLASS_PREFIX + "\\S+", 'g');
+    var DefaultType = {
+      animation: 'boolean',
+      template: 'string',
+      title: '(string|element|function)',
+      trigger: 'string',
+      delay: '(number|object)',
+      html: 'boolean',
+      selector: '(string|boolean)',
+      placement: '(string|function)',
+      offset: '(number|string)',
+      container: '(string|element|boolean)',
+      fallbackPlacement: '(string|array)',
+      boundary: '(string|element)'
+    };
+    var AttachmentMap = {
+      AUTO: 'auto',
+      TOP: 'top',
+      RIGHT: 'right',
+      BOTTOM: 'bottom',
+      LEFT: 'left'
+    };
+    var Default = {
+      animation: true,
+      template: '<div class="tooltip" role="tooltip">' + '<div class="arrow"></div>' + '<div class="tooltip-inner"></div></div>',
+      trigger: 'hover focus',
+      title: '',
+      delay: 0,
+      html: false,
+      selector: false,
+      placement: 'top',
+      offset: 0,
+      container: false,
+      fallbackPlacement: 'flip',
+      boundary: 'scrollParent'
+    };
+    var HoverState = {
+      SHOW: 'show',
+      OUT: 'out'
+    };
+    var Event = {
+      HIDE: "hide" + EVENT_KEY,
+      HIDDEN: "hidden" + EVENT_KEY,
+      SHOW: "show" + EVENT_KEY,
+      SHOWN: "shown" + EVENT_KEY,
+      INSERTED: "inserted" + EVENT_KEY,
+      CLICK: "click" + EVENT_KEY,
+      FOCUSIN: "focusin" + EVENT_KEY,
+      FOCUSOUT: "focusout" + EVENT_KEY,
+      MOUSEENTER: "mouseenter" + EVENT_KEY,
+      MOUSELEAVE: "mouseleave" + EVENT_KEY
+    };
+    var ClassName = {
+      FADE: 'fade',
+      SHOW: 'show'
+    };
+    var Selector = {
+      TOOLTIP: '.tooltip',
+      TOOLTIP_INNER: '.tooltip-inner',
+      ARROW: '.arrow'
+    };
+    var Trigger = {
+      HOVER: 'hover',
+      FOCUS: 'focus',
+      CLICK: 'click',
+      MANUAL: 'manual'
+      /**
+       * ------------------------------------------------------------------------
+       * Class Definition
+       * ------------------------------------------------------------------------
+       */
+>>>>>>> Stashed changes
 
 
 var enhanceError = __webpack_require__(92);
@@ -27535,8 +28234,14 @@ exports.default = {
         data = _$vnode.data,
         componentOptions = _$vnode.componentOptions;
 
+<<<<<<< Updated upstream
     var definedProps = data.attrs || {};
     var definedEvents = componentOptions.listeners || {};
+=======
+          this.addAttachmentClass(attachment);
+          var container = this.config.container === false ? document.body : $$$1(document).find(this.config.container);
+          $$$1(tip).data(this.constructor.DATA_KEY, this);
+>>>>>>> Stashed changes
 
     for (var propName in definedProps) {
       if (definedProps.hasOwnProperty(propName) && props[propName]) {
@@ -27659,6 +28364,14 @@ exports.default = {
     };
   },
 
+<<<<<<< Updated upstream
+=======
+      _proto.setContent = function setContent() {
+        var tip = this.getTipElement();
+        this.setElementContent($$$1(tip.querySelectorAll(Selector.TOOLTIP_INNER)), this.getTitle());
+        $$$1(tip).removeClass(ClassName.FADE + " " + ClassName.SHOW);
+      };
+>>>>>>> Stashed changes
 
   watch: {
     visible: function visible(val) {
@@ -27828,6 +28541,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var nodeList = [];
 var ctx = '@@clickoutsideContext';
 
+<<<<<<< Updated upstream
 var startClick = void 0;
 var seed = 0;
 
@@ -27840,6 +28554,21 @@ var seed = 0;
     return node[ctx].documentHandler(e, startClick);
   });
 });
+=======
+        if (tabClass !== null && tabClass.length) {
+          $tip.removeClass(tabClass.join(''));
+        }
+      };
+
+      _proto._handlePopperPlacementChange = function _handlePopperPlacementChange(popperData) {
+        var popperInstance = popperData.instance;
+        this.tip = popperInstance.popper;
+
+        this._cleanTipClass();
+
+        this.addAttachmentClass(this._getAttachment(popperData.placement));
+      };
+>>>>>>> Stashed changes
 
 function createDocumentHandler(el, binding, vnode) {
   return function () {
@@ -27953,6 +28682,7 @@ module.exports = function ( delay, noTrailing, callback, debounceMode ) {
 			timeoutID = undefined;
 		}
 
+<<<<<<< Updated upstream
 		if ( debounceMode && !timeoutID ) {
 			// Since `wrapper` is being called for the first time and
 			// `debounceMode` is true (at begin), execute `callback`.
@@ -27963,6 +28693,28 @@ module.exports = function ( delay, noTrailing, callback, debounceMode ) {
 		if ( timeoutID ) {
 			clearTimeout(timeoutID);
 		}
+=======
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.1.2): popover.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  var Popover = function ($$$1) {
+    /**
+     * ------------------------------------------------------------------------
+     * Constants
+     * ------------------------------------------------------------------------
+     */
+    var NAME = 'popover';
+    var VERSION = '4.1.2';
+    var DATA_KEY = 'bs.popover';
+    var EVENT_KEY = "." + DATA_KEY;
+    var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
+    var CLASS_PREFIX = 'bs-popover';
+    var BSCLS_PREFIX_REGEX = new RegExp("(^|\\s)" + CLASS_PREFIX + "\\S+", 'g');
+>>>>>>> Stashed changes
 
 		if ( debounceMode === undefined && elapsed > delay ) {
 			// In throttle mode, if `delay` time has been exceeded, execute
@@ -28116,9 +28868,70 @@ exports.__esModule = true;
 
 var _resizeEvent = __webpack_require__(18);
 
+<<<<<<< Updated upstream
 var _scrollbarWidth = __webpack_require__(38);
 
 var _scrollbarWidth2 = _interopRequireDefault(_scrollbarWidth);
+=======
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.1.2): scrollspy.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  var ScrollSpy = function ($$$1) {
+    /**
+     * ------------------------------------------------------------------------
+     * Constants
+     * ------------------------------------------------------------------------
+     */
+    var NAME = 'scrollspy';
+    var VERSION = '4.1.2';
+    var DATA_KEY = 'bs.scrollspy';
+    var EVENT_KEY = "." + DATA_KEY;
+    var DATA_API_KEY = '.data-api';
+    var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
+    var Default = {
+      offset: 10,
+      method: 'auto',
+      target: ''
+    };
+    var DefaultType = {
+      offset: 'number',
+      method: 'string',
+      target: '(string|element)'
+    };
+    var Event = {
+      ACTIVATE: "activate" + EVENT_KEY,
+      SCROLL: "scroll" + EVENT_KEY,
+      LOAD_DATA_API: "load" + EVENT_KEY + DATA_API_KEY
+    };
+    var ClassName = {
+      DROPDOWN_ITEM: 'dropdown-item',
+      DROPDOWN_MENU: 'dropdown-menu',
+      ACTIVE: 'active'
+    };
+    var Selector = {
+      DATA_SPY: '[data-spy="scroll"]',
+      ACTIVE: '.active',
+      NAV_LIST_GROUP: '.nav, .list-group',
+      NAV_LINKS: '.nav-link',
+      NAV_ITEMS: '.nav-item',
+      LIST_ITEMS: '.list-group-item',
+      DROPDOWN: '.dropdown',
+      DROPDOWN_ITEMS: '.dropdown-item',
+      DROPDOWN_TOGGLE: '.dropdown-toggle'
+    };
+    var OffsetMethod = {
+      OFFSET: 'offset',
+      POSITION: 'position'
+      /**
+       * ------------------------------------------------------------------------
+       * Class Definition
+       * ------------------------------------------------------------------------
+       */
+>>>>>>> Stashed changes
 
 var _util = __webpack_require__(3);
 
@@ -28136,6 +28949,7 @@ exports.default = {
 
   components: { Bar: _bar2.default },
 
+<<<<<<< Updated upstream
   props: {
     native: Boolean,
     wrapStyle: {},
@@ -28157,6 +28971,22 @@ exports.default = {
       moveY: 0
     };
   },
+=======
+        var autoMethod = this._scrollElement === this._scrollElement.window ? OffsetMethod.OFFSET : OffsetMethod.POSITION;
+        var offsetMethod = this._config.method === 'auto' ? autoMethod : this._config.method;
+        var offsetBase = offsetMethod === OffsetMethod.POSITION ? this._getScrollTop() : 0;
+        this._offsets = [];
+        this._targets = [];
+        this._scrollHeight = this._getScrollHeight();
+        var targets = [].slice.call(document.querySelectorAll(this._selector));
+        targets.map(function (element) {
+          var target;
+          var targetSelector = Util.getSelectorFromElement(element);
+
+          if (targetSelector) {
+            target = document.querySelector(targetSelector);
+          }
+>>>>>>> Stashed changes
 
 
   computed: {
@@ -28304,6 +29134,13 @@ exports.default = {
         move = this.move,
         bar = this.bar;
 
+<<<<<<< Updated upstream
+=======
+        var offsetLength = this._offsets.length;
+
+        for (var i = offsetLength; i--;) {
+          var isActiveTarget = this._activeTarget !== this._targets[i] && scrollTop >= this._offsets[i] && (typeof this._offsets[i + 1] === 'undefined' || scrollTop < this._offsets[i + 1]);
+>>>>>>> Stashed changes
 
     return h(
       'div',
@@ -28322,11 +29159,18 @@ exports.default = {
             'mousedown': this.clickThumbHandler
           },
 
+<<<<<<< Updated upstream
           style: (0, _util.renderThumbStyle)({ size: size, move: move, bar: bar }) },
         []
       )]
     );
   },
+=======
+        queries = queries.map(function (selector) {
+          return selector + "[data-target=\"" + target + "\"]," + (selector + "[href=\"" + target + "\"]");
+        });
+        var $link = $$$1([].slice.call(document.querySelectorAll(queries.join(','))));
+>>>>>>> Stashed changes
 
 
   methods: {
@@ -28355,7 +29199,31 @@ exports.default = {
       if (this.cursorDown === false) return;
       var prevPage = this[this.bar.axis];
 
+<<<<<<< Updated upstream
       if (!prevPage) return;
+=======
+      _proto._clear = function _clear() {
+        var nodes = [].slice.call(document.querySelectorAll(this._selector));
+        $$$1(nodes).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
+      }; // Static
+
+
+      ScrollSpy._jQueryInterface = function _jQueryInterface(config) {
+        return this.each(function () {
+          var data = $$$1(this).data(DATA_KEY);
+
+          var _config = typeof config === 'object' && config;
+
+          if (!data) {
+            data = new ScrollSpy(this, _config);
+            $$$1(this).data(DATA_KEY, data);
+          }
+
+          if (typeof config === 'string') {
+            if (typeof data[config] === 'undefined') {
+              throw new TypeError("No method named \"" + config + "\"");
+            }
+>>>>>>> Stashed changes
 
       var offset = (this.$el.getBoundingClientRect()[this.bar.direction] - e[this.bar.client]) * -1;
       var thumbClickPosition = this.$refs.thumb[this.bar.offset] - prevPage;
@@ -28378,10 +29246,19 @@ exports.default = {
 
 /***/ }),
 
+<<<<<<< Updated upstream
 /***/ 340:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+=======
+    $$$1(window).on(Event.LOAD_DATA_API, function () {
+      var scrollSpys = [].slice.call(document.querySelectorAll(Selector.DATA_SPY));
+      var scrollSpysLength = scrollSpys.length;
+
+      for (var i = scrollSpysLength; i--;) {
+        var $spy = $$$1(scrollSpys[i]);
+>>>>>>> Stashed changes
 
 
 exports.__esModule = true;
@@ -28417,6 +29294,7 @@ function renderThumbStyle(_ref) {
   var style = {};
   var translate = 'translate' + bar.axis + '(' + move + '%)';
 
+<<<<<<< Updated upstream
   style[bar.size] = size;
   style.transform = translate;
   style.msTransform = translate;
@@ -28424,6 +29302,54 @@ function renderThumbStyle(_ref) {
 
   return style;
 };
+=======
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.1.2): tab.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  var Tab = function ($$$1) {
+    /**
+     * ------------------------------------------------------------------------
+     * Constants
+     * ------------------------------------------------------------------------
+     */
+    var NAME = 'tab';
+    var VERSION = '4.1.2';
+    var DATA_KEY = 'bs.tab';
+    var EVENT_KEY = "." + DATA_KEY;
+    var DATA_API_KEY = '.data-api';
+    var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
+    var Event = {
+      HIDE: "hide" + EVENT_KEY,
+      HIDDEN: "hidden" + EVENT_KEY,
+      SHOW: "show" + EVENT_KEY,
+      SHOWN: "shown" + EVENT_KEY,
+      CLICK_DATA_API: "click" + EVENT_KEY + DATA_API_KEY
+    };
+    var ClassName = {
+      DROPDOWN_MENU: 'dropdown-menu',
+      ACTIVE: 'active',
+      DISABLED: 'disabled',
+      FADE: 'fade',
+      SHOW: 'show'
+    };
+    var Selector = {
+      DROPDOWN: '.dropdown',
+      NAV_LIST_GROUP: '.nav, .list-group',
+      ACTIVE: '.active',
+      ACTIVE_UL: '> li > .active',
+      DATA_TOGGLE: '[data-toggle="tab"], [data-toggle="pill"], [data-toggle="list"]',
+      DROPDOWN_TOGGLE: '.dropdown-toggle',
+      DROPDOWN_ACTIVE_CHILD: '> .dropdown-menu .active'
+      /**
+       * ------------------------------------------------------------------------
+       * Class Definition
+       * ------------------------------------------------------------------------
+       */
+>>>>>>> Stashed changes
 
 /***/ }),
 
@@ -28452,9 +29378,15 @@ exports.getFirstComponentChild = getFirstComponentChild;
 
 var _util = __webpack_require__(9);
 
+<<<<<<< Updated upstream
 function isVNode(node) {
   return node !== null && (typeof node === 'undefined' ? 'undefined' : _typeof(node)) === 'object' && (0, _util.hasOwn)(node, 'componentOptions');
 };
+=======
+        if (selector) {
+          target = document.querySelector(selector);
+        }
+>>>>>>> Stashed changes
 
 function getFirstComponentChild(children) {
   return children && children.filter(function (c) {
@@ -28644,8 +29576,15 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
+<<<<<<< Updated upstream
 /***/ 244:
 /***/ (function(module, exports, __webpack_require__) {
+=======
+          if (dropdownElement) {
+            var dropdownToggleList = [].slice.call(dropdownElement.querySelectorAll(Selector.DROPDOWN_TOGGLE));
+            $$$1(dropdownToggleList).addClass(ClassName.ACTIVE);
+          }
+>>>>>>> Stashed changes
 
 "use strict";
 
@@ -28700,7 +29639,16 @@ var Component = normalizeComponent(
 /* harmony default export */ __webpack_exports__["default"] = (Component.exports);
 
 
+<<<<<<< Updated upstream
 /***/ }),
+=======
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v4.1.2): index.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+>>>>>>> Stashed changes
 
 /***/ 246:
 /***/ (function(module, exports, __webpack_require__) {
@@ -60093,7 +61041,12 @@ var _emitter = __webpack_require__(1);
 
 var _emitter2 = _interopRequireDefault(_emitter);
 
+<<<<<<< Updated upstream
 var _migrating = __webpack_require__(7);
+=======
+// module
+exports.push([module.i, "\nlabel.custom-file-label[data-v-81a27640], input.custom-file-input[data-v-81a27640] {\n  height: 40px !important;\n}\nlabel.custom-file-label[data-v-81a27640]::after {\n  height: 38px !important;\n}\n.badge[data-v-81a27640] {\n  font-weight: normal;\n  font-size: 80% !important;\n  color: #909194;\n  background-color: #eff1f5;\n  padding: 0.5em;\n}\n.badge > div[data-v-81a27640] {\n    display: inline-block;\n    height: 1em;\n    width: 1em;\n    border-radius: 50%;\n    color: #eff1f5;\n    background-color: #bfc1cb;\n}\n.badge > div[data-v-81a27640]:hover {\n      background-color: #8f9198;\n      cursor: pointer;\n}\nlabel.custom-file-label[data-v-81a27640] {\n  z-index: 100;\n}\n.no-expiration[data-v-81a27640] {\n  color: grey;\n  font-style: italic;\n  font-size: 75%;\n}\n", ""]);
+>>>>>>> Stashed changes
 
 var _migrating2 = _interopRequireDefault(_migrating);
 
@@ -60101,6 +61054,7 @@ var _ariaMenubar = __webpack_require__(80);
 
 var _ariaMenubar2 = _interopRequireDefault(_ariaMenubar);
 
+<<<<<<< Updated upstream
 var _dom = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -60171,6 +61125,79 @@ exports.default = {
             },
             beforeLeave: function beforeLeave(el) {
               if (!el.dataset) el.dataset = {};
+=======
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+>>>>>>> Stashed changes
 
               if ((0, _dom.hasClass)(el, 'el-menu--collapse')) {
                 (0, _dom.removeClass)(el, 'el-menu--collapse');
@@ -60348,6 +61375,7 @@ exports.default = {
 
       var isOpened = this.openedMenus.indexOf(index) !== -1;
 
+<<<<<<< Updated upstream
       if (isOpened) {
         this.closeMenu(index);
         this.$emit('close', index, indexPath);
@@ -60358,6 +61386,108 @@ exports.default = {
     },
     handleItemClick: function handleItemClick(item) {
       var _this = this;
+=======
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "form-row" },
+    [
+      _c(
+        "form-item",
+        { attrs: { col: "col", label: _vm.label, errors: _vm.errors } },
+        [
+          _c("div", { class: "col-" + _vm.inputfilecol }, [
+            _c("div", { staticClass: "custom-file" }, [
+              _c("input", {
+                staticClass: "custom-file-input",
+                attrs: { type: "file", id: _vm.name, lang: "es" },
+                on: { change: _vm.fileUploaded }
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                { staticClass: "custom-file-label", attrs: { for: _vm.name } },
+                [
+                  _vm.file.selected
+                    ? _c(
+                        "span",
+                        {
+                          staticClass: "badge",
+                          on: {
+                            click: function(e) {
+                              return e.preventDefault()
+                            }
+                          }
+                        },
+                        [
+                          _c("abbreviation-text", {
+                            attrs: { text: _vm.file.name, length: 25 }
+                          }),
+                          _vm._v(" "),
+                          _c("div", { on: { click: _vm.deleteFile } }, [
+                            _c("i", { staticClass: "fas fa-times fa-sm" })
+                          ])
+                        ],
+                        1
+                      )
+                    : _c("span", [_vm._v("Seleccionar Archivo")])
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { class: "col-" + _vm.input_date_col + " text-center" }, [
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                type: "date",
+                name: _vm.name + "_expiration",
+                title: "Vencimiento"
+              },
+              on: {
+                input: function(e) {
+                  return _vm.updated("expiration", e.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _vm.checked !== null
+            ? _c(
+                "div",
+                { staticClass: "col-1 d-flex align-items-center" },
+                [
+                  _c("switch-box", {
+                    attrs: { title: "¿Requerido?" },
+                    on: {
+                      update: function(value) {
+                        return _vm.updated("required", value)
+                      }
+                    }
+                  })
+                ],
+                1
+              )
+            : _vm._e()
+        ]
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-81a27640", module.exports)
+  }
+}
+>>>>>>> Stashed changes
 
       var index = item.index,
           indexPath = item.indexPath;

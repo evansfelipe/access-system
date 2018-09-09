@@ -1,12 +1,27 @@
 <style lang="scss" scoped>
+    label.custom-file-label, input.custom-file-input {
+        height: 40px !important;
+    }
+    label.custom-file-label::after {
+        height: 38px !important;
+    }
     .badge {
-        font-size: 100% !important;
         font-weight: normal;
-        border: 1px solid #3F729B;
-        color: #3F729B;
-        & > div > i:hover {
-            color: rgb(160, 0, 0);
-            cursor: pointer;
+        font-size: 80% !important;
+        color: rgb(144, 145, 148);
+        background-color: rgb(239,241,245);
+        padding: 0.5em;
+        & > div {
+            display: inline-block;
+            height: 1em;
+            width: 1em;
+            border-radius: 50%;
+            color: rgb(239,241,245);
+            background-color: rgb(191,193,203);
+            &:hover {
+                background-color: rgb(143, 145, 152);
+                cursor: pointer;
+            }
         }
     }
 
@@ -33,8 +48,8 @@
                     <label class="custom-file-label" :for="name">
                         <!-- Shows file name when it's selected -->
                         <span v-if="file.selected" class="badge" @click="e => e.preventDefault()">
-                            <div @click="deleteFile" class="d-inline"><i class="fas fa-times fa-sm"></i></div>
                             <abbreviation-text :text="file.name" :length="25"/>
+                            <div @click="deleteFile"><i class="fas fa-times fa-sm"></i></div>
                         </span>
                         <!-- Default message instead -->
                         <span v-else>Seleccionar Archivo</span>                        
