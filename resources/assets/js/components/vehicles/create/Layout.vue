@@ -14,8 +14,8 @@
         <!-- Card -->
         <creation-wrapper   :updating="this.$store.getters.vehicle.updating" :values="values" :route="route" 
                             @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel">
-            <general-information v-show="tab === 0" :errors="errors.general_information" :values="values.general_information"/>
-            <assign-people v-show="tab === 1" :errors="errors.assign_people" :values="values.assign_people" :companyid="company_id" :companyname="company_name"/>
+            <general-information v-show="tab === 0" :errors="general_information_errors" :values="values.general_information"/>
+            <assign-people v-show="tab === 1" :errors="assign_people_errors" :values="values.assign_people" :companyid="company_id" :companyname="company_name"/>
         </creation-wrapper>
     </div>
 </template>
@@ -30,10 +30,7 @@ export default {
         return {
             tab: 0,
             first_save: false,
-            errors: {
-                general_information: {},
-                assign_people:       {},
-            },
+            errors: [],
             step_validated: {
                 general_information: null,
                 assign_people:       null,
@@ -68,6 +65,12 @@ export default {
             }
             return ret;
         },
+        general_information_errors: function() {
+            return this.errors['general_information'] ? this.errors['general_information'] : []; 
+        },
+        assign_people_errors: function() {
+            return this.errors['assign_people'] ? this.errors['assign_people'] : []; 
+        }
     },
     methods: {
         saveSuccess: function(id) {

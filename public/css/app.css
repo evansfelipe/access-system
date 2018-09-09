@@ -10517,6 +10517,11 @@ i.far.centered {
 
 .form-control {
   height: 40px;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #495057;
+  border-radius: 0.25rem;
   border-color: #ced4da;
 }
 
@@ -10531,10 +10536,6 @@ i.far.centered {
 
 .form-control:disabled {
   background-color: #f5f7fa;
-}
-
-.form-control:hover {
-  border-color: #ced4da;
 }
 
 .form-control::-webkit-input-placeholder {
@@ -10564,6 +10565,11 @@ i.far.centered {
 }
 
 .el-input.el-input--suffix > input {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #495057;
+  border-radius: 0.25rem;
   border-color: #ced4da;
 }
 
@@ -10594,7 +10600,7 @@ i.far.centered {
 .el-input.el-input--suffix.is-focus {
   -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
           box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-  border-radius: 3px;
+  border-radius: 0.25rem;
   -webkit-transition: -webkit-box-shadow .3s;
   transition: -webkit-box-shadow .3s;
   transition: box-shadow .3s;

@@ -74,7 +74,7 @@ export default {
         },
         errors: {
             required: true,
-            type: Object
+            type: Array
         }
     },
     computed: {

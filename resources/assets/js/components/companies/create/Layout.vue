@@ -8,7 +8,7 @@
 
         <creation-wrapper   :updating="this.$store.getters.company.updating" :values="values" :route="route" 
                             @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel">
-                <general-information v-show="tab === 0" :values="values.general_information" :errors="errors.general_information"></general-information>
+                <general-information v-show="tab === 0" :values="values.general_information" :errors="general_information_errors"></general-information>
         </creation-wrapper>
     </div>
 </template>
@@ -22,9 +22,7 @@ export default {
         return {
             tab: 0,
             first_save: false,
-            errors: {
-                general_information: {},
-            },
+            errors: [],
             step_validated: {
                 general_information: null,
             }
@@ -43,6 +41,9 @@ export default {
                 url:    this.id ? `/companies/${this.id}` : '/companies'
             }
         },
+        general_information_errors: function() {
+            return this.errors['general_information'] ? this.errors['general_information'] : []; 
+        }
     },
     methods: {
         saveSuccess: function(id) {

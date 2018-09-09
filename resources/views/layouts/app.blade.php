@@ -66,20 +66,24 @@
                 </div>
             </nav>
 
-            <main>
-                @if(count( $errors ) > 0)
-                    @foreach ($errors->all() as $error)
-                        <div>{{ $error }}</div>
-                    @endforeach
+            {{-- @if(count( $errors ) > 0)
+                @foreach ($errors->all() as $error)
+                <div>{{ $error }}</div>
+                @endforeach
                 @endif
-        
+                
                 @if(Session::has('error_messages'))
-                    <div class="alert alert-danger" role="alert">
-                        @foreach (Session::get('error_messages') as $error)
+                <div class="row">
+                    <div class="offset-6 col-6">
+                        <div class="alert alert-danger" role="alert">
+                            @foreach (Session::get('error_messages') as $error)
                             <div>{{ $error }}</div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
-                @endif
+                </div>
+                @endif --}}
+            <main>
                 @yield('content')
             </main>
         </div>

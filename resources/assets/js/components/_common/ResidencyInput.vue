@@ -79,7 +79,7 @@ export default {
     },
     mounted() {
         this.raw_countries.loading = true;
-        axios.get('locations/countries')
+        axios.get('app/locations/countries')
         .then(response => this.raw_countries.list = response.data)
         .catch(error =>   this.raw_countries.list = [])
         .finally(() => this.raw_countries.loading = false);
@@ -126,7 +126,7 @@ export default {
             this.raw_provinces.list = [];
             if(country) {
                 this.raw_provinces.loading = true;
-                axios.get(`locations/provinces/${country.id}`)
+                axios.get(`app/locations/provinces/${country.id}`)
                 .then(response => this.raw_provinces.list = response.data)
                 .catch(error => console.log(error))
                 .finally(() => this.raw_provinces.loading = false);
@@ -141,7 +141,7 @@ export default {
             this.raw_cities.list = [];
             if(province) {
                 this.raw_cities.loading = true
-                axios.get(`locations/cities/${province.id}`)
+                axios.get(`app/locations/cities/${province.id}`)
                 .then(response => this.raw_cities.list = response.data)
                 .catch(error => console.log(error))
                 .finally(() => this.raw_cities.loading = false);

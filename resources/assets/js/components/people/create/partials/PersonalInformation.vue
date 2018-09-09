@@ -157,7 +157,7 @@ export default {
         }
     },
     mounted() {
-        axios.get('locations/countries')
+        axios.get('app/locations/countries')
         .then(response => this.options.homeland = response.data.map(country => {
             return {
                 id: country.name,

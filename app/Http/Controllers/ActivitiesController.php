@@ -8,7 +8,7 @@ use App\Activity;
 
 class ActivitiesController extends Controller
 {
-    public function updated_at()
+    public function updatedAt()
     {
         return Activity::select(['updated_at'])->orderBy('updated_at','desc')->first();        
     }
@@ -16,26 +16,6 @@ class ActivitiesController extends Controller
     public function list()
     {
         return response(json_encode(Activity::all(['id','name'])))->header('Content-Type', 'application/json');        
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**

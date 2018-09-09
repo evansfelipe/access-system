@@ -15,7 +15,7 @@ class CompaniesController extends Controller
 {
     use SaveResidencyTrait;
 
-    public function updated_at()
+    public function updatedAt()
     {
         return Company::select(['updated_at'])->orderBy('updated_at','desc')->first();        
     }

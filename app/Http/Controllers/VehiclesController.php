@@ -10,7 +10,7 @@ use App\Http\Requests\{ SaveVehicleRequest };
 class VehiclesController extends Controller
 {
 
-    public function updated_at()
+    public function updatedAt()
     {
         $vehicle = Vehicle::select(['updated_at'])->orderBy('updated_at','desc')->first();
         return $vehicle? $vehicle->updated_at : null;        
@@ -24,26 +24,6 @@ class VehiclesController extends Controller
             return $vehicle;
         });
         return response(json_encode($vehicles))->header('Content-Type', 'application/json');        
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**

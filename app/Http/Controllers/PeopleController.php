@@ -14,7 +14,7 @@ class PeopleController extends Controller
      * 
      * @return Timestamp
      */
-    public function updated_at()
+    public function updatedAt()
     {
         // Doing this way prevents Laravel to call toArray function, since the result of the query is a Collection.
         $person = Person::select('updated_at')->orderBy('updated_at','desc')->first();

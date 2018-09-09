@@ -11,39 +11,56 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
-
+/**
+ * Landing routes.
+ */
+Route::get('/', function () { return redirect()->route('home'); });
 Route::get('/home', 'HomeController@index')->name('home');
-
-Route::middleware(['auth','administration'])->group(function() {
-    Route::get('/people/updated_at', 'PeopleController@updated_at');
-    Route::get('/people/list', 'PeopleController@list');
-    Route::get('/people/{person}/pictures', 'PeopleController@pictures');
-    Route::post('/people/{person}/new-observation', 'PeopleController@newObservation');
-    Route::resource('/people', 'PeopleController');
-    Route::get('/companies/updated_at', 'CompaniesController@updated_at');
-    Route::get('/companies/list', 'CompaniesController@list');
-    Route::resource('/companies', 'CompaniesController');
-    // Route::resource('/people/companies', 'PeopleCompaniesController', ['except' => ['create', 'store']], ['as' => 'people']);
-    // Route::resource('/people/vehicles', 'PeopleVehiclesController', ['except' => ['create', 'store']], ['as' => 'people']);
-    Route::resource('/cards', 'CardsController');
-    Route::get('/vehicles/updated_at', 'VehiclesController@updated_at');
-    Route::get('/vehicles/list', 'VehiclesController@list');
-    Route::resource('/vehicles', 'VehiclesController');
-    Route::get('/activities/updated_at', 'ActivitiesController@updated_at');
-    Route::get('/activities/list', 'ActivitiesController@list');
-    Route::resource('/activities', 'ActivitiesController');
-
-    Route::get('/locations/countries', 'LocationsController@countries');
-    Route::get('/locations/provinces/{country_id?}', 'LocationsController@provinces');
-    Route::get('/locations/cities/{province_id?}', 'LocationsController@cities');
-
+/**
+ * General application routes.
+ */
+Route::middleware(['auth'])->prefix('app')->group(function() {
+    // Locations routes.
+    Route::prefix('locations')->group(function() {
+        Route::get('/countries',                'LocationsController@countries')->name('locations.countries');
+        Route::get('/provinces/{country_id?}',  'LocationsController@provinces')->name('locations.provinces');
+        Route::get('/cities/{province_id?}',    'LocationsController@cities')->name('locations.cities');
+    });
 });
+/**
+ * Administration user routes.
+ */
+Route::middleware(['auth','user.administration'])->group(function() {
+    // People routes
+    Route::prefix('people')->group(function() {
+        Route::get('/updated-at',                   'PeopleController@updatedAt')->name('people.updated-at');
+        Route::get('/list',                         'PeopleController@list')->name('people.list');
+        Route::get('/{person}/pictures',            'PeopleController@pictures')->name('people.pictures');
+        Route::post('/{person}/new-observation',    'PeopleController@newObservation')->name('people.new-observation');
+    }); Route::resource('/people',                  'PeopleController')->only(['store', 'show', 'edit', 'update', 'destroy']);
+    // Companies routes
+    Route::prefix('companies')->group(function() {
+        Route::get('/updated-at',       'CompaniesController@updatedAt')->name('companies.updated-at');
+        Route::get('/list',             'CompaniesController@list')->name('companies.list');
+    }); Route::resource('/companies',   'CompaniesController')->only(['store', 'show', 'edit', 'update', 'destroy']);
+    // Vehicles routes
+    Route::prefix('vehicles')->group(function() {
+        Route::get('/updated-at',       'VehiclesController@updatedAt')->name('vehicles.updated-at');
+        Route::get('/list',             'VehiclesController@list')->name('vehicles.list');
+    }); Route::resource('/vehicles',    'VehiclesController')->only(['store', 'show', 'edit', 'update', 'destroy']);
+    // Activities routes
+    Route::prefix('activities')->group(function() {
+        Route::get('/updated-at',       'ActivitiesController@updatedAt')->name('activities.updated-at');
+        Route::get('/list',             'ActivitiesController@list')->name('activities.list');
+    }); Route::resource('/activities',  'ActivitiesController')->only(['store', 'show', 'edit', 'update', 'destroy']);;
 
-// Security
-Route::get('/security/person/{card_number}', 'SecurityController@personInfo');
-Route::post('/security/person/{person}/new-observation', 'PeopleController@newObservation');
+    // Route::resource('/cards', 'CardsController');
+});
+/**
+ * Security user routes.
+ */
+Route::middleware(['auth', 'user.security'])->prefix('security')->group(function() {
+    Route::get('/person/{card_number}',             'SecurityController@personInfo');
+    Route::post('/person/{person}/new-observation', 'PeopleController@newObservation');
+});

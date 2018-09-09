@@ -288,7 +288,7 @@ export default {
         fetchList: function({ commit, state }, what) {
             if(state.debug) console.log('Validating timestamps:', what);
             commit(`updatingList`, { what, value: true });
-            axios.get(`/${what}/updated_at`)
+            axios.get(`/${what}/updated-at`)
             .then(response => {
                 let new_timestamp = new Date(response.data.updated_at);
                 if(state.lists[what].timestamp === null || state.lists[what].timestamp < new_timestamp) {
