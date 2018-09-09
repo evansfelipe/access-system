@@ -16,7 +16,7 @@
             </tab-item>
         </ul>
         <!-- Content -->
-        <div class="card card-default borderless-top-card">
+        <div class="card card-default borderless-top">
             <div class="card-body">
                 <div class="row">
                     <div class="col-11">
@@ -29,7 +29,7 @@
                     </div>
                     <div class="col-1 text-right">
                         <!-- Edit button -->
-                        <button @click="edit" class="btn btn-sm btn-outline-unique btn-circle" title="Editar perfil"><i class="fas fa-user-edit fa-lg"></i></button>
+                        <button @click="edit" class="btn btn-sm btn-outline-unique btn-circle" title="Editar perfil"><i class="fas fa-pen-square fa-lg"></i></button>
                         <!-- PDF button -->
                         <button class="btn btn-sm btn-outline-unique btn-circle" title="Exportar como PDF"><i class="fas fa-file-pdf fa-lg"></i></button>
                     </div>
@@ -70,7 +70,8 @@ export default {
     },
     methods: {
         edit: function() {
-
+            this.$store.dispatch('fetchModel', { which: 'company', id: this.$route.params.id });
+            this.$router.push(`/companies/create`);
         }
     }
 }

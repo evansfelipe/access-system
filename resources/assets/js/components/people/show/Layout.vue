@@ -24,7 +24,7 @@
             </tab-item>
         </ul>
         <!-- Content -->
-        <div class="card card-default borderless-top-card ">
+        <div class="card card-default borderless-top">
             <div class="card-body">
                 <div class="row">
                     <div class="col-11">

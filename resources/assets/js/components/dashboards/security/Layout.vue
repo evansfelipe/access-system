@@ -80,7 +80,7 @@
                 {{ p.values.full_name }}
             </tab-item>
         </ul>
-        <div class="card card-default borderless-top-card">
+        <div class="card card-default borderless-top">
             <div class="card-body" style="padding: 2em 3em;">
 
                 <template v-if="person">

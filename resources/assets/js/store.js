@@ -319,9 +319,11 @@ export default {
             if(state.debug) console.log('Fetching', which, 'id', id);
             let model = getters[which];
             commit('updateModel', { which: which, properties_path: 'updating', value: true });
-            commit('updateModel', {which: which, properties_path: 'editing', value: true });
+            commit('updateModel', { which: which, properties_path: 'editing', value: true });
             axios.get(`/${model.plural}/${id}/edit`)
             .then(response => {
+                console.log(response);
+                
                 commit('updateModel', {which: which, properties_path: 'id', value: response.data.id });
                 commit('updateModel', {which: which, properties_path: 'values', value: response.data.values });
             })

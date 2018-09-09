@@ -51695,6 +51695,8 @@ var Model = function () {
             commit('updateModel', { which: which, properties_path: 'updating', value: true });
             commit('updateModel', { which: which, properties_path: 'editing', value: true });
             axios.get('/' + model.plural + '/' + id + '/edit').then(function (response) {
+                console.log(response);
+
                 commit('updateModel', { which: which, properties_path: 'id', value: response.data.id });
                 commit('updateModel', { which: which, properties_path: 'values', value: response.data.values });
             }).catch(function (error) {
@@ -59199,6 +59201,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -59263,6 +59268,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     computed: {
+        /**
+         * Checks if all the shown rows are picked
+         */
+        all_picked: function all_picked() {
+            var ret = this.pickable.list.length > 0 ? true : false;
+            var i = 0;
+            while (ret && i < this.shown_rows.length) {
+                if (!this.pickable.list.includes(this.shown_rows[i].id)) ret = false;
+                i++;
+            };
+            return ret;
+        },
         /**
          * Array that has the range of buttons for the navigation pages.
          */
@@ -59410,7 +59427,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return ret;
             });
             this.sortColumn(this.sort.column, true);
+        },
+        pickAll: function pickAll() {
+            var _this4 = this;
+
+            if (!this.all_picked) {
+                this.shown_rows.forEach(function (row) {
+                    if (!_this4.pickable.list.includes(row.id)) _this4.$emit('rowclicked', row);
+                });
+            } else {
+                this.shown_rows.forEach(function (row) {
+                    _this4.$emit('rowclicked', row);
+                });
+            }
         }
+
     }
 });
 
@@ -59517,7 +59548,26 @@ var render = function() {
                         "tr",
                         [
                           _vm.pickable.active
-                            ? _c("th", { staticClass: "pickable" })
+                            ? _c(
+                                "th",
+                                {
+                                  staticClass: "pickable",
+                                  on: { click: _vm.pickAll }
+                                },
+                                [
+                                  _vm.all_picked
+                                    ? _c("i", {
+                                        staticClass:
+                                          "far fa-check-square text-unique"
+                                      })
+                                    : _c("i", {
+                                        staticClass: "far fa-square",
+                                        staticStyle: {
+                                          color: "rgba(0,0,0,0.3)"
+                                        }
+                                      })
+                                ]
+                              )
                             : _vm._e(),
                           _vm._v(" "),
                           _vm._l(_vm.columns, function(column, key) {
@@ -60795,7 +60845,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "card card-default borderless-top-card" }, [
+  return _c("div", { staticClass: "card card-default borderless-top" }, [
     _c(
       "div",
       { staticClass: "card-body" },
@@ -63177,7 +63227,7 @@ var render = function() {
         })
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "card card-default borderless-top-card" }, [
+      _c("div", { staticClass: "card card-default borderless-top" }, [
         _c(
           "div",
           { staticClass: "card-body", staticStyle: { padding: "2em 3em" } },
@@ -63667,7 +63717,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            columns: [{ name: 'last_name', text: 'Apellido' }, { name: 'name', text: 'Nombre' }, { name: 'cuil', text: 'CUIL / CUIT' }, { name: 'company_name', text: 'Empresa' }],
+            columns: [{ name: 'last_name', text: 'Apellido', width: '20' }, { name: 'name', text: 'Nombre', width: '20' }, { name: 'cuil', text: 'CUIL / CUIT', width: '20' }, { name: 'company_name', text: 'Empresa', width: '40' }],
             filter: {
                 strict: true,
                 conditions: {
@@ -63773,7 +63823,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("transition", { attrs: { name: "advanced-search" } }, [
+      _c("transition", { attrs: { name: "collapse" } }, [
         _c(
           "div",
           {
@@ -68408,7 +68458,13 @@ var render = function() {
             [
               _c("custom-table", {
                 attrs: { columns: _vm.columns, rows: _vm.vehicles },
-                on: { rowclicked: _vm.showVehicle }
+                on: {
+                  rowclicked: function(ref) {
+                    var id = ref.id
+
+                    return _vm.$router.push("/vehicles/show/" + id)
+                  }
+                }
               })
             ],
             1
@@ -68780,7 +68836,7 @@ var render = function() {
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "card card-default borderless-top-card " }, [
+    _c("div", { staticClass: "card card-default borderless-top" }, [
       _c("div", { staticClass: "card-body" }, [
         _c("div", { staticClass: "row" }, [
           _c(
@@ -68992,7 +69048,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            columns: [{ name: 'business_name', text: 'Razón social' }, { name: 'name', text: 'Nombre' }, { name: 'area', text: 'Rubro' }, { name: 'cuit', text: 'CUIT' }],
+            columns: [{ name: 'business_name', text: 'Razón social', width: '30' }, { name: 'name', text: 'Nombre', width: '30' }, { name: 'area', text: 'Rubro', width: '20' }, { name: 'cuit', text: 'CUIT', width: '20' }],
             filter: {
                 strict: true,
                 conditions: {
@@ -69092,7 +69148,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("transition", { attrs: { name: "advanced-search" } }, [
+      _c("transition", { attrs: { name: "collapse" } }, [
         _c(
           "div",
           {
@@ -69387,8 +69443,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         saveSuccess: function saveSuccess(id) {
-            console.log("Redirigir a vista show de company");
-            // this.$router.push(`/companies/show/${id}`);
+            this.$router.push('/companies/show/' + id);
             this.$store.dispatch('addNotification', { type: 'success', message: 'Empresa ' + (this.id ? 'editada' : 'creada') + ' exitosamente.' });
             this.$store.commit('resetModel', 'company');
             this.first_save = true;
@@ -70057,7 +70112,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
-        edit: function edit() {}
+        edit: function edit() {
+            this.$store.dispatch('fetchModel', { which: 'company', id: this.$route.params.id });
+            this.$router.push('/companies/create');
+        }
     }
 });
 
@@ -70640,7 +70698,7 @@ var render = function() {
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "card card-default borderless-top-card" }, [
+    _c("div", { staticClass: "card card-default borderless-top" }, [
       _c("div", { staticClass: "card-body" }, [
         _c("div", { staticClass: "row" }, [
           _c(
@@ -70698,7 +70756,7 @@ var render = function() {
                 attrs: { title: "Editar perfil" },
                 on: { click: _vm.edit }
               },
-              [_c("i", { staticClass: "fas fa-user-edit fa-lg" })]
+              [_c("i", { staticClass: "fas fa-pen-square fa-lg" })]
             ),
             _vm._v(" "),
             _vm._m(0)
@@ -70945,7 +71003,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("transition", { attrs: { name: "advanced-search" } }, [
+      _c("transition", { attrs: { name: "collapse" } }, [
         _c(
           "div",
           {
@@ -71301,7 +71359,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         saveSuccess: function saveSuccess(id) {
-            console.log('Vehicle create:', id);
+            this.$router.push('/vehicles/show/' + id);
+            this.$store.dispatch('addNotification', { type: 'success', message: 'Veh\xEDculo ' + (this.id ? 'editado' : 'creado') + ' exitosamente.' });
+            this.$store.commit('resetModel', 'person');
+            this.first_save = true;
         },
         saveFailed: function saveFailed(_ref) {
             var errors = _ref.errors,
@@ -72438,7 +72499,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
-        edit: function edit() {}
+        edit: function edit() {
+            this.$store.dispatch('fetchModel', { which: 'vehicle', id: this.$route.params.id });
+            this.$router.push('/vehicles/create');
+        }
     }
 });
 
@@ -72798,7 +72862,7 @@ var render = function() {
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "card card-default borderless-top-card" }, [
+    _c("div", { staticClass: "card card-default borderless-top" }, [
       _c("div", { staticClass: "card-body" }, [
         _c("div", { staticClass: "row" }, [
           _c(
@@ -72832,7 +72896,7 @@ var render = function() {
                 attrs: { title: "Editar perfil" },
                 on: { click: _vm.edit }
               },
-              [_c("i", { staticClass: "fas fa-user-edit fa-lg" })]
+              [_c("i", { staticClass: "fas fa-pen-square fa-lg" })]
             ),
             _vm._v(" "),
             _vm._m(0)

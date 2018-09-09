@@ -26,15 +26,23 @@ class SaveCompanyRequest extends FormRequest
      */
     public function rules()
     {
-        \Debugbar::info($this);
+        $company_rules = Company::getValidationRules();
         $residency_rules = Residency::getValidationRules();
+
+        if($this->route()->getName() === 'companies.update') {
+            if($this->cuit === $this->company->cuit && ($key = array_search('unique:companies', $company_rules['cuit'])) !== false) {
+                unset($company_rules['cuit'][$key]);
+            }
+        }
+
         array_push($residency_rules['street'],    'required');
         array_push($residency_rules['cp'],        'required');
         array_push($residency_rules['country'],   'required');
         array_push($residency_rules['province'],  'required');
         array_push($residency_rules['city'],      'required');
+
         return array_merge(
-            Company::getValidationRules(),
+            $company_rules,
             $residency_rules
         );
     }

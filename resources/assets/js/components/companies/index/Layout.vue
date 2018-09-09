@@ -9,7 +9,7 @@
                 </button>
             </div>
         </div>
-        <transition name="advanced-search">
+        <transition name="collapse">
             <div v-show="advanced_search" class="card">
                 <div class="card-body" style="background: #fafafa">
                     <div class="row">
@@ -43,10 +43,10 @@ export default {
     data: function() {
         return {
             columns: [
-                {name: 'business_name', text: 'Razón social'},
-                {name: 'name',          text: 'Nombre'},
-                {name: 'area',          text: 'Rubro'},
-                {name: 'cuit',          text: 'CUIT'}
+                {name: 'business_name', text: 'Razón social',   width: '30'},
+                {name: 'name',          text: 'Nombre',         width: '30'},
+                {name: 'area',          text: 'Rubro',          width: '20'},
+                {name: 'cuit',          text: 'CUIT',           width: '20'}
             ],
             filter: {
                 strict: true,

@@ -9,7 +9,7 @@
                 </button>
             </div>
         </div>
-        <transition name="advanced-search">
+        <transition name="collapse">
             <div v-show="advanced_search" class="card">
                 <div class="card-body" style="background: #fafafa">
                     <div class="row">

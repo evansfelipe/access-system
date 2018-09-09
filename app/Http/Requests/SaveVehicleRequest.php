@@ -24,8 +24,14 @@ class SaveVehicleRequest extends FormRequest
      */
     public function rules()
     {
+        $vehicle_rules = Vehicle::getValidationRules();
+        if($this->route()->getName() === 'vehicles.update') {
+            if($this->plate === $this->vehicle->plate && ($key = array_search('unique:vehicles', $vehicle_rules['plate'])) !== false) {
+                unset($vehicle_rules['plate'][$key]);
+            }
+        }
         return array_merge(
-            Vehicle::getValidationRules(),
+            $vehicle_rules,
             PersonVehicle::getPeopleValidationRules()
         );
     }

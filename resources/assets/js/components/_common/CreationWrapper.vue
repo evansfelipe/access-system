@@ -3,7 +3,7 @@
 </style>
 
 <template>
-    <div class="card card-default borderless-top-card">
+    <div class="card card-default borderless-top">
         <div class="card-body">
             <loading-cover v-if="updating" message="Cargando..."/>
             <template v-else>

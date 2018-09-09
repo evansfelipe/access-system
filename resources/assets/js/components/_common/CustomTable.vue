@@ -61,7 +61,10 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th v-if="pickable.active" class="pickable"></th>
+                                    <th v-if="pickable.active" class="pickable" @click="pickAll">
+                                        <i v-if="all_picked" class="far fa-check-square text-unique"></i>
+                                        <i v-else class="far fa-square" style="color: rgba(0,0,0,0.3)"></i>
+                                    </th>
                                     <th v-for="(column,key) in columns" :key="key" @click="sortColumn(key)"
                                         :style="`width: ${column.hasOwnProperty('width')? column.width : (100/columns.length)}%`"
                                     >
@@ -186,6 +189,18 @@ export default {
         this.paginate();
     },
     computed: {
+        /**
+         * Checks if all the shown rows are picked
+         */
+        all_picked: function() {
+            let ret = this.pickable.list.length > 0 ? true : false;
+            let i = 0;
+            while(ret && i < this.shown_rows.length) {
+                if(!this.pickable.list.includes(this.shown_rows[i].id)) ret = false;
+                i++;
+            };
+            return ret;
+        },
         /**
          * Array that has the range of buttons for the navigation pages.
          */
@@ -330,7 +345,20 @@ export default {
                 return ret;
             });
             this.sortColumn(this.sort.column, true);
+        },
+        pickAll: function() {
+            if(!this.all_picked) {
+                this.shown_rows.forEach(row => {
+                    if(!this.pickable.list.includes(row.id)) this.$emit('rowclicked', row);                  
+                });
+            }
+            else {
+                this.shown_rows.forEach(row => {
+                    this.$emit('rowclicked', row);                  
+                });
+            }
         }
+
     }
 }
 </script>

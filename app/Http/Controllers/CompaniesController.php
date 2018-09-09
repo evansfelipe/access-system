@@ -69,9 +69,19 @@ class CompaniesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Company $company)
     {
-        //
+        $comp = $company->toShowArray();
+        unset($comp['assigned_people'], $comp['assigned_vehicles']);
+        unset($comp['general_information']['expiration']);
+        $comp['general_information']['expiration'] = $company->expiration ? date('Y-m-d', strtotime($company->expiration)) : '';
+        if( $comp['general_information']['apartment'] === '-' ) $comp['general_information']['apartment'] = '';
+
+        $data = [
+            'id'    => $company->id,
+            'values' => [ 'general_information' => $comp['general_information'] ]
+        ];
+        return response(json_encode($data), 200)->header('Content-Type', 'application/json'); 
     }
 
     /**
@@ -81,9 +91,12 @@ class CompaniesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Company $company)
     {
-        //
+        $company->fill($request->toArray());
+        $company->save();
+        
+        return response(json_encode(['id' => $company->id]), 200)->header('Content-Type', 'application/json');
     }
 
     /**
