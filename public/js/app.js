@@ -108652,7 +108652,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.badge[data-v-81a27640] {\n  font-size: 100% !important;\n  font-weight: normal;\n  border: 1px solid #3F729B;\n  color: #3F729B;\n}\n.badge > div > i[data-v-81a27640]:hover {\n    color: #a00000;\n    cursor: pointer;\n}\nlabel.custom-file-label[data-v-81a27640] {\n  z-index: 100;\n}\n.no-expiration[data-v-81a27640] {\n  color: grey;\n  font-style: italic;\n  font-size: 75%;\n}\n", ""]);
+exports.push([module.i, "\nlabel.custom-file-label[data-v-81a27640], input.custom-file-input[data-v-81a27640] {\n  height: 40px !important;\n}\nlabel.custom-file-label[data-v-81a27640]::after {\n  height: 38px !important;\n}\n.badge[data-v-81a27640] {\n  font-weight: normal;\n  font-size: 80% !important;\n  color: #909194;\n  background-color: #eff1f5;\n  padding: 0.5em;\n}\n.badge > div[data-v-81a27640] {\n    display: inline-block;\n    height: 1em;\n    width: 1em;\n    border-radius: 50%;\n    color: #eff1f5;\n    background-color: #bfc1cb;\n}\n.badge > div[data-v-81a27640]:hover {\n      background-color: #8f9198;\n      cursor: pointer;\n}\nlabel.custom-file-label[data-v-81a27640] {\n  z-index: 100;\n}\n.no-expiration[data-v-81a27640] {\n  color: grey;\n  font-style: italic;\n  font-size: 75%;\n}\n", ""]);
 
 // exports
 
@@ -108663,6 +108663,21 @@ exports.push([module.i, "\n.badge[data-v-81a27640] {\n  font-size: 100% !importa
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -108825,18 +108840,13 @@ var render = function() {
                           }
                         },
                         [
-                          _c(
-                            "div",
-                            {
-                              staticClass: "d-inline",
-                              on: { click: _vm.deleteFile }
-                            },
-                            [_c("i", { staticClass: "fas fa-times fa-sm" })]
-                          ),
-                          _vm._v(" "),
                           _c("abbreviation-text", {
                             attrs: { text: _vm.file.name, length: 25 }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _c("div", { on: { click: _vm.deleteFile } }, [
+                            _c("i", { staticClass: "fas fa-times fa-sm" })
+                          ])
                         ],
                         1
                       )
