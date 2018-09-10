@@ -1,7 +1,3 @@
-<style lang="scss" scoped>
-</style>
-
-
 <template>
     <el-select  style="width: 100%" 
                 v-model="input_value"   :disabled="disabled || loading"
@@ -9,11 +5,12 @@
                 :multiple="multiple"    :allow-create="tags"
                 filterable              default-first-option
                 clearable               :size="size"
-                :loading="loading"      loading-text="Cargando..." auto-complete="nope"
+                :loading="loading"      loading-text="Cargando..."
+                auto-complete="nope"    :filter-method="filterMethod"
     >
         <el-option
-            v-for="(item, key) in options"
-            :key="key"
+            v-for="item in filtered_options"
+            :key="item.id"
             :value="item.id"
             :label="item.text"
         >
@@ -22,61 +19,68 @@
 </template>
 
 <script>
-import Select2 from 'select2';
-
 export default {
     props: {
         disabled: {
-            type: Boolean,
+            type:     Boolean,
             required: false,
-            default: false
+            default:  false
         },
         options: {
-            type: Array,
+            type:     Array,
             required: false,
-            default: () => []
+            default:  () => []
         },
         value: {
             required: false,
-            default: 0
+            default:  ''
         },
         placeholder: {
-            type: String,
+            type:     String,
             required: false,
-            default: 'Seleccione una opción'
+            default:  'Seleccione una opción'
         },
         tags: {
-            type: Boolean,
+            type:     Boolean,
             required: false,
-            default: false
+            default:  false
         },
         name: {
-            type: String,
+            type:     String,
             required: false,
-            default: ''
+            default:  ''
         },
         multiple: {
-            type: Boolean,
+            type:     Boolean,
             required: false,
-            default: false
+            default:  false
         },
         size: {
-            type: String,
+            type:     String,
             required: false,
-            default: ''
+            default:  ''
         },
         loading: {
-            type: Boolean,
+            type:     Boolean,
             required: false,
-            default: false
+            default:  false
         }
     },
     data() {
         return {
-            input_value: this.value
+            input_value: this.value,
+            filtered_options: this.options
         };
     },
+    methods: {
+        filterMethod: function(value) {
+            this.filtered_options = this.options.filter(option => option.text.matches(value));
+        }
+    },
     watch: {
+        options: function() {
+            this.filtered_options = this.options;
+        },
         value: function() {
             this.input_value = this.value;
         },

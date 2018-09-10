@@ -53,11 +53,11 @@
 export default {
     props: {
         values: {
-            type: Object,
+            type:     Object,
             required: true
         },
         errors: {
-            type: Object,
+            type:     Object,
             required: true
         }
     },

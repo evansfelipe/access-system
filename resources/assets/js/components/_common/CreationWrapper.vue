@@ -5,13 +5,13 @@
 <template>
     <div class="card card-default borderless-top">
         <div class="card-body">
-            <loading-cover v-if="updating" message="Cargando..."/>
+            <loading-cover v-if="updating"/>
             <template v-else>
                 <slot/>
                 <hr>
                 <div class="row">
                     <div class="col">
-                        <confirmable-button btnclass="btn btn-outline-danger btn-sm" @confirmed="cancel">Cancelar</confirmable-button>
+                        <confirmable-button btn-class="btn btn-outline-danger btn-sm" @confirmed="cancel">Cancelar</confirmable-button>
                         <button class="btn btn-outline-success btn-sm float-right" @click="save">Guardar</button>
                     </div>
                 </div>

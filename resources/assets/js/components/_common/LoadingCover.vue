@@ -14,7 +14,7 @@
 
 <template>
     <div class="loading-panel">
-        <i class="fas fa-spinner fa-spin fa-4x text-unique"></i>
+        <i class="fas fa-spinner fa-spin fa-4x"></i>
         <br>
         <h4>{{ message }}</h4>
     </div>
@@ -24,8 +24,9 @@
 export default {
     props: {
         message: {
+            type:     String,
             required: false,
-            default: ''
+            default:  'Cargando...'
         }
     }
 }

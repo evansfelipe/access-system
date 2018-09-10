@@ -1,5 +1,9 @@
-String.prototype.matches = function(other) { 
-    return this.toUpperCase().includes(other.toString().toUpperCase().trim())
+String.prototype.normalized = function() {
+    return this.normalize('NFD').replace(/[\u0300-\u036f]/g,"").toLowerCase();
+}
+
+String.prototype.matches = function(other) {
+    return this.normalized().includes(other.toString().normalized());
 };
 
 Array.prototype.getPositionById = function(id, attr) {

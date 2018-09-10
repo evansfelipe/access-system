@@ -36,7 +36,7 @@
 export default {
     props: {
         active: {
-            type: Boolean,
+            type:     Boolean,
             required: false,
             default:  false
         },
@@ -45,9 +45,9 @@ export default {
             default:  null
         },
         icon: {
-            type: String,
+            type:     String,
             required: false,
-            default: ''
+            default:  ''
         }
     }
 }

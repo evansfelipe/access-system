@@ -20,7 +20,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-11">
-                        <loading-cover v-if="!axios_finished" message="Cargando..."/>
+                        <loading-cover v-if="!axios_finished"/>
                         <template v-else>
                             <cs-general-information v-show="tab === 0" :values="values.general_information"/>
                             <cs-people v-show="tab === 1" :values="values.assigned_people"/>

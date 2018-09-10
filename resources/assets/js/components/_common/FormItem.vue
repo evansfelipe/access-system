@@ -1,5 +1,6 @@
 <style>
     .has-errors {
+        text-align: justify;
         color: red;
         font-size: 85%;
     }
@@ -9,26 +10,25 @@
     .error-message:first-of-type {
         margin-top: 5px;
     }
-    .item-wrapper input, .item-wrapper select, .item-wrapper span, .item-wrapper label{
+    .item-wrapper input, .item-wrapper select, .item-wrapper span, .item-wrapper label {
         border-color: red !important;
     }
 </style>
 
-
 <template>
-    <div :class="col || 'col'">
+    <div :class="col">
         <div class="form-group">
-            <div v-if="label != null" class="form-row">
+            <div v-if="label" class="form-row">
                 <div class="col">
                     <label>{{ label }}:</label>
                 </div>
             </div>
-            <div :class="'form-row' + (errors.length > 0 ? ' item-wrapper' : '')">
+            <div :class="`form-row ${errors.length ? 'item-wrapper' : ''}`">
                 <slot></slot>
             </div>
             <div class="form-row">
                 <div class="col">
-                    <div v-if="errors.length > 0" class="has-errors text-justify" role="alert">
+                    <div v-if="errors.length" class="has-errors">
                         <strong class="error-message" v-for="(error, key) in errors" :key="key">{{ error }}</strong>
                     </div>
                 </div>
@@ -41,18 +41,19 @@
 export default {
     props: {
         col: {
-            type: String,
-            required: false
+            type:     String,
+            required: false,
+            default:  'col'
         },
         label: {
-            type: String,
+            type:     String,
             required: false,
-            default: null
+            default:  null
         },
         errors: {
-            type: Array,
+            type:     Array,
             required: false,
-            default: () => []
+            default:  () => []
         }
     }
 }

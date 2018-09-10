@@ -34,7 +34,7 @@
         </transition>
         <div class="card">
             <div class="card-body" :style="updating ? 'min-height: 60vh' : ''">
-                <loading-cover v-if="updating" message="Cargando..."/>
+                <loading-cover v-if="updating"/>
                 <custom-table  v-else :columns="columns" :rows="vehicles" :filter="filter" :advancedsearch="advanced_search" @rowclicked="showProfile"/>
             </div>
         </div>

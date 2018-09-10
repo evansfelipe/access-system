@@ -2,7 +2,7 @@ export default {
     default: (debug = false) => { 
         return {
             general_information: {
-                company_id: !debug ? '' : '1',
+                company_id: !debug ? '' : 1,
                 type:       !debug ? '' : 'Car',
                 owner:      !debug ? '' : 'Example Owner Name',
                 plate:      !debug ? '' : 'AAE 897',

@@ -31,7 +31,7 @@
 
 <template>
     <div>
-        <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.activities.updating" message="Cargando..."/>
+        <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.activities.updating"/>
         <template v-else>
             <transition-group name="job" tag="div">
                 <div class="container job mb-2" v-for="job in values.jobs" :key="job.key">

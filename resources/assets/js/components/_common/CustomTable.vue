@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
     div.table-wrapper {
         border: 1px solid rgb(222,222,222);
-        border-radius: 3px;
+        border-radius: 0.25rem;
     }
     table {
         width: 100%;

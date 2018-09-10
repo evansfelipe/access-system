@@ -18,7 +18,7 @@
 
 <template>
     <div>
-        <loading-cover v-if="this.$store.getters.people.updating" message="Cargando..."/>
+        <loading-cover v-if="this.$store.getters.people.updating"/>
         <template v-else>
             <!-- Options buttons -->
             <div class="row text-center mb-3">

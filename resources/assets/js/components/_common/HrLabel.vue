@@ -1,6 +1,19 @@
+<style lang="scss" scoped>
+    div.wrapper {
+        width: 100%;
+        & > span {
+            position: absolute;
+            left: 2rem; top: 4px;
+            background-color: white;
+            padding: 0 5px;
+        }
+    }
+</style>
+
+
 <template>
-    <div style="width:100%">
-        <span style="position: absolute; left: 2em; top: 4px; background-color: white;" class="px-1">
+    <div class="wrapper">
+        <span>
             <slot/>
         </span>
         <hr>

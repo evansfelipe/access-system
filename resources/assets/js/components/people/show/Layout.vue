@@ -28,7 +28,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-11">
-                        <loading-cover v-if="!axios_finished" message="Cargando..."/>
+                        <loading-cover v-if="!axios_finished"/>
                         <ps-personal-information v-show="tab === 0" :person="personal_information"/>
                         <ps-working-information v-show="tab === 1" :personCompany="working_information"/>
                         <ps-vehicles v-show="tab === 2" :vehicles="vehicles"/>

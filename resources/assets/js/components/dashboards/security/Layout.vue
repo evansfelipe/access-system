@@ -73,7 +73,7 @@
             <button class="btn btn-link" @click="forceReconnectionMQTT">Reconectar manualmente</button>
         </div>
 
-        <loading-cover v-if="connecting" message="Cargando..."/>
+        <loading-cover v-if="connecting"/>
         <ul class="nav nav-tabs">
             <tab-item v-for="(p,key) in people" :key="key" :active="tab === key" @click.native="changeTab(key)">
                 <div class="d-inline-block mr-2" @click="closeTab(key)"><i class="fas fa-times"></i></div>

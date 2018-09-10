@@ -31,9 +31,9 @@
 
 <template>
     <div>
-        <input type="number" :value="val[0]" id="cuil1" class="form-control" placeholder="xx" @input="update"
-        ><input type="number" :value="val[1]" id="cuil2" class="form-control" placeholder="xxxxxxxx" @input="update"
-        ><input type="number" :value="val[2]" id="cuil3" class="form-control" placeholder="x" @input="update">
+        <input  type="number" :value="val[0]" id="cuil1" class="form-control" @input="update" placeholder="xx" 
+        ><input type="number" :value="val[1]" id="cuil2" class="form-control" @input="update" placeholder="xxxxxxxx" 
+        ><input type="number" :value="val[2]" id="cuil3" class="form-control" @input="update" placeholder="x" >
     </div>
 </template>
 

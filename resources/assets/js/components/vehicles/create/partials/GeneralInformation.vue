@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loading-cover v-if="this.$store.getters.companies.updating" message="Cargando..."/>
+        <loading-cover v-if="this.$store.getters.companies.updating"/>
         <template v-else>
             <div class="form-row">
                 <!-- Type -->
@@ -57,9 +57,8 @@
                     </div>
                 </form-item>
             </div>
-            <hr>
             <div class="form-row">
-                <div class="col-12"><h6>Vencimientos</h6></div>
+                <div class="col-12"><hr-label>Vencimientos</hr-label></div>
                 <!-- Insurance -->
                 <form-item col="col-6" label="Seguro" :errors="errors.insurance">
                     <div class="col">

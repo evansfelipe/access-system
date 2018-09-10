@@ -120,7 +120,7 @@
         </div>
         <!-- Pictures panel -->
         <modal-wrapper :visible="pictures.opened" @closed="pictures.opened = false" :title="`Imágenes de ${person.full_name}`">
-            <loading-cover v-if="pictures.loading" message="Cargando..."/>
+            <loading-cover v-if="pictures.loading"/>
             <pictures-gallery :links="pictures.list"/>
         </modal-wrapper>
     </div>

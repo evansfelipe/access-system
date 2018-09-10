@@ -22,7 +22,7 @@
 
 <template>
     <div style="display: inline">
-        <button type="button" :class="btnclass" @click="open"><slot/></button>
+        <button type="button" :class="btnClass" @click="open"><slot/></button>
         <modal-wrapper :visible="opened" @closed="cancel">
             <h6 class="text-center">
                 ¿Está seguro que desea realizar esta acción?
@@ -38,7 +38,7 @@
 <script>
 export default {
     props: {
-        btnclass: {
+        btnClass: {
             type: String,
             required: false,
             default: ''

@@ -47,7 +47,7 @@
 export default {
     props: {
         links: {
-            type: Array,
+            type:     Array,
             required: true
         }
     },
