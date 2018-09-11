@@ -105,7 +105,7 @@ export default {
             this.$store.commit('addJob');
         },
         editJob: function(job, attribute, value) {
-            this.$store.commit('updateJob', {job, attribute, value});
+            this.$store.commit('updateJob', {job_key: job.key, attribute, value});
         },
         deleteJob: function(job) {
             this.$store.commit('deleteJob', job);
@@ -118,9 +118,6 @@ export default {
         },
         removeCardFromJob: function(job, card) {
             this.$store.commit('removeCardFromJob', {job, card});
-        },
-        update: function({name, value}) {
-            this.$store.commit('updateModel', { which: 'person', properties_path: `values.working_information.${name}`, value: value });
         }
     },
     computed: {

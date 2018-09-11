@@ -215,14 +215,14 @@ export default {
                 groups: [],
                 art_company: 'ART Test',
                 art_number: '123456',
-                cards: [{ key: Date.now(), number: '', from: '', until: '' }],
+                cards: [{ key: Date.now(), number: '', from: '', until: '' }]
             });
         },
         /**
          * Given a job of the jobs list of the person's model, updates its values.
          */
-        updateJob: function(state, {job, attribute, value}) {
-            let pos = state.models.person.values.working_information.jobs.indexOf(job);
+        updateJob: function(state, {job_key, attribute, value}) {
+            let pos = state.models.person.values.working_information.jobs.getPositionById(job_key, 'key');
             let ref = state.models.person.values.working_information.jobs[pos];
             ref[attribute] = value;
         },

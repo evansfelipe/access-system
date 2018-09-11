@@ -19,6 +19,7 @@ class CreatePersonDocumentsTable extends Migration
             $table->integer('document_type')->required();
             $table->string('document_name')->required();
             $table->datetime('expiration')->nullable();
+            $table->boolean('required')->nullable();
             $table->timestamps();
         });
     }

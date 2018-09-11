@@ -45,13 +45,10 @@ export default {
             },
             assign_vehicles: { vehicles_id: [] },
             documentation: {
-                company_note:               '',
                 dni_copy:                   '',
                 pna_file:                   '',
                 driver_license:             '',
                 driver_license_expiraton:   '',
-                art_file:                   '',
-                art_file_expiration:        '',
                 acc_pers:                   '',
                 acc_pers_expiration:        '',
                 boarding_passbook:          '',

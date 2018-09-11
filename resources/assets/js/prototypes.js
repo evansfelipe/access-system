@@ -16,7 +16,7 @@ Array.prototype.getPositionById = function(id, attr) {
 }
 
 Array.prototype.getPositionsByIds = function(ids, attr) {
-    attr = attr ? attr : 'id';
+    attr = attr ? attr : 'id';    
     let i;
     let ret = [];
     ids.forEach(id => {

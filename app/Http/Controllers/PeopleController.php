@@ -90,6 +90,13 @@ class PeopleController extends Controller
         $person->setContact($request->toArray());
         $person->residency_id = $residency->id;
         $person->save();
+        // Set files array
+        $files = $request->file();
+        $path = $person->getStorageFolder(true);
+        // Saves the picture
+        $person->picture_name = Helpers::storeFile($path.'/pictures', $files['picture']);
+        $person->save();
+        unset($files['picture']);
         // Saves each person-company relationship.
         if(isset($request->jobs)) {
             foreach ($request->jobs as $job) {
@@ -109,6 +116,26 @@ class PeopleController extends Controller
                     $card->until = $c['until'];
                     $card->save();
                 }
+
+                $file_name = $job['key'].'-company_note';
+                $person_document = new PersonDocument();
+                $person_document->person_id = $person->id;
+                $person_document->document_type = $person_document->getConst('company_note');
+                $person_document->document_name = Helpers::storeFile($path, $files[$file_name]);
+                $person_document->expiration = $request->{$file_name.'_expiration'};
+                $person_document->required = $request->{$file_name.'_required'} === 'true';
+                $person_document->save();
+                unset($files[$file_name]);
+
+                $file_name = $job['key'].'-art_file';
+                $person_document = new PersonDocument();
+                $person_document->person_id = $person->id;
+                $person_document->document_type = $person_document->getConst('art_file');
+                $person_document->document_name = Helpers::storeFile($path, $files[$file_name]);
+                $person_document->expiration = $request->{$file_name.'_expiration'};
+                $person_document->required = $request->{$file_name.'_required'} === 'true';
+                $person_document->save();
+                unset($files[$file_name]);
             }
         }
         // Saves each person-vehicle relationship.
@@ -118,12 +145,6 @@ class PeopleController extends Controller
                $person_vehicle->save();
            } 
         }
-        $files = $request->file();
-        $path = $person->getStorageFolder(true);
-        // Saves the picture
-        $person->picture_name = Helpers::storeFile($path.'/pictures', $files['picture']);
-        $person->save();
-        unset($files['picture']);
         // Saves the documentation
         foreach ($files as $key => $file) {
             $person_document = new PersonDocument();
@@ -131,6 +152,7 @@ class PeopleController extends Controller
             $person_document->document_type = $person_document->getConst($key);
             $person_document->document_name = Helpers::storeFile($path, $file);
             $person_document->expiration = $request->{$key.'_expiration'};
+            $person_document->required = $request->{$key.'_required'} === 'true';
             $person_document->save();
         }
         return response(json_encode(['id' => $person->id]), 200)->header('Content-Type', 'application/json');

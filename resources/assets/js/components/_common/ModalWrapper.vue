@@ -5,16 +5,13 @@
         overflow-y: auto;
     }
 
-    button.close {
-        outline: none;
-    }
+    button.close { outline: none }
 
     .modal-enter { opacity: 0 }
     .modal-leave-active { opacity: 0 }
     .modal-enter .modal-container,
     .modal-leave-active .modal-container { transform: scale(1.1) }
 </style>
-
 
 <template>
     <transition name="modal">

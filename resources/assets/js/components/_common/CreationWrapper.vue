@@ -94,6 +94,11 @@ export default {
                 data.append('_method', 'PUT');
             }
 
+            // for (var pair of data.entries()) {
+            //     console.log(pair[0]+ ', ' + pair[1]); 
+            // }
+                        
+
             axios.post(this.route.url, data)
             .then(response => this.$emit('saveSuccess', response.data.id))
             .catch(response => onError(response))
