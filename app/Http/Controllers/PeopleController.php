@@ -1,5 +1,5 @@
 <?php namespace App\Http\Controllers;
-use Storage;
+use Illuminate\Support\Facades\Storage;
 use Auth;
 use App\Http\Traits\Helpers;
 use Illuminate\Http\Request;
@@ -51,14 +51,10 @@ class PeopleController extends Controller
      */
     public function pictures(Person $person)
     {
-        $path = $person->getStorageFolder().'pictures';
-        $pictures = [];
-        foreach(scandir($path, 1) as $file) {
-            if($file !== '.' && $file !== '..') {
-                array_push($pictures, $path.'/'.$file);
-            }
-        }
-        return response(json_encode($pictures))->header('Content-Type', 'application/json');
+        $images = collect(Storage::files($person->getStorageFolder().'pictures/'))->map(function($file) {
+            return Helpers::getImageAsDataURI($file);
+        });
+        return response(json_encode($images))->header('Content-Type', 'application/json');
     }
 
     /**
@@ -92,7 +88,7 @@ class PeopleController extends Controller
         $person->save();
         // Set files array
         $files = $request->file();
-        $path = $person->getStorageFolder(true);
+        $path = $person->getStorageFolder();
         // Saves the picture
         $person->picture_name = Helpers::storeFile($path.'/pictures', $files['picture']);
         $person->save();
@@ -224,7 +220,7 @@ class PeopleController extends Controller
                     'country'           => $person->residency->country,
                     'province'          => $person->residency->province,
                     'city'              => $person->residency->city,
-                    'picture_path'      => $person->getCurrentPicturePath(),
+                    'picture_path'      => $person->getCurrentPicturePath(), // Change this 
                 ],
                 'working_information'   => [
                     // Basic information

@@ -29,11 +29,13 @@
                 <div class="row">
                     <div class="col-11">
                         <loading-cover v-if="!axios_finished"/>
-                        <ps-personal-information v-show="tab === 0" :person="personal_information"/>
-                        <ps-working-information v-show="tab === 1" :personCompany="working_information"/>
-                        <ps-vehicles v-show="tab === 2" :vehicles="vehicles"/>
-                        <ps-documentation v-show="tab === 3"/>
-                        <ps-observations v-show="tab === 4" :personObservations="observations"/>
+                        <template v-else>
+                            <ps-personal-information v-show="tab === 0" :person="personal_information"/>
+                            <ps-working-information v-show="tab === 1" :personCompany="working_information"/>
+                            <ps-vehicles v-show="tab === 2" :vehicles="vehicles"/>
+                            <ps-documentation v-show="tab === 3" :documents="documents"/>
+                            <ps-observations v-show="tab === 4" :personObservations="observations"/>
+                        </template>
                     </div>
                     <div class="col-1 text-right">
                         <!-- Edit button -->
@@ -61,13 +63,11 @@
             return {
                 axios_finished: false,
                 tab: 0,
-                edit_route: "",
                 personal_information: {},
                 working_information: {},
                 vehicles: [],
-                active_card: {},
-                inactive_cards: [],
-                observations: []
+                observations: [],
+                documents: []
             };
         },
         beforeMount() {
@@ -75,13 +75,11 @@
             .then(response => {
                 this.axios_finished = true;
                 let person_info = response.data;
-                this.edit_route = person_info.edit_url;
                 this.personal_information = person_info.personal_information;
                 this.working_information = person_info.working_information;
                 this.vehicles = person_info.vehicles;
-                this.active_card = person_info.active_card;
-                this.inactive_cards = person_info.inactive_cards;
                 this.observations = person_info.observations;
+                this.documents = person_info.documents;
             })
             .catch(error => {
                 console.log(error);

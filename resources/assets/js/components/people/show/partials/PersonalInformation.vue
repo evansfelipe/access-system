@@ -8,7 +8,7 @@
         <div class="row d-flex align-items-center">
             <div class="col-md-4 text-center">
                 <div class="offset-1 col-10">
-                    <img class="img-fluid rounded-circle shadow-sm" :src="person.picture_path">
+                    <img class="img-fluid rounded-circle shadow-sm" :src="person.picture">
                     <br>
                     <button class="btn btn-link mt-2" @click="showPictures">
                         <i class="fas fa-images"></i> Ver más

@@ -70,4 +70,13 @@ trait Helpers {
         Storage::putFileAs($path, $file, $name);
         return $name;
     }
+
+
+    public static function getImageAsDataURI($path)
+    {
+        $image = Storage::get($path);
+        $mime  = Storage::mimeType($path);
+        return 'data:' . $mime . ';base64,' . base64_encode($image);
+    }
+
 }

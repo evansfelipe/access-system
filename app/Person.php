@@ -1,5 +1,5 @@
 <?php namespace App;
-
+use Illuminate\Support\Facades\Storage;
 use App\Http\Traits\Helpers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
@@ -256,16 +256,16 @@ class Person extends Model
         ];
     }
 
-    public function getStorageFolder($public = false)
+    public function getStorageFolder()
     {
-        $root = $public ? 'public/' : 'storage/';
         $mod = $this->id % 10;
-        return $root . 'documentation/'.$mod.'/'.$this->id.'/';
+        return 'documentation/'.$mod.'/'.$this->id.'/';
     }
 
-    public function getCurrentPicturePath($public = false)
+    public function getCurrentPicture()
     {
-        return $this->getStorageFolder($public) . 'pictures/'.$this->picture_name;
+        $path = $this->getStorageFolder() . 'pictures/' . $this->picture_name;
+        return Helpers::getImageAsDataURI($path);
     }
 
     public function toShowArray() 
@@ -273,7 +273,7 @@ class Person extends Model
         return [
             'personal_information'  => array_merge(
                 [
-                    'picture_path'      => $this->getCurrentPicturePath(),
+                    'picture'           => $this->getCurrentPicture(),
                     'full_name'         => $this->fullName(),
                     'document_type'     => $this->documentTypeToString(),
                     'document_number'   => $this->document_number,
@@ -293,7 +293,10 @@ class Person extends Model
                 'jobs'          => $this->jobs(),
             ],
             'vehicles'          => $this->vehicles->toArray(),
-            'observations'      => $this->observations->toArray()
+            'observations'      => $this->observations->toArray(),
+            'documents'         => [
+                ['type' => '0', 'created_at' => 'hola', 'expiration' => 'chau']
+            ]
         ];
     }
 }

@@ -31,7 +31,7 @@ class SecurityController extends Controller
             'risk'              => 'Nivel ' . $person->risk,
             'document_type'     => $person->documentTypeToString(),
             'document_number'   => $person->document_number,
-            'picture_path'      => $person->getCurrentPicturePath(),
+            'picture_path'      => $person->getCurrentPicture(),
             'card'              => $card->toArray(),
             'company'           => $company ? $company->name : null,
             'activity'          => $card->job->activity->name,
