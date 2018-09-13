@@ -58,6 +58,19 @@ class PeopleController extends Controller
     }
 
     /**
+     * Returns something
+     * 
+     * @param  \App\PersonDocument  $person_document
+     */
+    public function document(PersonDocument $person_document)
+    {
+        $path = Person::findOrFail($person_document->person_id)->getStorageFolder() . $person_document->document_name;
+        $document = Storage::get($path);
+        $mime  = Storage::mimeType($path);
+        return response($document)->header('Content-Type', $mime);
+    }
+
+    /**
      * Stores a new observation and returns it
      */
     public function newObservation(Request $request, $person_id)
@@ -67,6 +80,22 @@ class PeopleController extends Controller
         $observation->user_id = Auth::user()->id;
         $observation->save();
         return response(json_encode($observation))->header('Content-Type', 'application/json');        
+    }
+
+    /**
+     * Stores the document asociated to a specified person
+     */
+    public function storeDocument($person_id, $request, $files, $file_type, $file_name, $path)
+    {
+        if(isset($files[$file_name])) {
+            $person_document = new PersonDocument();
+            $person_document->person_id = $person_id;
+            $person_document->document_type = $person_document->getConst($file_type);
+            $person_document->document_name = Helpers::storeFile($path, $files[$file_name]);
+            $person_document->expiration = $request->{$file_name.'_expiration'};
+            $person_document->required = $request->{$file_name.'_required'} === 'true';
+            $person_document->save();
+        }
     }
 
     /**
@@ -114,23 +143,11 @@ class PeopleController extends Controller
                 }
 
                 $file_name = $job['key'].'-company_note';
-                $person_document = new PersonDocument();
-                $person_document->person_id = $person->id;
-                $person_document->document_type = $person_document->getConst('company_note');
-                $person_document->document_name = Helpers::storeFile($path, $files[$file_name]);
-                $person_document->expiration = $request->{$file_name.'_expiration'};
-                $person_document->required = $request->{$file_name.'_required'} === 'true';
-                $person_document->save();
+                $this->storeDocument($person->id, $request, $files, 'company_note', $file_name, $path);
                 unset($files[$file_name]);
 
                 $file_name = $job['key'].'-art_file';
-                $person_document = new PersonDocument();
-                $person_document->person_id = $person->id;
-                $person_document->document_type = $person_document->getConst('art_file');
-                $person_document->document_name = Helpers::storeFile($path, $files[$file_name]);
-                $person_document->expiration = $request->{$file_name.'_expiration'};
-                $person_document->required = $request->{$file_name.'_required'} === 'true';
-                $person_document->save();
+                $this->storeDocument($person->id, $request, $files, 'art_file', $file_name, $path);
                 unset($files[$file_name]);
             }
         }
@@ -143,13 +160,7 @@ class PeopleController extends Controller
         }
         // Saves the documentation
         foreach ($files as $key => $file) {
-            $person_document = new PersonDocument();
-            $person_document->person_id = $person->id;
-            $person_document->document_type = $person_document->getConst($key);
-            $person_document->document_name = Helpers::storeFile($path, $file);
-            $person_document->expiration = $request->{$key.'_expiration'};
-            $person_document->required = $request->{$key.'_required'} === 'true';
-            $person_document->save();
+            $this->storeDocument($person->id, $request, $files, $key, $key, $path);
         }
         return response(json_encode(['id' => $person->id]), 200)->header('Content-Type', 'application/json');
     }

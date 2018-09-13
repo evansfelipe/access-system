@@ -28,7 +28,7 @@ export default {
     },
     methods: {
         openDocument: function(doc) {
-            window.open('google.com', '_blanck', 'titlebar=no');
+            window.open(`people/document/${doc.id}`, '_blanck', 'titlebar=no');
         }
     }
 }

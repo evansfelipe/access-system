@@ -21,4 +21,38 @@ class PersonDocument extends Model
     {
         return constant('App\PersonDocument::' . $string);
     }
+
+    public function typeToString()
+    {
+        switch ($this->document_type) {
+            case 0:
+                return 'Nota de la Empresa';
+            case 1:
+                return 'Documento de identidad';
+            case 2:
+                return 'Número de prontuario';
+            case 3:
+                return 'Registro de conducir';
+            case 4:
+                return 'Certificado de cobertura ART';
+            case 5:
+                return 'Certificado de cobertura Acc. Pers.';
+            case 6:
+                return 'Libreta de embarque';
+            case 7:
+                return 'Cédula de embarque';
+            case 8:
+                return 'Libreta sanitaria';
+            case 9:
+                return 'Constancia de curso PBIP';
+            default:
+                # code...
+                break;
+        }
+    }
+
+    public function person()
+    {
+        return $this->belongsTo('App\Person');
+    }
 }

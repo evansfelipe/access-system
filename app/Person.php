@@ -187,6 +187,11 @@ class Person extends Model
         return $this->hasMany('App\Observation')->orderBy('created_at', 'desc');
     }
 
+    public function documents()
+    {
+        return $this->hasMany('App\PersonDocument');
+    }
+
     /**
      * Creates and returns a string with the last name and the name of this person.
      */
@@ -294,9 +299,14 @@ class Person extends Model
             ],
             'vehicles'          => $this->vehicles->toArray(),
             'observations'      => $this->observations->toArray(),
-            'documents'         => [
-                ['type' => '0', 'created_at' => 'hola', 'expiration' => 'chau']
-            ]
+            'documents'         => $this->documents->map(function($document) {
+                                        return [
+                                            'id' => $document->id,
+                                            'type'  => $document->typeToString(),
+                                            'created_at'    => Helpers::timestampToDate($document->created_at),
+                                            'expiration'    => Helpers::timestampToDate($document->expiration)
+                                        ];
+                                    })
         ];
     }
 }
