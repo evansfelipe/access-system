@@ -71,8 +71,8 @@
 export default {
     props: {
         personCompany: {
-            required: true,
-            type: Object
+            type:     Object,
+            required: true
         }
     }
 }

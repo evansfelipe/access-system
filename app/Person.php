@@ -286,7 +286,7 @@ class Person extends Model
                     'birthday'          => Helpers::timestampToDate($this->birthday),
                     'sex'               => $this->sexToString(),
                     'blood_type'        => $this->blood_type    ?? '-',
-                    'homeland'          => $this->homeland,
+                    'homeland'          => $this->homeland ?? '-',
                     'risk'              => 'Nivel '.$this->risk,
                     'register_number'   => $this->register_number,
                     'pna'               => $this->pna           ?? '-',
@@ -307,6 +307,44 @@ class Person extends Model
                                             'expiration'    => Helpers::timestampToDate($document->expiration)
                                         ];
                                     })
+        ];
+    }
+
+    public function toPdfArray()
+    {
+        $contact = $this->contactToArray();
+        return [
+            'full_name'             => $this->fullName(),
+            'picture'               => $this->getCurrentPicture(),
+            'register_number'       => $this->register_number ?? '-',
+            'personal_information'  => [
+                'Tipo de documento'     => $this->documentTypeToString(),
+                'Número de documento'   => $this->document_number,
+                'CUIL'                  => $this->cuil          ?? '-',
+                'Fecha de nacimiento'   => Helpers::timestampToDate($this->birthday),
+                'Género'                => $this->sexToString(),
+                'Grupo sangíneo'        => $this->blood_type    ?? '-',
+                'Nacionalidad'          => $this->homeland ?? '-',
+                'Nivel de riesgo'       => 'Nivel '.$this->risk,
+                'Nº prontuario PNA'     => $this->pna           ?? '-',
+                'Email'                 => $contact['email'],
+                'Teléfono fijo'         => $contact['phone'],
+                'Teléfono móvil'        => $contact['mobile_phone'],
+                'Fax'                   => $contact['fax'],
+                'Domicilio'             => $this->residency->toString() 
+            ],
+            'jobs'                  => $this->jobs()->map(function($job) {
+                                            return (object) [
+                                                'company_name' => $job->company_name,
+                                                'activity_name' => $job->activity_name,
+                                                'data'          => [
+                                                    'Subactividades' => implode($job->subactivities, ', '),
+                                                    'Aseguradora'    => $job->art_company,
+                                                    'Nº de socio'    => $job->art_number,
+                                                ],
+                                                'cards' => $job->cards
+                                            ];
+                                        }),
         ];
     }
 }

@@ -1,20 +1,19 @@
 <template>
-    <div>
-        <custom-table
-            :columns="columns"
-            :rows="documents"
-            @rowclicked="openDocument"
-        />
-    </div>
+    <custom-table
+        :columns="columns"
+        :rows="documents"
+        :rowsquantity="10"
+        @rowclicked="openDocument"
+    />
 </template>
 
 <script>
 export default {
     props: {
         documents: {
-            type: Array,
+            type:     Array,
             required: false,
-            default: () => []
+            default:  () => []
         }
     },
     data() {

@@ -1,8 +1,15 @@
+<style lang="scss" scoped>
+    textarea.form-control {
+        height: auto;
+        resize: none;
+    }
+</style>
+
 <template>
     <div>
         <div class="form-row">
             <div class="col-10">
-                <textarea class="form-control" v-model="observation" rows="2" placeholder="Nueva observación" style="resize:none"></textarea>
+                <textarea class="form-control" v-model="observation" rows="2" placeholder="Nueva observación"></textarea>
             </div>
             <div class="col-2">
                 <button class="btn btn-block btn-outline-success" style="height:100%" @click="newObservation">Enviar</button>
@@ -25,7 +32,7 @@
 export default {
     props: {
         personObservations: {
-            type: Array,
+            type:     Array,
             required: true,
         }
     },

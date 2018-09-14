@@ -5,6 +5,7 @@ use App\Http\Traits\Helpers;
 use Illuminate\Http\Request;
 use App\Http\Requests\{ SavePersonRequest };
 use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle, PersonDocument, Observation};
+use PDF;
 
 class PeopleController extends Controller
 {
@@ -68,6 +69,14 @@ class PeopleController extends Controller
         $document = Storage::get($path);
         $mime  = Storage::mimeType($path);
         return response($document)->header('Content-Type', $mime);
+    }
+
+    public function pdf(Person $person)
+    {
+        // return view('pdfs.person', $person->toPdfArray());
+
+        $pdf = PDF::loadView('pdfs.person', $person->toPdfArray());
+        return $pdf->download('resumen.pdf');
     }
 
     /**

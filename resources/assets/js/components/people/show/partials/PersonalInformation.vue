@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-    small { display: block }
+    small { display: block; }
     div.row + div.row { margin-top: 15px }
 </style>
 
@@ -130,8 +130,8 @@
 export default {
     props: {
         person: {
-            required: true,
-            type: Object
+            type:     Object,
+            required: true
         }
     },
     data() {

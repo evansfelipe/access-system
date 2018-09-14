@@ -24,40 +24,24 @@
             </tab-item>
         </ul>
         <!-- Content -->
-        <div class="card card-default borderless-top">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-11">
-                        <loading-cover v-if="!axios_finished"/>
-                        <template v-else>
-                            <ps-personal-information v-show="tab === 0" :person="personal_information"/>
-                            <ps-working-information v-show="tab === 1" :personCompany="working_information"/>
-                            <ps-vehicles v-show="tab === 2" :vehicles="vehicles"/>
-                            <ps-documentation v-show="tab === 3" :documents="documents"/>
-                            <ps-observations v-show="tab === 4" :personObservations="observations"/>
-                        </template>
-                    </div>
-                    <div class="col-1 text-right">
-                        <!-- Edit button -->
-                        <button @click="edit" class="btn btn-sm btn-outline-unique btn-circle" title="Editar perfil"><i class="fas fa-user-edit fa-lg"></i></button>
-                        <!-- PDF button -->
-                        <button class="btn btn-sm btn-outline-unique btn-circle" title="Exportar como PDF"><i class="fas fa-file-pdf fa-lg"></i></button>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
+        <show-wrapper :loading="!axios_finished" @edit="edit" @pdf="pdf">
+            <personal-information v-show="tab === 0" :person="personal_information"/>
+            <working-information v-show="tab === 1" :personCompany="working_information"/>
+            <vehicles v-show="tab === 2" :vehicles="vehicles"/>
+            <documentation v-show="tab === 3" :documents="documents"/>
+            <observations v-show="tab === 4" :personObservations="observations"/>
+        </show-wrapper>
     </div>
 </template>
 
 <script>
     export default {
         components: {
-            'ps-personal-information': require('./partials/PersonalInformation.vue'),
-            'ps-working-information': require('./partials/WorkingInformation.vue'),
-            'ps-vehicles': require('./partials/Vehicles.vue'),
-            'ps-documentation': require('./partials/Documentation.vue'),
-            'ps-observations': require('./partials/Observations.vue'),
+            'personal-information': require('./partials/PersonalInformation.vue'),
+            'working-information': require('./partials/WorkingInformation.vue'),
+            'vehicles': require('./partials/Vehicles.vue'),
+            'documentation': require('./partials/Documentation.vue'),
+            'observations': require('./partials/Observations.vue'),
         },
         data: function() {
             return {
@@ -89,6 +73,9 @@
             edit: function() {
                 this.$store.dispatch('fetchModel', { which: 'person', id: this.$route.params.id });
                 this.$router.push(`/people/create`);
+            },
+            pdf: function() {
+                window.open(`/people/${this.$route.params.id}/pdf`, '_blanck', 'titlebar=no');
             }
         }
     }

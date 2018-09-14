@@ -37,8 +37,9 @@ Route::middleware(['auth','user.administration'])->group(function() {
         Route::get('/updated-at',                   'PeopleController@updatedAt')->name('people.updated-at');
         Route::get('/list',                         'PeopleController@list')->name('people.list');
         Route::get('/{person}/pictures',            'PeopleController@pictures')->name('people.pictures');
+        Route::get('/document/{person_document}',   'PeopleController@document')->name('people.document');
+        Route::get('/{person}/pdf',                 'PeopleController@pdf')->name('people.pdf');
         Route::post('/{person}/new-observation',    'PeopleController@newObservation')->name('people.new-observation');
-        Route::get('/document/{person_document}',          'PeopleController@document')->name('people.document');
     }); Route::resource('/people',                  'PeopleController')->only(['store', 'show', 'edit', 'update', 'destroy']);
     // Companies routes
     Route::prefix('companies')->group(function() {

@@ -42,9 +42,11 @@ Vue.component('loading-cover'     , require('./components/_common/LoadingCover.v
 Vue.component('modal-wrapper'     , require('./components/_common/ModalWrapper.vue'));
 Vue.component('residency-input'   , require('./components/_common/ResidencyInput.vue'));
 Vue.component('pictures-gallery'  , require('./components/_common/PicturesGallery.vue'));
-Vue.component('creation-wrapper'  , require('./components/_common/CreationWrapper.vue'));
 Vue.component('abbreviation-text' , require('./components/_common/AbbreviationText.vue'));
 Vue.component('confirmable-button', require('./components/_common/ConfirmableButton.vue'));
+// Wrappers
+Vue.component('show-wrapper'  , require('./components/_common/wrappers/ShowWrapper.vue'));
+Vue.component('creation-wrapper'  , require('./components/_common/wrappers/CreationWrapper.vue'));
 // Dashboards
 Vue.component('administration-dashboard', require('./components/dashboards/administration/Layout.vue'));
 Vue.component('security-dashboard', require('./components/dashboards/security/Layout.vue'));

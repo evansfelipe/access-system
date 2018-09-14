@@ -1,34 +1,19 @@
-<style lang="scss" scoped>
- 
-    div.table-container {
-        height: 65vh;
-    }
-</style>
-
 <template>
-    <div class="row">
-        <div class="col">
-            <div v-if="vehicles.length==0" class="table-container d-flex align-items-center justify-content-center">
-                <h4>No hay vehículos asignados</h4>
-            </div>
-            <div v-else>
-                <custom-table
-                    :columns="columns"
-                    :rows="vehicles"
-                    @rowclicked="({id}) => $router.push(`/vehicles/show/${id}`)"
-                />
-            </div>
-        </div>
-    </div>
+    <custom-table
+        :columns="columns"
+        :rows="vehicles"
+        :rowsquantity="10"
+        @rowclicked="({id}) => $router.push(`/vehicles/show/${id}`)"
+    />
 </template>
 
 <script>
 export default {
     props: {
         vehicles: {
-            type: Array,
+            type:     Array,
             required: false,
-            default: () => []
+            default:  () => []
         }
     },
     data: function() {
@@ -40,11 +25,6 @@ export default {
                 {name: 'year', text: 'Año'},
                 {name: 'colour', text: 'Color'},
             ],
-        }
-    },
-    methods: {
-        showVehicle(id) {
-
         }
     }
 }
