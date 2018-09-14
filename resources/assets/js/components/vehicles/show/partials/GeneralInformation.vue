@@ -74,6 +74,7 @@
                     :columns="columns"
                     :rows="values.assigned_people"
                     :rowsquantity="5"
+                    :no-rows-message="'No hay personas asignadas'"
                     @rowclicked="({id}) => $router.push(`/people/show/${id}`)"
                 />
             </div>

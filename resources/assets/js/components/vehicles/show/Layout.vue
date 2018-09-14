@@ -8,29 +8,16 @@
             </tab-item>
         </ul>
         <!-- Content -->
-        <div class="card card-default borderless-top">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-11">
-                        <loading-cover v-if="!axios_finished"/>
-                        <template v-else><vs-general-information v-show="tab === 0" :values="values"/></template>
-                    </div>
-                    <div class="col-1 text-right">
-                        <!-- Edit button -->
-                        <button @click="edit" class="btn btn-sm btn-outline-unique btn-circle" title="Editar perfil"><i class="fas fa-pen-square fa-lg"></i></button>
-                        <!-- PDF button -->
-                        <button class="btn btn-sm btn-outline-unique btn-circle" title="Exportar como PDF"><i class="fas fa-file-pdf fa-lg"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <show-wrapper :loading="!axios_finished" @edit="edit" @pdf="pdf">
+            <general-information v-show="tab === 0" :values="values"/>
+        </show-wrapper>
     </div>
 </template>
 
 <script>
 export default {
     components: {
-        'vs-general-information':   require('./partials/GeneralInformation.vue'),
+        'general-information':   require('./partials/GeneralInformation.vue'),
     },
     data: function() {
         return {
@@ -52,6 +39,9 @@ export default {
         edit: function() {
             this.$store.dispatch('fetchModel', { which: 'vehicle', id: this.$route.params.id });
             this.$router.push(`/vehicles/create`);
+        },
+        pdf: function() {
+            
         }
     }
 }

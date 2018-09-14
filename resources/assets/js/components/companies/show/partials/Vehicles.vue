@@ -3,6 +3,7 @@
         <custom-table
             :columns="columns"
             :rows="values"
+            :no-rows-message="'No hay vehículos asignados'"
             @rowclicked="({id}) => $router.push(`/vehicles/show/${id}`)"
         />
     </div>

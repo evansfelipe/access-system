@@ -3,6 +3,7 @@
         <custom-table
             :columns="columns"
             :rows="values"
+            :no-rows-message="'No hay personas asignadas'"
             @rowclicked="({id}) => $router.push(`/people/show/${id}`)"
         />
     </div>

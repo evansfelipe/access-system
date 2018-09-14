@@ -20,7 +20,8 @@
                 <custom-table
                     :columns="columns"
                     :rows="observations"
-                    :rowsquantity="5" 
+                    :rowsquantity="5"
+                    :no-rows-message="'No hay observaciones'"
                     @rowclicked="toggleObservation"
                 />
             </div>

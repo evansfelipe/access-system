@@ -38,22 +38,22 @@
 
 <template>
     <div>
-        <div v-if="rowsquantity === null" class="row d-flex align-items-center mb-2">
-            <div class="col-4">
-                Mostrar
-                <select class="form-control form-control-sm d-inline" style="width: auto;" v-model.number="pagination.quantity">
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select> 
-                filas
+        <template v-if="rows.length > 0">
+            <div v-if="rowsquantity === null" class="row d-flex align-items-center mb-2">
+                <div class="col-4">
+                    Mostrar
+                    <select class="form-control form-control-sm d-inline" style="width: auto;" v-model.number="pagination.quantity">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select> 
+                    filas
+                </div>
+                <div class="offset-4 col-4 text-right">
+                    <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" :disabled="advancedsearch">
+                </div>
             </div>
-            <div class="offset-4 col-4 text-right">
-                <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" :disabled="advancedsearch">
-            </div>
-        </div>
-        <template v-if="shown_rows.length > 0">
             <!-- Data displayed on a table -->
             <div class="row">
                 <div class="col">
@@ -74,15 +74,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(row,key) in pagination.page" :key="key" @click="click(row)">
-                                    <td v-if="pickable.active" class="pickable text-center" :key="key + '-pickable'">
-                                        <i v-if="pickable.list.includes(row.id)" class="far fa-check-square text-unique"></i>
-                                        <i v-else class="far fa-square" style="color: rgba(0,0,0,0.3)"></i>
-                                    </td>
-                                    <td v-for="(column,column_key) in columns" :key="column_key">
-                                        {{ row[column.name] }}
-                                    </td>
-                                </tr>
+                                <template v-if="pagination.page.length > 0">
+                                    <tr v-for="(row,key) in pagination.page" :key="key" @click="click(row)">
+                                        <td v-if="pickable.active" class="pickable text-center" :key="key + '-pickable'">
+                                            <i v-if="pickable.list.includes(row.id)" class="far fa-check-square text-unique"></i>
+                                            <i v-else class="far fa-square" style="color: rgba(0,0,0,0.3)"></i>
+                                        </td>
+                                        <td v-for="(column,column_key) in columns" :key="column_key">
+                                            {{ row[column.name] }}
+                                        </td>
+                                    </tr>
+                                </template>
+                                <tr v-else><td :colspan="columns.length" class="text-center">No se encontraron resultados de la búsqueda</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -93,7 +96,7 @@
                 <div v-if="rowsquantity !== null" class="col-4">
                     <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" :disabled="advancedsearch">
                 </div>
-                <div :class="`col-${rowsquantity !== null? '8' : '12'}`">
+                <div v-if="shown_rows.length > 0" :class="`col-${rowsquantity !== null? '8' : '12'}`">
                     <ul class="pagination justify-content-end" style="margin-bottom: 0px">
                         <li :class="`page-item ${pagination.current <= 0 ? 'disabled' : ''}`" @click="changeToPage(pagination.current - 1)">
                             <a class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
@@ -121,7 +124,7 @@
             </div>
         </template>
         <!-- No data situation -->
-        <h3 v-else class="text-center mt-5 mb-5">No se encontraron resultados</h3>
+        <h4 v-else class="text-center mt-5 mb-5">{{ noRowsMessage }}</h4>
         
     </div>
 </template>
@@ -166,6 +169,11 @@ export default {
                     list: []
                 }
             },
+        },
+        noRowsMessage: {
+            type: String,
+            required: false,
+            default: 'No se encontraron resultados'
         }
     },
     data() {
