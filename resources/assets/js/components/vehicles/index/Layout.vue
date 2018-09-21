@@ -100,7 +100,7 @@ export default {
     },
     methods: {
         /**
-         * Redirects to the profile of the clicked person.
+         * Redirects to the profile of the clicked vehicle.
          */
         showProfile: function(vehicle) {
             this.$router.push(`/vehicles/show/${vehicle.id}`);

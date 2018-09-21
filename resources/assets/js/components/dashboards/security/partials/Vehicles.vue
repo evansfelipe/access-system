@@ -24,7 +24,7 @@
 <template>
     <div>
         <div v-if="vehicles_filtered.length" class="row">
-            <div v-for="(vehicle, key) in vehicles_filtered" :key="key" class="col-3">
+            <div v-for="(vehicle, key) in vehicles_filtered" :key="key" class="col-4">
                 <div :class="`vehicle-card ${vehicle.id === selected ? 'selected' : ''}`" @click="selectVehicle(vehicle.id)">
                     <i v-if="vehicle.id === selected" class="fas fa-check-circle float-right"></i>
                     <i v-else class="far fa-circle float-right"></i>
@@ -68,7 +68,7 @@ export default {
     },
     methods: {
         selectVehicle: function(id) {
-            this.selected = id;
+            this.selected = this.selected === id ? null : id;
             this.$emit('selection', id);
         }
     }

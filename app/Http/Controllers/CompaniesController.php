@@ -14,18 +14,7 @@ use App\{Company, Residency};
 class CompaniesController extends Controller
 {
     use SaveResidencyTrait;
-
-    public function updatedAt()
-    {
-        return Company::select(['updated_at'])->orderBy('updated_at','desc')->first();        
-    }
-
-    public function list()
-    {
-        $companies = Company::select('id','business_name','name','area','cuit')->orderBy('created_at','desc')->get();
-        return  response(json_encode($companies))->header('Content-Type', 'application/json');        
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *

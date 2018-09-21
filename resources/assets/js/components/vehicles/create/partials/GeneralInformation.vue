@@ -1,12 +1,13 @@
 <template>
     <div>
-        <loading-cover v-if="this.$store.getters.companies.updating"/>
+        <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.vehicle_types.updating"/>
         <template v-else>
             <div class="form-row">
                 <!-- Type -->
                 <form-item col="col-4" label="Tipo" :errors="errors.type">
                     <div class="col">
-                        <input type="text" name="type" class="form-control" :value="values.type" @input="(e) => update(e.target)">
+                        <select2 placeholder="Seleccione un tipo" :value="values.type_id" :options="types"
+                                    @input="(value) => update({name: 'type_id', value: value})"/>
                     </div>
                 </form-item>
                 <!-- Plate -->
@@ -94,7 +95,15 @@ export default {
                 return {
                     id: company.id,
                     text: company.name,
-                }
+                };
+            });
+        },
+        types: function() {
+            return this.$store.getters.vehicle_types.list.map(type => {
+                return {
+                    id: type.id,
+                    text: type.type,
+                };
             });
         },
         company_id: function() {
@@ -102,6 +111,7 @@ export default {
         }
     },
     beforeMount() {
+        this.$store.dispatch('fetchList','vehicle_types');
         this.$store.dispatch('fetchList','companies');
     },
     methods: {

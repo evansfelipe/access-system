@@ -10,22 +10,6 @@ use App\Http\Requests\{ SaveVehicleRequest };
 class VehiclesController extends Controller
 {
 
-    public function updatedAt()
-    {
-        $vehicle = Vehicle::select(['updated_at'])->orderBy('updated_at','desc')->first();
-        return $vehicle? $vehicle->updated_at : null;        
-    }
-
-    public function list()
-    {
-        $vehicles = Vehicle::select(['id','plate','brand','model','year','colour','company_id'])->orderBy('created_at','desc')->with('company:id,name')->get()->map(function($vehicle) {
-            $vehicle->company_name = $vehicle->company->name;
-            unset($vehicle->company);
-            return $vehicle;
-        });
-        return response(json_encode($vehicles))->header('Content-Type', 'application/json');        
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -43,7 +27,7 @@ class VehiclesController extends Controller
                 $person_vehicle = new PersonVehicle(['person_id' => $person_id, 'vehicle_id' => $vehicle->id]);
                 $person_vehicle->save();
             } 
-         }
+        }
         return response(json_encode(['id' => $vehicle->id]), 200)->header('Content-Type', 'application/json');
     }
 
