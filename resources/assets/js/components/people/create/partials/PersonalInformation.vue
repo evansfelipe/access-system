@@ -2,11 +2,11 @@
 <div>
     <div class="form-row d-flex align-items-center">
         <!-- Photo loader section -->
-        <form-item col="col-4" :errors="errors.picture">
+        <form-item col="offset-md-2 col-md-8 offset-lg-0 col-lg-4" :errors="errors.picture">
             <web-camera @pictureTaken="picture => update({ name: 'picture', value: picture })" :img="values.picture_path"/>
         </form-item>
         <!-- Identification information section -->
-        <div class="col-8">
+        <div class="col-md-12 col-lg-8">
             <!-- Last name & name -->
             <div class="form-row">
                 <form-item col="col-6" label="Apellido" :errors="errors.last_name">
@@ -40,7 +40,7 @@
             <div class="form-row">
                 <form-item col="col-6" label="Fecha de nacimiento" :errors="errors.birthday">
                     <div class="col">
-                        <input type="date" name="birthday" class="form-control" :value="values.birthday" @input="(e) => update(e.target)">
+                        <date-picker :value="values.birthday" @input="value => update({name: 'birthday' , value: value})"/>
                     </div>
                 </form-item>
                 <form-item col="col-3" label="Género" :errors="errors.sex">
@@ -169,6 +169,9 @@ export default {
     methods: {
         update: function({name, value}) {
             this.$store.commit('updateModel', { which: 'person', properties_path: `values.personal_information.${name}`, value: value });
+        },
+        test: function(v) {
+            console.log(v);
         }
     },
     computed: {

@@ -26,9 +26,9 @@
         <!-- Content -->
         <show-wrapper :loading="!axios_finished" @edit="edit" @pdf="pdf">
             <personal-information v-show="tab === 0" :person="personal_information"/>
-            <working-information v-show="tab === 1" :personCompany="working_information"/>
+            <working-information v-show="tab === 1" :jobs="jobs"/>
             <vehicles v-show="tab === 2" :vehicles="vehicles"/>
-            <documentation v-show="tab === 3" :documents="documents"/>
+            <documentation v-show="tab === 3" :documents="documents" :required-documents="required_documents" :not-required-documents="not_required_documents"/>
             <observations v-show="tab === 4" :personObservations="observations"/>
         </show-wrapper>
     </div>
@@ -48,26 +48,31 @@
                 axios_finished: false,
                 tab: 0,
                 personal_information: {},
-                working_information: {},
+                jobs: [],
                 vehicles: [],
                 observations: [],
-                documents: []
+                documents: [],
+                required_documents: [],
+                not_required_documents: [],
             };
         },
         beforeMount() {
             axios.get(`/people/${this.$route.params.id}`)
             .then(response => {
-                this.axios_finished = true;
-                let person_info = response.data;
-                this.personal_information = person_info.personal_information;
-                this.working_information = person_info.working_information;
-                this.vehicles = person_info.vehicles;
-                this.observations = person_info.observations;
-                this.documents = person_info.documents;
+                this.personal_information = response.data.personal_information;
+                this.jobs = response.data.jobs;
+                this.vehicles = response.data.vehicles;
+                this.observations = response.data.observations;
+                this.documents = response.data.documents;
+                this.required_documents = response.data.required_documents;
+                this.not_required_documents = response.data.not_required_documents;
             })
             .catch(error => {
                 console.log(error);
             })
+            .finally(() => {
+                this.axios_finished = true;
+            });
         },
         methods: {
             edit: function() {

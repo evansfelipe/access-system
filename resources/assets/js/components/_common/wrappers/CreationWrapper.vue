@@ -81,23 +81,17 @@ export default {
                 console.log(errors);
             }
             
-            let data = new FormData();
+            let data = {};
 
             Object.keys(this.values).forEach(step => {
                 Object.keys(this.values[step]).forEach(key => {
-                    let val = this.values[step][key] ? this.values[step][key] : '';
-                    data.append(key, Array.isArray(val) ? JSON.stringify(val) : val);
+                    data[key] = this.values[step][key] ? this.values[step][key] : '';
                 });
             });
 
             if(this.route.method === 'put') {
                 data.append('_method', 'PUT');
             }
-
-            // for (var pair of data.entries()) {
-            //     console.log(pair[0]+ ', ' + pair[1]); 
-            // }
-                        
 
             axios.post(this.route.url, data)
             .then(response => this.$emit('saveSuccess', response.data.id))

@@ -1,11 +1,4 @@
 <style lang="scss" scoped>
-    div.container.job {
-        position: relative;
-        border-radius: 3px;
-        border: 1px solid rgb(222,222,222);
-        padding: 1em;
-    }
-
     .job-enter-active, .job-leave-active { transition: all .5s }
     .job-enter, .job-leave-to { opacity: 0 }
     .job-enter { transform: translateX(-10px) }
@@ -34,7 +27,7 @@
         <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.activities.updating"/>
         <template v-else>
             <transition-group name="job" tag="div">
-                <div class="container job mb-2" v-for="job in values.jobs" :key="job.key">
+                <div class="grey-border mb-2" v-for="job in values.jobs" :key="job.key">
                     <div class="form-row">
                         <div class="col" style="text-align: right">
                             <i class="btn-remove far fa-trash-alt" v-if="values.jobs.length > 1" @click="deleteJob(job)"></i>
@@ -62,7 +55,7 @@
                 </div>
             </transition-group>
             <!-- Add job button -->
-            <div class="container mt-3">
+            <div class="mt-3">
                 <div class="row">
                     <div class="col text-right">
                         <button class="btn btn-link" @click="addJob">

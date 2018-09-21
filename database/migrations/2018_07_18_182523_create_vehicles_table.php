@@ -25,8 +25,8 @@ class CreateVehiclesTable extends Migration
             $table->string('model', Vehicle::LENGTHS['model']['max'])->required();
             $table->string('colour', Vehicle::LENGTHS['colour']['max'])->nullable();
             $table->year('year')->nullable();
-            $table->datetime('insurance')->required();
-            $table->datetime('vtv')->required();
+            $table->datetime('insurance')->nullable();
+            $table->datetime('vtv')->nullable();
             $table->timestamps();
         });
     }

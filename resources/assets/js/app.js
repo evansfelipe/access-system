@@ -30,6 +30,7 @@ Vue.use(ElementUI, {locale});
 
 // Common components that are re-usable across all components
 Vue.component('hr-label' ,          require('./components/_common/HrLabel.vue'));
+Vue.component('date-picker' ,          require('./components/_common/DatePicker.vue'));
 Vue.component('select2'           , require('./components/_common/Select2.vue'));
 Vue.component('tab-item'          , require('./components/_common/TabItem.vue'));
 Vue.component('cuil-cuit'         , require('./components/_common/CuilCuit.vue'));
@@ -46,6 +47,7 @@ Vue.component('abbreviation-text' , require('./components/_common/AbbreviationTe
 Vue.component('confirmable-button', require('./components/_common/ConfirmableButton.vue'));
 // Wrappers
 Vue.component('show-wrapper'  , require('./components/_common/wrappers/ShowWrapper.vue'));
+Vue.component('index-wrapper'  , require('./components/_common/wrappers/IndexWrapper.vue'));
 Vue.component('creation-wrapper'  , require('./components/_common/wrappers/CreationWrapper.vue'));
 // Dashboards
 Vue.component('administration-dashboard', require('./components/dashboards/administration/Layout.vue'));
@@ -75,6 +77,14 @@ Vue.mixin({
         clone: function(object) {
             return JSON.parse(JSON.stringify(object));
         },
+        fileToDataURI: function(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
     }
 });
 

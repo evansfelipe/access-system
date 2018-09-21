@@ -15,13 +15,30 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::component('components.input', 'input');
-        Blade::component('components.panel', 'panel');
-        Blade::component('components.select', 'select');
-        Blade::component('components.submit-button', 'submitbutton');
-        Blade::component('components.residency', 'residency');
-        Blade::component('components.form-button', 'formbutton');
-        Blade::component('components.form-item', 'formitem');
+        Validator::extend('base64file', function ($attribute, $value, $parameters, $validator) {
+            $explode = explode(',', $value);
+            $allow = $parameters;
+            $format = str_replace(
+                [
+                    'data:image/',
+                    ';',
+                    'base64',
+                ],
+                [
+                    '', '', '',
+                ],
+                $explode[0]
+            );
+            // check file format
+            if (!in_array($format, $allow)) {
+                return false;
+            }
+            // check base64 format
+            if (!preg_match('%^[a-zA-Z0-9/+]*={0,2}$%', $explode[1])) {
+                return false;
+            }
+            return true;
+        });
     }
 
     /**

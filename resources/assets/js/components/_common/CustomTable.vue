@@ -1,8 +1,4 @@
 <style lang="scss" scoped>
-    div.table-wrapper {
-        border: 1px solid rgb(222,222,222);
-        border-radius: 0.25rem;
-    }
     table {
         width: 100%;
         cursor: pointer;
@@ -39,25 +35,20 @@
 <template>
     <div>
         <template v-if="rows.length > 0">
-            <div v-if="rowsquantity === null" class="row d-flex align-items-center mb-2">
+            <div v-if="rowsquantity === null" class="row mb-2">
                 <div class="col-4">
                     Mostrar
-                    <select class="form-control form-control-sm d-inline" style="width: auto;" v-model.number="pagination.quantity">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select> 
+                    <select2 :value="pagination.quantity" @input="value => pagination.quantity = value" :options="options.rows" :clearable="false" size="mini" width="50%"/>
                     filas
                 </div>
-                <div class="offset-4 col-4 text-right">
+                <div class="offset-4 col-4">
                     <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" :disabled="advancedsearch">
                 </div>
             </div>
             <!-- Data displayed on a table -->
             <div class="row">
                 <div class="col">
-                    <div class="table-wrapper">
+                    <div class="grey-border p-0">
                         <table>
                             <thead>
                                 <tr>
@@ -133,27 +124,27 @@
 export default {
     props: {
         columns: {
-            type: Array,
+            type:     Array,
             required: true
         },
         rows: {
-            type: Array,
+            type:     Array,
             required: true
         },
         rowsquantity: {
-            type: Number,
+            type:     Number,
             required: false,
-            default: null
+            default:  null
         },
         advancedsearch: {
-            type: Boolean,
+            type:     Boolean,
             required: false,
-            default: false
+            default:  false
         },
         filter: {
-            type: Object,
+            type:     Object,
             required: false,
-            default: () => {
+            default:  () => {
                 return {
                     strict: false,
                     conditions: {}
@@ -190,6 +181,14 @@ export default {
                 current: 0,
                 last: Math.ceil((this.rows.length) / rows_q),
                 page: [],
+            },
+            options: {
+                rows: [
+                    {id: 10},
+                    {id: 25},
+                    {id: 50},
+                    {id: 100},
+                ]
             }
         }
     },

@@ -28,22 +28,22 @@
             <div v-for="card in cards" :key="`card-${card.key}`" class="form-row">
                 <i class="btn-remove far fa-trash-alt" v-if="cards.length > 1" @click="removeCard(card)"></i>
                 <!-- Card number -->
-                <form-item label="Número" :errors="errors[card.key] ? errors[card.key]['number'] : []">
+                <form-item col="col-md-12 col-lg-4" label="Número" :errors="errors[card.key] ? errors[card.key]['number'] : []">
                     <div class="col">
                         <input  type="text" name="number" class="form-control"
                                 :value="card.number" @input="(e) => editCard(card, 'number', e.target.value)">
                     </div>
                 </form-item>
                 <!-- Card from -->
-                <form-item label="Valida desde" :errors="errors[card.key] ? errors[card.key]['from'] : []">
+                <form-item col="col-md-6 col-lg-4" label="Valida desde" :errors="errors[card.key] ? errors[card.key]['from'] : []">
                     <div class="col">
-                        <input type="date" name="from" class="form-control" :value="card.from" @input="(e) => editCard(card, 'from', e.target.value)">
+                        <date-picker :value="card.from" @input="value => editCard(card, 'from', value)"/>
                     </div>
                 </form-item>
                 <!-- Card until -->
-                <form-item label="Valida hasta" :errors="errors[card.key] ? errors[card.key]['until'] : []">
+                <form-item col="col-md-6 col-lg-4" label="Valida hasta" :errors="errors[card.key] ? errors[card.key]['until'] : []">
                     <div class="col">
-                        <input type="date" name="until" class="form-control" :value="card.until" @input="(e) => editCard(card, 'until', e.target.value)">
+                        <date-picker :value="card.until" @input="value => editCard(card, 'until', value)"/>
                     </div>
                 </form-item>
             </div>

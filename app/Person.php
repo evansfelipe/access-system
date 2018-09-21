@@ -43,8 +43,9 @@ class Person extends Model
         return [
             'picture' => [
                 'required',
-                'image', 
-                'mimes:jpeg,jpg,png'
+                'base64file:jpeg,jpg,png'
+                // 'image', 
+                // 'mimes:jpeg,jpg,png'
             ],
             'last_name' => [
                 'required',
@@ -229,6 +230,47 @@ class Person extends Model
         }
     }
 
+    public function setRequiredDocumentation(Array $data)
+    {
+        $this->required_documentation = json_encode($data);
+    }
+
+    public function getRequiredDocuments()
+    {
+        return collect(json_decode($this->required_documentation))->filter(function($doc) { return $doc; });
+    }
+
+    public function getNotRequiredDocuments()
+    {
+        return collect(json_decode($this->required_documentation))->filter(function($doc) { return !$doc; });
+    }
+
+    public function documentKeyToString($key)
+    {
+        switch ($key) {
+            case 'acc_pers':
+                return 'Certificado de cobertura Acc. Pers.';
+            case 'art_file':
+                return 'Certificado de cobertura ART';
+            case 'boarding_card':
+                return 'Cédula de embarque';
+            case 'boarding_passbook':
+                return 'Libreta de embarque';
+            case 'company_note':
+                return 'Nota de la empresa';
+            case 'dni_copy':
+                return 'Documento de identidad';
+            case 'driver_license':
+                return 'Registro de conducir';
+            case 'health_notebook':
+                return 'Libreta sanitaria';
+            case 'pbip_file':
+                return 'Constancia de curso PBIP';
+            case 'pna_file':
+                return 'Número de prontuario';
+        }
+    }
+
     /**
      * Given an array, sets the contact json of this person.
      */
@@ -294,19 +336,23 @@ class Person extends Model
                 $this->contactToArray(),
                 $this->residency ? $this->residency->toArray() : []
             ),
-            'working_information'   => [
-                'jobs'          => $this->jobs(),
-            ],
+            'jobs'              => $this->jobs(),
             'vehicles'          => $this->vehicles->toArray(),
             'observations'      => $this->observations->toArray(),
             'documents'         => $this->documents->map(function($document) {
                                         return [
-                                            'id' => $document->id,
-                                            'type'  => $document->typeToString(),
-                                            'created_at'    => Helpers::timestampToDate($document->created_at),
-                                            'expiration'    => Helpers::timestampToDate($document->expiration)
+                                            'id'         => $document->id,
+                                            'type'       => $document->typeToString(),
+                                            'created_at' => Helpers::timestampToDate($document->created_at),
+                                            'expiration' => Helpers::timestampToDate($document->expiration)
                                         ];
-                                    })
+                                    }),
+            'required_documents' => $this->getRequiredDocuments()->map(function($doc, $key) {
+                                        return $this->documentKeyToString($key);
+                                    }),
+            'not_required_documents' => $this->getNotRequiredDocuments()->map(function($doc, $key) {
+                                            return $this->documentKeyToString($key);
+                                        })
         ];
     }
 

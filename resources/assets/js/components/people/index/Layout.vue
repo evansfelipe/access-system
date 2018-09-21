@@ -1,41 +1,25 @@
 <template>
-    <div>
-        <div class="row text-right">
-            <div class="col">
-                <button class="btn btn-link btn-sm" @click="advancedSearch">
-                    <template v-if="!advanced_search"><i class="fas fa-angle-down"></i> Mostrar</template>
-                    <template v-else><i class="fas fa-angle-up"></i> Ocultar</template>
-                    búsqueda avanzada
-                </button>
+    <index-wrapper :updating="updating" @advanced-search="advancedSearch">
+        <!-- Advanced search -->
+        <template slot="advanced-search-filters">
+            <div class="col-12 col-md-3">
+                <input type="text" class="form-control form-control-sm" placeholder="Apellido" v-model="filter.conditions.last_name">
             </div>
-        </div>
-        <transition name="collapse">
-            <div v-show="advanced_search" class="card">
-                <div class="card-body" style="background: #fafafa">
-                    <div class="row">
-                        <div class="col-12 col-md-3">
-                            <input v-model="filter.conditions.last_name" type="text" class="form-control form-control-sm" :disabled="updating" placeholder="Apellido">
-                        </div>
-                        <div class="col-12 col-md-3">
-                            <input v-model="filter.conditions.name" type="text" class="form-control form-control-sm" :disabled="updating" placeholder="Nombre">
-                        </div>
-                        <div class="col-12 col-md-3">
-                            <input v-model="filter.conditions.cuil" type="text" class="form-control form-control-sm" :disabled="updating" placeholder="CUIL">
-                        </div>
-                        <div class="col-12 col-md-3">
-                            <input v-model="filter.conditions.company_name" type="text" class="form-control form-control-sm" :disabled="updating" placeholder="Nombre de la empresa">
-                        </div>
-                    </div>
-                </div>
+            <div class="col-12 col-md-3">
+                <input type="text" class="form-control form-control-sm" placeholder="Nombre" v-model="filter.conditions.name">
             </div>
-        </transition>
-        <div class="card">
-            <div class="card-body" :style="updating ? 'min-height: 60vh' : ''">
-                <loading-cover v-if="updating"/>
-                <custom-table  v-else :columns="columns" :rows="people" :filter="filter" :advancedsearch="advanced_search" @rowclicked="showProfile"/>
+            <div class="col-12 col-md-3">
+                <input type="text" class="form-control form-control-sm" placeholder="CUIL" v-model="filter.conditions.cuil">
             </div>
-        </div>
-    </div>
+            <div class="col-12 col-md-3">
+                <input type="text" class="form-control form-control-sm" placeholder="Nombre de la empresa" v-model="filter.conditions.company_name">
+            </div>
+        </template>
+        <!-- List -->
+        <template slot="main-content">
+            <custom-table :columns="columns" :rows="people" :filter="filter" :advancedsearch="advanced_search" @rowclicked="showProfile"/>
+        </template>
+    </index-wrapper>
 </template>
 
 <script>
@@ -98,7 +82,7 @@ export default {
          * Restarts filters and show/hide advanced search.
          */
         advancedSearch: function() {
-            this.advanced_search = !this.advanced_search;
+            // this.advanced_search = !this.advanced_search;
             if( this.advanced_search === true ) {
                 this.filter.conditions = {
                     plate:        "",

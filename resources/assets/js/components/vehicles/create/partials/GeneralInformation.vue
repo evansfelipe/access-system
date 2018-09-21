@@ -62,13 +62,13 @@
                 <!-- Insurance -->
                 <form-item col="col-6" label="Seguro" :errors="errors.insurance">
                     <div class="col">
-                        <input type="date" name="insurance" class="form-control" :value="values.insurance" @input="(e) => update(e.target)">
+                        <date-picker :value="values.insurance" @input="value => update({name: 'insurance', value: value})"/>
                     </div>
                 </form-item>
                 <!-- VTV -->
                 <form-item col="col-6" label="VTV" :errors="errors.vtv">
                     <div class="col">
-                        <input type="date" name="vtv" class="form-control" :value="values.vtv" @input="(e) => update(e.target)">
+                        <date-picker :value="values.vtv" @input="value => update({name: 'vtv', value: value})"/>
                     </div>
                 </form-item>
             </div>

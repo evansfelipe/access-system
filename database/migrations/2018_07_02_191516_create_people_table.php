@@ -31,6 +31,7 @@ class CreatePeopleTable extends Migration
             $table->integer('register_number')->unsigned()->nullable();
             $table->string('pna', Person::LENGTHS['pna']['max'])->nullable();
             $table->json('contact')->nullable();
+            $table->json('required_documentation')->required();
             $table->integer('residency_id')->unsigned()->nullable();
             $table->timestamps();
         });

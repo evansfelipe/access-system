@@ -1,17 +1,19 @@
 <style lang="scss" scoped>
+    div.wrapper {
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+    }
     div.checkbox {
         background-color: rgba(63, 114, 155, 0.7);
-        position: absolute;
-        height: 1.5em;
         width: 2.5em;
+        padding: 0.25em;
         border-radius: 0.75em;
         transition: all 0.25s;
-        cursor: pointer;
         &.active {
             background-color: #3F729B;
         }
         & > .check {
-            margin: 0.25em;
             position: relative;
             background-color: white;
             height: 1em;
@@ -23,23 +25,33 @@
 </style>
 
 <template>
-    <div :class="'checkbox' + (this.switch? ' active':'')" @click="toggle()">
-        <div class="check" :style="this.switch? 'left:1em': 'left:0'"></div>
+    <div class="mb-1 wrapper" @click="toggle">
+        <div :class="'checkbox' + (this.switch? ' active':'')">
+            <div class="check" :style="this.switch? 'left:1em': 'left:0'"></div>
+        </div>
+        <span class="ml-2">
+            {{ label }}
+        </span>
     </div>
 </template>
 
 <script>
 export default {
     props: {
-        initial: {
+        value: {
             type: Boolean,
             required: false,
             default: false
+        },
+        label: {
+            type: String,
+            required: false,
+            default: ''
         }
     },
     data() {
         return {
-            switch: this.initial,
+            switch: this.value,
         }
     },
     methods: {

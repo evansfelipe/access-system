@@ -1,10 +1,10 @@
 <template>
-    <el-select  style="width: 100%" 
+    <el-select  :style="`width: ${width}`" 
                 v-model="input_value"   :disabled="disabled || loading"
                 :name="name"            :placeholder="!loading ? placeholder : 'Cargando valores...'"
                 :multiple="multiple"    :allow-create="tags"
                 filterable              default-first-option
-                clearable               :size="size"
+                :clearable="clearable"  :size="size"
                 :loading="loading"      loading-text="Cargando..."
                 auto-complete="nope"    :filter-method="filterMethod"
     >
@@ -22,48 +22,58 @@
 export default {
     props: {
         disabled: {
-            type:     Boolean,
-            required: false,
-            default:  false
+            type:       Boolean,
+            required:   false,
+            default:    false
         },
         options: {
-            type:     Array,
-            required: false,
-            default:  () => []
+            type:       Array,
+            required:   false,
+            default:    () => []
         },
         value: {
-            required: false,
-            default:  ''
+            required:   false,
+            default:    ''
         },
         placeholder: {
-            type:     String,
-            required: false,
-            default:  'Seleccione una opción'
+            type:       String,
+            required:   false,
+            default:    'Seleccione una opción'
         },
         tags: {
-            type:     Boolean,
-            required: false,
-            default:  false
+            type:       Boolean,
+            required:   false,
+            default:    false
         },
         name: {
-            type:     String,
-            required: false,
-            default:  ''
+            type:       String,
+            required:   false,
+            default:    ''
         },
         multiple: {
-            type:     Boolean,
-            required: false,
-            default:  false
+            type:       Boolean,
+            required:   false,
+            default:    false
         },
         size: {
-            type:     String,
-            required: false,
-            default:  ''
+            type:       String,
+            required:   false,
+            default:    ''
         },
         loading: {
-            type:     Boolean,
-            required: false,
-            default:  false
+            type:       Boolean,
+            required:   false,
+            default:    false
+        },
+        clearable: {
+            type:       Boolean,
+            required:   false,
+            default:    true
+        },
+        width: {
+            type:       String,
+            required:   false,
+            default:    '100%'
         }
     },
     data() {

@@ -3,6 +3,7 @@
         display: block;
         text-decoration: none;
         padding: .5em 0 .5em 1.5em;
+        transition: background-color .3s;
         &:hover {
             background-color: rgba(28, 35, 49, .3);
             cursor: pointer;
@@ -20,8 +21,8 @@
         z-index: 9;
         // Position
         position: absolute;
-        top: 0; bottom: 0; left: 0; 
-        right: 85vw;
+        top: 0; bottom: 0;
+        width: 250px;
         // Colors and padding
         padding: 1em 0;
         & * { color: rgba(255, 255, 255, 0.9) }
@@ -53,7 +54,7 @@
         }
     }
 
-    .sidebar-enter, .sidebar-leave-to { transform: translateX(-15vw) }
+    .sidebar-enter, .sidebar-leave-to { transform: translateX(-250px) }
     .sidebar-enter-active, .sidebar-leave-active  { transition: all .5s }
 </style>
 

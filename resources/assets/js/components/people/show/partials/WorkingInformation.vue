@@ -1,14 +1,6 @@
-<style lang="scss" scoped>
-    div.job {
-        border-radius: 3px;
-        border: 1px solid rgb(222,222,222);
-        padding: 1em;
-    }
-</style>
-
 <template>
     <div>
-        <div v-for="(job, key) in personCompany.jobs" :key="key" class="job my-2">
+        <div v-for="(job, key) in jobs" :key="key" class="grey-border my-2">
             <!-- Company name, activity & subactivities -->
             <div class="row">
                 <div class="col">
@@ -70,8 +62,8 @@
 <script>
 export default {
     props: {
-        personCompany: {
-            type:     Object,
+        jobs: {
+            type:     Array,
             required: true
         }
     }

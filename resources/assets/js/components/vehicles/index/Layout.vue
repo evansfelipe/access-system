@@ -1,44 +1,28 @@
 <template>
-    <div>
-        <div class="row text-right">
-            <div class="col">
-                <button class="btn btn-link btn-sm" @click="advancedSearch">
-                    <template v-if="!advanced_search"><i class="fas fa-angle-down"></i> Mostrar</template>
-                    <template v-else><i class="fas fa-angle-up"></i> Ocultar</template>
-                    búsqueda avanzada
-                </button>
+    <index-wrapper :updating="updating" @advanced-search="advancedSearch">
+        <!-- Advanced search -->
+        <template slot="advanced-search-filters">
+            <div class="col-12 col-md-2">
+                <input type="text" class="form-control form-control-sm" placeholder="Patente" v-model="filter.conditions.plate">
             </div>
-        </div>
-        <transition name="collapse">
-            <div v-show="advanced_search" class="card">
-                <div class="card-body" style="background: #fafafa">
-                    <div class="row">
-                        <div class="col-12 col-md-2">
-                            <input v-model="filter.conditions.plate" type="text" class="form-control form-control-sm" :disabled="updating" placeholder="Patente">
-                        </div>
-                        <div class="col-12 col-md-2">
-                            <input v-model="filter.conditions.brand" type="text" class="form-control form-control-sm" :disabled="updating" placeholder="Marca">
-                        </div>
-                        <div class="col-12 col-md-2">
-                            <input v-model="filter.conditions.model" type="text" class="form-control form-control-sm" :disabled="updating" placeholder="Modelo">
-                        </div>
-                        <div class="col-12 col-md-2">
-                            <input v-model="filter.conditions.year" type="text" class="form-control form-control-sm" :disabled="updating" placeholder="Año">
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <input v-model="filter.conditions.company_name" type="text" class="form-control form-control-sm" :disabled="updating" placeholder="Nombre de la empresa">
-                        </div>
-                    </div>
-                </div>
+            <div class="col-12 col-md-2">
+                <input type="text" class="form-control form-control-sm" placeholder="Marca" v-model="filter.conditions.brand">
             </div>
-        </transition>
-        <div class="card">
-            <div class="card-body" :style="updating ? 'min-height: 60vh' : ''">
-                <loading-cover v-if="updating"/>
-                <custom-table  v-else :columns="columns" :rows="vehicles" :filter="filter" :advancedsearch="advanced_search" @rowclicked="showProfile"/>
+            <div class="col-12 col-md-2">
+                <input type="text" class="form-control form-control-sm" placeholder="Modelo" v-model="filter.conditions.model">
             </div>
-        </div>
-    </div>
+            <div class="col-12 col-md-2">
+                <input type="text" class="form-control form-control-sm" placeholder="Año" v-model="filter.conditions.year">
+            </div>
+            <div class="col-12 col-md-4">
+                <input type="text" class="form-control form-control-sm" placeholder="Nombre de la empresa" v-model="filter.conditions.company_name">
+            </div>
+        </template>
+        <!-- List -->
+        <template slot="main-content">
+            <custom-table :columns="columns" :rows="vehicles" :filter="filter" :advancedsearch="advanced_search" @rowclicked="showProfile"/>
+        </template>
+    </index-wrapper>
 </template>
 
 <script>

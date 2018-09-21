@@ -20,10 +20,10 @@ export default {
     data: function() {
         return {
             columns: [ 
-                {name: 'plate', text: 'Patente'},
-                {name: 'brand', text: 'Marca'},
-                {name: 'model', text: 'Modelo'},
-                {name: 'year', text: 'Año'},
+                {name: 'plate',  text: 'Patente'},
+                {name: 'brand',  text: 'Marca'},
+                {name: 'model',  text: 'Modelo'},
+                {name: 'year',   text: 'Año'},
                 {name: 'colour', text: 'Color'},
             ],
         }

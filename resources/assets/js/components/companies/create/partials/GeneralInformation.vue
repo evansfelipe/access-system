@@ -27,7 +27,7 @@
             </form-item>
             <form-item col="col-4" label="Vencimiento" :errors="errors.expiration">
                 <div class="col">
-                    <input type="date" name="expiration" class="form-control" :value="values.expiration" @input="(e) => update(e.target)">
+                    <date-picker :value="values.expiration" @input="value => update({name: 'expiration', value: value})"/>
                 </div>
             </form-item>
         </div>

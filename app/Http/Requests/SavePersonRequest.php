@@ -7,22 +7,6 @@ use App\{ User, Person, Residency, PersonCompany, PersonVehicle, Card };
 class SavePersonRequest extends FormRequest
 {
     /**
-     * Prepare the request data to be validated.
-     * 
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'vehicles_id'   =>  json_decode($this->vehicles_id),
-            'jobs'          =>  array_map(function($job) {
-                                    $job['company_id'] = !empty($job['company_id']) ? $job['company_id'] : null;
-                                    return $job;
-                                }, json_decode($this->jobs, true))
-        ]);
-    }
-
-    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
@@ -44,6 +28,34 @@ class SavePersonRequest extends FormRequest
         $residency_rules            = Residency::getValidationRules();
         $working_information_rules  = PersonCompany::getValidationRules();
         $assign_vehicles_rules      = PersonVehicle::getVehiclesValidationRules();
+        $documents_required_rules   = [
+            'documents_required' => [
+                'required',
+                'array',
+                function($attribute, $value, $fail) {
+                    $keys_allowed = [
+                        'acc_pers',
+                        'art_file',
+                        'boarding_card',
+                        'boarding_passbook',
+                        'company_note',
+                        'dni_copy',
+                        'driver_license',
+                        'health_notebook',
+                        'pbip_file',
+                        'pna_file'
+                    ];
+                    foreach (array_keys($value) as $key) {
+                        if(!in_array($key, $keys_allowed)) {
+                            return $fail('Algo salió mal al validar los datos. Por favor, intente de nuevo o reinicie el sistema');
+                        }
+                    }
+                }
+            ],
+            'documents_required.*' => [
+                'boolean'
+            ]
+        ];
         /**
          * If the request comes from an edition, then performs some actions over the personal information validation rules.
          */
@@ -117,7 +129,8 @@ class SavePersonRequest extends FormRequest
             $person_rules, 
             $residency_rules, 
             $working_information_rules, 
-            $assign_vehicles_rules
+            $assign_vehicles_rules,
+            $documents_required_rules
         );
     }
 

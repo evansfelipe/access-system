@@ -24,7 +24,7 @@ export default {
                 city:            !debug ? '' : '',
                 risk:            !debug ? '' : '1',
                 homeland:        !debug ? '' : '',
-                register_number: !debug ? '' : '123450999'
+                register_number: !debug ? '' : '123450999',
             },
             working_information: {
                 jobs: [{
@@ -45,17 +45,52 @@ export default {
             },
             assign_vehicles: { vehicles_id: [] },
             documentation: {
-                dni_copy:                   '',
-                pna_file:                   '',
-                driver_license:             '',
-                driver_license_expiraton:   '',
-                acc_pers:                   '',
-                acc_pers_expiration:        '',
-                boarding_passbook:          '',
-                boarding_card:              '',
-                health_notebook:            '',
-                pbip_file:                  '',
-                pbip_file_expiration:       ''
+                documents: {
+                    dni_copy: {
+                        file: '',
+                        expiration: ''
+                    },
+                    pna_file: {
+                        file: '',
+                        expiration: ''
+                    },
+                    driver_license: {
+                        file: '',
+                        expiration: ''
+                    },
+                    acc_pers: {
+                        file: '',
+                        expiration: ''
+                    },
+                    boarding_passbook: {
+                        file: '',
+                        expiration: ''
+                    },
+                    boarding_card: {
+                        file: '',
+                        expiration: ''
+                    },
+                    health_notebook: {
+                        file: '',
+                        expiration: ''
+                    },
+                    pbip_file: {
+                        file: '',
+                        expiration: ''
+                    },
+                },
+                documents_required: {
+                    acc_pers:           false,
+                    art_file:           false,
+                    boarding_card:      false,
+                    boarding_passbook:  false,
+                    company_note:       false,
+                    dni_copy:           false,
+                    driver_license:     false,
+                    health_notebook:    false,
+                    pbip_file:          false,
+                    pna_file:           false,
+                },
             }
         }
     }

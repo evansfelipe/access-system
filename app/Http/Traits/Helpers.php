@@ -61,13 +61,15 @@ trait Helpers {
 
     public static function timestampToDate($timestamp)
     {
-        return $timestamp ? date('d-m-Y', strtotime($timestamp)) : '-';
+        return $timestamp ? date('d / m / Y', strtotime($timestamp)) : '-';
     }
 
-    public static function storeFile($path, $file)
+    public static function storeFile($path, $fileAsDataURI)
     {
-        $name = time() . '.' . $file->guessExtension();
-        Storage::putFileAs($path, $file, $name);
+        list($meta, $content) = explode(',', $fileAsDataURI);
+        $content = base64_decode($content);
+        $name = uniqid();
+        Storage::put($path.'/'.$name, $content);
         return $name;
     }
 

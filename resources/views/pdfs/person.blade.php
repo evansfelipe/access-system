@@ -1,123 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-        }
-        div.section {
-            border-radius: 3px;
-            border: 1px solid rgb(222,222,222);
-        }
-
-        div.section + div.section {
-            margin-top: 2em;
-        }
-
-        div.section > div.section-title {
-            font-size: 150%;
-            border-bottom: 1px solid rgb(222,222,222);
-            padding: .5em 1em;
-        }
-
-        div.section > div.section-content {
-            padding: 1em;
-        }
-
-        img {
-            max-width: 200px;
-            height: auto;
-        }
-
-        table {
-            width: 100%;
-        }
-
-        .mb-1 {
-            margin-bottom: 1em;
-        }
-
-        .d-inline {
-            display: inline;
-        }
-
-        .d-inline-block {
-            display: inline-block;
-        }
-
-        table.information td {
-            width: 50%;
-        }
-
-        table.table {
-            border-radius: 3px;
-            border: 1px solid rgb(222,222,222);
-        }
-
-        table.table > thead > tr {
-            border-bottom: 1px solid rgb(222,222,222);
-        }
-
-        table.table > thead > tr > th {
-            padding: 0.75em;
-            text-align: left;
-        }
-
-        table.table > tbody > tr > td {
-            border-bottom: 1px solid rgba(222,222,222, .25);
-            padding: 0.5em;
-        }
-
-    </style>
-</head>
-    <body>
-        {{-- <div class="mb-1">
-            <img src="{{ $picture }}">
-            <div class="d-inline-block">
-                <h1 class="d-inline">{{ $full_name }}</h1>
-                <br>
-                <h2 class="d-inline">{{ $register_number }}</h2>
-            </div>
-        </div> --}}
-
-        {{-- Personal information section --}}
-        <div class="section">
-            <div class="section-title">
-                Información personal
-            </div>
-            <div class="section-content">
-                <table class="information">
-                    <tbody>
-                        @foreach($personal_information as $key => $value)
-                            <tr>
-                                <td>{{ $key }}</td>
-                                <td><strong>{{ $value }}</strong></td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+@extends('layouts.pdfs')
+@section('content')
+    {{-- <div class="mb-1">
+        <img src="{{ $picture }}">
+        <div class="d-inline-block">
+            <h1 class="d-inline">{{ $full_name }}</h1>
+            <br>
+            <h2 class="d-inline">{{ $register_number }}</h2>
         </div>
-        {{-- Jobs section --}}
-        @foreach($jobs as $job)
-        <div class="section">
-            <div class="section-title">
+    </div> --}}
+
+    {{-- Personal information section --}}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Información Personal</h4>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <tbody>
+                    @foreach($personal_information as $key => $value)
+                        <tr>
+                            <td class="small">{{ $key }}</td>
+                            <td class="strong"><strong>{{ $value }}</strong></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    {{-- Jobs section --}}
+    @foreach($jobs as $job)
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>
                 {{ $job->company_name }} @if(isset($job->company_name)) | @endif {{ $job->activity_name }}
-            </div>
-            <div class="section-content">
-                <table class="information">
+            </h4>
+        </div>
+        <div class="panel-body">
+                <table class="table">
                     <tbody>
                         @foreach($job->data as $key => $value)
                             <tr>
-                                <td>{{ $key }}</td>
-                                <td><strong>{{ $value }}</strong></td>
+                                <td class="small">{{ $key }}</td>
+                                <td class="strong">{{ $value }}</td>
                             </tr>
                         @endforeach
+                        <tr>
+                            <td colspan="2">Tarjetas</td>
+                        </tr>
                     </tbody>
                 </table>
-
-                <table class="table">
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>Número</th>
@@ -135,9 +68,7 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>
         </div>
-        @endforeach
-
-    </body>
-</html>
+    </div>
+    @endforeach
+@endsection

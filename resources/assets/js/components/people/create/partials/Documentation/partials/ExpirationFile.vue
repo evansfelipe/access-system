@@ -13,13 +13,9 @@
         padding: 0.5em;
         & > div {
             display: inline-block;
-            height: 1em;
-            width: 1em;
-            border-radius: 50%;
-            color: rgb(239,241,245);
-            background-color: rgb(191,193,203);
+            color: rgb(191,193,203);
             &:hover {
-                background-color: rgb(143, 145, 152);
+                color: rgb(143, 145, 152);
                 cursor: pointer;
             }
         }
@@ -35,7 +31,6 @@
         font-style: italic;
         font-size: 75%;
     }
-
 </style>
 
 <template>
@@ -49,7 +44,7 @@
                         <!-- Shows file name when it's selected -->
                         <span v-if="file.selected" class="badge" @click="e => e.preventDefault()">
                             <abbreviation-text :text="file.name" :length="25"/>
-                            <div @click="deleteFile"><i class="fas fa-times fa-sm"></i></div>
+                            <div @click="deleteFile"><i class="el-icon-error"></i></div>
                         </span>
                         <!-- Default message instead -->
                         <span v-else>Seleccionar Archivo</span>                        
@@ -58,11 +53,13 @@
             </div>
             <!-- Expiration date -->
             <div :class="'col-' + input_date_col + ' text-center'">
-                <input type="date" :name="name + '_expiration'" class="form-control" title="Vencimiento" @input="e => updated('expiration', e.target.value)">
+                <el-tooltip class="item" effect="dark" content="Vencimiento" placement="top">
+                    <date-picker :name="`${name}_expiration`" :value="expiration" @input="value => updated('expiration', value)"/>
+                </el-tooltip>
             </div>
-            <div v-if="checked !== null" class="col-1 d-flex align-items-center">
-                <switch-box title="¿Requerido?" @update="(value) => updated('required', value)" />
-            </div>
+            <!-- <div v-if="checked !== null" class="col-1 d-flex align-items-center">
+                <switch-box title="¿Requerido?" @update="(value) => updated('required', value)"/>
+            </div> -->
         </form-item>
     </div>
 </template>
@@ -70,6 +67,11 @@
 <script>
 export default {
     props: {
+        expiration: {
+            type: String,
+            required: false,
+            default: ''
+        },
         label: {
             type: String,
             required: false,
@@ -87,7 +89,7 @@ export default {
         inputfilecol: {
             type:  Number,
             required: false,
-            default: 8
+            default: 7
         },
         errors: {
             type: Array,
@@ -115,7 +117,10 @@ export default {
             if(e.target.files.length > 0) {
                 this.file.selected = true;
                 this.file.name = e.target.files[0].name;
-                this.$emit('updated', {name: this.name, value: e.target.files[0]});
+                this.fileToDataURI(e.target.files[0])
+                .then(file => {
+                    this.$emit('updated', {name: 'documents.' + this.name + '.file', value: file});
+                })
             }
         },
         updated: function(which, value) {

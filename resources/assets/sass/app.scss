@@ -80,13 +80,19 @@ i.fas.centered, i.far.centered {
     text-align: center;
 }
 
+div.grey-border {
+    border-radius: 3px;
+    border: 1px solid rgb(222,222,222);
+    padding: 1em;
+}
+
 /**
  * Form items styles
  */
 // Bootstrap form-control
 .form-control { 
     height: 40px;
-    &.form-control-sm { height: 28px }
+    &.form-control-sm { height: 28px; font-size: 85%; }
     padding: 0.375rem 0.75rem;
     font-size: 0.9rem;
     line-height: 1.6;
@@ -103,7 +109,7 @@ i.fas.centered, i.far.centered {
 }
 // Element.io Select
 .el-input.el-input--suffix  > input {
-    padding: 0.375rem 0.75rem;
+    // padding: 0.375rem 0.75rem;
     font-size: 0.9rem;
     line-height: 1.6;
     color: #495057;
@@ -120,7 +126,7 @@ i.fas.centered, i.far.centered {
 }
 // Material design like input
 input.md-input {
-    width: auto;
+    width: 100%;
     border: 0;
     border-bottom: 1px solid rgb(222,222,222);
     outline: none;
@@ -167,14 +173,12 @@ input.md-input {
     color: white;
 }
 
-/**
- * Vue.js shared transitions
- */
-// Toggle animation (height & opacity).
-.collapse-enter-active, .collapse-leave-active { transition: all .3s }
-.collapse-enter, .collapse-leave-to { opacity: 0; max-height: 0; }
-.collapse-enter-to, .collapse-leave { opacity: 1; max-height: 100vh; }
- 
+// .nav.nav-tabs {
+//     display: -webkit-box;
+//     overflow-x: auto;
+//     overflow-y: hidden;
+// }
+
 // Old table format
 //     display: flex;
 //     flex-flow: column;

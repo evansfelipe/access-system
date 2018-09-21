@@ -2,7 +2,7 @@
     div.content {
         position: absolute;
         right: 0; top: 0; bottom: 0;
-        left: 15vw;
+        left: 250px;
         &.expanded { left: 0vw }
         padding-top: 1em;
         padding-bottom: 1em;
@@ -19,10 +19,10 @@
 
         <div :class="'content ' + (!sidebar_opened ? 'expanded' : '')" :style="(loading.state ? 'overflow: hidden; ' : '')" ref="contentDiv">
             <loading-cover v-if="loading.state" :message="loading.message"/>
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
-                    <div class="offset-lg-1 col-lg-10">
-                        <router-view></router-view>
+                    <div class="col-md-12 offset-lg-1 col-lg-10">
+                        <router-view/>
                     </div>
                 </div>
             </div>

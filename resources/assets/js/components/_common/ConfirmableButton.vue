@@ -21,18 +21,7 @@
 </style>
 
 <template>
-    <div style="display: inline">
-        <button type="button" :class="btnClass" @click="open"><slot/></button>
-        <modal-wrapper :visible="opened" @closed="cancel">
-            <h6 class="text-center">
-                ¿Está seguro que desea realizar esta acción?
-            </h6>
-            <div class="text-right mt-2">
-                <button type="button" class="btn btn-sm btn-link btn-cancel" @click="cancel">Regresar</button>
-                <button type="button" class="btn btn-sm btn-link btn-confirm" @click="confirm">Confirmar</button>
-            </div>
-        </modal-wrapper>
-    </div>    
+    <button type="button" :class="btnClass" @click="open"><slot/></button>
 </template>
 
 <script>
@@ -44,22 +33,16 @@ export default {
             default: ''
         }
     },
-    data() {
-        return {
-            opened: false
-        };
-    },
     methods: {
         open: function() {
-            this.opened = true;
+            this.$confirm('¿Está seguro que desea realizar esta acción?', '', {
+                confirmButtonText: 'Sí',
+                cancelButtonText: 'No',
+                type: 'error'
+            })
+            .then(() => this.$emit('confirmed'))
+            .catch(() => {});
         },
-        confirm: function() {
-            this.$emit('confirmed');
-            this.opened = false;
-        },
-        cancel: function() {
-            this.opened = false;
-        }
     }
 }
 </script>
