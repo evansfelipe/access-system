@@ -2,6 +2,7 @@
     div.active-card {
         display: inline-block;
         width: 100%;
+        max-width: 16em;
         border-radius: 5px;
         color: white;
         background: linear-gradient(to right, #0d47a1 , #4285F4);

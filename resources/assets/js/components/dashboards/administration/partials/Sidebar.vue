@@ -106,7 +106,20 @@
                     </router-link>
                 </div>
             </div>
-
+            <!-- Containers -->
+            <div class="sidebar-group">
+                <a class="btn-sidebar sidebar-toggle" @click="group_active.containers = !group_active.containers">
+                    <i class="fas centered fa-boxes fa-lg"></i> Contenedores
+                    <i :class="'toggle-icon fas centered fa-caret-' + (group_active.containers ? 'up' : 'down')"></i>
+                </a>
+                <div class="items" v-if="group_active.containers">
+                    <router-link to="/containers" class="btn-sidebar">Listado</router-link>
+                    <router-link to="/containers/create" class="btn-sidebar">
+                        {{ this.$store.getters.container.editing ? 'Editar' : 'Crear' }}
+                        <i v-if="$store.getters.container.modified" class="fas fa-exclamation centered"></i>
+                    </router-link>
+                </div>
+            </div>
             <hr>
             <!-- Expiration -->
             <div class="sidebar-group">
@@ -130,6 +143,7 @@ export default {
                 people: false,
                 companies: false,
                 vehicles: false,
+                containers: false,
                 expiration: false,
             }
         };

@@ -67,6 +67,10 @@ const router = new VueRouter({
         { path: '/vehicles',            component: require('./components/vehicles/index/Layout.vue') },
         { path: '/vehicles/create',     component: require('./components/vehicles/create/Layout.vue') },
         { path: '/vehicles/show/:id',   component: require('./components/vehicles/show/Layout.vue') },
+        // Containers
+        { path: '/containers',            component: require('./components/containers/index/Layout.vue') },
+        { path: '/containers/create',     component: require('./components/containers/create/Layout.vue') },
+        { path: '/containers/show/:id',   component: require('./components/containers/show/Layout.vue') },
         // Extra
         { path: '/bar', component: { template: '<div>Test route</div>' } },
     ]

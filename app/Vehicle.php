@@ -7,10 +7,9 @@ use App\Http\Traits\Helpers;
 
 class Vehicle extends Model
 {
-    protected $fillable = ['company_id', 'type', 'owner', 'plate', 'brand', 'model', 'year', 'colour', 'insurance', 'vtv'];
+    protected $fillable = ['company_id', 'type_id', 'owner', 'plate', 'brand', 'model', 'year', 'colour', 'insurance', 'vtv'];
 
     public const LENGTHS = [
-        'type' => ['max' => 15],
         'owner' => ['max' => 100],
         'plate' => ['min' => 5 ,'max' => 10],
         'brand' => ['max' => 20],
@@ -29,10 +28,9 @@ class Vehicle extends Model
                 'required',
                 'exists:companies,id'
             ],
-            'type' => [
+            'type_id' => [
                 'required',
-                'string',
-                'max:'.Vehicle::LENGTHS['type']['max']
+                'exists:vehicle_types,id'
             ],
             'owner' => [
                 'nullable',
@@ -83,6 +81,11 @@ class Vehicle extends Model
         ];;
     }
 
+    public function vehicleType()
+    {
+        return $this->belongsTo('App\VehicleType', 'type_id');
+    }
+
     public function people()
     {
         return $this->belongsToMany('\App\Person', 'person_vehicle')->using('\App\PersonVehicle');
@@ -91,6 +94,11 @@ class Vehicle extends Model
     public function company()
     {
         return $this->belongsTo('App\Company');
+    }
+
+    public function containers()
+    {
+        return $this->belongsToMany('App\Container', 'vehicle_containers')->using('App\VehicleContainer');
     }
 
     public function toShowArray()
@@ -103,7 +111,7 @@ class Vehicle extends Model
             ],
             'plate'             => $this->plate,
             'owner'             => $this->owner,
-            'type'              => $this->type,
+            'type'              => $this->vehicleType->type,
             'brand'             => $this->brand,
             'model'             => $this->model,
             'year'              => $this->year,

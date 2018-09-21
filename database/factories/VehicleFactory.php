@@ -13,7 +13,7 @@ $factory->define(App\Vehicle::class, function (Faker $faker) {
     $company = Company::all()->random();
     return [
         'company_id' => $company->id,
-        'type' => $types[rand()%count($brands)],
+        'type_id' => 1,
         'owner' => $faker->lastName .' '. $faker->firstName,
         'plate' => $faker->ean8,
         'brand' => $brands[rand()%count($brands)],

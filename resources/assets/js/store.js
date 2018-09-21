@@ -48,15 +48,18 @@ export default {
             sidebar_opened: true
         },
         lists: {
-            people:     new List(),
-            vehicles:   new List(),
-            companies:  new List(),
-            activities: new List()
+            people:         new List(),
+            companies:      new List(),
+            vehicles:       new List(),
+            containers:     new List(),
+            activities:     new List(),
+            vehicle_types:  new List()
         },
         models: {
-            person:  new Model('person', 'people'),
-            company: new Model('company', 'companies'),
-            vehicle: new Model('vehicle', 'vehicles'),
+            person:    new Model('person', 'people'),
+            company:   new Model('company', 'companies'),
+            vehicle:   new Model('vehicle', 'vehicles'),
+            container: new Model('container', 'containers')
         }
     },
     getters: {
@@ -81,11 +84,17 @@ export default {
         vehicles: function({lists}) {
             return lists.vehicles;
         },
+        containers: function({lists}) {
+            return lists.containers;
+        },
         companies: function({lists}) {
             return lists.companies;
         },
         activities: function({lists}) {
             return lists.activities;
+        },
+        vehicle_types: function({lists}) {
+            return lists.vehicle_types;
         },
         /**
          * Models
@@ -98,6 +107,9 @@ export default {
         },
         vehicle: function({models}) {
             return models.vehicle;
+        },
+        container: function({models}) {
+            return models.container;
         }
     },
     mutations: {
@@ -190,6 +202,18 @@ export default {
                     state.models.vehicle.values.assign_people.people_id.push(id);
                 }
                 if(state.debug) console.log('People picked:', state.models.vehicle.values.assign_people.people_id);
+            }
+        },
+        pickTruck: function(state, id) {
+            if(state.lists.vehicles.list.getById(id) !== undefined) {
+                let pos = state.models.container.values.assign_trucks.trucks_id.indexOf(id);
+                if(pos !== -1) {
+                    state.models.container.values.assign_trucks.trucks_id.splice(pos, 1);
+                }
+                else {
+                    state.models.container.values.assign_trucks.trucks_id.push(id);
+                }
+                if(state.debug) console.log('Trcucks picked:', state.models.container.values.assign_trucks.trucks_id);
             }
         },
         /**

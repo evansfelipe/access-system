@@ -3,7 +3,7 @@ export default {
         return {
             general_information: {
                 company_id: !debug ? '' : 1,
-                type:       !debug ? '' : 'Car',
+                type_id:    !debug ? '' : 1,
                 owner:      !debug ? '' : 'Example Owner Name',
                 plate:      !debug ? '' : 'AAE 897',
                 brand:      !debug ? '' : 'Chevrolet',

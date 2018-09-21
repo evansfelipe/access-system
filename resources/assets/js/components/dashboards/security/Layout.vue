@@ -1,59 +1,4 @@
 <style lang="scss" scoped>
-    ul.steps-vertical {
-        // Removes ul style.
-        list-style-type: none;
-        margin: 0; padding: 0;
-        // Number of items counter.
-        counter-reset: steps;
-        // Style for each li.
-        & > li {
-            position: relative;
-            padding: 0 0 20px 50px;
-            margin: 0;
-            // Circle with the number of the li inside the ul.
-            &:after {
-                // Position & Display
-                position: absolute;
-                top: 0; left: 0;
-                display: inline-block;
-                // Item number.
-                content: counter(steps);
-                counter-increment: steps;
-                // Fixed size and border radius to make a perfect circle.
-                height: 1.5em; width: 1.5em;
-                border-radius: 50%;
-                // Font style.
-                color: white;
-                text-align: center;
-                font-weight: bold;
-                // Item style.
-                background-color: #9e9e9e;
-                outline: 5px solid white;
-            }
-            // Changes the color of the circle when the item is active or completed.
-            &.active:after { background-color: #3F729B }
-            &.completed:after { background-color: #00695c }
-            // Line within two consecutive circles.
-            &:before {
-                position: absolute;
-                left: 0.75em;
-                top: 0;
-                content: "";
-                height: 100%;
-                width: 0;
-                border-left: 1px solid rgb(202, 202, 202);
-            }
-            &:last-of-type:before { border: none }
-            // Style for the content of a item.
-            & > div.content {
-                margin-top: .8em;
-                border: 1px solid rgb(222,222,222);
-                padding: 1em;
-                border-radius: 5px;
-            }
-        }
-    }
-
     td.small {
         padding-right: 0.5em;
         font-size: 75%;
@@ -61,6 +6,22 @@
 
     td.strong {
         font-weight: bold;
+    }
+
+    div.card-body {
+        padding: 0.5em !important;
+    }
+
+    div.content {
+        margin: 1em;
+        border: 1px solid rgb(222,222,222);
+        padding: 1em;
+        border-radius: 5px;
+    }
+
+    textarea.form-control {
+        resize: none;
+        height: auto;
     }
 
 </style>
@@ -84,94 +45,75 @@
             <div class="card-body" style="padding: 2em 3em;">
 
                 <template v-if="person">
-                    <ul class="steps-vertical">
-                        <li :class="person.step === 0 ? 'active' : (person.step > 0 ? 'completed' : '')">
-                            Reconocimiento
+                    <div class="form-row">
+                        <div class="col-4">
                             <div class="content">
                                 <h3 class="text-center">{{ person.values.full_name }}</h3>
-                                <div class="row d-flex align-items-center justify-content-center">
-                                    <div class="col-3">
-                                        <img class="img-fluid rounded-circle shadow-sm" :src="person.values.picture_path">
-                                    </div>
-                                    <div class="offset-1 col-3">
-                                        <access-card :number="person.values.card.number" :from="person.values.card.from" :until="person.values.card.until"/>
-                                    </div>
-                                    <div class="col-4">
-                                        <table class="ml-4">
-                                            <tr>
-                                                <td class="small">Riesgo</td>
-                                                <td class="strong">{{ person.values.risk }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="small">{{ person.values.document_type }}</td>
-                                                <td class="strong">{{ person.values.document_number }}</td>
-                                            </tr>
-                                            <tr v-if="person.values.company">
-                                                <td class="small">Empresa</td>
-                                                <td class="strong">{{ person.values.company }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="small">Actividad</td>
-                                                <td class="strong">{{ person.values.activity }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="small">Subactividad {{ person.values.subactivities.length > 1 ? 'es' : '' }}</td>
-                                                <td class="strong">{{ person.values.subactivities.join(', ') }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
+                                <div class="p-3"><img class="img-fluid rounded-circle shadow-sm" :src="person.values.picture_path"></div>
+                                <div class=" d-flex justify-content-center"><access-card :number="person.values.card.number" :from="person.values.card.from" :until="person.values.card.until"/></div>
+                                <table class="m-2">
+                                    <tr>
+                                        <td class="small">Riesgo</td>
+                                        <td class="strong">{{ person.values.risk }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="small">{{ person.values.document_type }}</td>
+                                        <td class="strong">{{ person.values.document_number }}</td>
+                                    </tr>
+                                    <tr v-if="person.values.company">
+                                        <td class="small">Empresa</td>
+                                        <td class="strong">{{ person.values.company }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="small">Actividad</td>
+                                        <td class="strong">{{ person.values.activity }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="small">Subactividad {{ person.values.subactivities.length > 1 ? 'es' : '' }}</td>
+                                        <td class="strong">{{ person.values.subactivities.join(', ') }}</td>
+                                    </tr>
+                                </table>
                             </div>
-                        </li>
-                        <li :class="person.step === 1 ? 'active' : (person.step > 1 ? 'completed' : '')">
-                            Vehículos
-                            <template v-if="person.step === 1">
-                                <div class="d-inline-block float-right">
-                                    <input v-if="person.vehicles_search" v-model="person.vehicles_search_input" type="text" placeholder="Búsqueda" class="md-input" ref="vehicles_search">
-                                    <div class="d-inline cursor-pointer" @click="toggleVehicleSearch"><i class="fas fa-search cursor-pointer"></i></div>
-                                </div>
-                                <div class="content">
-                                    <p-vehicles :vehicles="person.values.vehicles" 
-                                                :filter="person.vehicles_search_input"
-                                                @selection="id => person.selectVehicle(id)"
-                                    />
-                                </div>
-                            </template>
-                        </li>
-                        <li :class="person.step === 2 ? 'active' : (person.step > 2 ? 'completed' : '')">
-                            Observaciones
-                            <div class="content">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <textarea class="form-control" rows="4" placeholder="Nueva observación" v-model="person.textarea" style="resize:none"></textarea>
-                                        <button class="btn btn-outline-success btn-block mt-1" @click="newObservation">Enviar</button>
-                                    </div>
-                                    <div class="col-8">
-                                        <custom-table   :columns="observations_columns" :rows="person.values.observations" :rowsquantity="5" 
-                                                        @rowclicked="toggleObservation"
+                        </div>
+                        <div class="col-8">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="content">
+                                        <p-vehicles :vehicles="person.values.vehicles" 
+                                                    :filter="person.vehicles_search_input"
+                                                    @selection="id => person.selectVehicle(id)"
                                         />
                                     </div>
                                 </div>
                             </div>
-                        </li>
-                    </ul>
-
-                    <div class="row">
-                        <div class="col text-right">
-                            <button class="btn btn-link" v-if="person.step > 0" @click="person.previousStep()">
-                                <i class="fas fa-angle-double-left fa-sm"></i> Anterior
-                            </button>
-                            <button class="btn btn-link" v-if="person.step < 2" @click="person.nextStep()">
-                                Siguiente <i class="fas fa-angle-double-right fa-sm"></i>
-                            </button>
-                            <button class="btn btn-outline-success btn-sm" v-if="person.step === 2">
-                                Confirmar
-                            </button>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="content">
+                                        <div class="form-row">
+                                            <div class="col-10">
+                                                <textarea class="form-control" v-model="person.textarea" rows="2" placeholder="Nueva observación"></textarea>
+                                            </div>
+                                            <div class="col-2">
+                                                <button class="btn btn-block btn-outline-success" style="height:100%" @click="newObservation">Enviar</button>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col">
+                                                <custom-table
+                                                    :columns="observations_columns"
+                                                    :rows="person.values.observations"
+                                                    :rowsquantity="5"
+                                                    :no-rows-message="'No hay observaciones'"
+                                                    @rowclicked="toggleObservation"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </template>
-                
             </div>
         </div>
     </div>
@@ -236,7 +178,7 @@ export default {
             observations_columns: [
                 {name: 'date', text: 'Fecha',   width: '15'},
                 {name: 'user', text: 'Usuario', width: '15'},
-                {name: 'text', text: 'Texto',   width: '60'}
+                {name: 'text', text: 'Texto',   width: '70'}
             ]
         };
     },

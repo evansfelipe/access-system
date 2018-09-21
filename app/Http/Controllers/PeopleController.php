@@ -11,41 +11,6 @@ class PeopleController extends Controller
 {
 
     /**
-     * Returns the timestamp of the last update on people's table.
-     * 
-     * @return Timestamp
-     */
-    public function updatedAt()
-    {
-        // Doing this way prevents Laravel to call toArray function, since the result of the query is a Collection.
-        $person = Person::select('updated_at')->orderBy('updated_at','desc')->first();
-        return $person ? $person->updated_at : null; 
-    }
-
-    /**
-     * Returns an array with each person from the system, order desc by the creation timestamp.
-     * 
-     * @return Array<Person>
-     */
-    public function list()
-    {
-        $people = Person::select('id', 'last_name', 'name', 'cuil')->orderBy('created_at','desc')->get()
-                        ->map(function($person) {
-                            return [
-                                'id'            => $person->id,
-                                'last_name'     => $person->last_name,
-                                'name'          => $person->name,
-                                'cuil'          => $person->cuil,
-                                'companies'     => $person->companies()->select('companies.id')->get()->map(function($job) {
-                                                        return $job->id;
-                                                    }),
-                                'company_name'  => $person->companies()->select('name')->get()->implode('name', ' / ')
-                            ];
-                        });
-        return response(json_encode($people))->header('Content-Type', 'application/json');        
-    }
-
-    /**
      * Returns an array with the routes to each picture associated with a given person.
      * 
      * @return Array<String>

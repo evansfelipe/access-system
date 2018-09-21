@@ -15,25 +15,38 @@ class DatabaseSeeder extends Seeder
         factory(App\Vehicle::class, 115)->create();
         // factory(App\Person::class, 5)->create();
         DB::table('users')->insert([
-            'name' => 'Root',
-            'email' =>'root@example.com',
-            'password' => bcrypt('secret'),
-            'type' => \App\User::ROOT
+            [
+                'name' => 'Root',
+                'email' =>'root@example.com',
+                'password' => bcrypt('secret'),
+                'type' => \App\User::ROOT
+            ],
+            [
+                'name' => 'Administrator',
+                'email' =>'administrator@example.com',
+                'password' => bcrypt('secret'),
+                'type' => \App\User::ADMINISTRATION
+            ],
+            [
+                'name' => 'Security',
+                'email' =>'security@example.com',
+                'password' => bcrypt('secret'),
+                'type' => \App\User::SECURITY
+            ]
         ]);
-        DB::table('users')->insert([
-            'name' => 'Administrator',
-            'email' =>'administrator@example.com',
-            'password' => bcrypt('secret'),
-            'type' => \App\User::ADMINISTRATION
+        
+        DB::table('activities')->insert([
+            ['name' => 'Pesquero'],
+            ['name' => 'Control de calidad']
         ]);
-        DB::table('users')->insert([
-            'name' => 'Security',
-            'email' =>'security@example.com',
-            'password' => bcrypt('secret'),
-            'type' => \App\User::SECURITY
+
+        DB::table('vehicle_types')->insert([
+            ['type' => 'Auto',      'allows_container' => false],
+            ['type' => 'Tractor',   'allows_container' => false],
+            ['type' => 'Camion',    'allows_container' => true],
+            ['type' => 'Grúa',      'allows_container' => false],
+            ['type' => 'Remolque',  'allows_container' => false]
         ]);
-        DB::table('activities')->insert(['name' => 'Pesquero']);
-        DB::table('activities')->insert(['name' => 'Control de calidad']);
 
 
         DB::table('countries')->truncate();
