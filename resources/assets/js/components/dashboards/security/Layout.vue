@@ -79,9 +79,33 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="content">
-                                        <p-vehicles :vehicles="person.values.vehicles" 
-                                                    :filter="person.vehicles_search_input"
-                                                    @selection="id => person.selectVehicle(id)"
+                                        <h5 class="mb-2 d-inline-block">Vehículos</h5>
+                                        <div class="d-inline-block float-right">
+                                            <input v-if="person.vehicles_search" v-model="person.vehicles_search_input" type="text" placeholder="Búsqueda" class="md-input" ref="vehicles_search">
+                                            <div class="d-inline cursor-pointer" @click="toggleVehicleSearch"><i class="fas fa-search cursor-pointer"></i></div>
+                                        </div>
+                                        <cards-carousel :list="person.values.vehicles"
+                                                        :selected="person.vehicle"
+                                                        :keys="['type','plate','brand','model','year','colour']"
+                                                        :filter="person.vehicles_search_input"
+                                                        @selection="id => person.selectVehicle(id)"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="person.containers.length !== 0" class="row">
+                                <div class="col">
+                                    <div class="content">
+                                        <h5 class="mb-2 d-inline-block">Containers</h5>
+                                        <div class="d-inline-block float-right">
+                                            <input v-if="person.containers_search" v-model="person.containers_search_input" type="text" placeholder="Búsqueda" class="md-input" ref="containers_search">
+                                            <div class="d-inline cursor-pointer" @click="toggleContainerSearch"><i class="fas fa-search cursor-pointer"></i></div>
+                                        </div>
+                                        <cards-carousel :list="person.containers"
+                                                        :selected="person.container"
+                                                        :keys="['series_number','format','size','brand','model','colour']"
+                                                        :filter="person.containers_search_input"
+                                                        @selection="id => person.selectContainer(id)"
                                         />
                                     </div>
                                 </div>
@@ -89,6 +113,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="content">
+                                        <h5 class="mb-2">Observaciones</h5>
                                         <div class="form-row">
                                             <div class="col-10">
                                                 <textarea class="form-control" v-model="person.textarea" rows="2" placeholder="Nueva observación"></textarea>
@@ -133,11 +158,15 @@ class Person {
         });
 
         this.textarea = "";
+
         this.vehicles_search_input = "";
         this.vehicles_search = false;
-
-        this.step = 0;
         this.vehicle = null;
+
+        this.containers = [];
+        this.container = null;
+        this.containers_search_input = "";
+        this.containers_search = false;
     }
 
     addObservation(observation) {
@@ -149,21 +178,27 @@ class Person {
     }
 
     selectVehicle(id) {
+        console.log(this);
+        
         this.vehicle = this.vehicle === id ? null : id;
+        this.container = null;
+        if(this.vehicle !== null) {
+            let vehicle_pos = this.values.vehicles.getPositionById(id);
+            this.containers = this.values.vehicles[vehicle_pos].containers;
+        }
+        else {
+            this.containers = [];
+        }
     }
 
-    previousStep() {
-        this.step--;
-    }
-
-    nextStep() {
-        this.step++;
+    selectContainer(id) {
+        this.container = this.container === id ? null : id;
     }
 }
 
 export default {
     components: {
-        'p-vehicles': require('./partials/Vehicles')
+        'cards-carousel': require('./partials/CardsCarousel.vue')
     },
     data() {
         return {
@@ -279,6 +314,13 @@ export default {
             this.person.vehicles_search_input = "";
             if(this.person.vehicles_search) {
                 this.$nextTick(() => this.$refs.vehicles_search.focus())
+            }
+        },
+        toggleContainerSearch: function() {
+            this.person.containers_search = !this.person.containers_search;
+            this.person.containers_search_input = "";
+            if(this.person.containers_search) {
+                this.$nextTick(() => this.$refs.containers_search.focus())
             }
         }
     }
