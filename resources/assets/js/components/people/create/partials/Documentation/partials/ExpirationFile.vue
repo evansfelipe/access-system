@@ -39,7 +39,7 @@
             <!-- File uploader -->
             <div :class="'col-' + inputfilecol">
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" :id="name" lang="es" @change="fileUploaded">
+                    <input type="file" class="custom-file-input" :id="name" lang="es" @change="fileChanged">
                     <label class="custom-file-label" :for="name">
                         <!-- Shows file name when it's selected -->
                         <span v-if="file.selected" class="badge" @click="e => e.preventDefault()">
@@ -54,12 +54,9 @@
             <!-- Expiration date -->
             <div :class="'col-' + input_date_col + ' text-center'">
                 <el-tooltip class="item" effect="dark" content="Vencimiento" placement="top">
-                    <date-picker :name="`${name}_expiration`" :value="expiration" @input="value => updated('expiration', value)"/>
+                    <date-picker :name="`${name}_expiration`" :value="value.expiration" @input="value => expirationChanged(value)"/>
                 </el-tooltip>
             </div>
-            <!-- <div v-if="checked !== null" class="col-1 d-flex align-items-center">
-                <switch-box title="¿Requerido?" @update="(value) => updated('required', value)"/>
-            </div> -->
         </form-item>
     </div>
 </template>
@@ -67,10 +64,15 @@
 <script>
 export default {
     props: {
-        expiration: {
-            type: String,
+        value: {
+            type: Object,
             required: false,
-            default: ''
+            default: () => {
+                return {
+                    file: '',
+                    expiration: ''
+                }
+            }
         },
         label: {
             type: String,
@@ -113,26 +115,20 @@ export default {
         }
     },
     methods: {
-        fileUploaded: function(e) {
+        expirationChanged: function(value) {
+            this.$emit('expiration-changed', value)
+        },
+        fileChanged: function(e) {
             if(e.target.files.length > 0) {
                 this.file.selected = true;
                 this.file.name = e.target.files[0].name;
-                this.fileToDataURI(e.target.files[0])
-                .then(file => {
-                    this.$emit('updated', {name: 'documents.' + this.name + '.file', value: file});
-                })
+                this.fileToDataURI(e.target.files[0]).then(file => this.$emit('file-changed', file));
             }
-        },
-        updated: function(which, value) {
-            this.$emit('updated', {name: this.name + '_' + which, value: value});
         },
         deleteFile: function(e) {
             e.preventDefault();
-            this.file = {
-                selected: false,
-                name: '',
-            }
-            this.$emit('fileUploaded', null);
+            this.file = { selected: false, name: '' }
+            this.$emit('file-changed', '');
         }
     }
 }

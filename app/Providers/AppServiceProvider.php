@@ -16,28 +16,31 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Validator::extend('base64file', function ($attribute, $value, $parameters, $validator) {
-            $explode = explode(',', $value);
-            $allow = $parameters;
-            $format = str_replace(
-                [
-                    'data:image/',
-                    ';',
-                    'base64',
-                ],
-                [
-                    '', '', '',
-                ],
-                $explode[0]
-            );
-            // check file format
-            if (!in_array($format, $allow)) {
+            list($metadata, $content) = explode(',', $value);
+            list($type, $extension) = explode('/', str_replace(
+                ['data:', ';', 'base64'],
+                ['', '', ''],
+                $metadata
+            ));
+            // Checks if its possible to decode the content
+            if(base64_decode($content, true) === false) {
                 return false;
             }
-            // check base64 format
-            if (!preg_match('%^[a-zA-Z0-9/+]*={0,2}$%', $explode[1])) {
+            // Checks file extension
+            else if(!in_array($extension, $parameters)) {
                 return false;
             }
-            return true;
+            // Checks base64 format
+            else if(!preg_match('%^[a-zA-Z0-9/+]*={0,2}$%', $content)) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+
+        Validator::replacer('base64file', function ($message, $attribute, $rule, $parameters) {
+            return 'El archivo debe ser de alguno de los siguientes tipos: ' . implode(', ', $parameters);
         });
     }
 

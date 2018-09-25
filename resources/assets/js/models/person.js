@@ -35,6 +35,14 @@ export default {
                     groups:         !debug ? [] : [2],
                     art_company:    !debug ? '' : 'ART Test',
                     art_number:     !debug ? '' : '123456',
+                    company_note: {
+                        file: '',
+                        expiration: '2020-06-07'
+                    },
+                    art_file: {
+                        file: '',
+                        expiration: ''
+                    },
                     cards: [{
                         key: Date.now(),
                         number:     !debug ? '' :  Date.now().toString(),

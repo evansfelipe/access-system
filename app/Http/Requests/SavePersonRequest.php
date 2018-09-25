@@ -28,23 +28,30 @@ class SavePersonRequest extends FormRequest
         $residency_rules            = Residency::getValidationRules();
         $working_information_rules  = PersonCompany::getValidationRules();
         $assign_vehicles_rules      = PersonVehicle::getVehiclesValidationRules();
+        $documents_rules            = [
+            'documents' => [
+                'array',
+                'required',
+            ],
+            'documents.*' => [
+                'array'
+            ],
+            'documents.*.file' => [
+                'nullable',
+                'base64file:jpg,jpeg,png,pdf'
+            ],
+            'documents.*.expiration' => [
+                'nullable',
+                "regex:/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", 
+                'after:'.date('Y-m-d'), 
+            ]
+        ];
         $documents_required_rules   = [
             'documents_required' => [
                 'required',
                 'array',
                 function($attribute, $value, $fail) {
-                    $keys_allowed = [
-                        'acc_pers',
-                        'art_file',
-                        'boarding_card',
-                        'boarding_passbook',
-                        'company_note',
-                        'dni_copy',
-                        'driver_license',
-                        'health_notebook',
-                        'pbip_file',
-                        'pna_file'
-                    ];
+                    $keys_allowed = ['acc_pers', 'art_file', 'boarding_card', 'boarding_passbook', 'company_note', 'dni_copy', 'driver_license', 'health_notebook', 'pbip_file', 'pna_file'];
                     foreach (array_keys($value) as $key) {
                         if(!in_array($key, $keys_allowed)) {
                             return $fail('Algo salió mal al validar los datos. Por favor, intente de nuevo o reinicie el sistema');
@@ -130,6 +137,7 @@ class SavePersonRequest extends FormRequest
             $residency_rules, 
             $working_information_rules, 
             $assign_vehicles_rules,
+            $documents_rules,
             $documents_required_rules
         );
     }

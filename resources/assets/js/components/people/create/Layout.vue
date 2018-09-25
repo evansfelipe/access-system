@@ -26,7 +26,7 @@
             <personal-information v-show="tab === 0" :errors="personal_information_errors" :values="values.personal_information"/>
             <working-information  v-show="tab === 1" :errors="working_information_errors"  :values="values.working_information"/>
             <assign-vehicles      v-show="tab === 2" :companyname="company_name" :assignedcompanies="assigned_companies"/>
-            <documentation        v-show="tab === 3" />
+            <documentation        v-show="tab === 3" :errors="documentation_errors"/>
         </creation-wrapper>
     </div>
 </template>
@@ -98,6 +98,9 @@
             },
             working_information_errors: function() {
                 return this.errors['working_information'] ? this.errors['working_information'] : []; 
+            },
+            documentation_errors: function() {
+                return this.errors['documentation'] ? this.errors['documentation'] : [];
             }
         },
         methods: {
