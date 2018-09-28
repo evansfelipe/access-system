@@ -67,13 +67,16 @@ export default {
             containers:     new List(),
             activities:     new List(),
             subactivities:  new List(),
-            vehicle_types:  new List()
+            vehicle_types:  new List(),
+            groups:         new List(),
+            gates:          new List(),
         },
         models: {
             person:    new Model('person', 'people'),
             company:   new Model('company', 'companies'),
             vehicle:   new Model('vehicle', 'vehicles'),
-            container: new Model('container', 'containers')
+            container: new Model('container', 'containers'),
+            group:     new Model('group', 'groups'),
         }
     },
     getters: {
@@ -113,6 +116,12 @@ export default {
         vehicle_types: function({lists}) {
             return lists.vehicle_types;
         },
+        groups: function({lists}) {
+            return lists.groups;
+        },
+        gates: function({lists}) {
+            return lists.gates;
+        },
         /**
          * Models
          */
@@ -127,6 +136,9 @@ export default {
         },
         container: function({models}) {
             return models.container;
+        },
+        group: function({models}) {
+            return models.group;
         }
     },
     mutations: {

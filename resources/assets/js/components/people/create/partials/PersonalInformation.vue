@@ -169,9 +169,6 @@ export default {
     methods: {
         update: function({name, value}) {
             this.$store.commit('updateModel', { which: 'person', properties_path: `values.personal_information.${name}`, value: value });
-        },
-        test: function(v) {
-            console.log(v);
         }
     },
     computed: {

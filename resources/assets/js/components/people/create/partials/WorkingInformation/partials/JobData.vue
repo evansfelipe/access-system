@@ -83,6 +83,11 @@ export default {
             required: false,
             default: () => []
         },
+        groups: {
+            type: Array,
+            required: false,
+            default: () => []
+        }
     },
     computed: {
         company_errors: function() {
@@ -98,16 +103,13 @@ export default {
             return !this.job.activity_id ? [] : 
                     this.subactivities.filter(s => s.activity_id === this.job.activity_id)
                         // .concat(this.job.subactivities.map(s => { return { id: s, name: s } }))
-                        .map(s => { return { id: s.name, name: s.name } });
+                        .map(s => { return { id: s.name, text: s.name } });
         },
         groups_errors: function() {
             return this.errors['groups'] || [];
         },
         groups_options: function() {
-            return [
-                {id: 1, text: 'Grupo 1'},
-                {id: 2, text: 'Grupo 2'}
-            ]
+            return this.groups.concat().filter(group => group.company_id == null || group.company_id == this.job.company_id);
         }
     },
     methods: {

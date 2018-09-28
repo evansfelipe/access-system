@@ -71,6 +71,10 @@ const router = new VueRouter({
         { path: '/containers',            component: require('./components/containers/index/Layout.vue') },
         { path: '/containers/create',     component: require('./components/containers/create/Layout.vue') },
         { path: '/containers/show/:id',   component: require('./components/containers/show/Layout.vue') },
+        // Groups
+        { path: '/groups',            component: require('./components/groups/index/Layout.vue') },
+        { path: '/groups/create',     component: require('./components/groups/create/Layout.vue') },
+        // { path: '/groups/show/:id',   component: require('./components/groups/show/Layout.vue') },
         // Extra
         { path: '/bar', component: { template: '<div>Test route</div>' } },
         // Settings

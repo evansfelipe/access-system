@@ -32,7 +32,7 @@ export default {
                     company_id:     !debug ? '' : 5,
                     activity_id:    !debug ? '' : 1,
                     subactivities:  !debug ? [] : ['hola'],
-                    groups:         !debug ? [] : [2],
+                    groups:         !debug ? [] : [],
                     art_company:    !debug ? '' : 'ART Test',
                     art_number:     !debug ? '' : '123456',
                     company_note: {

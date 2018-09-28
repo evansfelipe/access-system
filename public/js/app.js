@@ -27501,6 +27501,7 @@ module.exports = Cancel;
 var map = {
 	"./company.js": 113,
 	"./container.js": 114,
+	"./group.js": 485,
 	"./person.js": 115,
 	"./vehicle.js": 116
 };
@@ -29286,6 +29287,9 @@ var router = new __WEBPACK_IMPORTED_MODULE_2_vue_router__["a" /* default */]({
     { path: '/vehicles', component: __webpack_require__(402) }, { path: '/vehicles/create', component: __webpack_require__(405) }, { path: '/vehicles/show/:id', component: __webpack_require__(416) },
     // Containers
     { path: '/containers', component: __webpack_require__(422) }, { path: '/containers/create', component: __webpack_require__(425) }, { path: '/containers/show/:id', component: __webpack_require__(434) },
+    // Groups
+    { path: '/groups', component: __webpack_require__(486) }, { path: '/groups/create', component: __webpack_require__(475) },
+    // { path: '/groups/show/:id',   component: require('./components/groups/show/Layout.vue') },
     // Extra
     { path: '/bar', component: { template: '<div>Test route</div>' } },
     // Settings
@@ -55329,13 +55333,16 @@ var Model = function () {
             containers: new List(),
             activities: new List(),
             subactivities: new List(),
-            vehicle_types: new List()
+            vehicle_types: new List(),
+            groups: new List(),
+            gates: new List()
         },
         models: {
             person: new Model('person', 'people'),
             company: new Model('company', 'companies'),
             vehicle: new Model('vehicle', 'vehicles'),
-            container: new Model('container', 'containers')
+            container: new Model('container', 'containers'),
+            group: new Model('group', 'groups')
         }
     },
     getters: {
@@ -55395,46 +55402,61 @@ var Model = function () {
 
             return lists.vehicle_types;
         },
+        groups: function groups(_ref11) {
+            var lists = _ref11.lists;
+
+            return lists.groups;
+        },
+        gates: function gates(_ref12) {
+            var lists = _ref12.lists;
+
+            return lists.gates;
+        },
         /**
          * Models
          */
-        person: function person(_ref11) {
-            var models = _ref11.models;
+        person: function person(_ref13) {
+            var models = _ref13.models;
 
             return models.person;
         },
-        company: function company(_ref12) {
-            var models = _ref12.models;
+        company: function company(_ref14) {
+            var models = _ref14.models;
 
             return models.company;
         },
-        vehicle: function vehicle(_ref13) {
-            var models = _ref13.models;
+        vehicle: function vehicle(_ref15) {
+            var models = _ref15.models;
 
             return models.vehicle;
         },
-        container: function container(_ref14) {
-            var models = _ref14.models;
+        container: function container(_ref16) {
+            var models = _ref16.models;
 
             return models.container;
+        },
+        group: function group(_ref17) {
+            var models = _ref17.models;
+
+            return models.group;
         }
     },
     mutations: {
 
-        addItemToList: function addItemToList(_ref15, _ref16) {
-            var debug = _ref15.debug,
-                lists = _ref15.lists;
-            var list = _ref16.list,
-                item = _ref16.item,
-                timestamp = _ref16.timestamp;
+        addItemToList: function addItemToList(_ref18, _ref19) {
+            var debug = _ref18.debug,
+                lists = _ref18.lists;
+            var list = _ref19.list,
+                item = _ref19.item,
+                timestamp = _ref19.timestamp;
 
             if (debug) console.log('Adding to', list, 'the item', item, 'with timestamp', timestamp);
             lists[list].addItem(item, timestamp);
         },
 
-        loading: function loading(_ref17, values) {
-            var debug = _ref17.debug,
-                ui = _ref17.ui;
+        loading: function loading(_ref20, values) {
+            var debug = _ref20.debug,
+                ui = _ref20.ui;
 
             ui.loading.state = values.state;
             ui.loading.message = values.message;
@@ -55469,24 +55491,24 @@ var Model = function () {
                 state.ui.notifications.list.splice(index, 1);
             }
         },
-        updatingList: function updatingList(state, _ref18) {
-            var what = _ref18.what,
-                value = _ref18.value;
+        updatingList: function updatingList(state, _ref21) {
+            var what = _ref21.what,
+                value = _ref21.value;
 
             state.lists[what].updating = value;
         },
-        set: function set(state, _ref19) {
-            var what = _ref19.what,
-                data = _ref19.data,
-                timestamp = _ref19.timestamp;
+        set: function set(state, _ref22) {
+            var what = _ref22.what,
+                data = _ref22.data,
+                timestamp = _ref22.timestamp;
 
             state.lists[what].list = data;
             state.lists[what].timestamp = timestamp;
         },
-        updateModel: function updateModel(state, _ref20) {
-            var which = _ref20.which,
-                properties_path = _ref20.properties_path,
-                value = _ref20.value;
+        updateModel: function updateModel(state, _ref23) {
+            var which = _ref23.which,
+                properties_path = _ref23.properties_path,
+                value = _ref23.value;
 
             if (state.debug) console.log('Updating model: ', which, properties_path, value);
             state.models[which].modified = true;
@@ -55584,10 +55606,10 @@ var Model = function () {
         /**
          * Given a job of the jobs list of the person's model, updates its values.
          */
-        updateJob: function updateJob(state, _ref21) {
-            var job_key = _ref21.job_key,
-                attribute = _ref21.attribute,
-                value = _ref21.value;
+        updateJob: function updateJob(state, _ref24) {
+            var job_key = _ref24.job_key,
+                attribute = _ref24.attribute,
+                value = _ref24.value;
 
             var pos = state.models.person.values.working_information.jobs.getPositionById(job_key, 'key');
             var ref = state.models.person.values.working_information.jobs[pos];
@@ -55616,11 +55638,11 @@ var Model = function () {
                 });
             }
         },
-        editCardFromJob: function editCardFromJob(state, _ref22) {
-            var job = _ref22.job,
-                card = _ref22.card,
-                attribute = _ref22.attribute,
-                value = _ref22.value;
+        editCardFromJob: function editCardFromJob(state, _ref25) {
+            var job = _ref25.job,
+                card = _ref25.card,
+                attribute = _ref25.attribute,
+                value = _ref25.value;
 
             var pos = state.models.person.values.working_information.jobs.indexOf(job);
             if (pos !== -1) {
@@ -55634,9 +55656,9 @@ var Model = function () {
         /**
          * Given a job and a card, removes the card from the card list of the job.
          */
-        removeCardFromJob: function removeCardFromJob(state, _ref23) {
-            var job = _ref23.job,
-                card = _ref23.card;
+        removeCardFromJob: function removeCardFromJob(state, _ref26) {
+            var job = _ref26.job,
+                card = _ref26.card;
 
             var pos = state.models.person.values.working_information.jobs.indexOf(job);
             if (pos !== -1) {
@@ -55652,11 +55674,11 @@ var Model = function () {
         /**
          * UI actions.
          */
-        addNotification: function addNotification(_ref24, _ref25) {
-            var commit = _ref24.commit,
-                state = _ref24.state;
-            var type = _ref25.type,
-                message = _ref25.message;
+        addNotification: function addNotification(_ref27, _ref28) {
+            var commit = _ref27.commit,
+                state = _ref27.state;
+            var type = _ref28.type,
+                message = _ref28.message;
 
             var id = state.ui.notifications.next_id;
             commit('addNotification', { id: id, type: type, message: message });
@@ -55667,9 +55689,9 @@ var Model = function () {
         /**
          * Lists actions.
          */
-        fetchList: function fetchList(_ref26, what) {
-            var commit = _ref26.commit,
-                state = _ref26.state;
+        fetchList: function fetchList(_ref29, what) {
+            var commit = _ref29.commit,
+                state = _ref29.state;
 
             if (state.debug) console.log('Validating timestamps:', what);
             commit('updatingList', { what: what, value: true });
@@ -55696,12 +55718,12 @@ var Model = function () {
         /**
          * Models actions.
          */
-        fetchModel: function fetchModel(_ref27, _ref28) {
-            var getters = _ref27.getters,
-                commit = _ref27.commit,
-                state = _ref27.state;
-            var which = _ref28.which,
-                id = _ref28.id;
+        fetchModel: function fetchModel(_ref30, _ref31) {
+            var getters = _ref30.getters,
+                commit = _ref30.commit,
+                state = _ref30.state;
+            var which = _ref31.which,
+                id = _ref31.id;
 
             if (state.debug) console.log('Fetching', which, 'id', id);
             var model = getters[which];
@@ -55822,7 +55844,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     company_id: !debug ? '' : 5,
                     activity_id: !debug ? '' : 1,
                     subactivities: !debug ? [] : ['hola'],
-                    groups: !debug ? [] : [2],
+                    groups: !debug ? [] : [],
                     art_company: !debug ? '' : 'ART Test',
                     art_number: !debug ? '' : '123456',
                     company_note: {
@@ -105058,6 +105080,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -105067,6 +105103,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 companies: false,
                 vehicles: false,
                 containers: false,
+                groups: false,
                 expiration: false,
                 settings: false
             }
@@ -105324,6 +105361,70 @@ var render = function() {
                           "\n                        "
                       ),
                       _vm.$store.getters.container.modified
+                        ? _c("i", {
+                            staticClass: "fas fa-exclamation centered"
+                          })
+                        : _vm._e()
+                    ]
+                  )
+                ],
+                1
+              )
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "sidebar-group" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn-sidebar sidebar-toggle",
+              on: {
+                click: function($event) {
+                  _vm.group_active.groups = !_vm.group_active.groups
+                }
+              }
+            },
+            [
+              _c("i", {
+                staticClass: "fas centered fa-universal-access fa-lg"
+              }),
+              _vm._v(" Grupos\n                    "),
+              _c("i", {
+                class:
+                  "toggle-icon fas centered fa-caret-" +
+                  (_vm.group_active.groups ? "up" : "down")
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _vm.group_active.groups
+            ? _c(
+                "div",
+                { staticClass: "items" },
+                [
+                  _c(
+                    "router-link",
+                    { staticClass: "btn-sidebar", attrs: { to: "/groups" } },
+                    [_vm._v("Listado")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn-sidebar",
+                      attrs: { to: "/groups/create" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(
+                            this.$store.getters.groups.editing
+                              ? "Editar"
+                              : "Crear"
+                          ) +
+                          "\n                        "
+                      ),
+                      _vm.$store.getters.groups.modified
                         ? _c("i", {
                             staticClass: "fas fa-exclamation centered"
                           })
@@ -107636,9 +107737,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 value = _ref.value;
 
             this.$store.commit('updateModel', { which: 'person', properties_path: 'values.personal_information.' + name, value: value });
-        },
-        test: function test(v) {
-            console.log(v);
         }
     },
     computed: {
@@ -108400,6 +108498,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
@@ -108425,6 +108524,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.$store.dispatch('fetchList', 'companies');
         this.$store.dispatch('fetchList', 'activities');
         this.$store.dispatch('fetchList', 'subactivities');
+        this.$store.dispatch('fetchList', 'groups');
     },
 
     computed: {
@@ -108440,6 +108540,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         subactivities: function subactivities() {
             return this.$store.getters.subactivities.list;
+        },
+        groups: function groups() {
+            return this.$store.getters.groups.list.map(function (g) {
+                return { id: g.id, text: g.name, company_id: g.company_id };
+            });;
         }
     },
     methods: {
@@ -108652,6 +108757,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             default: function _default() {
                 return [];
             }
+        },
+        groups: {
+            type: Array,
+            required: false,
+            default: function _default() {
+                return [];
+            }
         }
     },
     computed: {
@@ -108672,14 +108784,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             })
             // .concat(this.job.subactivities.map(s => { return { id: s, name: s } }))
             .map(function (s) {
-                return { id: s.name, name: s.name };
+                return { id: s.name, text: s.name };
             });
         },
         groups_errors: function groups_errors() {
             return this.errors['groups'] || [];
         },
         groups_options: function groups_options() {
-            return [{ id: 1, text: 'Grupo 1' }, { id: 2, text: 'Grupo 2' }];
+            var _this2 = this;
+
+            return this.groups.concat().filter(function (group) {
+                return group.company_id == null || group.company_id == _this2.job.company_id;
+            });
         }
     },
     methods: {
@@ -109263,7 +109379,8 @@ var render = function() {
     [
       this.$store.getters.companies.updating ||
       this.$store.getters.activities.updating ||
-      this.$store.getters.subactivities.updating
+      this.$store.getters.subactivities.updating ||
+      this.$store.getters.groups.updating
         ? _c("loading-cover")
         : [
             _c(
@@ -109307,6 +109424,7 @@ var render = function() {
                               companies: _vm.companies,
                               activities: _vm.activities,
                               subactivities: _vm.subactivities,
+                              groups: _vm.groups,
                               errors: _vm.jobs_errors[job.key] || []
                             },
                             on: {
@@ -120862,6 +120980,885 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-13ed8404", module.exports)
+  }
+}
+
+/***/ }),
+/* 475 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(477)
+/* template */
+var __vue_template__ = __webpack_require__(476)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/groups/create/Layout.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2d3a9c59", Component.options)
+  } else {
+    hotAPI.reload("data-v-2d3a9c59", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 476 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "ul",
+        { staticClass: "nav nav-tabs" },
+        [
+          _c(
+            "tab-item",
+            {
+              attrs: {
+                active: _vm.tab === 0,
+                "has-errors": _vm.step_validated.general_information,
+                icon: "fas fa-universal-access"
+              },
+              nativeOn: {
+                click: function($event) {
+                  _vm.tab = 0
+                }
+              }
+            },
+            [_vm._v("\n            Información general\n        ")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "creation-wrapper",
+        {
+          attrs: {
+            updating: this.$store.getters.vehicle.updating,
+            values: _vm.values,
+            route: _vm.route
+          },
+          on: {
+            saveSuccess: _vm.saveSuccess,
+            saveFailed: _vm.saveFailed,
+            cancel: _vm.cancel
+          }
+        },
+        [
+          _c("general-information", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.tab === 0,
+                expression: "tab === 0"
+              }
+            ],
+            attrs: {
+              errors: _vm.general_information_errors,
+              values: _vm.values.general_information
+            }
+          })
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2d3a9c59", module.exports)
+  }
+}
+
+/***/ }),
+/* 477 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    components: {
+        'general-information': __webpack_require__(478)
+    },
+    data: function data() {
+        return {
+            tab: 0,
+            first_save: false,
+            errors: [],
+            step_validated: {
+                general_information: null
+            }
+        };
+    },
+    computed: {
+        id: function id() {
+            return this.$store.getters.group.id;
+        },
+        values: function values() {
+            return this.$store.getters.group.values;
+        },
+        route: function route() {
+            return {
+                method: this.id ? 'put' : 'post',
+                url: this.id ? '/groups/' + this.id : '/groups'
+            };
+        },
+        general_information_errors: function general_information_errors() {
+            return this.errors['general_information'] ? this.errors['general_information'] : [];
+        }
+    },
+    methods: {
+        saveSuccess: function saveSuccess(id) {
+            this.$router.push('/groups/show/' + id);
+            this.$store.dispatch('addNotification', { type: 'success', message: 'Contenedor ' + (this.id ? 'editado' : 'creado') + ' exitosamente.' });
+            this.$store.commit('resetModel', 'container');
+            this.first_save = true;
+        },
+        saveFailed: function saveFailed(_ref) {
+            var errors = _ref.errors,
+                step_validated = _ref.step_validated;
+
+            this.errors = errors;
+            this.step_validated = step_validated;
+            this.first_save = true;
+        },
+        cancel: function cancel() {
+            this.$router.go(-1);
+            this.$store.commit('resetModel', 'container');
+        }
+    }
+});
+
+/***/ }),
+/* 478 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(480)
+/* template */
+var __vue_template__ = __webpack_require__(479)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/groups/create/partials/GeneralInformation.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-29857062", Component.options)
+  } else {
+    hotAPI.reload("data-v-29857062", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 479 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      this.$store.getters.companies.updating ||
+      this.$store.getters.gates.updating
+        ? _c("loading-cover")
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-row" },
+        [
+          _c(
+            "form-item",
+            { attrs: { label: "Empresa", errors: _vm.errors.company_id } },
+            [
+              _c(
+                "div",
+                { staticClass: "col" },
+                [
+                  _c("select2", {
+                    attrs: {
+                      name: "company_id",
+                      value: _vm.values.company_id,
+                      placeholder: "Seleccione una empresa",
+                      options: _vm.companies
+                    },
+                    on: {
+                      input: function(value) {
+                        return _vm.update({ name: "company_id", value: value })
+                      }
+                    }
+                  })
+                ],
+                1
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "form-item",
+            { attrs: { label: "Nombre", errors: _vm.errors.name } },
+            [
+              _c("div", { staticClass: "col" }, [
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "text", placeholder: _vm.name_placeholder },
+                  domProps: { value: _vm.values.name },
+                  on: {
+                    input: function(e) {
+                      return _vm.update({ name: "name", value: e.target.value })
+                    }
+                  }
+                })
+              ])
+            ]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-row" },
+        [
+          _c(
+            "form-item",
+            { attrs: { label: "Entrada", errors: _vm.errors.gate_id } },
+            [
+              _c(
+                "div",
+                { staticClass: "col" },
+                [
+                  _c("select2", {
+                    attrs: {
+                      name: "gate_id",
+                      value: _vm.values.gate_id,
+                      placeholder: "Seleccione una entrada",
+                      options: _vm.gates
+                    },
+                    on: {
+                      input: function(value) {
+                        return _vm.update({ name: "gate_id", value: value })
+                      }
+                    }
+                  })
+                ],
+                1
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "form-item",
+            {
+              attrs: {
+                label: "Franja horaria",
+                errors: []
+                  .concat(_vm.errors.start ? _vm.errors.start : [])
+                  .concat(_vm.errors.end ? _vm.errors.end : [])
+              }
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "col" },
+                [
+                  _c("el-time-select", {
+                    staticStyle: { width: "100%" },
+                    attrs: {
+                      placeholder: "Comienzo",
+                      value: _vm.values.start,
+                      "picker-options": _vm.timer_options
+                    },
+                    on: {
+                      input: function(value) {
+                        return _vm.update({ name: "start", value: value })
+                      }
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col" },
+                [
+                  _c("el-time-select", {
+                    staticStyle: { width: "100%" },
+                    attrs: {
+                      placeholder: "Finalización",
+                      value: _vm.values.end,
+                      "picker-options": _vm.timer_options
+                    },
+                    on: {
+                      input: function(value) {
+                        return _vm.update({ name: "end", value: value })
+                      }
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _vm.two_days
+                ? _c("div", { staticClass: "col-12" }, [
+                    _c("small", [
+                      _vm._v(
+                        "Esta franja comenzará un día y finalizará al siguiente."
+                      )
+                    ])
+                  ])
+                : _vm._e()
+            ]
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-29857062", module.exports)
+  }
+}
+
+/***/ }),
+/* 480 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        values: {
+            required: true,
+            type: Object
+        },
+        errors: {
+            required: true,
+            type: Array
+        }
+    },
+    data: function data() {
+        return {
+            value2: '',
+            timer_options: {
+                start: '00:00',
+                step: '00:30',
+                end: '23:45'
+            }
+        };
+    },
+    beforeMount: function beforeMount() {
+        this.$store.dispatch('fetchList', 'companies');
+        this.$store.dispatch('fetchList', 'gates');
+    },
+
+    computed: {
+        companies: function companies() {
+            return this.$store.getters.companies.list.map(function (company) {
+                return {
+                    id: company.id,
+                    text: company.name
+                };
+            });
+        },
+        gates: function gates() {
+            return this.$store.getters.gates.list.map(function (gate) {
+                return {
+                    id: gate.id,
+                    text: gate.name
+                };
+            });
+        },
+        name_placeholder: function name_placeholder() {
+            var company = this.companies.getById(this.values.company_id);
+            var gate = this.gates.getById(this.values.gate_id);
+            var range = '(' + this.values.start + ' - ' + this.values.end + ')';
+            return (company ? company.text + ' - ' : '') + (gate ? gate.text + ' ' : '') + (this.values.start && this.values.end ? range : '');
+        },
+        two_days: function two_days() {
+            return this.values.end && this.values.start && this.values.end < this.values.start;
+        }
+    },
+    methods: {
+        update: function update(_ref) {
+            var name = _ref.name,
+                value = _ref.value;
+
+            this.$store.commit('updateModel', { which: 'group', properties_path: 'values.general_information.' + name, value: value });
+        }
+    }
+});
+
+/***/ }),
+/* 481 */,
+/* 482 */,
+/* 483 */,
+/* 484 */,
+/* 485 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony default export */ __webpack_exports__["default"] = ({
+    default: function _default() {
+        var debug = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+        return {
+            general_information: {
+                company_id: !debug ? '' : '',
+                name: !debug ? '' : '',
+                gate_id: !debug ? '' : '',
+                start: !debug ? '' : '',
+                end: !debug ? '' : ''
+            }
+        };
+    }
+});
+
+/***/ }),
+/* 486 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(487)
+/* template */
+var __vue_template__ = __webpack_require__(488)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/groups/index/Layout.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4899d93b", Component.options)
+  } else {
+    hotAPI.reload("data-v-4899d93b", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 487 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            columns: [{ name: 'name', text: 'Nombre', width: '40' }, { name: 'company', text: 'Empresa', width: '20' }, { name: 'gate', text: 'Entrada', width: '20' }, { name: 'range', text: 'Franja horaria', width: '20' }],
+            filter: {
+                strict: true,
+                conditions: {
+                    name: "",
+                    company: "",
+                    gate: "",
+                    range: ""
+                }
+            },
+            groups: [],
+            advanced_search: false
+        };
+    },
+    beforeMount: function beforeMount() {
+        this.$store.dispatch('fetchList', 'groups');
+        this.groups = this.$store.getters.groups.list;
+    },
+
+    computed: {
+        /**
+         * Returns whether the list of groups is being updated or not.
+         */
+        updating: function updating() {
+            return this.$store.getters.groups.updating;
+        },
+        /**
+         * Returns the list of groups from the store.
+         */
+        unfilteredGroups: function unfilteredGroups() {
+            return this.$store.getters.groups.list;
+        }
+    },
+    watch: {
+        /**
+         * When the unfiltered list of groups changes, resets the groups list and the filters.
+         */
+        unfilteredGroups: function unfilteredGroups() {
+            this.groups = this.unfilteredGroups;
+            this.filter = {
+                strict: true,
+                conditions: {
+                    name: "",
+                    company: "",
+                    gate: "",
+                    range: ""
+                }
+            };
+        }
+    },
+    methods: {
+        /**
+         * Redirects to the profile of the clicked group.
+         */
+        showProfile: function showProfile(group) {
+            this.$router.push('/groups/show/' + group.id);
+        },
+        /**
+         * Restarts filters and show/hide advanced search.
+         */
+        advancedSearch: function advancedSearch() {
+            // this.advanced_search = !this.advanced_search;
+            if (this.advanced_search === true) {
+                this.filter.conditions = {
+                    name: "",
+                    company: "",
+                    gate: "",
+                    range: ""
+                };
+            }
+        }
+    }
+});
+
+/***/ }),
+/* 488 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "index-wrapper",
+    {
+      attrs: { updating: _vm.updating },
+      on: { "advanced-search": _vm.advancedSearch }
+    },
+    [
+      _c("template", { slot: "advanced-search-filters" }, [
+        _c("div", { staticClass: "col-12 col-md-3" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.filter.conditions.name,
+                expression: "filter.conditions.name"
+              }
+            ],
+            staticClass: "form-control form-control-sm",
+            attrs: { type: "text", placeholder: "Nombre" },
+            domProps: { value: _vm.filter.conditions.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.filter.conditions, "name", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-12 col-md-3" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.filter.conditions.company,
+                expression: "filter.conditions.company"
+              }
+            ],
+            staticClass: "form-control form-control-sm",
+            attrs: { type: "text", placeholder: "Empresa" },
+            domProps: { value: _vm.filter.conditions.company },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.filter.conditions, "company", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-12 col-md-3" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.filter.conditions.gate,
+                expression: "filter.conditions.gate"
+              }
+            ],
+            staticClass: "form-control form-control-sm",
+            attrs: { type: "text", placeholder: "Entrada" },
+            domProps: { value: _vm.filter.conditions.gate },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.filter.conditions, "gate", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-12 col-md-3" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.filter.conditions.range,
+                expression: "filter.conditions.range"
+              }
+            ],
+            staticClass: "form-control form-control-sm",
+            attrs: { type: "text", placeholder: "Franja horaria" },
+            domProps: { value: _vm.filter.conditions.range },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.filter.conditions, "range", $event.target.value)
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "template",
+        { slot: "main-content" },
+        [
+          _c("custom-table", {
+            attrs: {
+              columns: _vm.columns,
+              rows: _vm.groups,
+              filter: _vm.filter,
+              advancedsearch: _vm.advanced_search
+            },
+            on: { rowclicked: _vm.showProfile }
+          })
+        ],
+        1
+      )
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4899d93b", module.exports)
   }
 }
 

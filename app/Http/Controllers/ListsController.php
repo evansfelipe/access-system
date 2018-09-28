@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\{ Person, Company, Vehicle, Container, Activity, Subactivity, VehicleType };
+use App\{ Person, Company, Vehicle, Container, Activity, Subactivity, VehicleType, Group, Gate };
 
 class ListsController extends Controller
 {
@@ -188,5 +188,49 @@ class ListsController extends Controller
             return $type->toListArray();
         });
         return response(json_encode($types))->header('Content-Type', 'application/json');        
+    }
+
+    /**
+     * Returns the date of the last update on the groups
+     *
+     * @return Timestamp
+     */
+    public function groupsUpdatedAt()
+    {
+        return Group::select(['updated_at'])->orderBy('updated_at','desc')->first();        
+    }
+
+    /**
+     * Returns the list of groups
+     * 
+     * @return Array<VehicleType>
+     */
+    public function groupsList()
+    {
+        $groups = Group::all()->map(function($group) {
+            return $group->toListArray();
+        });
+        return response(json_encode($groups))->header('Content-Type', 'application/json');        
+    }
+
+    /**
+     * Returns the date of the last update on the gates
+     *
+     * @return Timestamp
+     */
+    public function gatesUpdatedAt()
+    {
+        return Gate::select(['updated_at'])->orderBy('updated_at','desc')->first();        
+    }
+
+    /**
+     * Returns the list of gates
+     * 
+     * @return Array<VehicleType>
+     */
+    public function gatesList()
+    {
+        $gates = Gate::all(['id','name']);
+        return response(json_encode($gates))->header('Content-Type', 'application/json');        
     }
 }

@@ -187,6 +187,10 @@ return [
         'jobs.*.cards.*.number'     => 'Número de la tarjeta',
         'jobs.*.cards.*.from'       => 'Valido desde',
         'jobs.*.cards.*.until'      => 'Valido hasta',
+        // Groups
+        'gate_id'   => 'Entrada',
+        'start'     => 'Comienzo',
+        'end'       => 'Finalización',
     ],
 
 ];

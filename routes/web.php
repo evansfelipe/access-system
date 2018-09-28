@@ -79,6 +79,18 @@ Route::middleware(['auth','user.administration'])->group(function() {
         Route::get('/list',             'ListsController@vehicleTypesList')->name('vehicle-types.list');
     });
 
+    // Groups routes
+    Route::prefix('groups')->group(function() {
+        Route::get('/updated-at',       'ListsController@groupsUpdatedAt')->name('groups.updated-at');
+        Route::get('/list',             'ListsController@groupsList')->name('groups.list');
+    }); Route::resource('/groups',  'GroupsController')->only(['store', 'show', 'edit', 'update', 'destroy']);
+    
+    // Gates routes
+    Route::prefix('gates')->group(function() {
+        Route::get('/updated-at',   'ListsController@gatesUpdatedAt')->name('gates.updated-at');
+        Route::get('/list',         'ListsController@gatesList')->name('gates.list');
+    });
+
     // Settings Routes
     Route::prefix('settings')->group(function() {
         Route::post('new-activity',                 'SettingsController@newActivity')->name('settings.new-activity');

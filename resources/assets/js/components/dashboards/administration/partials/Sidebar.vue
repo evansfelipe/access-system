@@ -128,6 +128,20 @@
                         </router-link>
                     </div>
                 </div>
+                <!-- Groups -->
+                <div class="sidebar-group">
+                    <a class="btn-sidebar sidebar-toggle" @click="group_active.groups = !group_active.groups">
+                        <i class="fas centered fa-universal-access fa-lg"></i> Grupos
+                        <i :class="'toggle-icon fas centered fa-caret-' + (group_active.groups ? 'up' : 'down')"></i>
+                    </a>
+                    <div class="items" v-if="group_active.groups">
+                        <router-link to="/groups" class="btn-sidebar">Listado</router-link>
+                        <router-link to="/groups/create" class="btn-sidebar">
+                            {{ this.$store.getters.groups.editing ? 'Editar' : 'Crear' }}
+                            <i v-if="$store.getters.groups.modified" class="fas fa-exclamation centered"></i>
+                        </router-link>
+                    </div>
+                </div>
                 <hr>
                 <!-- Expiration -->
                 <div class="sidebar-group">
@@ -165,6 +179,7 @@ export default {
                 companies:  false,
                 vehicles:   false,
                 containers: false,
+                groups:     false,
                 expiration: false,
                 settings:   false,
             }

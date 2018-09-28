@@ -24,7 +24,7 @@
 
 <template>
     <div>
-        <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.activities.updating || this.$store.getters.subactivities.updating"/>
+        <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.activities.updating || this.$store.getters.subactivities.updating || this.$store.getters.groups.updating"/>
         <template v-else>
             <transition-group name="job" tag="div">
                 <div class="grey-border mb-2" v-for="job in values.jobs" :key="job.key">
@@ -37,7 +37,8 @@
                         <div class="col-12">
                             <!-- Company, Activity & Subactivities -->
                             <job-data   :job="job" 
-                                        :companies="companies" :activities="activities" :subactivities="subactivities" :errors="jobs_errors[job.key] || []"
+                                        :companies="companies" :activities="activities" :subactivities="subactivities" :groups="groups"
+                                        :errors="jobs_errors[job.key] || []"
                                         @change="({attribute, value}) => editJob(job, attribute, value)"
                             />
                         </div>
@@ -93,6 +94,7 @@ export default {
         this.$store.dispatch('fetchList','companies');
         this.$store.dispatch('fetchList','activities');
         this.$store.dispatch('fetchList','subactivities');
+        this.$store.dispatch('fetchList','groups');
     },
     computed: {
         companies: function() {
@@ -103,6 +105,9 @@ export default {
         },
         subactivities: function() {
             return this.$store.getters.subactivities.list;
+        },
+        groups: function() {
+            return this.$store.getters.groups.list.map(g => { return { id: g.id, text: g.name, company_id: g.company_id }});;
         }
     },
     methods: {
