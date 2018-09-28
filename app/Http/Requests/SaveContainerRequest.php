@@ -28,14 +28,4 @@ class SaveContainerRequest extends FormRequest
             Container::getValidationRules()
         );
     }
-
-    /**
-     * Transforms the request input data before validation.
-     * 
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        $this->merge(['trucks_id' => json_decode($this->trucks_id)]);
-    }
 }

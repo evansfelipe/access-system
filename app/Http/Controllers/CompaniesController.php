@@ -1,14 +1,7 @@
-<?php
-
-namespace App\Http\Controllers;
-
-use View;
-use App\Http\Traits\Helpers;
+<?php namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\SaveCompanyRequest;
-
 use App\Http\Traits\{ SaveResidencyTrait };
-
 use App\{Company, Residency};
 
 class CompaniesController extends Controller
@@ -26,7 +19,7 @@ class CompaniesController extends Controller
         // Saves the residency
         $residency = new Residency($request->toArray());
         $residency->save();
-        Helpers::storeLocation($residency->city, $residency->province, $residency->country);
+        \Helpers::storeLocation($residency->city, $residency->province, $residency->country);
         // Sets the new company data
         $company = new Company($request->toArray());
         $company->residency_id = $residency->id;

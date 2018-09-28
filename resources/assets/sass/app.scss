@@ -92,7 +92,7 @@ div.grey-border {
 // Bootstrap form-control
 .form-control { 
     height: 40px;
-    &.form-control-sm { height: 28px; font-size: 85%; }
+    &.form-control-sm { height: 32px; font-size: 90%; }
     padding: 0.375rem 0.75rem;
     font-size: 0.9rem;
     line-height: 1.6;
@@ -133,6 +133,7 @@ input.md-input {
     padding-left: 0.5em;
     padding-bottom: 0.25em;
     margin-right: 3px;
+    background-color: transparent;
     &:disabled {
         background-color: transparent;
         border-color: rgba(222, 222, 222, .5);

@@ -73,6 +73,8 @@ const router = new VueRouter({
         { path: '/containers/show/:id',   component: require('./components/containers/show/Layout.vue') },
         // Extra
         { path: '/bar', component: { template: '<div>Test route</div>' } },
+        // Settings
+        { path: '/settings', component: require('./components/dashboards/administration/partials/settings/Layout.vue')}
     ]
 });
 

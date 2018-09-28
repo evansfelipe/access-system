@@ -1,6 +1,5 @@
 <?php namespace App;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Traits\Helpers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use App\{ Card, Residency, Activity, Vehicle };
@@ -73,7 +72,7 @@ class Person extends Model
                     'unique:people',
                     'nullable'
                 ], 
-                Helpers::getCuilRules()
+                \Helpers::getCuilRules()
             ),
             'birthday' => [
                 'string', 
@@ -161,7 +160,7 @@ class Person extends Model
                     ->get()
                     ->map(function($job) {
                         $job->company_name  = $job->company_name ?? 'Personal';
-                        $job->company_expiration = Helpers::timestampToDate($job->company_expiration);
+                        $job->company_expiration = \Helpers::timestampToDate($job->company_expiration);
                         $job->subactivities = json_decode($job->subactivities);
                         $job->cards         = Card::where('person_company_id', $job->id)
                                                     ->select('id', 'number', 'from', 'until', 'active')
@@ -312,7 +311,7 @@ class Person extends Model
     public function getCurrentPicture()
     {
         $path = $this->getStorageFolder() . 'pictures/' . $this->picture_name;
-        return Helpers::getImageAsDataURI($path);
+        return \Helpers::getImageAsDataURI($path);
     }
 
     public function toShowArray() 
@@ -325,7 +324,7 @@ class Person extends Model
                     'document_type'     => $this->documentTypeToString(),
                     'document_number'   => $this->document_number,
                     'cuil'              => $this->cuil          ?? '-',
-                    'birthday'          => Helpers::timestampToDate($this->birthday),
+                    'birthday'          => \Helpers::timestampToDate($this->birthday),
                     'sex'               => $this->sexToString(),
                     'blood_type'        => $this->blood_type    ?? '-',
                     'homeland'          => $this->homeland ?? '-',
@@ -343,8 +342,8 @@ class Person extends Model
                                         return [
                                             'id'         => $document->id,
                                             'type'       => $document->typeToString(),
-                                            'created_at' => Helpers::timestampToDate($document->created_at),
-                                            'expiration' => Helpers::timestampToDate($document->expiration)
+                                            'created_at' => \Helpers::timestampToDate($document->created_at),
+                                            'expiration' => \Helpers::timestampToDate($document->expiration)
                                         ];
                                     }),
             'required_documents' => $this->getRequiredDocuments()->map(function($doc, $key) {
@@ -367,7 +366,7 @@ class Person extends Model
                 'Tipo de documento'     => $this->documentTypeToString(),
                 'Número de documento'   => $this->document_number,
                 'CUIL'                  => $this->cuil          ?? '-',
-                'Fecha de nacimiento'   => Helpers::timestampToDate($this->birthday),
+                'Fecha de nacimiento'   => \Helpers::timestampToDate($this->birthday),
                 'Género'                => $this->sexToString(),
                 'Grupo sangíneo'        => $this->blood_type    ?? '-',
                 'Nacionalidad'          => $this->homeland ?? '-',

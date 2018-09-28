@@ -10,6 +10,19 @@ class List {
     getById(id) {
         return this.list.getById(id);
     }
+
+    addItem(item, timestamp) {
+        let pos = this.list.getPositionById(item.id);
+        if(pos !== undefined) {
+            Vue.set(this.list, pos, item);
+        }
+        else {
+            this.list.push(item);
+        }
+        if(timestamp) {
+            this.timestamp = timestamp;
+        }
+    }
 }
 
 class Model {
@@ -53,6 +66,7 @@ export default {
             vehicles:       new List(),
             containers:     new List(),
             activities:     new List(),
+            subactivities:  new List(),
             vehicle_types:  new List()
         },
         models: {
@@ -93,6 +107,9 @@ export default {
         activities: function({lists}) {
             return lists.activities;
         },
+        subactivities: function({lists}) {
+            return lists.subactivities;
+        },
         vehicle_types: function({lists}) {
             return lists.vehicle_types;
         },
@@ -113,6 +130,12 @@ export default {
         }
     },
     mutations: {
+
+        addItemToList: function({debug, lists}, {list, item, timestamp}) {
+            if(debug) console.log('Adding to', list, 'the item', item, 'with timestamp', timestamp);
+            lists[list].addItem(item, timestamp);
+        },
+
         loading: function({debug, ui}, values) {
             ui.loading.state = values.state;
             ui.loading.message = values.message;

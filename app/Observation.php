@@ -1,9 +1,5 @@
-<?php
-
-namespace App;
-
+<?php namespace App;
 use Illuminate\Database\Eloquent\Model;
-use App\Http\Traits\Helpers;
 
 class Observation extends Model
 {
@@ -26,7 +22,7 @@ class Observation extends Model
     public function toArray()
     {
         return [
-            'date' => Helpers::timestampToDate($this->created_at),
+            'date' => \Helpers::timestampToDate($this->created_at),
             'user' => $this->user->name,
             'text' => $this->text
         ];

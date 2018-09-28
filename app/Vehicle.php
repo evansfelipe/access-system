@@ -1,9 +1,5 @@
-<?php
-
-namespace App;
-
+<?php namespace App;
 use Illuminate\Database\Eloquent\Model;
-use App\Http\Traits\Helpers;
 
 class Vehicle extends Model
 {
@@ -116,8 +112,8 @@ class Vehicle extends Model
             'model'             => $this->model,
             'year'              => $this->year,
             'colour'            => $this->colour,
-            'insurance'         => Helpers::timestampToDate($this->insurance),
-            'vtv'               => Helpers::timestampToDate($this->vtv),
+            'insurance'         => \Helpers::timestampToDate($this->insurance),
+            'vtv'               => \Helpers::timestampToDate($this->vtv),
             'assigned_people'   => $this->people()->select('people.id','last_name','name','cuil')->get()
                                         ->map(function($person) {
                                             return [

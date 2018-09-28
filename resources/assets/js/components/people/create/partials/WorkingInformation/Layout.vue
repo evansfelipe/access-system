@@ -24,7 +24,7 @@
 
 <template>
     <div>
-        <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.activities.updating"/>
+        <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.activities.updating || this.$store.getters.subactivities.updating"/>
         <template v-else>
             <transition-group name="job" tag="div">
                 <div class="grey-border mb-2" v-for="job in values.jobs" :key="job.key">
@@ -37,7 +37,7 @@
                         <div class="col-12">
                             <!-- Company, Activity & Subactivities -->
                             <job-data   :job="job" 
-                                        :companies="companies" :activities="activities" :errors="jobs_errors[job.key] || []"
+                                        :companies="companies" :activities="activities" :subactivities="subactivities" :errors="jobs_errors[job.key] || []"
                                         @change="({attribute, value}) => editJob(job, attribute, value)"
                             />
                         </div>
@@ -92,6 +92,18 @@ export default {
     beforeMount() {
         this.$store.dispatch('fetchList','companies');
         this.$store.dispatch('fetchList','activities');
+        this.$store.dispatch('fetchList','subactivities');
+    },
+    computed: {
+        companies: function() {
+            return this.$store.getters.companies.list.map(c => { return { id: c.id, text: c.name }});
+        },
+        activities: function() {
+            return this.$store.getters.activities.list.map(a => { return { id: a.id, text: a.name }});
+        },
+        subactivities: function() {
+            return this.$store.getters.subactivities.list;
+        }
     },
     methods: {
         addJob: function() {
@@ -111,14 +123,6 @@ export default {
         },
         removeCardFromJob: function(job, card) {
             this.$store.commit('removeCardFromJob', {job, card});
-        }
-    },
-    computed: {
-        companies: function() {
-            return this.$store.getters.companies.list.map(c => { return { id: c.id, text: c.name }});
-        },
-        activities: function() {
-            return this.$store.getters.activities.list.map(a => { return { id: a.id, text: a.name }});
         }
     },
     watch: {

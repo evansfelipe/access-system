@@ -1,6 +1,4 @@
 <?php namespace App;
-
-use App\Http\Traits\Helpers;
 use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
@@ -44,7 +42,7 @@ class Company extends Model
                     'required',
                     'unique:companies',
                 ], 
-                Helpers::getCuilRules()
+                \Helpers::getCuilRules()
             ),
             'expiration' => [
                 'required',
@@ -119,7 +117,7 @@ class Company extends Model
                     'name'          => $this->name,
                     'area'          => $this->area,
                     'cuit'          => $this->cuit,
-                    'expiration'    => Helpers::timestampToDate($this->expiration),
+                    'expiration'    => \Helpers::timestampToDate($this->expiration),
                 ],
                 $this->residency->toArray(),
                 $this->contactToArray()),

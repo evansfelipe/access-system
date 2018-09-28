@@ -4,15 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VehicleType extends Model
+class Subactivity extends Model
 {
-    protected $fillable = ['type', 'allows_container'];
+    protected $fillable = ['name', 'activity_id'];
     
     /**
      * Array with the length of each string column of the database associated with this model.
      */
     public const LENGTHS = [
-        'type' => ['max' => 30]
+        'name' => ['max' => 50]
     ];
 
     /**
@@ -22,30 +22,31 @@ class VehicleType extends Model
     public static function getValidationRules()
     {
         return [
-            'type' => [
+            'name' => [
                 'required',
                 'string',
-                'max:'.VehicleType::LENGTHS['type']['max'],
-                'unique:vehicle_types'
+                'max:'.Subactivity::LENGTHS['name']['max'],
+                'unique_with:subactivities,activity_id'
             ],
-            'allows_container' => [
+            'activity_id' => [
                 'required',
-                'boolean'
+                'integer',
+                'exists:activities,id'
             ]
         ];
     }
 
-    public function vehicles()
+    public function activity()
     {
-        return $this->hasMany('App\Vehicle', 'type_id');
+        return $this->belongsTo('\App\Activity');
     }
 
     public function toListArray()
     {
         return [
-            'id'                => $this->id,
-            'type'              => $this->type,
-            'allows_container'  => $this->allows_container
+            'id'            => $this->id,
+            'name'          => $this->name,
+            'activity_id'   => $this->activity_id
         ];
     }
 }

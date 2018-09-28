@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\{ Person, Company, Vehicle, Container, Activity, VehicleType };
+use App\{ Person, Company, Vehicle, Container, Activity, Subactivity, VehicleType };
 
 class ListsController extends Controller
 {
@@ -138,7 +138,33 @@ class ListsController extends Controller
      */
     public function activitiesList()
     {
-        return response(json_encode(Activity::all(['id','name'])))->header('Content-Type', 'application/json');        
+        $activities = Activity::all(['id','name'])->map(function($activity) {
+            return $activity->toListArray();
+        });
+        return response(json_encode($activities))->header('Content-Type', 'application/json');        
+    }
+
+    /**
+     * Returns the date of the last update on the subactivities
+     * 
+     * @return Timestamp
+     */
+    public function subactivitiesUpdatedAt()
+    {
+        return Subactivity::select(['updated_at'])->orderBy('updated_at','desc')->first();        
+    }
+
+    /**
+     * Returns the list of subactivities
+     * 
+     * @return Array<Activity>
+     */
+    public function subactivitiesList()
+    { 
+        $subactivities = Subactivity::all(['id', 'activity_id', 'name'])->map(function($subactivity) {
+            return $subactivity->toListArray();
+        });
+        return response(json_encode($subactivities))->header('Content-Type', 'application/json');        
     }
 
     /**
@@ -158,6 +184,9 @@ class ListsController extends Controller
      */
     public function vehicleTypesList()
     {
-        return response(json_encode(VehicleType::all(['id','type'])))->header('Content-Type', 'application/json');        
+        $types = VehicleType::all(['id','type','allows_container'])->map(function($type) {
+            return $type->toListArray();
+        });
+        return response(json_encode($types))->header('Content-Type', 'application/json');        
     }
 }

@@ -35,14 +35,4 @@ class SaveVehicleRequest extends FormRequest
             PersonVehicle::getPeopleValidationRules()
         );
     }
-
-    /**
-     * Transforms the request input data before validation.
-     * 
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        $this->merge(['people_id' => json_decode($this->people_id)]);
-    }
 }

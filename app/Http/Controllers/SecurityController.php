@@ -18,9 +18,10 @@ class SecurityController extends Controller
                 'plate'     => $vehicle->plate,
                 'brand'     => $vehicle->brand,
                 'model'     => $vehicle->model,
-                'type'      => $vehicle->type,
+                'type'      => $vehicle->vehicleType->type,
                 'colour'    => $vehicle->colour,
-                'year'      => $vehicle->year
+                'year'      => $vehicle->year,
+                'containers'=> $vehicle->containers
             ];
         });
 

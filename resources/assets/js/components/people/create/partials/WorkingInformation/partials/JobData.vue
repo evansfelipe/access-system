@@ -95,7 +95,10 @@ export default {
             return this.errors['subactivities'] || [];
         },
         subactivities_options: function() {
-            return this.subactivities.concat(this.job.subactivities.map(s => { return { id: s, text: s } }));
+            return !this.job.activity_id ? [] : 
+                    this.subactivities.filter(s => s.activity_id === this.job.activity_id)
+                        // .concat(this.job.subactivities.map(s => { return { id: s, name: s } }))
+                        .map(s => { return { id: s.name, name: s.name } });
         },
         groups_errors: function() {
             return this.errors['groups'] || [];

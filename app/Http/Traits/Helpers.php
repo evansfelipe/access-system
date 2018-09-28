@@ -5,6 +5,7 @@ namespace App\Http\Traits;
 use Illuminate\Http\Request;
 use Storage;
 
+use App\Subactivity;
 use App\Location\{ City, Province, Country };
 
 trait Helpers {
@@ -36,6 +37,18 @@ trait Helpers {
         }
     }
 
+    public static function storeSubactivity($name, $activity_id)
+    {
+        $ret = Subactivity::where('activity_id', $activity_id)->where('name', $name)->first();
+
+        if(!$ret) {
+            $ret = new Subactivity(['name' => $name, 'activity_id' => $activity_id]);
+            $ret->save();
+        }
+
+        return $ret;
+    }
+
     /**
      * 
      */
@@ -61,7 +74,7 @@ trait Helpers {
 
     public static function timestampToDate($timestamp)
     {
-        return $timestamp ? date('d / m / Y', strtotime($timestamp)) : '-';
+        return $timestamp ? date('d/m/Y', strtotime($timestamp)) : '-';
     }
 
     public static function storeFile($path, $fileAsDataURI)

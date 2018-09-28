@@ -1,7 +1,6 @@
 <?php namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Auth;
-use App\Http\Traits\Helpers;
 use Illuminate\Http\Request;
 use App\Http\Requests\{ SavePersonRequest };
 use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle, PersonDocument, Observation};
@@ -18,7 +17,7 @@ class PeopleController extends Controller
     public function pictures(Person $person)
     {
         $images = collect(Storage::files($person->getStorageFolder().'pictures/'))->map(function($file) {
-            return Helpers::getImageAsDataURI($file);
+            return \Helpers::getImageAsDataURI($file);
         });
         return response(json_encode($images))->header('Content-Type', 'application/json');
     }
@@ -65,7 +64,7 @@ class PeopleController extends Controller
             $person_document = new PersonDocument();
             $person_document->person_id = $person_id;
             $person_document->document_type = $person_document->getConst($file_type);
-            $person_document->document_name = Helpers::storeFile($path, $fileDataURI);
+            $person_document->document_name = \Helpers::storeFile($path, $fileDataURI);
             $person_document->expiration = $expiration;
             $person_document->save();
         }
@@ -82,7 +81,7 @@ class PeopleController extends Controller
         // Saves the residency
         $residency = new Residency($request->toArray());
         $residency->save();
-        Helpers::storeLocation($residency->city, $residency->province, $residency->country);
+        \Helpers::storeLocation($residency->city, $residency->province, $residency->country);
         // Saves the person
         $person = new Person($request->toArray());
         $person->setContact($request->toArray());
@@ -93,7 +92,7 @@ class PeopleController extends Controller
         $files = $request->file();
         $path = $person->getStorageFolder();
         // Saves the picture
-        $person->picture_name = Helpers::storeFile($path.'pictures', $request->picture);
+        $person->picture_name = \Helpers::storeFile($path.'pictures', $request->picture);
         $person->save();
         unset($files['picture']);
         // Saves each person-company relationship.
@@ -104,6 +103,11 @@ class PeopleController extends Controller
                 $person_company->company_id = $job['company_id'];
                 $person_company->activity_id = $job['activity_id'];
                 $person_company->subactivities = json_encode($job['subactivities']);
+
+                foreach($job['subactivities'] as $name) {
+                    \Helpers::storeSubactivity($name, $job['activity_id']);
+                }
+
                 $person_company->art_company = $job['art_company'];
                 $person_company->art_number = $job['art_number'];
                 $person_company->save();

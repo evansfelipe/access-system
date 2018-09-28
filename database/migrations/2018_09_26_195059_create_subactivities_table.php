@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\VehicleType;
-class CreateVehicleTypesTable extends Migration
+use App\Subactivity;
+class CreateSubactivitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateVehicleTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('vehicle_types', function (Blueprint $table) {
+        Schema::create('subactivities', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type', VehicleType::LENGTHS['type']['max'])->required()->unique();
-            $table->boolean('allows_container')->default(false);
+            $table->integer('activity_id')->unsigned()->required();
+            $table->string('name', Subactivity::LENGTHS['name']['max'])->required();
             $table->timestamps();
+            $table->unique(['activity_id', 'name']);
         });
     }
 
@@ -28,6 +29,6 @@ class CreateVehicleTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vehicle_types');
+        Schema::dropIfExists('subactivities');
     }
 }

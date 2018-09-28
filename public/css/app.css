@@ -10537,8 +10537,8 @@ div.grey-border {
 .input-group-sm > .input-group-append > .form-control.input-group-text,
 .input-group-sm > .input-group-prepend > .form-control.btn,
 .input-group-sm > .input-group-append > .form-control.btn {
-  height: 28px;
-  font-size: 85%;
+  height: 32px;
+  font-size: 90%;
 }
 
 .form-control:disabled {
@@ -10621,6 +10621,7 @@ input.md-input {
   padding-left: 0.5em;
   padding-bottom: 0.25em;
   margin-right: 3px;
+  background-color: transparent;
 }
 
 input.md-input:disabled {

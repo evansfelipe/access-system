@@ -1,6 +1,6 @@
 <style>
     .has-errors {
-        text-align: justify;
+        /* text-align: justify; */
         color: red;
         font-size: 85%;
     }
@@ -17,14 +17,14 @@
 
 <template>
     <div :class="col">
-        <div class="form-group">
+        <div class="form-group" :style="extraStyle">
             <div v-if="label" class="form-row">
                 <div class="col">
                     <label>{{ label }}:</label>
                 </div>
             </div>
             <div :class="`form-row ${errors.length ? 'item-wrapper' : ''}`">
-                <slot></slot>
+                <slot/>
             </div>
             <div class="form-row">
                 <div class="col">
@@ -54,6 +54,11 @@ export default {
             type:     Array,
             required: false,
             default:  () => []
+        },
+        extraStyle: {
+            type:     String,
+            required: false,
+            default:  ''
         }
     }
 }

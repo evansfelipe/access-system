@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Activity extends Model
 {
+    protected $fillable = ['name'];
+    
     /**
      * Array with the length of each string column of the database associated with this model.
      */
@@ -20,11 +22,30 @@ class Activity extends Model
     public static function getValidationRules()
     {
         return [
+            'name' => [
+                'required',
+                'string',
+                'max:'.Activity::LENGTHS['name']['max'],
+                'unique:activities'
+            ]
         ];
     }
 
     public function personCompany()
     {
         return $this->belongsTo('App\PersonCompany');
+    }
+
+    public function subactivities()
+    {
+        return $this->hasMany('\App\Subactivity');
+    }
+
+    public function toListArray()
+    {
+        return [
+            'id'    => $this->id,
+            'name'  => $this->name,
+        ];
     }
 }

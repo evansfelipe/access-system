@@ -2,7 +2,7 @@
     div.content {
         position: absolute;
         right: 0; top: 0; bottom: 0;
-        left: 250px;
+        left: 210px;
         &.expanded { left: 0vw }
         padding-top: 1em;
         padding-bottom: 1em;
