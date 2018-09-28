@@ -15,6 +15,9 @@ export default {
             },
             assign_people: {
                 people_id: []
+            },
+            assign_containers: {
+                containers_id: []
             }
         }
     }

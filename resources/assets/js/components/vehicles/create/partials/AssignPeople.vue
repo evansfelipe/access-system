@@ -133,9 +133,6 @@ export default {
             this.selected_list = this.company_people.length > 0 ? 'company' : 'other';
             this.people_list = this.company_people.length > 0 ? this.company_people : this.other_people;
         },
-        unpickAll() {
-            this.$store.getters.people.list.forEach(person => this.$store.commit('pickPerson', { id: person.id, value: false }));
-        },
         togglePerson(person) {
             this.$store.commit('pickPerson', person.id);
         }

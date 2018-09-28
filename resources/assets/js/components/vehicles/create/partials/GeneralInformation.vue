@@ -6,8 +6,8 @@
                 <!-- Type -->
                 <form-item col="col-4" label="Tipo" :errors="errors.type">
                     <div class="col">
-                        <select2 placeholder="Seleccione un tipo" :value="values.type_id" :options="types"
-                                    @input="(value) => update({name: 'type_id', value: value})"/>
+                        <select2 placeholder="Seleccione un tipo" :value="type_id" :options="types"
+                                    @input="(value) => this.$emit('typeUpdated', value)"/>
                     </div>
                 </form-item>
                 <!-- Plate -->
@@ -108,6 +108,10 @@ export default {
         },
         company_id: function() {
             return this.values.company_id;
+        },
+
+        type_id: function() {
+            return this.values.type_id;
         }
     },
     beforeMount() {

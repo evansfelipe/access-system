@@ -1,12 +1,13 @@
 <template>
     <el-select  :style="`width: ${width}`" 
-                v-model="input_value"   :disabled="disabled || loading"
+                :value="value"     :disabled="disabled || loading"
                 :name="name"            :placeholder="!loading ? placeholder : 'Cargando valores...'"
                 :multiple="multiple"    :allow-create="tags"
                 filterable              default-first-option
                 :clearable="clearable"  :size="size"
                 :loading="loading"      loading-text="Cargando..."
                 auto-complete="nope"    :filter-method="filterMethod"
+                @change="value => this.$emit('input', value)"
     >
         <el-option
             v-for="item in filtered_options"
@@ -78,24 +79,17 @@ export default {
     },
     data() {
         return {
-            input_value: this.value,
             filtered_options: this.options
         };
-    },
-    methods: {
-        filterMethod: function(value) {
-            this.filtered_options = this.options.filter(option => option.text.matches(value));
-        }
     },
     watch: {
         options: function() {
             this.filtered_options = this.options;
-        },
-        value: function() {
-            this.input_value = this.value;
-        },
-        input_value: function() {
-            this.$emit('input', this.input_value);            
+        }
+    },
+    methods: {
+        filterMethod: function(value) {
+            this.filtered_options = this.options.filter(option => option.text.matches(value));
         }
     }
 }

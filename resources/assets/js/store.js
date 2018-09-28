@@ -216,6 +216,18 @@ export default {
                 if(state.debug) console.log('Trcucks picked:', state.models.container.values.assign_trucks.trucks_id);
             }
         },
+        pickContainer: function(state, id) {
+            if(state.lists.containers.list.getById(id) !== undefined) {
+                let pos = state.models.vehicle.values.assign_containers.containers_id.indexOf(id);
+                if(pos !== -1) {
+                    state.models.vehicle.values.assign_containers.containers_id.splice(pos, 1);
+                }
+                else {
+                    state.models.vehicle.values.assign_containers.containers_id.push(id);
+                }
+                if(state.debug) console.log('Trcucks picked:', state.models.vehicle.values.assign_containers.containers_id);
+            }
+        },
         /**
          * Unpicks each vehicle from the list of vehicles.
          */

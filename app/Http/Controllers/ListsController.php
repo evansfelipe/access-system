@@ -158,6 +158,6 @@ class ListsController extends Controller
      */
     public function vehicleTypesList()
     {
-        return response(json_encode(VehicleType::all(['id','type'])))->header('Content-Type', 'application/json');        
+        return response(json_encode(VehicleType::all(['id','type','allows_container'])))->header('Content-Type', 'application/json');        
     }
 }

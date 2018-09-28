@@ -43,6 +43,6 @@ class SaveVehicleRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $this->merge(['people_id' => json_decode($this->people_id)]);
+        // $this->merge(['people_id' => json_decode($this->people_id)]);
     }
 }

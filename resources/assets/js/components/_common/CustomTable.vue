@@ -38,11 +38,12 @@
             <div v-if="rowsquantity === null" class="row mb-2">
                 <div class="col-4">
                     Mostrar
-                    <select2 :value="pagination.quantity" @input="value => pagination.quantity = value" :options="options.rows" :clearable="false" size="mini" width="50%"/>
+                    <select2 :value="pagination.quantity" @input="value => pagination.quantity = value" :options="options.rows" :clearable="false" size="mini" width="30%"/>
                     filas
                 </div>
                 <div class="offset-4 col-4">
                     <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" :disabled="advancedsearch">
+                    <i class="fas fa-search"></i>
                 </div>
             </div>
             <!-- Data displayed on a table -->
@@ -85,7 +86,8 @@
             <!-- Pagination -->
             <div class="row mt-2">
                 <div v-if="rowsquantity !== null" class="col-4">
-                    <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" :disabled="advancedsearch">
+                    <i class="fas fa-search"></i>
+                    <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" style="width:12em" :disabled="advancedsearch">
                 </div>
                 <div v-if="shown_rows.length > 0" :class="`col-${rowsquantity !== null? '8' : '12'}`">
                     <ul class="pagination justify-content-end" style="margin-bottom: 0px">
