@@ -6,7 +6,7 @@
             </div>
             <div class="col-2">
                 <small>Tipo</small><br>
-                <strong>{{ values.type }}</strong>
+                <strong>{{ values.type.name }}</strong>
             </div>
             <div class="col-2">
                 <small>Patente</small><br>

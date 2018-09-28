@@ -10,12 +10,19 @@
             <tab-item :active="tab === 1" @click.native="tab = 1" :has-errors="step_validated.assign_people" icon="fas fa-users">
                 Asignar personas
             </tab-item>
+            <!-- Assign containers tab -->
+            <tab-item v-if="allows_containers" :active="tab === 2" @click.native="tab = 2" :has-errors="step_validated.assign_containers" icon="fas fa-boxes">
+                Asignar contenedores
+            </tab-item>
         </ul>
         <!-- Card -->
         <creation-wrapper   :updating="this.$store.getters.vehicle.updating" :values="values" :route="route" 
                             @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel">
-            <general-information v-show="tab === 0" :errors="general_information_errors" :values="values.general_information"/>
+            <general-information v-show="tab === 0" :errors="general_information_errors" :values="values.general_information"
+                                    @typeUpdated="value => updateType(value)"
+            />
             <assign-people v-show="tab === 1" :errors="assign_people_errors" :values="values.assign_people" :companyid="company_id" :companyname="company_name"/>
+            <assign-containers v-show="tab === 2" :errors="assign_containers_errors" :values="values.assign_containers"/>
         </creation-wrapper>
     </div>
 </template>
@@ -25,6 +32,7 @@ export default {
     components: {
         'general-information': require('./partials/GeneralInformation.vue'),
         'assign-people': require('./partials/AssignPeople.vue'),
+        'assign-containers': require('./partials/AssignContainers.vue'),
     },
     data: function() {
         return {
@@ -34,6 +42,7 @@ export default {
             step_validated: {
                 general_information: null,
                 assign_people:       null,
+                assign_containers:   null,
             }
         }
     },
@@ -70,7 +79,20 @@ export default {
         },
         assign_people_errors: function() {
             return this.errors['assign_people'] ? this.errors['assign_people'] : []; 
+        },
+        assign_containers_errors: function() {
+            return this.errors['assign_containers'] ? this.errors['assign_containers'] : []; 
+        },
+        allows_containers: function() {
+            if(this.$store.getters.vehicle_types.timestamp !== null && this.values.general_information.type_id !== ''){
+                let vehicle_type = this.$store.getters.vehicle_types.list.getById(this.values.general_information.type_id);
+                return vehicle_type.allows_container;
+            }
+            return false;
         }
+    },
+    beforeMount() {
+        this.$store.dispatch('fetchList','vehicle_types');
     },
     methods: {
         saveSuccess: function(id) {
@@ -88,6 +110,34 @@ export default {
             this.$router.go(-1);
             this.$store.commit('resetModel', 'vehicle');
         },
+        updateType: function(value) {
+            let confirmation = (value) => {
+                this.$confirm('Si realiza esta acción se perderán los contenedores seleccionados', '', {
+                    confirmButtonText: 'Confirmar',
+                    cancelButtonText: 'Cancelar',
+                    type: 'error'
+                })
+                .then(() => {
+                    this.$store.commit('updateModel', { which: 'vehicle', properties_path: `values.general_information.type_id`, value: value });
+                    this.$store.commit('updateModel', { which: 'vehicle', properties_path: `values.assign_containers.containers_id`, value: [] });
+                })
+                .catch(() => {});
+            }
+
+            // let old_vehicle_type = this.$store.getters.vehicle_types.list.getById(this.values.type_id);
+            let new_vehicle_type = this.$store.getters.vehicle_types.list.getById(value);
+            if (new_vehicle_type != undefined && new_vehicle_type.allows_container == false && this.values.assign_containers.containers_id.length > 0) {
+                confirmation(value);
+            }
+            else {
+                if(value === '' && this.values.assign_containers.containers_id.length > 0) {
+                    confirmation(value);
+                }
+                else {
+                    this.$store.commit('updateModel', { which: 'vehicle', properties_path: `values.general_information.type_id`, value: value });
+                }
+            }
+        }
     }
 }
 </script>

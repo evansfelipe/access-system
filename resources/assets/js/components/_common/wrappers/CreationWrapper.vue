@@ -89,11 +89,11 @@ export default {
                 });
             });
 
-            if(this.route.method === 'put') {
-                data.append('_method', 'PUT');
-            }
-
-            axios.post(this.route.url, data)
+            axios({
+                method: this.route.method,
+                url: this.route.url,
+                data: data
+            })
             .then(response => this.$emit('saveSuccess', response.data.id))
             .catch(response => onError(response))
             .finally(() => this.$store.commit('loading', { state: false, message: "" }));

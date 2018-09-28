@@ -100,21 +100,24 @@ class Vehicle extends Model
     public function toShowArray()
     {
         return [
-            'id'                => $this->id,
-            'company'           => [
-                'id'    => $this->company->id,
-                'name'  => $this->company->name
-            ],
-            'plate'             => $this->plate,
-            'owner'             => $this->owner,
-            'type'              => $this->vehicleType->type,
-            'brand'             => $this->brand,
-            'model'             => $this->model,
-            'year'              => $this->year,
-            'colour'            => $this->colour,
-            'insurance'         => \Helpers::timestampToDate($this->insurance),
-            'vtv'               => \Helpers::timestampToDate($this->vtv),
-            'assigned_people'   => $this->people()->select('people.id','last_name','name','cuil')->get()
+            'id'                    => $this->id,
+            'company'               => [
+                                        'id'    => $this->company->id,
+                                        'name'  => $this->company->name
+                                    ],
+            'plate'                 => $this->plate,
+            'owner'                 => $this->owner,
+            'type'                  => [
+                                        'id'    =>  $this->vehicleType->id,
+                                        'name'  =>  $this->vehicleType->type,
+                                    ],
+            'brand'                 => $this->brand,
+            'model'                 => $this->model,
+            'year'                  => $this->year,
+            'colour'                => $this->colour,
+            'insurance'             => \Helpers::timestampToDate($this->insurance),
+            'vtv'                   => \Helpers::timestampToDate($this->vtv),
+            'assigned_people'       => $this->people()->select('people.id','last_name','name','cuil')->get()
                                         ->map(function($person) {
                                             return [
                                                 'id'            => $person->id,
@@ -122,7 +125,8 @@ class Vehicle extends Model
                                                 'cuil'          => $person->cuil,
                                                 'company_name'  => $person->companies()->select('name')->get()->implode('name', ' / ')
                                             ];
-                                        })
+                                        }),
+            'assigned_containers'   => $this->containers
         ];
     }
 }

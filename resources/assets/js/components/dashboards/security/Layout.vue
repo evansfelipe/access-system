@@ -211,9 +211,9 @@ export default {
             tab: 0,
 
             observations_columns: [
-                {name: 'date', text: 'Fecha',   width: '15'},
-                {name: 'user', text: 'Usuario', width: '15'},
-                {name: 'text', text: 'Texto',   width: '70'}
+                {name: 'date', text: 'Fecha',   width: '20'},
+                {name: 'user', text: 'Usuario', width: '20'},
+                {name: 'text', text: 'Texto',   width: '60'}
             ]
         };
     },
