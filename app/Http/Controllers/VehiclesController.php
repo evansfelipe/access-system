@@ -87,7 +87,7 @@ class VehiclesController extends Controller
         $general_information = array_merge($general_information, $veh);
 
         $data = [
-            'id'    => $vehicle->id,
+            'id'     => $vehicle->id,
             'values' => [
                 'general_information' => $general_information,
                 'assign_people'       => $assign_people,

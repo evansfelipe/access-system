@@ -67,7 +67,6 @@ export default {
     },
     data() {
         return {
-            value2: '',
             timer_options: {
                 start: '00:00',
                 step: '00:30',

@@ -17,6 +17,15 @@ export default {
                 country:        !debug ? '' : '',
                 province:       !debug ? '' : '',
                 city:           !debug ? '' : ''
+            },
+            assign_groups: {
+                groups: [{
+                    key:        Date.now(),
+                    name:       !debug ? '' : 'Example group name',
+                    gate_id:    !debug ? '' : 1,
+                    start:      !debug ? '' : '09:00',
+                    end:        !debug ? '' : '17:00'
+                }]
             }
         }
     }

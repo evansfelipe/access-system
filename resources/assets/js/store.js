@@ -284,8 +284,8 @@ export default {
                 activity_id: '',
                 subactivities: [],
                 groups: [],
-                art_company: 'ART Test',
-                art_number: '123456',
+                art_company: '',
+                art_number: '',
                 cards: [{ key: Date.now(), number: '', from: '', until: '' }]
             });
         },
@@ -341,8 +341,38 @@ export default {
                     state.models.person.values.working_information.jobs[pos].cards.splice(pos2, 1);
                 }
             }
-        }
+        },
 
+        /**
+         * Adds a new group to the groups list of the company's model
+         */
+        addGroup: function(state) {
+            state.models.company.values.assign_groups.groups.push({
+                key: Date.now(),
+                name: '',
+                gate_id: '',
+                start: '',
+                end: ''
+            });
+        },
+        /**
+         * Given a group of the groups list of the company's model, updates its values
+         */
+        updateGroup: function(state, {group_key, attribute, value}) {
+            let pos = state.models.company.values.assign_groups.groups.getPositionById(group_key, 'key');
+            let ref = state.models.company.values.assign_groups.groups[pos];
+            if(state.debug) console.log('Updating model: ', 'company', 'state.models.company.values.assign_groups.groups', value);
+            ref[attribute] = value;
+        },
+        /**
+         * Given a group, removes it from the groups list of the company's model
+         */
+        deleteGroup: function(state, group) {
+            let pos = state.models.company.values.assign_groups.groups.indexOf(group);
+            if(pos !== -1) {
+                state.models.company.values.assign_groups.groups.splice(pos, 1);
+            }
+        },
     },
     actions: {
         /**

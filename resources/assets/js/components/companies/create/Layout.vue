@@ -4,11 +4,15 @@
             <tab-item :active="tab === 0" @click.native="tab = 0" :has-errors="step_validated.general_information" icon="fas fa-building">
                 Información general
             </tab-item>
+            <tab-item :active="tab === 1" @click.native="tab = 1" :has-errors="step_validated.general_information" icon="fas fa-universal-access">
+                Asignar grupos
+            </tab-item>
         </ul>
 
         <creation-wrapper   :updating="this.$store.getters.company.updating" :values="values" :route="route" 
                             @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel">
-                <general-information v-show="tab === 0" :values="values.general_information" :errors="general_information_errors"></general-information>
+                <general-information v-show="tab === 0" :values="values.general_information" :errors="general_information_errors" />
+                <assign-groups v-show="tab === 1" :values="values.assign_groups" :errors="assign_groups_errors" :companyname="values.general_information.name" />
         </creation-wrapper>
     </div>
 </template>
@@ -17,6 +21,7 @@
 export default {
     components: {
         'general-information': require('./partials/GeneralInformation'),
+        'assign-groups': require('./partials/AssignGroups/Layout'),
     },
     data: function() {
         return {
@@ -25,6 +30,7 @@ export default {
             errors: [],
             step_validated: {
                 general_information: null,
+                assign_groups: null,
             }
         };
     },
@@ -43,6 +49,9 @@ export default {
         },
         general_information_errors: function() {
             return this.errors['general_information'] ? this.errors['general_information'] : []; 
+        },
+        assign_groups_errors: function() {
+            return this.errors['assign_groups'] ? this.errors['assign_groups'] : []; 
         }
     },
     methods: {

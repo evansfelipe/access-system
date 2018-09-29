@@ -41,8 +41,8 @@
                     <select2 :value="pagination.quantity" @input="value => pagination.quantity = value" :options="options.rows" :clearable="false" size="mini" width="30%"/>
                     filas
                 </div>
-                <div class="offset-4 col-4">
-                    <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" :disabled="advancedsearch">
+                <div class="offset-4 col-4 d-flex justify-content-end">
+                    <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" :disabled="advancedsearch" style="width:14em">
                     <i class="fas fa-search"></i>
                 </div>
             </div>

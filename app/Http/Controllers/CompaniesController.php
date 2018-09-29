@@ -2,7 +2,7 @@
 use Illuminate\Http\Request;
 use App\Http\Requests\SaveCompanyRequest;
 use App\Http\Traits\{ SaveResidencyTrait };
-use App\{Company, Residency};
+use App\{Company, Residency, Group};
 
 class CompaniesController extends Controller
 {
@@ -30,6 +30,15 @@ class CompaniesController extends Controller
             'email' => $request->email
         ]);
         $company->save();
+        // Saves the company's groups
+        if(isset($request->groups)) {
+            foreach ($request->groups as $group) {
+                $group['company_id'] = $company->id;
+                $gp = new Group($group);
+                $gp->save();
+            }
+        }
+
         return response(json_encode(['id' => $company->id]), 200)->header('Content-Type', 'application/json');
     }
 

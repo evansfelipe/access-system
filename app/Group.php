@@ -48,6 +48,21 @@ class Group extends Model
         ];
     }
 
+    public static function getValidationRulesForCompany()
+    {
+        $rules = Group::getValidationRules();
+        $new_rules = [
+            'groups' => [
+                'required',
+                'array'
+            ]
+        ];
+        foreach ($rules as $key => $value) {
+            $new_rules['groups.*.'.$key] = $value;
+        }
+        return $new_rules;
+    }
+
     public function company()
     {
         return $this->belongsTo('\App\Company')->select(['id', 'name']);
@@ -79,18 +94,6 @@ class Group extends Model
     public function toShowArray()
     {
         return [
-            'id'        => $this->id,
-            'name'      => $this->formatedName(),
-            'gate'      => $this->gate->name,
-            'end'       => date('H:i', strtotime($this->end)),
-            'start'     => date('H:i', strtotime($this->start)),
-            'company'   => $this->company ? $this->company->name : '-',
-        ];
-    }
-
-    public function toListArray()
-    {
-        return [
             'id'            => $this->id,
             'name'          => $this->formatedName(),
             'gate'          => $this->gate->name,
@@ -98,5 +101,10 @@ class Group extends Model
             'company'       => $this->company ? $this->company->name : '-',
             'company_id'    => $this->company ? $this->company->id : null,
         ];
+    }
+
+    public function toListArray()
+    {
+        return $this->toShowArray();
     }
 }

@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 use Auth;
-use App\User;
-use App\Company;
-use App\Residency;
+use App\{ User, Company, Residency, Group };
 use Illuminate\Foundation\Http\FormRequest;
 
 class SaveCompanyRequest extends FormRequest
@@ -28,6 +26,7 @@ class SaveCompanyRequest extends FormRequest
     {
         $company_rules = Company::getValidationRules();
         $residency_rules = Residency::getValidationRules();
+        $groups_rules = Group::getValidationRulesForCompany();
 
         if($this->route()->getName() === 'companies.update') {
             if($this->cuit === $this->company->cuit && ($key = array_search('unique:companies', $company_rules['cuit'])) !== false) {
@@ -43,7 +42,8 @@ class SaveCompanyRequest extends FormRequest
 
         return array_merge(
             $company_rules,
-            $residency_rules
+            $residency_rules,
+            $groups_rules
         );
     }
 }

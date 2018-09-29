@@ -107,6 +107,11 @@ class Company extends Model
         return $this->belongsTo('App\Residency');
     }
 
+    public function groups()
+    {
+        return $this->hasMany('App\Group');
+    }
+
     public function toShowArray()
     {
         return [
@@ -121,6 +126,9 @@ class Company extends Model
                 ],
                 $this->residency->toArray(),
                 $this->contactToArray()),
+            'assigned_groups'       => $this->groups->map(function($group){
+                return $group->toListArray();
+            }),
             'assigned_people'       => $this->people()->select('people.id','last_name','name','cuil')->get(),
             'assigned_vehicles'     => $this->vehicles
         ];

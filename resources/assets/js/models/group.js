@@ -2,11 +2,11 @@ export default {
     default: (debug = false) => { 
         return {
             general_information: {
-                company_id: !debug ? '' : '',
-                name:       !debug ? '' : '',
-                gate_id:    !debug ? '' : '',
-                start:      !debug ? '' : '',
-                end:        !debug ? '' : '',
+                name:       !debug ? '' : 'Example group name',
+                company_id: !debug ? '' : 1,
+                gate_id:    !debug ? '' : 1,
+                start:      !debug ? '' : '09:00',
+                end:        !debug ? '' : '17:00'
             },
         }
     }
