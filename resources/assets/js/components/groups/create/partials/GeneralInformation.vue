@@ -14,6 +14,9 @@
                             :value="values.name" @input="(e) => update({name: 'name', value: e.target.value})"
                     >
                 </div>
+                <div v-if="!values.name && name_placeholder" class="col-12">
+                    <small>Mostrando nombre por defecto.</small>
+                </div>
             </form-item>
         </div>
         <div class="form-row">
@@ -42,7 +45,7 @@
                         :picker-options="timer_options">
                     </el-time-select>
                 </div>
-                <div class="col-12" v-if="two_days">
+                <div class="col-12" v-if="different_days">
                     <small>Esta franja comenzará un día y finalizará al siguiente.</small>
                 </div>
             </form-item>
@@ -101,7 +104,7 @@ export default {
                     (gate ? gate.text + ' ' : '') +
                     (this.values.start && this.values.end ? range : '');
         },
-        two_days: function() {
+        different_days: function() {
             return this.values.end && this.values.start && this.values.end < this.values.start;
         }
     },

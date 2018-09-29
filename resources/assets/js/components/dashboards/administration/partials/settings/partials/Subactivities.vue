@@ -35,7 +35,7 @@
                                     <input v-model="values.name" 
                                             type="text" ref="input"
                                             class="md-input" style="width: 100%; padding: 0"
-                                            placeholder="Ingrese nuevo nombre de la subactividad"
+                                            placeholder="Nombre"
                                     >
                                 </div>
                             </form-item>

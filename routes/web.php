@@ -83,7 +83,7 @@ Route::middleware(['auth','user.administration'])->group(function() {
     Route::prefix('groups')->group(function() {
         Route::get('/updated-at',       'ListsController@groupsUpdatedAt')->name('groups.updated-at');
         Route::get('/list',             'ListsController@groupsList')->name('groups.list');
-    }); Route::resource('/groups',  'GroupsController')->only(['store', 'show', 'edit', 'update', 'destroy']);
+    }); Route::resource('/groups',      'GroupsController')->only(['store', 'show', 'edit', 'update', 'destroy']);
     
     // Gates routes
     Route::prefix('gates')->group(function() {
@@ -93,11 +93,13 @@ Route::middleware(['auth','user.administration'])->group(function() {
 
     // Settings Routes
     Route::prefix('settings')->group(function() {
-        Route::post('new-activity',                 'SettingsController@newActivity')->name('settings.new-activity');
-        Route::put('update-activity/{activity}',    'SettingsController@updateActivity')->name('settings.update-activity');
-        Route::post('new-subactivity',   'SettingsController@newSubactivity')->name('settings.new-subactivity');
-        Route::put('update-subactivity/{subactivity}',    'SettingsController@updateSubactivity')->name('settings.update-subactivity');
-        Route::post('new-vehicle-type',                 'SettingsController@newVehicleType')->name('settings.new-vehicle-type');
+        Route::post('new-gate',                             'SettingsController@newGate')->name('settings.new-gate');
+        Route::put('update-gate/{gate}',                    'SettingsController@updateGate')->name('settings.update-gate');
+        Route::post('new-activity',                         'SettingsController@newActivity')->name('settings.new-activity');
+        Route::put('update-activity/{activity}',            'SettingsController@updateActivity')->name('settings.update-activity');
+        Route::post('new-subactivity',                      'SettingsController@newSubactivity')->name('settings.new-subactivity');
+        Route::put('update-subactivity/{subactivity}',      'SettingsController@updateSubactivity')->name('settings.update-subactivity');
+        Route::post('new-vehicle-type',                     'SettingsController@newVehicleType')->name('settings.new-vehicle-type');
         Route::put('update-vehicle-type/{vehicle_type}',    'SettingsController@updateVehicleType')->name('settings.update-vehicle-type');
     });
 

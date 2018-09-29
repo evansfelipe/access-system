@@ -1,33 +1,11 @@
 <style lang="scss" scoped>
     i { cursor: pointer }
-
-    table {
-        width: 100%;
-        td { vertical-align: baseline }
-        & > tbody {
-            & > tr {
-                & > td.content {
-                    width: 85%;
-                    text-align: left;
-                }
-                & > td.option {
-                    text-align: right;
-                    color: transparent;
-                    &.active { color: black; }
-                }
-
-                &:hover > td.option { color: black; }
-            }
-        }
-        & > tfoot > tr > td { padding-top: 10px }
-    }
-
     div.list-item {
         position: relative;
         padding-left: 8px;
         & > div.inputs {
             display: inline-block;
-            width: 80%;
+            width: 70%;
         }
 
         & > div.buttons {
@@ -92,7 +70,7 @@
             </div>
         </template>
         <h6 v-else class="text-center">
-            No hay datos
+            No se encontraron resultados
         </h6>
         <div v-if="!loading" class="list-item">
             <div class="inputs">

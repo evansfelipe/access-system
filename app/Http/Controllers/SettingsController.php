@@ -1,10 +1,41 @@
 <?php namespace App\Http\Controllers;
 use Validator;
 use Illuminate\Http\Request;
-use App\{ Activity, Subactivity, VehicleType };
+use App\{ Gate, Activity, Subactivity, VehicleType };
 
 class SettingsController extends Controller
 {
+    /**
+     * Adds a new gate to the system.
+     */
+    public function newGate(Request $request)
+    {
+        Validator::make($request->all(), Gate::getValidationRules())->validate();
+        $gate = new Gate(['name' => $request->name, 'enabled' => $request->enabled ?? false]);
+        $gate->save();
+        return response(json_encode($gate->toListArray()), 200)->header('Content-Type', 'application/json');
+    }
+
+    /**
+     * Updates an existing gate from the system.
+     */
+    public function updateGate(Request $request, Gate $gate)
+    {
+        // Updates the object if at least one value is different to the current ones.
+        if(($request->name !== $gate->name) || ($request->enabled !== $gate->enabled)) {
+            $validation_rules = Gate::getValidationRules();
+            // If the name hadn't change, removes the unique rule so the validation won't fail.
+            if($request->name === $gate->name && ($key = array_search('unique:gates,name', $validation_rules['name'])) !== false) {
+                unset($validation_rules['name'][$key]);
+            }
+            Validator::make($request->all(), $validation_rules)->validate();
+            $gate->name     = $request->name;
+            $gate->enabled  = $request->enabled ?? false;
+            $gate->save();
+        }
+        return response(json_encode($gate->toListArray()), 200)->header('Content-Type', 'application/json');
+    }
+
     /**
      * Adds a new activity to the system.
      */

@@ -29,7 +29,7 @@
                                     <input  v-model="values.type" 
                                             type="text" ref="input"
                                             class="md-input" style="width: 100%; padding: 0"
-                                            placeholder="Nombre"
+                                            placeholder="Tipo"
                                     >
                                 </div>
                                 <div class="col-5">

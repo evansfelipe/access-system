@@ -6,15 +6,15 @@
     <div class="row">
         <!-- Left Panel -->
         <div class="col-12 col-xl-5 mb-3">
-            <label>Valores por defecto:</label>
+            <label>Administrar acceso:</label>
             <div class="accordion" id="leftAccordion">
-                <!-- Required documentation for access -->
-                <accordion-item title="Documentación para el acceso" accordion-id="leftAccordion" active>
-                    <required-documentation-settings/>
+                <!-- Gates -->
+                <accordion-item title="Entradas" accordion-id="leftAccordion" active>
+                    <gates-settings :loading="gates.updating" :gates="gates.list"/>
                 </accordion-item>
-                <!--  -->
-                <accordion-item title="Another menú" accordion-id="leftAccordion">
-                    Example
+                <!-- Required documentation for access -->
+                <accordion-item title="Mínima documentación requerida por defecto" accordion-id="leftAccordion">
+                    <required-documentation-settings/>
                 </accordion-item>
             </div>
         </div>
@@ -43,32 +43,40 @@
 export default {
     components: {
         'accordion-item':                   require('./partials/AccordionItem'),
+        'gates-settings':                   require('./partials/Gates.vue'),
         'activities-settings':              require('./partials/Activities.vue'),
         'subactivities-settings':           require('./partials/Subactivities.vue'),
         'vehicle-types-settings':           require('./partials/VehicleTypes.vue'),
         'required-documentation-settings':  require('./partials/RequiredDocumentation.vue'),
     },
     mounted() {
+        this.$store.dispatch('fetchList', 'gates');
         this.$store.dispatch('fetchList', 'activities');
         this.$store.dispatch('fetchList', 'vehicle_types');
         this.$store.dispatch('fetchList', 'subactivities');
     },
     computed: {
+        gates: function() {
+            return {
+                list: this.$store.getters.gates.list.concat().sort((a, b) => a.name.matches(b.name)), // As sort mutates the array, we use cocant to clone it.
+                updating: this.$store.getters.gates.updating
+            };
+        },
         activities: function() {
             return {
-                list: this.$store.getters.activities.list.concat().sort((a, b) => a.name.localeCompare(b.name)), // As sort mutates the array, we use cocant to clone it.
+                list: this.$store.getters.activities.list.concat().sort((a, b) => a.name.matches(b.name)), // As sort mutates the array, we use cocant to clone it.
                 updating: this.$store.getters.activities.updating
             };
         },
         subactivities: function() {
             return {
-                list: this.$store.getters.subactivities.list.concat().sort((a, b) => a.name.localeCompare(b.name)), // As sort mutates the array, we use cocant to clone it.
+                list: this.$store.getters.subactivities.list.concat().sort((a, b) => a.name.matches(b.name)), // As sort mutates the array, we use cocant to clone it.
                 updating: this.$store.getters.subactivities.updating
             };
         },
         vehicle_types: function() {
             return {
-                list: this.$store.getters.vehicle_types.list.concat().sort((a, b) => a.type.localeCompare(b.type)), // As sort mutates the array, we use cocant to clone it.
+                list: this.$store.getters.vehicle_types.list.concat().sort((a, b) => a.type.matches(b.type)), // As sort mutates the array, we use cocant to clone it.
                 updating: this.$store.getters.vehicle_types.updating,
             }
         }

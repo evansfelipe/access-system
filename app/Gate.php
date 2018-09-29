@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gate extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'enabled'];
     
     /**
      * Array with the length of each string column of the database associated with this model.
@@ -22,6 +22,25 @@ class Gate extends Model
     public static function getValidationRules()
     {
         return [
+            'name' => [
+                'required',
+                'unique:gates,name',
+                'string',
+                'max:'.Gate::LENGTHS['name']['max'],
+            ],
+            'enabled' => [
+                'nullable',
+                'boolean'
+            ]
+        ];
+    }
+
+    public function toListArray()
+    {
+        return [
+            'id'        => $this->id,
+            'name'      => $this->name,
+            'enabled'   => $this->enabled
         ];
     }
 }

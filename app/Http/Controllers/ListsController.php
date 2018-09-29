@@ -230,7 +230,9 @@ class ListsController extends Controller
      */
     public function gatesList()
     {
-        $gates = Gate::all(['id','name']);
+        $gates = Gate::all()->map(function($gate) {
+            return $gate->toListArray();
+        });
         return response(json_encode($gates))->header('Content-Type', 'application/json');        
     }
 }

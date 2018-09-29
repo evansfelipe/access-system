@@ -22,6 +22,11 @@ class Group extends Model
     public static function getValidationRules()
     {
         return [
+            'company_id' => [
+                'nullable',
+                'integer',
+                'exists:companies,id'
+            ],
             'name' => [
                 'nullable',
                 'string',
@@ -39,56 +44,59 @@ class Group extends Model
             'end' => [
                 'required',
                 "regex:/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/", 
-            ],
-            'company_id' => [
-                'nullable',
-                'integer',
-                'exists:companies,id'
             ]
         ];
     }
 
     public function company()
     {
-        return $this->belongsTo('\App\Company');
+        return $this->belongsTo('\App\Company')->select(['id', 'name']);
     }
 
     public function gate()
     {
-        return $this->belongsTo('\App\Gate');
+        return $this->belongsTo('\App\Gate')->select(['id', 'name']);
+    }
+
+    public function rangeToString()
+    {
+        $start_hour = date('H:i', strtotime($this->start));
+        $end_hour   = date('H:i', strtotime($this->end));
+        return $start_hour.' - '.$end_hour;
+    }
+
+    public function formatedName()
+    {
+        $ret = $this->name ?? '';;
+        if($ret === '') {
+            $company_name   = $this->company ? $this->company->name.' -' : '';
+            // Composes the name
+            $ret = $company_name.' '.$this->gate->name.' ('.$this->rangeToString().')';
+        }
+        return $ret;
     }
 
     public function toShowArray()
     {
-        $name = $this->name ?? (
-                ($this->company ? $this->company->name.' - ' : '') .
-                ($this->gate ? $this->gate->name.' ' : '') .
-                ('('.date('H:i', strtotime($this->start)) . ' - ' . date('H:i', strtotime($this->end)).')')
-        );
         return [
             'id'        => $this->id,
-            'name'      => $name,
-            'company'   => $this->company ? $this->company->name : '-',
+            'name'      => $this->formatedName(),
             'gate'      => $this->gate->name,
+            'end'       => date('H:i', strtotime($this->end)),
             'start'     => date('H:i', strtotime($this->start)),
-            'end'       => date('H:i', strtotime($this->end))
+            'company'   => $this->company ? $this->company->name : '-',
         ];
     }
 
     public function toListArray()
     {
-        $name = $this->name ?? (
-            ($this->company ? $this->company->name.' - ' : '') .
-            ($this->gate ? $this->gate->name.' ' : '') .
-            ('('.date('H:i', strtotime($this->start)) . ' - ' . date('H:i', strtotime($this->end)).')')
-        );
         return [
-            'id'        => $this->id,
-            'name'      => $name,
-            'company_id'=> $this->company ? $this->company->id : null,
-            'company'   => $this->company ? $this->company->name : '-',
-            'gate'      => $this->gate->name,
-            'range'     => date('H:i', strtotime($this->start)) . ' - ' . date('H:i', strtotime($this->end)) . ($this->end < $this->start ? ' (+1d)' : '')
+            'id'            => $this->id,
+            'name'          => $this->formatedName(),
+            'gate'          => $this->gate->name,
+            'range'         => $this->rangeToString().($this->end < $this->start ? ' (+1d)' : ''),
+            'company'       => $this->company ? $this->company->name : '-',
+            'company_id'    => $this->company ? $this->company->id : null,
         ];
     }
 }

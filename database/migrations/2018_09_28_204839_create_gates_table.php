@@ -15,7 +15,8 @@ class CreateGatesTable extends Migration
     {
         Schema::create('gates', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', Gate::LENGTHS['name']['max'])->required();
+            $table->string('name', Gate::LENGTHS['name']['max'])->required()->unique();
+            $table->boolean('enabled')->default(false);
             $table->timestamps();
         });
     }
