@@ -73,6 +73,11 @@ class Group extends Model
         return $this->belongsTo('\App\Gate')->select(['id', 'name']);
     }
 
+    public function jobs()
+    {
+        return $this->belongsToMany('App\PersonCompany','person_job_groups','group_id','job_id');
+    }
+
     public function rangeToString()
     {
         $start_hour = date('H:i', strtotime($this->start));
@@ -106,5 +111,11 @@ class Group extends Model
     public function toListArray()
     {
         return $this->toShowArray();
+    }
+
+    public function deleteCascade()
+    {
+        $this->jobs()->detach();
+        $this->delete();
     }
 }

@@ -94,10 +94,4 @@ trait Helpers {
         return 'data:' . $mime . ';base64,' . base64_encode($image);
     }
 
-
-    public static function storeGroup()
-    {
-        
-    }
-
 }

@@ -348,7 +348,7 @@ export default {
          */
         addGroup: function(state) {
             state.models.company.values.assign_groups.groups.push({
-                key: Date.now(),
+                key: 'T' + Date.now(),
                 name: '',
                 gate_id: '',
                 start: '',

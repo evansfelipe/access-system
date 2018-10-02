@@ -19,8 +19,8 @@ export default {
                 city:           !debug ? '' : ''
             },
             assign_groups: {
-                groups: [{
-                    key:        Date.now(),
+                groups: !debug ? [] : [{
+                    key:        'T' + Date.now(),
                     name:       !debug ? '' : 'Example group name',
                     gate_id:    !debug ? '' : 1,
                     start:      !debug ? '' : '09:00',

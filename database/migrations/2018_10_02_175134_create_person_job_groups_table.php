@@ -18,6 +18,8 @@ class CreatePersonJobGroupsTable extends Migration
             $table->integer('job_id')->unsigned()->required();
             $table->integer('group_id')->unsigned()->required();
             $table->timestamps();
+
+            // $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
         });
     }
 
