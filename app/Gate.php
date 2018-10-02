@@ -29,7 +29,7 @@ class Gate extends Model
                 'max:'.Gate::LENGTHS['name']['max'],
             ],
             'enabled' => [
-                'nullable',
+                'required',
                 'boolean'
             ]
         ];

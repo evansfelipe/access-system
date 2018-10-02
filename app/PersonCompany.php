@@ -6,15 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class PersonCompany extends Pivot
 {
     protected $table = 'company_people';
-    protected $fillable = [
-        'company_id',
-        'activity_id',
-        'subactivities',
-        'art_company',
-        'art_number',
-        'groups'
-    ];
-
+    protected $fillable = ['company_id', 'activity_id', 'subactivities', 'art_company', 'art_number', 'groups'];
 
     public const LENGTHS = [
         'art_company' => ['max' => 50],
@@ -49,7 +41,7 @@ class PersonCompany extends Pivot
             ],
             'jobs.*.groups.*' => [
                 'integer',
-                // 'exists:groups,id' TODO: Create groups table
+                'exists:groups,id'
             ],
             'jobs.*.art_company' => [
                 'required',
@@ -96,5 +88,10 @@ class PersonCompany extends Pivot
     public function cards()
     {
         return $this->hasMany('App\Card', 'person_company_id');
+    }
+
+    public function groups()
+    {
+        return $this->belongsToMany('App\Group', 'person_job_groups', 'job_id', 'group_id');
     }
 }

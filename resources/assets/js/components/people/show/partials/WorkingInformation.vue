@@ -10,8 +10,19 @@
                         </template>
                         <span style="color: grey">{{ job.activity_name }}</span>
                     </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <span v-for="(subactivity, skey) in job.subactivities" :key="skey" class="badge badge-ligth mr-1">
                         {{ subactivity }}
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <span v-for="(group, gkey) in job.groups" :key="gkey" class="badge badge-primary mr-1">
+                        {{ group.name }}
                     </span>
                     <hr>
                 </div>

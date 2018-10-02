@@ -3,7 +3,7 @@ use Illuminate\Support\Facades\Storage;
 use Auth;
 use Illuminate\Http\Request;
 use App\Http\Requests\{ SavePersonRequest };
-use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle, PersonDocument, Observation};
+use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle, PersonJobGroup, PersonDocument, Observation};
 use PDF;
 
 class PeopleController extends Controller
@@ -118,6 +118,11 @@ class PeopleController extends Controller
                     $card->from = $c['from'];
                     $card->until = $c['until'];
                     $card->save();
+                }
+
+                foreach($job['groups'] as $group) {
+                    $job_group = new PersonJobGroup(['job_id' => $person_company->id, 'group_id' => $group]);
+                    $job_group->save();
                 }
 
                 // $file_name = $job['key'].'-company_note';

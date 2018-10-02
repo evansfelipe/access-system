@@ -2,7 +2,7 @@
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-use App\{ Card, Residency, Activity, Vehicle };
+use App\{ Card, Residency, Activity, Vehicle, Group, PersonJobGroup };
 
 class Person extends Model
 {
@@ -140,33 +140,39 @@ class Person extends Model
 
     public function jobs()
     {
-        return  DB::table('company_people')
-                    ->where('person_id', $this->id)
-                    ->leftJoin('companies', 'company_people.company_id', '=', 'companies.id')
-                    ->join('activities', 'company_people.activity_id', '=', 'activities.id')
-                    ->select(
-                        'company_people.id              as id',
-                        'company_people.activity_id     as activity_id',
-                        'company_people.art_company     as art_company',
-                        'company_people.art_number      as art_number',
-                        'company_people.subactivities   as subactivities',
-                        'companies.id                   as company_id',
-                        'companies.business_name        as company_name',
-                        'companies.area                 as company_area',
-                        'companies.cuit                 as company_cuit',
-                        'companies.expiration           as company_expiration',
-                        'activities.name                as activity_name'               
-                    )
-                    ->get()
-                    ->map(function($job) {
-                        $job->company_name  = $job->company_name ?? 'Personal';
-                        $job->company_expiration = \Helpers::timestampToDate($job->company_expiration);
-                        $job->subactivities = json_decode($job->subactivities);
-                        $job->cards         = Card::where('person_company_id', $job->id)
-                                                    ->select('id', 'number', 'from', 'until', 'active')
-                                                    ->get();
-                        return $job;
-                    });
+        return \App\PersonCompany::hydrate(
+                        DB::table('company_people')
+                        ->where('person_id', $this->id)
+                        ->leftJoin('companies', 'company_people.company_id', '=', 'companies.id')
+                        ->join('activities', 'company_people.activity_id', '=', 'activities.id')
+                        ->select(
+                            'company_people.id              as id',
+                            'company_people.activity_id     as activity_id',
+                            'company_people.art_company     as art_company',
+                            'company_people.art_number      as art_number',
+                            'company_people.subactivities   as subactivities',
+                            'companies.id                   as company_id',
+                            'companies.business_name        as company_name',
+                            'companies.area                 as company_area',
+                            'companies.cuit                 as company_cuit',
+                            'companies.expiration           as company_expiration',
+                            'activities.name                as activity_name'               
+                        )
+                        ->get()->toArray()
+                )
+                ->map(function($job) {
+                    $job->company_name  = $job->company_name ?? 'Personal';
+                    $job->company_expiration = \Helpers::timestampToDate($job->company_expiration);
+                    $job->subactivities = json_decode($job->subactivities);
+                    $job->cards         = $job->cards()->select('id', 'number', 'from', 'until', 'active')->get();
+                    $job->groups        = $job->groups()->get()->map(function($group) {
+                                            return [
+                                                'id'    => $group->id,
+                                                'name'  => $group->formatedName()
+                                            ];
+                                        });
+                    return $job;
+                });
     }
 
     /**
