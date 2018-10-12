@@ -1,7 +1,8 @@
 const debug = true;
 
 class List {
-    constructor() {
+    constructor(base_path) {
+        this.base_path = base_path;
         this.timestamp = null;
         this.updating  = false;
         this.list      = [];
@@ -22,6 +23,34 @@ class List {
         if(timestamp) {
             this.timestamp = timestamp;
         }
+    }
+
+    asOptions(attr = 'name') {
+        return this.list.map(item => {
+            return {
+                id: item.id ? item.id : item[attr],
+                text: item[attr],
+            };
+        });
+    }
+
+    forParent(attr, value, strict = true) {
+        let new_list = new List();
+        new_list.list = this.list.filter(item => {
+            let ret = item[attr] === value;
+            if(!strict) {
+                ret = ret || item[attr] === null;
+            }
+            return ret;
+        });
+        return new_list;
+    }
+}
+
+class StaticList extends List {
+    constructor(list) {
+        super('');
+        this.list = list;
     }
 }
 
@@ -61,22 +90,39 @@ export default {
             sidebar_opened: true
         },
         lists: {
-            people:         new List(),
-            companies:      new List(),
-            vehicles:       new List(),
-            containers:     new List(),
-            activities:     new List(),
-            subactivities:  new List(),
-            vehicle_types:  new List(),
-            groups:         new List(),
-            gates:          new List(),
+            gates:          new List('gates'),
+            groups:         new List('groups'),
+            people:         new List('people'),
+            vehicles:       new List('vehicles'),
+            companies:      new List('companies'),
+            activities:     new List('activities'),
+            // containers:     new List('containers'),
+            subactivities:  new List('subactivities'),
+            vehicle_types:  new List('vehicle_types'),
+            // Locations lists
+            homelands:      new List('app/locations/countries'),
+        },
+        static_lists: {
+            risks:          new StaticList([{id: '1', name: 'Nivel 1'}, {id: '2', name: 'Nivel 2'}, {id: '3', name: 'Nivel 3'}]),
+            sexes:          new StaticList([{id: 'F', name: 'Femenino'}, {id: 'M', name: 'Masculino'}, {id: 'O', name: 'Otro'}]),
+            document_types: new StaticList([{id: "0", name: 'DNI'}, {id: "1", name: 'Pasaporte'}]),
+            blood_types:    new StaticList([
+                                                {id: "0-", text: "0-"},
+                                                {id: "0+", text: "0+"},
+                                                {id: "A-", text: "A-"},
+                                                {id: "A+", text: "A+"},
+                                                {id: "B-", text: "B-"},
+                                                {id: "B+", text: "B+"},
+                                                {id: "AB-", text: "AB-"},
+                                                {id: "AB+", text: "AB+"},   
+                                            ]),
         },
         models: {
-            person:    new Model('person', 'people'),
-            company:   new Model('company', 'companies'),
-            vehicle:   new Model('vehicle', 'vehicles'),
-            container: new Model('container', 'containers'),
-            group:     new Model('group', 'groups'),
+            group:     new Model('group',       'groups'),
+            person:    new Model('person',      'people'),
+            vehicle:   new Model('vehicle',     'vehicles'),
+            company:   new Model('company',     'companies'),
+            container: new Model('container',   'containers'),
         }
     },
     getters: {
@@ -122,6 +168,15 @@ export default {
         gates: function({lists}) {
             return lists.gates;
         },
+        homelands: function({lists}) {
+            return lists.homelands;
+        },
+        /**
+         * Static lists
+         */
+        static_lists: function({static_lists}) {
+            return static_lists;
+        },
         /**
          * Models
          */
@@ -142,7 +197,10 @@ export default {
         }
     },
     mutations: {
-
+        /**
+         * Given a list and an item, if the list doesn't contains and item with the same id of the new item,
+         * adds the new item to the list. Otherwise, updates the existing item with the new item data.
+         */
         addItemToList: function({debug, lists}, {list, item, timestamp}) {
             if(debug) console.log('Adding to', list, 'the item', item, 'with timestamp', timestamp);
             lists[list].addItem(item, timestamp);
@@ -161,14 +219,12 @@ export default {
             state.ui.sidebar_opened = value;
         },
         /**
-         * Given a type and a message, creates and adds a new notification with an unique id
-         * to the array of notifications.
+         * Given a type and a message, creates and adds a new notification with an unique id to the array of notifications.
          */
         addNotification: function(state, notification) {
             if(state.debug) console.log('Adding notification: ', notification);
             state.ui.notifications.list.push(notification);
-            // Increases the id for the next notification. Done here because
-            // it can't be done in the 'addNotification' action.
+            // Increases the id for the next notification. Done here because it can't be done in the 'addNotification' action.
             state.ui.notifications.next_id++;
         },
         /**
@@ -182,6 +238,9 @@ export default {
                 state.ui.notifications.list.splice(index, 1);
             }
         },
+        /**
+         * Changes the 'updating' status of a given list to the given value.
+         */
         updatingList: function(state, {what, value}) {
             state.lists[what].updating = value;
         },
@@ -205,7 +264,7 @@ export default {
             }
         },
         /**
-         * Given a model name, resets this model to the default value.
+         * Given a model name, resets this model to the default values.
          */
         resetModel: function(state, which) {
             if(state.debug) console.log('Restarting model:', which);
@@ -376,7 +435,7 @@ export default {
     },
     actions: {
         /**
-         * UI actions.
+         * Given a type and a message, adds a new notification with this data.
          */
         addNotification: function({ commit, state }, { type, message }) {
             let id = state.ui.notifications.next_id;
@@ -384,17 +443,18 @@ export default {
             setTimeout(() => commit('removeNotification', id), 5000);
         },
         /**
-         * Lists actions.
+         * Given a list name, validates if the server's data associated with it has changed.
+         * If so, then updates the list with the new data, otherwise, leaves the list unchanged.
          */
         fetchList: function({ commit, state }, what) {
             if(state.debug) console.log('Validating timestamps:', what);
             commit(`updatingList`, { what, value: true });
-            axios.get(`/${what}/updated-at`)
+            axios.get(`/${state.lists[what].base_path}/updated-at`)
             .then(response => {
                 let new_timestamp = new Date(response.data.updated_at);
                 if(state.lists[what].timestamp === null || state.lists[what].timestamp < new_timestamp) {
                     if(state.debug) console.log('Fetching: ', what);
-                    axios.get(`/${what}/list`)
+                    axios.get(`/${state.lists[what].base_path}/list`)
                     .then(response => {
                         if(state.debug) console.log('Fetch success: ', what);
                         commit(`set`, {what, data: response.data, timestamp: new_timestamp});
@@ -414,7 +474,7 @@ export default {
             });
         },
         /**
-         * Models actions.
+         * Given a model name and an ID, gets the data associated to this combination from the server.
          */
         fetchModel: function({ getters, commit, state }, { which, id }) {
             if(state.debug) console.log('Fetching', which, 'id', id);

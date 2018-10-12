@@ -115,7 +115,7 @@
                     </div>
                 </div>
                 <!-- Containers -->
-                <div class="sidebar-group">
+                <!-- <div class="sidebar-group">
                     <a class="btn-sidebar sidebar-toggle" @click="group_active.containers = !group_active.containers">
                         <i class="fas centered fa-boxes fa-lg"></i> Contenedores
                         <i :class="'toggle-icon fas centered fa-caret-' + (group_active.containers ? 'up' : 'down')"></i>
@@ -127,7 +127,7 @@
                             <i v-if="$store.getters.container.modified" class="fas fa-exclamation centered"></i>
                         </router-link>
                     </div>
-                </div>
+                </div> -->
                 <!-- Groups -->
                 <div class="sidebar-group">
                     <a class="btn-sidebar sidebar-toggle" @click="group_active.groups = !group_active.groups">
@@ -140,17 +140,6 @@
                             {{ this.$store.getters.groups.editing ? 'Editar' : 'Crear' }}
                             <i v-if="$store.getters.groups.modified" class="fas fa-exclamation centered"></i>
                         </router-link>
-                    </div>
-                </div>
-                <hr>
-                <!-- Expiration -->
-                <div class="sidebar-group">
-                    <a class="btn-sidebar sidebar-toggle" @click="group_active.expiration = !group_active.expiration">
-                        <i class="fas centered fa-clock fa-lg"></i> Vencimientos
-                        <i :class="'toggle-icon fas centered fa-caret-' + (group_active.expiration ? 'up' : 'down')"></i>
-                    </a>
-                    <div class="items" v-if="group_active.expiration">
-                        <router-link to="/bar" class="btn-sidebar">Go to Bar</router-link>
                     </div>
                 </div>
                 <hr>

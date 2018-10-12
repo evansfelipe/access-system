@@ -63,11 +63,17 @@ class Group extends Model
         return $new_rules;
     }
 
+    /**
+     * The company that this groups belongs to. It may be null if the group doesn't belongs to any company.
+     */
     public function company()
     {
         return $this->belongsTo('\App\Company')->select(['id', 'name']);
     }
 
+    /**
+     * The gate that this group manages.
+     */
     public function gate()
     {
         return $this->belongsTo('\App\Gate')->select(['id', 'name']);

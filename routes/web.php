@@ -24,6 +24,10 @@ Route::middleware(['auth'])->prefix('app')->group(function() {
     // Locations routes.
     Route::prefix('locations')->group(function() {
         Route::get('/countries',                'LocationsController@countries')->name('locations.countries');
+
+        Route::get('/countries/updated-at',     'LocationsController@countriesUpdatedAt')->name('locations.countries.updated-at');
+        Route::get('/countries/list',           'LocationsController@countries')->name('locations.countries');
+
         Route::get('/provinces/{country_id?}',  'LocationsController@provinces')->name('locations.provinces');
         Route::get('/cities/{province_id?}',    'LocationsController@cities')->name('locations.cities');
     });
@@ -47,12 +51,14 @@ Route::middleware(['auth','user.administration'])->group(function() {
     Route::prefix('companies')->group(function() {
         Route::get('/updated-at',       'ListsController@companiesUpdatedAt')->name('companies.updated-at');
         Route::get('/list',             'ListsController@companiesList')->name('companies.list');
+        Route::get('/id-search',        'ListsController@companiesIdSearch')->name('companies.id-search');
     }); Route::resource('/companies',   'CompaniesController')->only(['store', 'show', 'edit', 'update', 'destroy']);
 
     // Vehicles routes
     Route::prefix('vehicles')->group(function() {
         Route::get('/updated-at',       'ListsController@vehiclesUpdatedAt')->name('vehicles.updated-at');
         Route::get('/list',             'ListsController@vehiclesList')->name('vehicles.list');
+        Route::get('/id-search',        'ListsController@vehiclesIdSearch')->name('vehicles.id-search');
     }); Route::resource('/vehicles',    'VehiclesController')->only(['store', 'show', 'edit', 'update', 'destroy']);
 
     // Containers routes

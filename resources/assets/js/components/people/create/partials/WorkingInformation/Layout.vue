@@ -24,7 +24,7 @@
 
 <template>
     <div>
-        <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.activities.updating || this.$store.getters.subactivities.updating || this.$store.getters.groups.updating"/>
+        <loading-cover v-if="updating"/>
         <template v-else>
             <transition-group name="job" tag="div">
                 <div class="grey-border mb-2" v-for="job in values.jobs" :key="job.key">
@@ -36,10 +36,8 @@
                     <div class="form-row">
                         <div class="col-12">
                             <!-- Company, Activity & Subactivities -->
-                            <job-data   :job="job" 
-                                        :companies="companies" :activities="activities" :subactivities="subactivities" :groups="groups"
-                                        :errors="jobs_errors[job.key] || []"
-                                        @change="({attribute, value}) => editJob(job, attribute, value)"
+                            <job-data   :job="job"  :companies="companies" :activities="activities"
+                                        :errors="jobs_errors[job.key] || []" @change="({attribute, value}) => editJob(job, attribute, value)"
                             />
                         </div>
                         <div class="col-12">
@@ -91,23 +89,24 @@ export default {
         }
     },
     beforeMount() {
-        this.$store.dispatch('fetchList','companies');
-        this.$store.dispatch('fetchList','activities');
-        this.$store.dispatch('fetchList','subactivities');
-        this.$store.dispatch('fetchList','groups');
+        this.$store.dispatch('fetchList', 'companies');
+        this.$store.dispatch('fetchList', 'activities');
+        // Used on childs. Called here so it is not fetched once for every added child.
+        this.$store.dispatch('fetchList', 'groups');
+        this.$store.dispatch('fetchList', 'subactivities');
     },
     computed: {
+        updating: function() {
+            return  this.$store.getters.groups.updating ||
+                    this.$store.getters.companies.updating ||
+                    this.$store.getters.activities.updating ||
+                    this.$store.getters.subactivities.updating;
+        },
         companies: function() {
-            return this.$store.getters.companies.list.map(c => { return { id: c.id, text: c.name }});
+            return this.$store.getters.companies.asOptions();
         },
         activities: function() {
-            return this.$store.getters.activities.list.map(a => { return { id: a.id, text: a.name }});
-        },
-        subactivities: function() {
-            return this.$store.getters.subactivities.list;
-        },
-        groups: function() {
-            return this.$store.getters.groups.list.map(g => { return { id: g.id, text: g.name, company_id: g.company_id }});;
+            return this.$store.getters.activities.asOptions();
         }
     },
     methods: {

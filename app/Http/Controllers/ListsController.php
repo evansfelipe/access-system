@@ -1,10 +1,6 @@
-<?php
-
-namespace App\Http\Controllers;
-
+<?php namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-
-use App\{ Person, Company, Vehicle, Container, Activity, Subactivity, VehicleType, Group, Gate };
+use App\{ ModelTimestamp, Person, Company, Vehicle, Container, Activity, Subactivity, VehicleType, Group, Gate, RiskLevel };
 
 class ListsController extends Controller
 {
@@ -15,9 +11,8 @@ class ListsController extends Controller
      */
     public function peopleUpdatedAt()
     {
-        // Doing this way prevents Laravel to call toArray function, since the result of the query is a Collection.
-        $person = Person::select('updated_at')->orderBy('updated_at','desc')->first();
-        return $person ? $person->updated_at : null; 
+        $mt = ModelTimestamp::select('last')->where('model', Person::class)->first();
+        return $mt ? $mt->last : null;
     }
 
     /**
@@ -50,7 +45,8 @@ class ListsController extends Controller
      */
     public function companiesUpdatedAt()
     {
-        return Company::select(['updated_at'])->orderBy('updated_at','desc')->first();        
+        $mt = ModelTimestamp::select('last')->where('model', Company::class)->first();
+        return $mt ? $mt->last : null;
     }
 
     /**
@@ -65,14 +61,57 @@ class ListsController extends Controller
     }
 
     /**
+     * Returns an array with the id of each company that matches the filter conditions.
+     */
+    public function companiesIdSearch(Request $request)
+    {
+        $companies = Company::select('id');
+        // Business name
+        $business_name = $request->business_name;
+        $companies->when($business_name, function($query, $business_name) {
+            return $query->where('business_name', 'like', '%'.$business_name.'%');
+        });
+        // Name
+        $name = $request->name;
+        $companies->when($name, function($query, $name) {
+            return $query->where('name', 'like', '%'.$name.'%');
+        });
+        // Area
+        $area = $request->area;
+        $companies->when($area, function($query, $area) {
+            return $query->where('area', 'like', '%'.$area.'%');
+        });
+        // CUIT
+        $cuit = $request->cuit;
+        $companies->when($cuit, function($query, $cuit) {
+            return $query->where('cuit', 'like', '%'.$cuit.'%');
+        });
+        // Expiration
+        if(isset($request->expiration_from) && isset($request->expiration_until)) {
+            $companies->whereBetween('expiration', [$request->expiration_from, $request->expiration_until]);
+        }
+        else {
+            $expiration_from = $request->expiration_from;
+            $companies->when($expiration_from, function($query, $expiration_from) {
+                return $query->where('expiration', '>=', $expiration_from);
+            });
+            $expiration_until = $request->expiration_until;
+            $companies->when($expiration_until, function($query, $expiration_until) {
+                return $query->where('expiration', '<=', $expiration_until);
+            });
+        }
+        return response(json_encode($companies->get()->pluck('id')))->header('Content-Type', 'application/json');        
+    }
+
+    /**
      * Returns the date of the last update on the vehicles
      * 
      * @return Timestamp
      */
     public function vehiclesUpdatedAt()
     {
-        $vehicle = Vehicle::select(['updated_at'])->orderBy('updated_at','desc')->first();
-        return $vehicle? $vehicle->updated_at : null;        
+        $mt = ModelTimestamp::select('last')->where('model', Vehicle::class)->first();
+        return $mt ? $mt->last : null;     
     }
 
     /**
@@ -97,6 +136,55 @@ class ListsController extends Controller
             ];
         });
         return response(json_encode($vehicles))->header('Content-Type', 'application/json');        
+    }
+
+    /**
+     * Returns an array with the id of each vehicle that matches the filter conditions.
+     */
+    public function vehiclesIdSearch(Request $request)
+    {
+        $vehicles = Vehicle::select('id');
+        // Plate
+        $plate = $request->plate;
+        $vehicles->when($plate, function($query, $plate) {
+            return $query->where('plate', 'like', '%'.$plate.'%');
+        });
+        // Brand
+        $brand = $request->brand;
+        $vehicles->when($brand, function($query, $brand) {
+            return $query->where('brand', 'like', '%'.$brand.'%');
+        });
+        // Model
+        $model = $request->model;
+        $vehicles->when($model, function($query, $model) {
+            return $query->where('model', 'like', '%'.$model.'%');
+        });
+        // Year
+        $year = $request->year;
+        $vehicles->when($year, function($query, $year) {
+            return $query->where('year', 'like', '%'.$year.'%');
+        });
+        // Owner
+        $owner = $request->owner;
+        $vehicles->when($owner, function($query, $owner) {
+            return $query->where('owner', 'like', '%'.$owner.'%');
+        });
+        // Colour
+        $colour = $request->colour;
+        $vehicles->when($colour, function($query, $colour) {
+            return $query->where('colour', 'like', '%'.$colour.'%');
+        });
+        // Company ID
+        $company_id = $request->company_id;
+        $vehicles->when($company_id, function($query, $company_id) {
+            return $query->whereIn('company_id', $company_id);
+        });
+        // Vehicle type
+        $type_id = $request->type_id;
+        $vehicles->when($type_id, function($query, $type_id) {
+            return $query->whereIn('type_id', $type_id);
+        });
+        return response(json_encode($vehicles->get()->pluck('id')))->header('Content-Type', 'application/json');        
     }
 
     /**
@@ -128,7 +216,8 @@ class ListsController extends Controller
      */
     public function activitiesUpdatedAt()
     {
-        return Activity::select(['updated_at'])->orderBy('updated_at','desc')->first();        
+        $mt = ModelTimestamp::select('last')->where('model', Activity::class)->first();
+        return $mt ? $mt->last : null;     
     }
 
     /**

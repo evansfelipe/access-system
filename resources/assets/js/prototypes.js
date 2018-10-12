@@ -1,7 +1,17 @@
+// Adds function to some prototypes that are required across the entire application.
+
+/**
+ * Returns the normalized version of a string. The normalized version means:
+ * - Lowercase.
+ * - No accents.
+ */
 String.prototype.normalized = function() {
-    return this.normalize('NFD').replace(/[\u0300-\u036f]/g,"").toLowerCase();
+    return this.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 }
 
+/**
+ * Returns true if the string contains another given string inside it.
+ */
 String.prototype.matches = function(other) {
     return this.normalized().includes(other.toString().normalized());
 };

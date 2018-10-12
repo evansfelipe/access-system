@@ -34,6 +34,9 @@ class Card extends Model
         ];
     }
 
+    /**
+     * The job that owns this card.
+     */
     public function job()
     {
         return $this->belongsTo('App\PersonCompany', 'person_company_id');

@@ -1,26 +1,51 @@
+<style lang="scss" scoped>
+    div.form-row + div.form-row {
+        margin-top: 5px;
+    }
+</style>
+
 <template>
-    <index-wrapper :updating="updating" @advanced-search="advancedSearch">
+    <index-wrapper  :conditions="conditions" :updating="updating" advanced-search-route="/vehicles/id-search"
+                    @advanced-search-success="advancedSearchSuccess"
+                    @advanced-search-clear="advancedSearchClear">
         <!-- Advanced search -->
         <template slot="advanced-search-filters">
-            <div class="col-12 col-md-2">
-                <input type="text" class="form-control form-control-sm" placeholder="Patente" v-model="filter.conditions.plate">
+            <div class="form-row">
+                <div class="col-12 col-md-6">
+                    <select2    size="small" :value="conditions.type_id" @input="value => conditions.type_id = value"
+                                placeholder="Tipo de vehículo" :options="vehicle_types" multiple/>
+                </div>
+                <div class="col-12 col-md-12 col-xl-6">
+                    <select2    size="small" :value="conditions.company_id" @input="value => conditions.company_id = value"
+                                placeholder="Empresa" :options="companies" multiple/>
+                </div>
             </div>
-            <div class="col-12 col-md-2">
-                <input type="text" class="form-control form-control-sm" placeholder="Marca" v-model="filter.conditions.brand">
+            <div class="form-row">
+                <div class="col-12 col-md-6 col-xl-4">
+                    <input type="text" class="form-control form-control-sm" placeholder="Titular" v-model="conditions.owner">
+                </div>
+                <div class="col-12 col-md-6 col-xl-4">
+                    <input type="text" class="form-control form-control-sm" placeholder="Patente" v-model="conditions.plate">
+                </div>
+                <div class="col-12 col-md-6 col-xl-4">
+                    <input type="text" class="form-control form-control-sm" placeholder="Color" v-model="conditions.colour">
+                </div>
             </div>
-            <div class="col-12 col-md-2">
-                <input type="text" class="form-control form-control-sm" placeholder="Modelo" v-model="filter.conditions.model">
-            </div>
-            <div class="col-12 col-md-2">
-                <input type="text" class="form-control form-control-sm" placeholder="Año" v-model="filter.conditions.year">
-            </div>
-            <div class="col-12 col-md-4">
-                <input type="text" class="form-control form-control-sm" placeholder="Nombre de la empresa" v-model="filter.conditions.company_name">
+            <div class="form-row">
+                <div class="col-12 col-md-6 col-xl-4">
+                    <input type="text" class="form-control form-control-sm" placeholder="Marca" v-model="conditions.brand">
+                </div>
+                <div class="col-12 col-md-6 col-xl-4">
+                    <input type="text" class="form-control form-control-sm" placeholder="Modelo" v-model="conditions.model">
+                </div>
+                <div class="col-12 col-md-6 col-xl-4">
+                    <input type="text" class="form-control form-control-sm" placeholder="Año" v-model="conditions.year">
+                </div>
             </div>
         </template>
         <!-- List -->
         <template slot="main-content">
-            <custom-table :columns="columns" :rows="vehicles" :filter="filter" :advancedsearch="advanced_search" @rowclicked="showProfile"/>
+            <custom-table :columns="columns" :rows="vehicles" @rowclicked="showProfile"/>
         </template>
     </index-wrapper>
 </template>
@@ -36,50 +61,42 @@ export default {
                 {name: 'year',         text: 'Año',     width: '10'},
                 {name: 'company_name', text: 'Empresa', width: '35'},
             ],
-            filter: {
-                strict: true,
-                conditions: {
-                    plate:        "",
-                    brand:        "",
-                    model:        "",
-                    year:         "",
-                    company_name: ""
-                }
+            conditions: {
+                plate:        "",
+                brand:        "",
+                model:        "",
+                year:         "",
+                colour:       "",
+                owner:        "",
+                company_id:   [],
+                type_id:      [],
             },
-            vehicles: [],
-            advanced_search: false
+            filtered_ids: null
         }
     },
     beforeMount() {
         this.$store.dispatch('fetchList', 'vehicles');
-        this.vehicles = this.$store.getters.vehicles.list;
+        this.$store.dispatch('fetchList', 'companies');
+        this.$store.dispatch('fetchList', 'vehicle_types');
     },
     computed: {
-        /**
-         * Returns whether the list of vehicles is being updated or not.
-         */
-        updating: function() { return this.$store.getters.vehicles.updating },
-        /**
-         * Returns the list of vehicles from the store.
-         */
-        unfilteredVehicles: function() { return this.$store.getters.vehicles.list }
-    },
-    watch: {
-        /**
-         * When the unfiltered list of vehicles changes, resets the vehicles list and the filters.
-         */
-        unfilteredVehicles: function() { 
-            this.vehicles = this.unfilteredVehicles;
-            this.filter = {
-                strict: true,
-                conditions: { 
-                    plate:        "",
-                    brand:        "",
-                    model:        "",
-                    year:         "",
-                    company_name: "" 
-                }
-            }
+        updating: function() { 
+            return  this.$store.getters.vehicles.updating ||
+                    this.$store.getters.companies.updating ||
+                    this.$store.getters.vehicle_types.updating;
+        },
+
+        vehicles: function() {
+            let all = this.$store.getters.vehicles.list;
+            return this.filtered_ids ? all.filter(vehicle => this.filtered_ids.includes(vehicle.id)) : all;
+        },
+
+        companies: function() {
+            return this.$store.getters.companies.asOptions();
+        },
+
+        vehicle_types: function() {
+            return this.$store.getters.vehicle_types.asOptions('type')
         },
     },
     methods: {
@@ -89,20 +106,21 @@ export default {
         showProfile: function(vehicle) {
             this.$router.push(`/vehicles/show/${vehicle.id}`);
         },
-        /**
-         * Restarts filters and show/hide advanced search.
-         */
-        advancedSearch: function() {
-            this.advanced_search = !this.advanced_search;
-            if( this.advanced_search === true ) {
-                this.filter.conditions = {
-                    plate:        "",
-                    brand:        "",
-                    model:        "",
-                    year:         "",
-                    company_name: ""
-                };
-            }
+        advancedSearchSuccess: function(ids) {
+            this.filtered_ids = ids;
+        },
+        advancedSearchClear: function() {
+            this.filtered_ids = null;
+            this.conditions = {
+                plate:        "",
+                brand:        "",
+                model:        "",
+                year:         "",
+                colour:       "",
+                owner:        "",
+                company_id:   [],
+                type_id:      [],
+            };
         }
     }
 }

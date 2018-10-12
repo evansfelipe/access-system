@@ -85,12 +85,7 @@ export default {
     },
     computed: {
         gates: function() {
-            return this.$store.getters.gates.list.map(gate => {
-                return {
-                    id: gate.id,
-                    text: gate.name,
-                };
-            });
+            return this.$store.getters.gates.asOptions();
         },
         groups_errors: function() {
             let ret = [];

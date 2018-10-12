@@ -107,6 +107,9 @@ class Company extends Model
         return $this->belongsTo('App\Residency');
     }
 
+    /**
+     * The groups of this company. It may be empty if this company has no groups yet.
+     */
     public function groups()
     {
         return $this->hasMany('App\Group');

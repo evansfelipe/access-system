@@ -6,6 +6,7 @@
         format="dd / MM / yyyy"
         value-format="yyyy-MM-dd"
         style="width: 100%"
+        :size="size"
     >
     </el-date-picker>
 </template>
@@ -14,6 +15,10 @@
 export default {
     props: {
         value: {
+            required: false,
+            default:  ''
+        },
+        size: {
             required: false,
             default:  ''
         }

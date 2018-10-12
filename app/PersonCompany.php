@@ -82,7 +82,7 @@ class PersonCompany extends Pivot
 
     public function activity()
     {
-        return $this->hasOne('App\Activity', 'id', 'activity_id');
+        return $this->belongsTo('App\Activity');
     }
 
     public function cards()

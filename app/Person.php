@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\{ Card, Residency, Activity, Vehicle, Group, PersonJobGroup };
 
 class Person extends Model
-{
+{ 
     protected $fillable = [
         'name', 'last_name', 
         'document_type', 'document_number',
@@ -154,15 +154,13 @@ class Person extends Model
                             'companies.id                   as company_id',
                             'companies.business_name        as company_name',
                             'companies.area                 as company_area',
-                            'companies.cuit                 as company_cuit',
-                            'companies.expiration           as company_expiration',
-                            'activities.name                as activity_name'               
+                            'companies.cuit                 as company_cuit'
                         )
                         ->get()->toArray()
                 )
                 ->map(function($job) {
+                    $job->activity_name = $job->activity->name;
                     $job->company_name  = $job->company_name ?? 'Personal';
-                    $job->company_expiration = \Helpers::timestampToDate($job->company_expiration);
                     $job->subactivities = json_decode($job->subactivities);
                     $job->cards         = $job->cards()->select('id', 'number', 'from', 'until', 'active')->get();
                     $job->groups        = $job->groups()->get()->map(function($group) {

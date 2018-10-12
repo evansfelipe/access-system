@@ -10613,6 +10613,10 @@ div.grey-border {
   transition: box-shadow .3s, -webkit-box-shadow .3s;
 }
 
+.el-input.el-input--small.el-input--suffix .el-input__inner {
+  font-size: 1em;
+}
+
 input.md-input {
   border: 0;
   border-bottom: 1px solid #dedede;

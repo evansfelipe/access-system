@@ -20,7 +20,7 @@
             </tab-item>
         </ul>
         <!-- Card -->
-        <creation-wrapper   :updating="this.$store.getters.person.updating" :values="values" :route="route" 
+        <creation-wrapper   :updating="updating" :values="values" :route="route" 
                             @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel"
         >
             <personal-information v-show="tab === 0" :errors="personal_information_errors" :values="values.personal_information"/>
@@ -54,6 +54,9 @@
             };
         },
         computed: {
+            updating: function() {
+                return this.$store.getters.person.updating;
+            },
             /**
              * Concatenates the person's last name with the person name. If some one of those values isn't seted, then puts an 'x'.
              */

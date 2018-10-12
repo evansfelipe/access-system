@@ -1,7 +1,4 @@
-<?php
-
-namespace App;
-
+<?php namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Activity extends Model
@@ -33,12 +30,15 @@ class Activity extends Model
 
     public function personCompany()
     {
-        return $this->belongsTo('App\PersonCompany');
+        return $this->hasMany('App\PersonCompany');
     }
 
+    /**
+     * Subactivities associated with this activity.
+     */
     public function subactivities()
     {
-        return $this->hasMany('\App\Subactivity');
+        return $this->hasMany('App\Subactivity');
     }
 
     public function toListArray()

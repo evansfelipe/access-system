@@ -78,16 +78,6 @@ export default {
             required: false,
             default: () => []
         },
-        subactivities: {
-            type: Array,
-            required: false,
-            default: () => []
-        },
-        groups: {
-            type: Array,
-            required: false,
-            default: () => []
-        }
     },
     computed: {
         company_errors: function() {
@@ -100,16 +90,13 @@ export default {
             return this.errors['subactivities'] || [];
         },
         subactivities_options: function() {
-            return !this.job.activity_id ? [] : 
-                    this.subactivities.filter(s => s.activity_id === this.job.activity_id)
-                        // .concat(this.job.subactivities.map(s => { return { id: s, name: s } }))
-                        .map(s => { return { id: s.name, text: s.name } });
+            return this.$store.getters.subactivities.forParent('activity_id', this.job.activity_id).asOptions();
         },
         groups_errors: function() {
             return this.errors['groups'] || [];
         },
         groups_options: function() {
-            return this.groups.concat().filter(group => group.company_id == null || group.company_id == this.job.company_id);
+            return this.$store.getters.groups.forParent('company_id', this.job.company_id, false).asOptions();
         }
     },
     methods: {

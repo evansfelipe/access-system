@@ -5,6 +5,13 @@ use App\Location\{ City, Province, Country };
 
 class LocationsController extends Controller
 {
+
+    public function countriesUpdatedAt()
+    {
+        $country = Country::select('updated_at')->orderBy('updated_at','desc')->first();
+        return $country ? $country->updated_at : null; 
+    }
+
     public function countries()
     {
         $countries = Country::all(['id', 'name']);

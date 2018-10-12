@@ -58,6 +58,9 @@ class Container extends Model
         ];;
     }
 
+    /**
+     * All vehicles to which this container is associated.
+     */
     public function vehicles()
     {
         return $this->belongsToMany('App\Vehicle', 'vehicle_containers')->using('App\VehicleContainer');

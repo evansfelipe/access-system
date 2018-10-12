@@ -29,29 +29,29 @@ Vue.use(ElementUI, {locale});
  */
 
 // Common components that are re-usable across all components
-Vue.component('hr-label' ,          require('./components/_common/HrLabel.vue'));
-Vue.component('date-picker' ,          require('./components/_common/DatePicker.vue'));
-Vue.component('select2'           , require('./components/_common/Select2.vue'));
-Vue.component('tab-item'          , require('./components/_common/TabItem.vue'));
-Vue.component('cuil-cuit'         , require('./components/_common/CuilCuit.vue'));
-Vue.component('form-item'         , require('./components/_common/FormItem.vue'));
-Vue.component('web-camera'        , require('./components/_common/WebCamera.vue'));
-Vue.component('switch-box'        , require('./components/_common/SwitchBox.vue'));
-Vue.component('access-card'       , require('./components/_common/AccessCard.vue'));
-Vue.component('custom-table'      , require('./components/_common/CustomTable.vue'));
-Vue.component('loading-cover'     , require('./components/_common/LoadingCover.vue'));
-Vue.component('modal-wrapper'     , require('./components/_common/ModalWrapper.vue'));
-Vue.component('residency-input'   , require('./components/_common/ResidencyInput.vue'));
-Vue.component('pictures-gallery'  , require('./components/_common/PicturesGallery.vue'));
-Vue.component('abbreviation-text' , require('./components/_common/AbbreviationText.vue'));
-Vue.component('confirmable-button', require('./components/_common/ConfirmableButton.vue'));
+Vue.component('hr-label'            , require('./components/_common/HrLabel.vue'));
+Vue.component('select2'             , require('./components/_common/Select2.vue'));
+Vue.component('tab-item'            , require('./components/_common/TabItem.vue'));
+Vue.component('cuil-cuit'           , require('./components/_common/CuilCuit.vue'));
+Vue.component('form-item'           , require('./components/_common/FormItem.vue'));
+Vue.component('web-camera'          , require('./components/_common/WebCamera.vue'));
+Vue.component('switch-box'          , require('./components/_common/SwitchBox.vue'));
+Vue.component('access-card'         , require('./components/_common/AccessCard.vue'));
+Vue.component('date-picker'         , require('./components/_common/DatePicker.vue'));
+Vue.component('custom-table'        , require('./components/_common/CustomTable.vue'));
+Vue.component('loading-cover'       , require('./components/_common/LoadingCover.vue'));
+Vue.component('modal-wrapper'       , require('./components/_common/ModalWrapper.vue'));
+Vue.component('residency-input'     , require('./components/_common/ResidencyInput.vue'));
+Vue.component('pictures-gallery'    , require('./components/_common/PicturesGallery.vue'));
+Vue.component('abbreviation-text'   , require('./components/_common/AbbreviationText.vue'));
+Vue.component('confirmable-button'  , require('./components/_common/ConfirmableButton.vue'));
 // Wrappers
-Vue.component('show-wrapper'  , require('./components/_common/wrappers/ShowWrapper.vue'));
-Vue.component('index-wrapper'  , require('./components/_common/wrappers/IndexWrapper.vue'));
-Vue.component('creation-wrapper'  , require('./components/_common/wrappers/CreationWrapper.vue'));
+Vue.component('show-wrapper'        , require('./components/_common/wrappers/ShowWrapper.vue'));
+Vue.component('index-wrapper'       , require('./components/_common/wrappers/IndexWrapper.vue'));
+Vue.component('creation-wrapper'    , require('./components/_common/wrappers/CreationWrapper.vue'));
 // Dashboards
 Vue.component('administration-dashboard', require('./components/dashboards/administration/Layout.vue'));
-Vue.component('security-dashboard', require('./components/dashboards/security/Layout.vue'));
+Vue.component('security-dashboard'      , require('./components/dashboards/security/Layout.vue'));
 
 const router = new VueRouter({
     routes: [
@@ -67,18 +67,16 @@ const router = new VueRouter({
         { path: '/vehicles',            component: require('./components/vehicles/index/Layout.vue') },
         { path: '/vehicles/create',     component: require('./components/vehicles/create/Layout.vue') },
         { path: '/vehicles/show/:id',   component: require('./components/vehicles/show/Layout.vue') },
-        // Containers
-        { path: '/containers',            component: require('./components/containers/index/Layout.vue') },
-        { path: '/containers/create',     component: require('./components/containers/create/Layout.vue') },
-        { path: '/containers/show/:id',   component: require('./components/containers/show/Layout.vue') },
         // Groups
         { path: '/groups',            component: require('./components/groups/index/Layout.vue') },
         { path: '/groups/create',     component: require('./components/groups/create/Layout.vue') },
         { path: '/groups/show/:id',   component: require('./components/groups/show/Layout.vue') },
-        // Extra
-        { path: '/bar', component: { template: '<div>Test route</div>' } },
         // Settings
         { path: '/settings', component: require('./components/dashboards/administration/partials/settings/Layout.vue')}
+        // Containers
+        // { path: '/containers',            component: require('./components/containers/index/Layout.vue') },
+        // { path: '/containers/create',     component: require('./components/containers/create/Layout.vue') },
+        // { path: '/containers/show/:id',   component: require('./components/containers/show/Layout.vue') },
     ]
 });
 

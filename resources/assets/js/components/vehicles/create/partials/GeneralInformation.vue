@@ -91,20 +91,10 @@ export default {
     },
     computed: {
         companies: function() {
-            return this.$store.getters.companies.list.map(company => {
-                return {
-                    id: company.id,
-                    text: company.name,
-                };
-            });
+            return this.$store.getters.companies.asOptions();
         },
         types: function() {
-            return this.$store.getters.vehicle_types.list.map(type => {
-                return {
-                    id: type.id,
-                    text: type.type,
-                };
-            });
+            return this.$store.getters.vehicle_types.asOptions('type');
         },
         company_id: function() {
             return this.values.company_id;

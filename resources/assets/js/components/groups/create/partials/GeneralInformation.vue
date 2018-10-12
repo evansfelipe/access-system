@@ -80,20 +80,10 @@ export default {
     },
     computed: {
         companies: function() {
-            return this.$store.getters.companies.list.map(company => {
-                return {
-                    id: company.id,
-                    text: company.name,
-                };
-            });
+            return this.$store.getters.companies.asOptions();
         },
         gates: function() {
-            return this.$store.getters.gates.list.map(gate => {
-                return {
-                    id: gate.id,
-                    text: gate.name,
-                };
-            });
+            return this.$store.getters.gates.asOptions();
         },
         name_placeholder: function() {
             let company = this.companies.getById(this.values.company_id);
