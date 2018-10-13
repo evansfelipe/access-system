@@ -19,9 +19,11 @@ class CreateCompanyPeopleTable extends Migration
             $table->increments('id');
             $table->integer('person_id')->unsigned()->required();
             $table->integer('company_id')->unsigned()->nullable();
+            $table->integer('company_note_id')->unsigned()->nullable();
             $table->integer('activity_id')->unsigned()->required();
             $table->string('art_company', PersonCompany::LENGTHS['art_company']['max'])->required();
             $table->integer('art_number')->required();
+            $table->integer('art_file_id')->unsigned()->nullable();
             $table->json('subactivities');
             $table->unique(['person_id', 'company_id']);
             $table->timestamps();

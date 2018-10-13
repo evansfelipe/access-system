@@ -20,9 +20,18 @@
                 <small>Franja horaria</small><br>
                 <strong>{{ values.range }}</strong>
             </div>
+            <div class="col-12 mt-2">
+                <small>Días habilitados</small>
+            </div>
+            <div class="col-12">
+                <div v-for="(value, day) in values.days" :key="day" class="d-inline mr-5">
+                    <i v-if="value == 0" class="far fa-circle"></i>
+                    <i v-else class="fas fa-check-circle"></i>
+                    <strong>{{ day }}</strong>
+                </div>
+            </div>
         </div>
-        <br>
-        <div class="row">
+        <div class="row mt-3">
             <div class="col-12">
                 <hr-label>Personas asignadas</hr-label>
             </div>

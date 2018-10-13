@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Gate;
-class CreateGatesTable extends Migration
+
+class CreateZonesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateGatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('gates', function (Blueprint $table) {
+        Schema::create('zones', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', Gate::LENGTHS['name']['max'])->required()->unique();
-            $table->boolean('enabled')->default(false);
-            $table->integer('zone_id')->unsigned()->required();
+            $table->string('name')->required();
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateGatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gates');
+        Schema::dropIfExists('zones');
     }
 }

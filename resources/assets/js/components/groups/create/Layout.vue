@@ -8,7 +8,7 @@
             </tab-item>
         </ul>
         <!-- Card -->
-        <creation-wrapper   :updating="this.$store.getters.vehicle.updating" :values="values" :route="route" 
+        <creation-wrapper   :updating="this.$store.getters.group.updating" :values="values" :route="route" 
                             @saveSuccess="saveSuccess" @saveFailed="saveFailed" @cancel="cancel">
             <general-information v-show="tab === 0" :errors="general_information_errors" :values="values.general_information"/>
         </creation-wrapper>

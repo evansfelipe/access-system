@@ -50,6 +50,18 @@
                 </div>
             </form-item>
         </div>
+        <div class="form-row">
+            <div class="col">
+                <hr-label>Días habilitados</hr-label>
+                <switch-box class="mr-3" label="Lunes" :value="values.days.monday" @update="value => update({name: 'days.monday', value: value})"/>
+                <switch-box class="mr-3" label="Martes" :value="values.days.tuesday" @update="value => update({name: 'days.tuesday', value: value})"/>
+                <switch-box class="mr-3" label="Miércoles" :value="values.days.wednesday" @update="value => update({name: 'days.wednesday', value: value})"/>
+                <switch-box class="mr-3" label="Jueves" :value="values.days.thursday" @update="value => update({name: 'days.thursday', value: value})"/>
+                <switch-box class="mr-3" label="Viernes" :value="values.days.friday" @update="value => update({name: 'days.friday', value: value})"/>
+                <switch-box class="mr-3" label="Sábado" :value="values.days.saturday" @update="value => update({name: 'days.saturday', value: value})"/>
+                <switch-box class="mr-3" label="Domingo" :value="values.days.sunday" @update="value => update({name: 'days.sunday', value: value})"/>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -77,6 +89,9 @@ export default {
     beforeMount() {
         this.$store.dispatch('fetchList','companies');
         this.$store.dispatch('fetchList','gates');
+        console.log(this.values.days);
+        
+        console.log(this.values.days.monday, this.values.days.tuesday);
     },
     computed: {
         companies: function() {

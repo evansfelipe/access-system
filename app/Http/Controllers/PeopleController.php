@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
-use Auth;
+use Auth, DB;
 use Illuminate\Http\Request;
 use App\Http\Requests\{ SavePersonRequest };
 use App\{ Person, Vehicle, Residency, Company, Card, Activity, PersonCompany, PersonVehicle, PersonJobGroup, PersonDocument, Observation};
@@ -67,6 +67,7 @@ class PeopleController extends Controller
             $person_document->document_name = \Helpers::storeFile($path, $fileDataURI);
             $person_document->expiration = $expiration;
             $person_document->save();
+            return $person_document->id;
         }
     }
 
@@ -89,12 +90,10 @@ class PeopleController extends Controller
         $person->residency_id = $residency->id;
         $person->save();
         // Set files array
-        $files = $request->file();
         $path = $person->getStorageFolder();
         // Saves the picture
         $person->picture_name = \Helpers::storeFile($path.'pictures', $request->picture);
         $person->save();
-        unset($files['picture']);
         // Saves each person-company relationship.
         if(isset($request->jobs)) {
             foreach ($request->jobs as $job) {
@@ -110,7 +109,12 @@ class PeopleController extends Controller
 
                 $person_company->art_company = $job['art_company'];
                 $person_company->art_number = $job['art_number'];
+
+                $person_company->company_note_id = $this->storeDocument($person->id, $job['company_note']['file'], $job['company_note']['expiration'], 'company_note', $path);
+                $person_company->art_file_id = $this->storeDocument($person->id, $job['art_file']['file'], $job['art_file']['expiration'], 'art_file', $path);
+
                 $person_company->save();
+
                 foreach ($job['cards'] as $c) {
                     $card = new Card();
                     $card->person_company_id = $person_company->id;
@@ -119,19 +123,11 @@ class PeopleController extends Controller
                     $card->until = $c['until'];
                     $card->save();
                 }
-
+                
                 foreach($job['groups'] as $group) {
                     $job_group = new PersonJobGroup(['job_id' => $person_company->id, 'group_id' => $group]);
                     $job_group->save();
                 }
-
-                // $file_name = $job['key'].'-company_note';
-                // $this->storeDocument($person->id, $request, $files, 'company_note', $file_name, $path);
-                // unset($files[$file_name]);
-
-                // $file_name = $job['key'].'-art_file';
-                // $this->storeDocument($person->id, $request, $files, 'art_file', $file_name, $path);
-                // unset($files[$file_name]);
             }
         }
         // Saves each person-vehicle relationship.
@@ -168,31 +164,68 @@ class PeopleController extends Controller
     public function edit(Person $person)
     {
         $vehicles_id = [];
-        foreach($person->vehicles as $vehicle) { array_push($vehicles_id, $vehicle->id); }
+        // foreach($person->vehicles()->select('vehicle.id')->get() as $vehicle) { array_push($vehicles_id, $vehicle->id); }
+        $vehicles_id = $person->vehicles->pluck('id');
         $contact = $person->contactToObject();
 
-        $jobs = $person->jobs()->map(function($job, $key) {
+        $jobs = $person->jobs()->map(function($job) {
+            $company_note = $job->company_note;
+            $art_file = $job->art_file;
             return [
-                'key'           =>  $key + 1, // We want the first key to be 1 and not 0 (0 may represent empty in some functions).
-                'company_id'    =>  $job->company_id,
-                'activity_id'   =>  $job->activity_id,
-                'subactivities' =>  $job->subactivities,
-                'cards'         =>  $job->cards->map(function($card, $key) {
-                                        return [
-                                            'key'    => $key + 1, // We want the first key to be 1 and not 0 (0 may represent empty in some functions).
-                                            'number' => $card->number,
-                                            'from'   => $card->from  ? date('Y-m-d', strtotime($card->from))  : '',
-                                            'until'  => $card->until ? date('Y-m-d', strtotime($card->until)) : '',
-                                        ]; 
-                                    })
+                'key'            => $job->id,
+                'company_id'     => $job->company_id,
+                'company_note'   => $company_note === null ? ['name' => null, 'expiration' => null] : [
+                    'name'       => $company_note->document_name ? PersonDocument::typeToString($company_note->document_type) : null,
+                    'expiration' => $company_note->expiration,
+                ],
+                'activity_id'    => $job->activity_id,
+                'subactivities'  => $job->subactivities,
+                'groups'         => $job->groups->pluck('id'),
+                'art_company'    => $job->art_company,
+                'art_number'     => $job->art_number,
+                'art_file'       => $art_file === null ? ['name' => null, 'expiration' => null] : [
+                    'name'       => $art_file->document_name ? PersonDocument::typeToString($art_file->document_type) : null,
+                    'expiration' => $art_file->expiration,
+                ],
+                'cards'          => $job->cards->map(function($card) {
+                    return [
+                        'key'    => $card->id,
+                        'number' => $card->number,
+                        'from'   => $card->from  ? date('Y-m-d', strtotime($card->from))  : '',
+                        'until'  => $card->until ? date('Y-m-d', strtotime($card->until)) : '',
+                    ]; 
+                })
             ];
         });
 
+        // Gets last expiration of each type
+        $person_documents_ids = $person->documents()->select(DB::raw('max(id) as id'))->groupBy('document_type')->get()->pluck('id');
+        $person_documents = $person->documents()->select('document_type', 'expiration')->whereIn('id',$person_documents_ids)->get();
+
+        $documents = [];
+        $documents_types = PersonDocument::TYPES;
+        unset($documents_types['company_note'],$documents_types['art_file']);
+        foreach (PersonDocument::TYPES as $key => $value) {
+            $i = 0;
+            while($i < count($person_documents) && $person_documents[$i]['document_type'] !== $value) {
+                $i++;
+            }
+            if($i < count($person_documents)) {
+                $documents[$key]['expiration'] = $person_documents[$i]['expiration'] ? date('Y-m-d', strtotime($person_documents[$i]['expiration'])) : '';
+                $documents[$key]['name'] = PersonDocument::typeToString($value);
+            }
+            else {
+                $documents[$key]['expiration'] = null;
+                $documents[$key]['name'] = null;
+            }
+        }
+        
         $data = [
             'id'     => $person->id,
             'values' => [
                 'personal_information'  => [
                     // Basic information
+                    'picture_path'      => $person->getCurrentPicture(),
                     'last_name'         => $person->last_name,
                     'name'              => $person->name,
                     'document_type'     => $person->document_type,
@@ -202,11 +235,14 @@ class PeopleController extends Controller
                     'sex'               => $person->sex,
                     'blood_type'        => $person->blood_type,
                     'pna'               => $person->pna,
+                    'risk'              => $person->risk,
+                    'homeland'          => $person->homeland,
+                    'register_number'   => $person->register_number,
                     // Contact
-                    'fax'               => $contact->fax,
                     'email'             => $contact->email,
                     'home_phone'        => $contact->home_phone,
                     'mobile_phone'      => $contact->mobile_phone,
+                    'fax'               => $contact->fax,
                     // Residency
                     'street'            => $person->residency->street,
                     'apartment'         => $person->residency->apartment,
@@ -214,18 +250,13 @@ class PeopleController extends Controller
                     'country'           => $person->residency->country,
                     'province'          => $person->residency->province,
                     'city'              => $person->residency->city,
-                    'picture_path'      => $person->getCurrentPicturePath(), // Change this 
                 ],
-                'working_information'   => [
-                    // Basic information
-                    'risk'              => $person->risk,
-                    'art'               => $person->art,
-                    'pbip'              => $person->pbip ? date('Y-m-d', strtotime($person->pbip)) : '',
-                    // Jobs array
-                    'jobs'              => $jobs
-                ],
-                'assign_vehicles'       => ['vehicles_id' => $vehicles_id],
-                'documentation'         => []
+                'working_information'   => [ 'jobs' => $jobs ],
+                'assign_vehicles'       => [ 'vehicles_id' => $vehicles_id ],
+                'documentation'         => [
+                    'documents'          => $documents,
+                    'documents_required' => json_decode($person->required_documentation)
+                ]
             ],
         ];
 
@@ -244,15 +275,15 @@ class PeopleController extends Controller
         // Updates the person
         $person->fill($request->toArray());
         $person->setContact($request->toArray());
+        $person->setRequiredDocumentation($request->documents_required);
         if($request->has('picture')) {
-            $path = 'public/documentation/'.$person->last_name[0].'/'.$person->id.'_'.$person->last_name.'_'.$person->name;
-            $person->picture_name = time() . '.' . $request->file('picture')->guessExtension();
-            Storage::putFileAs($path.'/pictures', $request->file('picture'), $person->picture_name);
+            $person->picture_name = \Helpers::storeFile($path.'pictures', $request->picture);
         }
         $person->save();
         // Updates the residency
         $person->residency->fill($request->toArray());
         $person->residency->save();
+        \Helpers::storeLocation($residency->city, $residency->province, $residency->country);
         // Updates the person-company relationship
         $person_company = $person->company()->pivot;
         $person_company->company_id = $request->company_id;

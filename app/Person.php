@@ -2,7 +2,7 @@
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-use App\{ Card, Residency, Activity, Vehicle, Group, PersonJobGroup };
+use App\{ Card, Residency, Activity, Vehicle, Group, PersonDocument, PersonJobGroup };
 
 class Person extends Model
 {
@@ -156,7 +156,9 @@ class Person extends Model
                             'companies.area                 as company_area',
                             'companies.cuit                 as company_cuit',
                             'companies.expiration           as company_expiration',
-                            'activities.name                as activity_name'               
+                            'activities.name                as activity_name',
+                            'company_people.company_note_id as company_note_id',
+                            'company_people.art_file_id     as art_file_id'
                         )
                         ->get()->toArray()
                 )
@@ -347,7 +349,7 @@ class Person extends Model
             'documents'         => $this->documents->map(function($document) {
                                         return [
                                             'id'         => $document->id,
-                                            'type'       => $document->typeToString(),
+                                            'type'       => PersonDocument::typeToString($document->document_type),
                                             'created_at' => \Helpers::timestampToDate($document->created_at),
                                             'expiration' => \Helpers::timestampToDate($document->expiration)
                                         ];

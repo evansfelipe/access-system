@@ -295,7 +295,19 @@ export default {
         updateJob: function(state, {job_key, attribute, value}) {
             let pos = state.models.person.values.working_information.jobs.getPositionById(job_key, 'key');
             let ref = state.models.person.values.working_information.jobs[pos];
-            ref[attribute] = value;
+            let attributes = attribute.split('.');
+            let i = 1;
+            let last_attr;
+            attributes.forEach(attr => {
+                if(attributes.length === i){
+                    last_attr = attr;
+                }
+                else {
+                    ref = ref[attr];
+                    i++;
+                }
+            });
+            ref[last_attr] = value;
         },
         /**
          * Given a job, removes it from the jobs list of the person's model.

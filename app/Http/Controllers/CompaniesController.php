@@ -62,11 +62,6 @@ class CompaniesController extends Controller
      */
     public function edit(Company $company)
     {
-        // $comp = $company->toShowArray();
-        // unset($comp['assigned_people'], $comp['assigned_vehicles']);
-        // unset($comp['general_information']['expiration']);
-        // $comp['general_information']['expiration'] = $company->expiration ? date('Y-m-d', strtotime($company->expiration)) : '';
-        // if( $comp['general_information']['apartment'] === '-' ) $comp['general_information']['apartment'] = '';
         $groups = $company->groups->map(function($group){
             return [
                 'key'     => $group->id,

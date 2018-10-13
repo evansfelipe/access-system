@@ -22,6 +22,7 @@ class CreateGroupsTable extends Migration
             $table->time('end')->required();
             $table->integer('gate_id')->unsigned()->required();
             $table->integer('company_id')->unsigned()->nullable();
+            $table->char('days')->nullable();
             $table->timestamps();
         });
     }

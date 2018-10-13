@@ -94,4 +94,14 @@ class PersonCompany extends Pivot
     {
         return $this->belongsToMany('App\Group', 'person_job_groups', 'job_id', 'group_id');
     }
+
+    public function company_note()
+    {
+        return $this->hasOne('App\PersonDocument','id','company_note_id');
+    }
+
+    public function art_file()
+    {
+        return $this->hasOne('App\PersonDocument', 'id', 'art_file_id');
+    }
 }

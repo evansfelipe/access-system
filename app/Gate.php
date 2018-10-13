@@ -35,6 +35,11 @@ class Gate extends Model
         ];
     }
 
+    public function groups()
+    {
+        return $this->hasMany('App\Group');
+    }
+
     public function toListArray()
     {
         return [

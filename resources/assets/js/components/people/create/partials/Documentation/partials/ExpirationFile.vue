@@ -114,6 +114,13 @@ export default {
             return 12 - this.inputfilecol - checkbox_col;
         }
     },
+    beforeMount() {
+        // When you edit a person, the value has a name to know there is a file uploaded
+        if (this.value.hasOwnProperty('name') && this.value.name !== null && this.value.name !== '') {
+            this.file.selected = true;
+            this.file.name = this.value.name;
+        }
+    },
     methods: {
         expirationChanged: function(value) {
             this.$emit('expiration-changed', value)
@@ -122,13 +129,13 @@ export default {
             if(e.target.files.length > 0) {
                 this.file.selected = true;
                 this.file.name = e.target.files[0].name;
-                this.fileToDataURI(e.target.files[0]).then(file => this.$emit('file-changed', file));
+                this.fileToDataURI(e.target.files[0]).then(file => this.$emit('file-changed', file, this.file.name));
             }
         },
         deleteFile: function(e) {
             e.preventDefault();
             this.file = { selected: false, name: '' }
-            this.$emit('file-changed', '');
+            this.$emit('file-changed', '', '');
         }
     }
 }
