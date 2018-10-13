@@ -29,6 +29,8 @@
 <template>
     <div class="container">
 
+        <rt-camera source="http://184.72.239.149/vod/smil:BigBuckBunny.smil/playlist.m3u8"/>
+
         <div v-if="disconnected" class="alert alert-danger">
             Se ha perdido la conexión con el servidor. {{ this.connecting_attempts }}º intento de reconección. <i class="fas fa-spinner fa-spin fa-lg centered"></i>
             <button class="btn btn-link" @click="forceReconnectionMQTT">Reconectar manualmente</button>
@@ -198,7 +200,8 @@ class Person {
 
 export default {
     components: {
-        'cards-carousel': require('./partials/CardsCarousel.vue')
+        'rt-camera': require('./partials/Camera.vue'),
+        'cards-carousel': require('./partials/CardsCarousel.vue'),
     },
     data() {
         return {
