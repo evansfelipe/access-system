@@ -112,15 +112,25 @@ class Group extends Model
         return $ret;
     }
 
+    /**
+     * Gets the ordinal number of the char stored and transforms it to a seven bits string.
+     * Then the string is completed with zeros to the left.
+     * Finally the string is converted to an array and returns it.
+     */
     public function daysToArray()
     {
         $bin = decbin(ord($this->days));
         $bin = str_pad($bin, 7, 0, STR_PAD_LEFT);
         $bin = str_split($bin);
-        // unset($bin[0]); // The first bit doesn't represents any day.
         return $bin;
     }
 
+    /**
+     * Opposite of the previous function.
+     * Receives an array with the ones and zeros of the days and transforms it to an array.
+     * Put the ones and zeros all together in a string and gets the decimal number of the binary.
+     * Finally converts the ordinal to a char and stores it in the days variable.
+     */
     public function daysToChar($days_array)
     {
         $days = array_map(function($day) { return $day === true ? 1 : 0; }, $days_array);

@@ -67,10 +67,7 @@ class GenerateEntranceFiles extends Command
                                             $group->start.';'.'23:59:59'.';'.'00:00:00'.';'.$group->end.';' :
                                             $group->start.';'.$group->end.';;;');
                                     // Days
-                                    $bin = decbin(ord($group->days));
-                                    $bin = str_pad($bin, 8, 0, STR_PAD_LEFT);
-                                    $bin = str_split($bin);
-                                    unset($bin[0]); // The first bit doesn't represents any day.
+                                    $bin = $group->daysToArray();
                                     $line = $line . implode(';', $bin) . ';';
                                     // Gate number.
                                     $line = $line . $gate->id.';';

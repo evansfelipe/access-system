@@ -14,10 +14,6 @@ class GroupsController extends Controller
     public function store(Request $request)
     {
         Validator::make($request->all(), Group::getValidationRules())->validate();
-
-        // $days = array_map(function($day) { return $day === true ? 1 : 0; }, $request->days);
-        // $days_char = chr(bindec(implode("", $days)));
-
         $group = new Group($request->toArray());
         $group->daysToChar($request->days);
         $group->save();
@@ -65,7 +61,6 @@ class GroupsController extends Controller
                 ]
             ]
         ];
-        \Debugbar::info($data);
         return response(json_encode($data), 200)->header('Content-Type', 'application/json');
     }
 
@@ -78,7 +73,6 @@ class GroupsController extends Controller
     public function update(Request $request, Group $group)
     {
         Validator::make($request->all(), Group::getValidationRules())->validate();
-        \Debugbar::info($request->toArray());
         $group->fill($request->toArray());
         $group->daysToChar($request->days);
         $group->save();
