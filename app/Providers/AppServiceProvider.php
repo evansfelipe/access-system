@@ -16,14 +16,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-        \App\Person::observe(\App\Observers\PersonObserver::class);
-        \App\Company::observe(\App\Observers\CompanyObserver::class);
-        \App\Vehicle::observe(\App\Observers\VehicleObserver::class);
-        \App\Activity::observe(\App\Observers\ActivityObserver::class);
-
-
-
         Validator::extend('unique_with', function($attribute, $value, $parameters) {
             $table       = $parameters[0]; // the table where the combination is checked.
             $field       = $parameters[1]; // the name of the field with which it must be unique.

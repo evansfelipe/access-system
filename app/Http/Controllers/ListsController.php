@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\{ ModelTimestamp, Person, Company, Vehicle, Container, Activity, Subactivity, VehicleType, Group, Gate, RiskLevel };
+use App\{ TableTimestamp, Person, Company, Vehicle, Container, Activity, Subactivity, VehicleType, Group, Gate, RiskLevel };
 
 class ListsController extends Controller
 {
@@ -11,8 +11,7 @@ class ListsController extends Controller
      */
     public function peopleUpdatedAt()
     {
-        $mt = ModelTimestamp::select('last')->where('model', Person::class)->first();
-        return $mt ? $mt->last : null;
+        return TableTimestamp::lastTimestamp('people');
     }
 
     /**
@@ -45,8 +44,7 @@ class ListsController extends Controller
      */
     public function companiesUpdatedAt()
     {
-        $mt = ModelTimestamp::select('last')->where('model', Company::class)->first();
-        return $mt ? $mt->last : null;
+        return TableTimestamp::lastTimestamp('companies');
     }
 
     /**
@@ -110,8 +108,7 @@ class ListsController extends Controller
      */
     public function vehiclesUpdatedAt()
     {
-        $mt = ModelTimestamp::select('last')->where('model', Vehicle::class)->first();
-        return $mt ? $mt->last : null;     
+        return TableTimestamp::lastTimestamp('vehicles');
     }
 
     /**
@@ -217,8 +214,7 @@ class ListsController extends Controller
      */
     public function activitiesUpdatedAt()
     {
-        $mt = ModelTimestamp::select('last')->where('model', Activity::class)->first();
-        return $mt ? $mt->last : null;     
+        return TableTimestamp::lastTimestamp('activities');
     }
 
     /**
@@ -241,7 +237,7 @@ class ListsController extends Controller
      */
     public function subactivitiesUpdatedAt()
     {
-        return Subactivity::select(['updated_at'])->orderBy('updated_at','desc')->first();        
+        return TableTimestamp::lastTimestamp('subactivities');
     }
 
     /**
@@ -264,7 +260,7 @@ class ListsController extends Controller
      */
     public function vehicleTypesUpdatedAt()
     {
-        return VehicleType::select(['updated_at'])->orderBy('updated_at','desc')->first();        
+        return TableTimestamp::lastTimestamp('vehicle_types');
     }
 
     /**
@@ -287,7 +283,7 @@ class ListsController extends Controller
      */
     public function groupsUpdatedAt()
     {
-        return Group::select(['updated_at'])->orderBy('updated_at','desc')->first();        
+        return TableTimestamp::lastTimestamp('groups');  
     }
 
     /**
@@ -310,7 +306,7 @@ class ListsController extends Controller
      */
     public function gatesUpdatedAt()
     {
-        return Gate::select(['updated_at'])->orderBy('updated_at','desc')->first();        
+        return TableTimestamp::lastTimestamp('gates');      
     }
 
     /**
