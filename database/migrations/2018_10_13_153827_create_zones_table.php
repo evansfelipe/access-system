@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePersonJobGroupsTable extends Migration
+class CreateZonesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreatePersonJobGroupsTable extends Migration
      */
     public function up()
     {
-        Schema::create('person_job_groups', function (Blueprint $table) {
+        Schema::create('zones', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('job_id')->unsigned()->required();
-            $table->integer('group_id')->unsigned()->required();
+            $table->string('name')->required();
             $table->timestamps();
-
-            // $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
         });
     }
 
@@ -30,6 +27,6 @@ class CreatePersonJobGroupsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('person_job_groups');
+        Schema::dropIfExists('zones');
     }
 }

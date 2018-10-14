@@ -55674,6 +55674,7 @@ var Model = function () {
          * Adds a new job to the jobs list of the person's model
          */
         addJob: function addJob(state) {
+            state.models['person'].modified = true;
             state.models.person.values.working_information.jobs.push({
                 key: Date.now(),
                 company_id: '',
@@ -55693,14 +55694,27 @@ var Model = function () {
                 attribute = _ref26.attribute,
                 value = _ref26.value;
 
+            state.models['person'].modified = true;
             var pos = state.models.person.values.working_information.jobs.getPositionById(job_key, 'key');
             var ref = state.models.person.values.working_information.jobs[pos];
-            ref[attribute] = value;
+            var attributes = attribute.split('.');
+            var i = 1;
+            var last_attr = void 0;
+            attributes.forEach(function (attr) {
+                if (attributes.length === i) {
+                    last_attr = attr;
+                } else {
+                    ref = ref[attr];
+                    i++;
+                }
+            });
+            ref[last_attr] = value;
         },
         /**
          * Given a job, removes it from the jobs list of the person's model.
          */
         deleteJob: function deleteJob(state, job) {
+            state.models['person'].modified = true;
             var pos = state.models.person.values.working_information.jobs.indexOf(job);
             if (pos !== -1) {
                 state.models.person.values.working_information.jobs.splice(pos, 1);
@@ -55710,6 +55724,7 @@ var Model = function () {
          * Given a job, adds a new card to its cards list.
          */
         addCardToJob: function addCardToJob(state, job) {
+            state.models['person'].modified = true;
             var pos = state.models.person.values.working_information.jobs.indexOf(job);
             if (pos !== -1) {
                 state.models.person.values.working_information.jobs[pos].cards.push({
@@ -55726,6 +55741,7 @@ var Model = function () {
                 attribute = _ref27.attribute,
                 value = _ref27.value;
 
+            state.models['person'].modified = true;
             var pos = state.models.person.values.working_information.jobs.indexOf(job);
             if (pos !== -1) {
                 var pos2 = state.models.person.values.working_information.jobs[pos].cards.indexOf(card);
@@ -55742,6 +55758,7 @@ var Model = function () {
             var job = _ref28.job,
                 card = _ref28.card;
 
+            state.models['person'].modified = true;
             var pos = state.models.person.values.working_information.jobs.indexOf(job);
             if (pos !== -1) {
                 var pos2 = state.models.person.values.working_information.jobs[pos].cards.indexOf(card);
@@ -55755,12 +55772,22 @@ var Model = function () {
          * Adds a new group to the groups list of the company's model
          */
         addGroup: function addGroup(state) {
+            state.models['company'].modified = true;
             state.models.company.values.assign_groups.groups.push({
-                key: Date.now(),
+                key: 'T' + Date.now(),
                 name: '',
                 gate_id: '',
                 start: '',
-                end: ''
+                end: '',
+                days: {
+                    monday: false,
+                    tuesday: false,
+                    wednesday: false,
+                    thursday: false,
+                    friday: false,
+                    saturday: false,
+                    sunday: false
+                }
             });
         },
         /**
@@ -55771,15 +55798,29 @@ var Model = function () {
                 attribute = _ref29.attribute,
                 value = _ref29.value;
 
+            state.models['company'].modified = true;
             var pos = state.models.company.values.assign_groups.groups.getPositionById(group_key, 'key');
             var ref = state.models.company.values.assign_groups.groups[pos];
-            if (state.debug) console.log('Updating model: ', 'company', 'state.models.company.values.assign_groups.groups', value);
-            ref[attribute] = value;
+            // ref[attribute] = value;
+            var attributes = attribute.split('.');
+            var i = 1;
+            var last_attr = void 0;
+            attributes.forEach(function (attr) {
+                if (attributes.length === i) {
+                    last_attr = attr;
+                } else {
+                    ref = ref[attr];
+                    i++;
+                }
+            });
+            if (state.debug) console.log(last_attr, value);
+            ref[last_attr] = value;
         },
         /**
          * Given a group, removes it from the groups list of the company's model
          */
         deleteGroup: function deleteGroup(state, group) {
+            state.models['company'].modified = true;
             var pos = state.models.company.values.assign_groups.groups.indexOf(group);
             if (pos !== -1) {
                 state.models.company.values.assign_groups.groups.splice(pos, 1);
@@ -55890,12 +55931,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 city: !debug ? '' : ''
             },
             assign_groups: {
-                groups: [{
-                    key: Date.now(),
+                groups: !debug ? [] : [{
+                    key: 'T' + Date.now(),
                     name: !debug ? '' : 'Example group name',
                     gate_id: !debug ? '' : 1,
                     start: !debug ? '' : '09:00',
-                    end: !debug ? '' : '17:00'
+                    end: !debug ? '' : '17:00',
+                    days: {
+                        monday: false,
+                        tuesday: false,
+                        wednesday: false,
+                        thursday: false,
+                        friday: false,
+                        saturday: false,
+                        sunday: false
+                    }
                 }]
             }
         };
@@ -55944,7 +55994,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 company_id: !debug ? '' : 1,
                 gate_id: !debug ? '' : 1,
                 start: !debug ? '' : '09:00',
-                end: !debug ? '' : '17:00'
+                end: !debug ? '' : '17:00',
+                days: {
+                    monday: false,
+                    tuesday: false,
+                    wednesday: false,
+                    thursday: false,
+                    friday: false,
+                    saturday: false,
+                    sunday: false
+                }
             }
         };
     }
@@ -55972,6 +56031,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 sex: !debug ? '' : 'M',
                 blood_type: !debug ? '' : '0+',
                 pna: !debug ? '' : '0123456789',
+                risk: !debug ? '' : '1',
+                homeland: !debug ? '' : '',
+                register_number: !debug ? '' : '123450999',
                 email: !debug ? '' : 'mail@example.com',
                 home_phone: !debug ? '' : '2231234567',
                 mobile_phone: !debug ? '' : '223123652643',
@@ -55981,10 +56043,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 cp: !debug ? '' : '123',
                 country: !debug ? '' : '',
                 province: !debug ? '' : '',
-                city: !debug ? '' : '',
-                risk: !debug ? '' : '1',
-                homeland: !debug ? '' : '',
-                register_number: !debug ? '' : '123450999'
+                city: !debug ? '' : ''
             },
             working_information: {
                 jobs: [{
@@ -55997,10 +56056,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     art_number: !debug ? '' : '123456',
                     company_note: {
                         file: '',
+                        name: '',
                         expiration: '2020-06-07'
                     },
                     art_file: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     cards: [{
@@ -56016,34 +56077,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 documents: {
                     dni_copy: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     pna_file: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     driver_license: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     acc_pers: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     boarding_passbook: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     boarding_card: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     health_notebook: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     pbip_file: {
                         file: '',
+                        name: '',
                         expiration: ''
                     }
                 },
@@ -110660,6 +110729,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
@@ -110673,6 +110748,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         errors: {
             type: Array,
             required: true
+        }
+    },
+    methods: {
+        update: function update(_ref) {
+            var job_key = _ref.job_key,
+                name = _ref.name,
+                value = _ref.value;
+
+            this.$store.commit('updateJob', { job_key: job_key, attribute: name, value: value });
         }
     }
 });
@@ -110842,6 +110926,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return 12 - this.inputfilecol - checkbox_col;
         }
     },
+    beforeMount: function beforeMount() {
+        // When you edit a person, the value has a name to know there is a file uploaded
+        if (this.value.hasOwnProperty('name') && this.value.name !== null && this.value.name !== '') {
+            this.file.selected = true;
+            this.file.name = this.value.name;
+        }
+    },
+
     methods: {
         expirationChanged: function expirationChanged(value) {
             this.$emit('expiration-changed', value);
@@ -110853,14 +110945,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.file.selected = true;
                 this.file.name = e.target.files[0].name;
                 this.fileToDataURI(e.target.files[0]).then(function (file) {
-                    return _this.$emit('file-changed', file);
+                    return _this.$emit('file-changed', file, _this.file.name);
                 });
             }
         },
         deleteFile: function deleteFile(e) {
             e.preventDefault();
             this.file = { selected: false, name: '' };
-            this.$emit('file-changed', '');
+            this.$emit('file-changed', '', '');
         }
     }
 });
@@ -111005,6 +111097,27 @@ var render = function() {
                   errors: _vm.errors[job.key],
                   name: "company_note",
                   value: job.company_note
+                },
+                on: {
+                  "expiration-changed": function(value) {
+                    return _vm.update({
+                      job_key: job.key,
+                      name: "company_note.expiration",
+                      value: value
+                    })
+                  },
+                  "file-changed": function(file, name) {
+                    _vm.update({
+                      job_key: job.key,
+                      name: "company_note.file",
+                      value: file
+                    })
+                    _vm.update({
+                      job_key: job.key,
+                      name: "company_note.name",
+                      value: name
+                    })
+                  }
                 }
               })
             ],
@@ -111021,6 +111134,27 @@ var render = function() {
                   errors: _vm.errors[job.key],
                   name: "art_file",
                   value: job.art_file
+                },
+                on: {
+                  "expiration-changed": function(value) {
+                    return _vm.update({
+                      job_key: job.key,
+                      name: "art_file.expiration",
+                      value: value
+                    })
+                  },
+                  "file-changed": function(file, name) {
+                    _vm.update({
+                      job_key: job.key,
+                      name: "art_file.file",
+                      value: file
+                    })
+                    _vm.update({
+                      job_key: job.key,
+                      name: "art_file.name",
+                      value: name
+                    })
+                  }
                 }
               })
             ],
@@ -111204,8 +111338,9 @@ var render = function() {
             "expiration-changed": function(value) {
               return _vm.update({ name: "dni_copy.expiration", value: value })
             },
-            "file-changed": function(value) {
-              return _vm.update({ name: "dni_copy.file", value: value })
+            "file-changed": function(file, name) {
+              _vm.update({ name: "dni_copy.file", value: file })
+              _vm.update({ name: "dni_copy.name", value: name })
             }
           }
         })
@@ -111228,8 +111363,9 @@ var render = function() {
             "expiration-changed": function(value) {
               return _vm.update({ name: "pna_file.expiration", value: value })
             },
-            "file-changed": function(value) {
-              return _vm.update({ name: "pna_file.file", value: value })
+            "file-changed": function(file, name) {
+              _vm.update({ name: "pna_file.file", value: file })
+              _vm.update({ name: "pna_file.name", value: name })
             }
           }
         })
@@ -111255,8 +111391,9 @@ var render = function() {
                 value: value
               })
             },
-            "file-changed": function(value) {
-              return _vm.update({ name: "driver_license.file", value: value })
+            "file-changed": function(file, name) {
+              _vm.update({ name: "driver_license.file", value: file })
+              _vm.update({ name: "driver_license.name", value: name })
             }
           }
         })
@@ -111279,8 +111416,9 @@ var render = function() {
             "expiration-changed": function(value) {
               return _vm.update({ name: "pbip_file.expiration", value: value })
             },
-            "file-changed": function(value) {
-              return _vm.update({ name: "pbip_file.file", value: value })
+            "file-changed": function(file, name) {
+              _vm.update({ name: "pbip_file.file", value: file })
+              _vm.update({ name: "pbip_file.name", value: name })
             }
           }
         })
@@ -111306,11 +111444,9 @@ var render = function() {
                 value: value
               })
             },
-            "file-changed": function(value) {
-              return _vm.update({
-                name: "boarding_passbook.file",
-                value: value
-              })
+            "file-changed": function(file, name) {
+              _vm.update({ name: "boarding_passbook.file", value: file })
+              _vm.update({ name: "boarding_passbook.name", value: name })
             }
           }
         })
@@ -111336,8 +111472,9 @@ var render = function() {
                 value: value
               })
             },
-            "file-changed": function(value) {
-              return _vm.update({ name: "boarding_card.file", value: value })
+            "file-changed": function(file, name) {
+              _vm.update({ name: "boarding_card.file", value: file })
+              _vm.update({ name: "boarding_card.name", value: name })
             }
           }
         })
@@ -111363,8 +111500,9 @@ var render = function() {
                 value: value
               })
             },
-            "file-changed": function(value) {
-              return _vm.update({ name: "health_notebook.file", value: value })
+            "file-changed": function(file, name) {
+              _vm.update({ name: "health_notebook.file", value: file })
+              _vm.update({ name: "health_notebook.name", value: name })
             }
           }
         })
@@ -111387,8 +111525,9 @@ var render = function() {
             "expiration-changed": function(value) {
               return _vm.update({ name: "acc_pers.expiration", value: value })
             },
-            "file-changed": function(value) {
-              return _vm.update({ name: "acc_pers.file", value: value })
+            "file-changed": function(file, name) {
+              _vm.update({ name: "acc_pers.file", value: file })
+              _vm.update({ name: "acc_pers.name", value: name })
             }
           }
         })
@@ -114774,6 +114913,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             type: Array
         }
     },
+    data: function data() {
+        return {
+            groups_errors: []
+        };
+    },
     beforeMount: function beforeMount() {
         this.$store.dispatch('fetchList', 'gates');
     },
@@ -114781,19 +114925,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         gates: function gates() {
             return this.$store.getters.gates.asOptions();
-        },
-        groups_errors: function groups_errors() {
-            var _this = this;
-
-            var ret = [];
-            var errors = this.errors['groups'] ? this.errors['groups'] : [];
-            errors.forEach(function (e, index) {
-                if (_this.values.groups[index]) {
-                    var key = _this.values.groups[index].key;
-                    ret[key] = e;
-                }
-            });
-            return ret;
         }
     },
     methods: {
@@ -114804,7 +114935,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$store.commit('updateGroup', { group_key: group.key, attribute: attribute, value: value });
         },
         deleteGroup: function deleteGroup(group) {
-            this.$store.commit('deleteGroup', group);
+            var _this = this;
+
+            if (this.$store.getters.company.id && !group.key.toString().startsWith('T')) {
+                this.$confirm('Si realiza esta acción se desasociarán las personas al grupo', '', {
+                    confirmButtonText: 'Confirmar',
+                    cancelButtonText: 'Cancelar',
+                    type: 'error'
+                }).then(function () {
+                    _this.$store.commit('deleteGroup', group);
+                }).catch(function () {});
+            } else {
+                this.$store.commit('deleteGroup', group);
+            }
+        }
+    },
+    watch: {
+        errors: function errors() {
+            var _this2 = this;
+
+            var ret = [];
+            var errors = this.errors['groups'] ? this.errors['groups'] : [];
+            console.log(this.errors['groups']);
+
+            errors.forEach(function (e, index) {
+                if (_this2.values.groups[index]) {
+                    var key = _this2.values.groups[index].key;
+                    ret[key] = e;
+                }
+            });
+            this.groups_errors = ret;
         }
     }
 });
@@ -114862,6 +115022,20 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -114964,132 +115138,219 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "form-row" },
-    [
-      _c(
-        "form-item",
-        { attrs: { col: "col-5", label: "Nombre", errors: _vm.errors.name } },
-        [
-          _c("div", { staticClass: "col" }, [
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: _vm.name_placeholder },
-              domProps: { value: _vm.values.name },
-              on: {
-                input: function(e) {
-                  return _vm.update({ name: "name", value: e.target.value })
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          !_vm.values.name && _vm.name_placeholder
-            ? _c("div", { staticClass: "col-12" }, [
-                _c("small", [_vm._v("Mostrando nombre por defecto.")])
-              ])
-            : _vm._e()
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "form-item",
-        {
-          attrs: { col: "col-3", label: "Entrada", errors: _vm.errors.gate_id }
-        },
-        [
-          _c(
-            "div",
-            { staticClass: "col" },
-            [
-              _c("select2", {
-                attrs: {
-                  name: "gate_id",
-                  value: _vm.values.gate_id,
-                  placeholder: "Seleccione una entrada",
-                  options: _vm.gates
-                },
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "form-row" },
+      [
+        _c(
+          "form-item",
+          { attrs: { col: "col-5", label: "Nombre", errors: _vm.errors.name } },
+          [
+            _c("div", { staticClass: "col" }, [
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: _vm.name_placeholder },
+                domProps: { value: _vm.values.name },
                 on: {
-                  input: function(value) {
-                    return _vm.update({ name: "gate_id", value: value })
+                  input: function(e) {
+                    return _vm.update({ name: "name", value: e.target.value })
                   }
                 }
               })
-            ],
-            1
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "form-item",
-        {
-          attrs: {
-            col: "col-4",
-            label: "Franja horaria",
-            errors: []
-              .concat(_vm.errors.start ? _vm.errors.start : [])
-              .concat(_vm.errors.end ? _vm.errors.end : [])
-          }
-        },
-        [
-          _c(
-            "div",
-            { staticClass: "col" },
-            [
-              _c("el-time-select", {
-                staticStyle: { width: "100%" },
-                attrs: {
-                  placeholder: "Comienzo",
-                  value: _vm.values.start,
-                  "picker-options": _vm.timer_options
-                },
-                on: {
-                  input: function(value) {
-                    return _vm.update({ name: "start", value: value })
-                  }
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col" },
-            [
-              _c("el-time-select", {
-                staticStyle: { width: "100%" },
-                attrs: {
-                  placeholder: "Finalización",
-                  value: _vm.values.end,
-                  "picker-options": _vm.timer_options
-                },
-                on: {
-                  input: function(value) {
-                    return _vm.update({ name: "end", value: value })
-                  }
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _vm.different_days
-            ? _c("div", { staticClass: "col-12" }, [
-                _c("small", [
-                  _vm._v(
-                    "Esta franja comenzará un día y finalizará al siguiente."
-                  )
+            ]),
+            _vm._v(" "),
+            !_vm.values.name && _vm.name_placeholder
+              ? _c("div", { staticClass: "col-12" }, [
+                  _c("small", [_vm._v("Mostrando nombre por defecto.")])
                 ])
-              ])
-            : _vm._e()
-        ]
+              : _vm._e()
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "form-item",
+          {
+            attrs: {
+              col: "col-3",
+              label: "Entrada",
+              errors: _vm.errors.gate_id
+            }
+          },
+          [
+            _c(
+              "div",
+              { staticClass: "col" },
+              [
+                _c("select2", {
+                  attrs: {
+                    name: "gate_id",
+                    value: _vm.values.gate_id,
+                    placeholder: "Seleccione una entrada",
+                    options: _vm.gates
+                  },
+                  on: {
+                    input: function(value) {
+                      return _vm.update({ name: "gate_id", value: value })
+                    }
+                  }
+                })
+              ],
+              1
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "form-item",
+          {
+            attrs: {
+              col: "col-4",
+              label: "Franja horaria",
+              errors: []
+                .concat(_vm.errors.start ? _vm.errors.start : [])
+                .concat(_vm.errors.end ? _vm.errors.end : [])
+            }
+          },
+          [
+            _c(
+              "div",
+              { staticClass: "col" },
+              [
+                _c("el-time-select", {
+                  staticStyle: { width: "100%" },
+                  attrs: {
+                    placeholder: "Comienzo",
+                    value: _vm.values.start,
+                    "picker-options": _vm.timer_options
+                  },
+                  on: {
+                    input: function(value) {
+                      return _vm.update({ name: "start", value: value })
+                    }
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col" },
+              [
+                _c("el-time-select", {
+                  staticStyle: { width: "100%" },
+                  attrs: {
+                    placeholder: "Finalización",
+                    value: _vm.values.end,
+                    "picker-options": _vm.timer_options
+                  },
+                  on: {
+                    input: function(value) {
+                      return _vm.update({ name: "end", value: value })
+                    }
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm.different_days
+              ? _c("div", { staticClass: "col-12" }, [
+                  _c("small", [
+                    _vm._v(
+                      "Esta franja comenzará un día y finalizará al siguiente."
+                    )
+                  ])
+                ])
+              : _vm._e()
+          ]
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-row" }, [
+      _c(
+        "div",
+        { staticClass: "col" },
+        [
+          _c("hr-label", [_vm._v("Días habilitados")]),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Lunes", value: _vm.values.days.monday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.monday", value: value })
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Martes", value: _vm.values.days.tuesday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.tuesday", value: value })
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Miércoles", value: _vm.values.days.wednesday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.wednesday", value: value })
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Jueves", value: _vm.values.days.thursday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.thursday", value: value })
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Viernes", value: _vm.values.days.friday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.friday", value: value })
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Sábado", value: _vm.values.days.saturday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.saturday", value: value })
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Domingo", value: _vm.values.days.sunday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.sunday", value: value })
+              }
+            }
+          })
+        ],
+        1
       )
-    ],
-    1
-  )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -115131,16 +115392,14 @@ var render = function() {
                           staticStyle: { "text-align": "right" }
                         },
                         [
-                          _vm.values.groups.length > 1
-                            ? _c("i", {
-                                staticClass: "btn-remove far fa-trash-alt",
-                                on: {
-                                  click: function($event) {
-                                    _vm.deleteGroup(group)
-                                  }
-                                }
-                              })
-                            : _vm._e()
+                          _c("i", {
+                            staticClass: "btn-remove far fa-trash-alt",
+                            on: {
+                              click: function($event) {
+                                _vm.deleteGroup(group)
+                              }
+                            }
+                          })
                         ]
                       )
                     ]),
@@ -119493,6 +119752,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -119517,6 +119788,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     beforeMount: function beforeMount() {
         this.$store.dispatch('fetchList', 'companies');
         this.$store.dispatch('fetchList', 'gates');
+        console.log(this.values.days);
+
+        console.log(this.values.days.monday, this.values.days.tuesday);
     },
 
     computed: {
@@ -119718,7 +119992,88 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-row" }, [
+        _c(
+          "div",
+          { staticClass: "col" },
+          [
+            _c("hr-label", [_vm._v("Días habilitados")]),
+            _vm._v(" "),
+            _c("switch-box", {
+              staticClass: "mr-3",
+              attrs: { label: "Lunes", value: _vm.values.days.monday },
+              on: {
+                update: function(value) {
+                  return _vm.update({ name: "days.monday", value: value })
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("switch-box", {
+              staticClass: "mr-3",
+              attrs: { label: "Martes", value: _vm.values.days.tuesday },
+              on: {
+                update: function(value) {
+                  return _vm.update({ name: "days.tuesday", value: value })
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("switch-box", {
+              staticClass: "mr-3",
+              attrs: { label: "Miércoles", value: _vm.values.days.wednesday },
+              on: {
+                update: function(value) {
+                  return _vm.update({ name: "days.wednesday", value: value })
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("switch-box", {
+              staticClass: "mr-3",
+              attrs: { label: "Jueves", value: _vm.values.days.thursday },
+              on: {
+                update: function(value) {
+                  return _vm.update({ name: "days.thursday", value: value })
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("switch-box", {
+              staticClass: "mr-3",
+              attrs: { label: "Viernes", value: _vm.values.days.friday },
+              on: {
+                update: function(value) {
+                  return _vm.update({ name: "days.friday", value: value })
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("switch-box", {
+              staticClass: "mr-3",
+              attrs: { label: "Sábado", value: _vm.values.days.saturday },
+              on: {
+                update: function(value) {
+                  return _vm.update({ name: "days.saturday", value: value })
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("switch-box", {
+              staticClass: "mr-3",
+              attrs: { label: "Domingo", value: _vm.values.days.sunday },
+              on: {
+                update: function(value) {
+                  return _vm.update({ name: "days.sunday", value: value })
+                }
+              }
+            })
+          ],
+          1
+        )
+      ])
     ],
     1
   )
@@ -119772,7 +120127,7 @@ var render = function() {
         "creation-wrapper",
         {
           attrs: {
-            updating: this.$store.getters.vehicle.updating,
+            updating: this.$store.getters.group.updating,
             values: _vm.values,
             route: _vm.route
           },
@@ -120010,6 +120365,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -120068,12 +120432,26 @@ var render = function() {
         _c("br"),
         _vm._v(" "),
         _c("strong", [_vm._v(_vm._s(_vm.values.range))])
-      ])
+      ]),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "col-12" },
+        _vm._l(_vm.values.days, function(value, day) {
+          return _c("div", { key: day, staticClass: "d-inline mr-5" }, [
+            value == 0
+              ? _c("i", { staticClass: "far fa-circle" })
+              : _c("i", { staticClass: "fas fa-check-circle" }),
+            _vm._v(" "),
+            _c("strong", [_vm._v(_vm._s(day))])
+          ])
+        })
+      )
     ]),
     _vm._v(" "),
-    _c("br"),
-    _vm._v(" "),
-    _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "row mt-3" }, [
       _c(
         "div",
         { staticClass: "col-12" },
@@ -120106,7 +120484,16 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-12 mt-2" }, [
+      _c("small", [_vm._v("Días habilitados")])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

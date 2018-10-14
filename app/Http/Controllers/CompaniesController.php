@@ -35,6 +35,7 @@ class CompaniesController extends Controller
             foreach ($request->groups as $group) {
                 $group['company_id'] = $company->id;
                 $gp = new Group($group);
+                $gp->daysToChar($group['days']);
                 $gp->save();
             }
         }
@@ -62,16 +63,48 @@ class CompaniesController extends Controller
      */
     public function edit(Company $company)
     {
-        $comp = $company->toShowArray();
-        unset($comp['assigned_people'], $comp['assigned_vehicles']);
-        unset($comp['general_information']['expiration']);
-        $comp['general_information']['expiration'] = $company->expiration ? date('Y-m-d', strtotime($company->expiration)) : '';
-        if( $comp['general_information']['apartment'] === '-' ) $comp['general_information']['apartment'] = '';
+        $groups = $company->groups->map(function($group){
+            $days_array = $group->daysToArray();
+            return [
+                'key'     => $group->id,
+                'name'    => $group->name,
+                'gate_id' => $group->gate_id,
+                'start'   => $group->start,
+                'end'     => $group->end,
+                'days'          => [
+                    'monday'    => $days_array[0] == 1 ? true : false,
+                    'tuesday'   => $days_array[1] == 1 ? true : false,
+                    'wednesday' => $days_array[2] == 1 ? true : false,
+                    'thursday'  => $days_array[3] == 1 ? true : false,
+                    'friday'    => $days_array[4] == 1 ? true : false,
+                    'saturday'  => $days_array[5] == 1 ? true : false,
+                    'sunday'    => $days_array[6] == 1 ? true : false
+                ]
+            ];
+        })->toArray();
+
+        $general_information = array_merge([
+            'business_name' => $company->business_name,
+            'name'          => $company->name,
+            'area'          => $company->area,
+            'cuit'          => $company->cuit,
+            'expiration'    => $company->expiration ? date('Y-m-d', strtotime($company->expiration)) : '',
+        ],
+        $company->residency->toArray(),
+        $company->contactToArray());
 
         $data = [
             'id'    => $company->id,
-            'values' => [ 'general_information' => $comp['general_information'] ]
+            'values' => [
+                'general_information'   => $general_information,
+                'assign_groups'         => [
+                    'groups'            => $groups
+                ]
+            ]
         ];
+        \Debugbar::info($data);
+        if( $data['values']['general_information']['apartment'] === '-' ) $data['values']['general_information']['apartment'] = '';
+
         return response(json_encode($data), 200)->header('Content-Type', 'application/json'); 
     }
 
@@ -84,9 +117,36 @@ class CompaniesController extends Controller
      */
     public function update(Request $request, Company $company)
     {
+        // \Debugbar::info($request->toArray());
         $company->fill($request->toArray());
         $company->save();
-        
+
+        $old_groups = [];
+        foreach ($company->groups as $group) { array_push($old_groups,$group->id); }
+
+        $existing_groups = [];
+        foreach ($request->groups as $group) {
+            $existing_group = Group::where('id', $group['key'])->first();
+            if($existing_group) {
+                $existing_group->fill($group);
+                $existing_group->daysToChar($group['days']);
+                $existing_group->save();
+                array_push($existing_groups, $existing_group->id);
+            }
+            else {
+                $group['company_id'] = $company->id;
+                $gp = new Group($group);
+                $gp->daysToChar($group['days']);
+                $gp->save();
+            }
+        }
+
+        $removed_groups = array_diff($old_groups, $existing_groups);
+        foreach ($removed_groups as $group_id) {
+            $group = Group::where('id', $group_id)->first();
+            $group->deleteCascade();
+        }
+         
         return response(json_encode(['id' => $company->id]), 200)->header('Content-Type', 'application/json');
     }
 

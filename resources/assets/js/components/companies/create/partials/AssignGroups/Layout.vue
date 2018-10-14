@@ -31,7 +31,7 @@
                 <div class="grey-border mb-2" v-for="group in values.groups" :key="group.key">
                     <div class="form-row">
                         <div class="col" style="text-align: right">
-                            <i class="btn-remove far fa-trash-alt" v-if="values.groups.length > 1" @click="deleteGroup(group)"></i>
+                            <i class="btn-remove far fa-trash-alt" @click="deleteGroup(group)"></i>
                         </div>
                     </div>
                     <div class="form-row">
@@ -80,23 +80,17 @@ export default {
             type: Array
         }
     },
+    data() {
+        return {
+            groups_errors: []
+        }
+    },
     beforeMount() {
         this.$store.dispatch('fetchList','gates');
     },
     computed: {
         gates: function() {
             return this.$store.getters.gates.asOptions();
-        },
-        groups_errors: function() {
-            let ret = [];
-            let errors = this.errors['groups'] ? this.errors['groups'] : [];
-            errors.forEach((e, index) => {
-                if(this.values.groups[index]) {
-                    let key = this.values.groups[index].key;
-                    ret[key] = e;
-                }
-            });
-            return ret;
         }
     },
     methods: {
@@ -107,8 +101,36 @@ export default {
             this.$store.commit('updateGroup', {group_key: group.key, attribute, value});
         },
         deleteGroup: function(group) {
-            this.$store.commit('deleteGroup', group);
-        },
+            if(this.$store.getters.company.id && !group.key.toString().startsWith('T')) {
+                this.$confirm('Si realiza esta acción se desasociarán las personas al grupo', '', {
+                    confirmButtonText: 'Confirmar',
+                    cancelButtonText: 'Cancelar',
+                    type: 'error'
+                })
+                .then(() => {
+                    this.$store.commit('deleteGroup', group);
+                })
+                .catch(() => {});
+            }
+            else {
+                this.$store.commit('deleteGroup', group);
+            }
+        }
+    },
+    watch: {
+        errors: function() {
+            let ret = [];
+            let errors = this.errors['groups'] ? this.errors['groups'] : [];
+            console.log(this.errors['groups']);
+            
+            errors.forEach((e, index) => {
+                if(this.values.groups[index]) {
+                    let key = this.values.groups[index].key;
+                    ret[key] = e;
+                }
+            });
+            this.groups_errors = ret;
+        }
     }
 }
 </script>

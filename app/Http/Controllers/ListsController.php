@@ -132,6 +132,7 @@ class ListsController extends Controller
                 'model'             => $vehicle->model,
                 'year'              => $vehicle->year,
                 'colour'            => $vehicle->colour,
+                'company_id'        => $vehicle->company_id,
                 'company_name'      => $vehicle->company->name
             ];
         });

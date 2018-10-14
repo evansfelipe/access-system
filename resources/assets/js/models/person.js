@@ -12,6 +12,9 @@ export default {
                 sex:             !debug ? '' : 'M', 
                 blood_type:      !debug ? '' : '0+',
                 pna:             !debug ? '' : '0123456789',
+                risk:            !debug ? '' : '1',
+                homeland:        !debug ? '' : '',
+                register_number: !debug ? '' : '123450999',
                 email:           !debug ? '' : 'mail@example.com',
                 home_phone:      !debug ? '' : '2231234567',
                 mobile_phone:    !debug ? '' : '223123652643',
@@ -22,9 +25,6 @@ export default {
                 country:         !debug ? '' : '',
                 province:        !debug ? '' : '',
                 city:            !debug ? '' : '',
-                risk:            !debug ? '' : '1',
-                homeland:        !debug ? '' : '',
-                register_number: !debug ? '' : '123450999',
             },
             working_information: {
                 jobs: [{
@@ -37,10 +37,12 @@ export default {
                     art_number:     !debug ? '' : '123456',
                     company_note: {
                         file: '',
+                        name: '',
                         expiration: '2020-06-07'
                     },
                     art_file: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     cards: [{
@@ -56,34 +58,42 @@ export default {
                 documents: {
                     dni_copy: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     pna_file: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     driver_license: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     acc_pers: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     boarding_passbook: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     boarding_card: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     health_notebook: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                     pbip_file: {
                         file: '',
+                        name: '',
                         expiration: ''
                     },
                 },

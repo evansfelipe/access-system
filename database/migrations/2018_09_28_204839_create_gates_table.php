@@ -17,6 +17,7 @@ class CreateGatesTable extends Migration
             $table->increments('id');
             $table->string('name', Gate::LENGTHS['name']['max'])->required()->unique();
             $table->boolean('enabled')->default(false);
+            $table->integer('zone_id')->unsigned()->required();
             $table->timestamps();
         });
     }

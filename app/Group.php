@@ -44,6 +44,22 @@ class Group extends Model
             'end' => [
                 'required',
                 "regex:/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/", 
+            ],
+            'days' => [
+                'required',
+                'array',
+                function ($attribute, $value, $fail) {
+                    $days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+                    $keys = array_keys($value);
+                    foreach ($keys as $key) {
+                        if (!in_array($key, $days)) {
+                            $fail('Algún día es inválido');
+                        }
+                    }
+                },
+            ],
+            'days.*' => [
+                'boolean'
             ]
         ];
     }
@@ -79,6 +95,11 @@ class Group extends Model
         return $this->belongsTo('\App\Gate')->select(['id', 'name']);
     }
 
+    public function jobs()
+    {
+        return $this->belongsToMany('App\PersonCompany','person_job_groups','group_id','job_id');
+    }
+
     public function rangeToString()
     {
         $start_hour = date('H:i', strtotime($this->start));
@@ -97,8 +118,34 @@ class Group extends Model
         return $ret;
     }
 
+    /**
+     * Gets the ordinal number of the char stored and transforms it to a seven bits string.
+     * Then the string is completed with zeros to the left.
+     * Finally the string is converted to an array and returns it.
+     */
+    public function daysToArray()
+    {
+        $bin = decbin(ord($this->days));
+        $bin = str_pad($bin, 7, 0, STR_PAD_LEFT);
+        $bin = str_split($bin);
+        return $bin;
+    }
+
+    /**
+     * Opposite of the previous function.
+     * Receives an array with the ones and zeros of the days and transforms it to an array.
+     * Put the ones and zeros all together in a string and gets the decimal number of the binary.
+     * Finally converts the ordinal to a char and stores it in the days variable.
+     */
+    public function daysToChar($days_array)
+    {
+        $days = array_map(function($day) { return $day === true ? 1 : 0; }, $days_array);
+        $this->days = chr(bindec(implode("", $days)));
+    }
+
     public function toShowArray()
     {
+        $days_array = $this->daysToArray();
         return [
             'id'            => $this->id,
             'name'          => $this->formatedName(),
@@ -106,11 +153,32 @@ class Group extends Model
             'range'         => $this->rangeToString().($this->end < $this->start ? ' (+1d)' : ''),
             'company'       => $this->company ? $this->company->name : '-',
             'company_id'    => $this->company ? $this->company->id : null,
+            'days'          => [
+                'Lunes'     => $days_array[0],
+                'Martes'    => $days_array[1],
+                'Miércoles' => $days_array[2],
+                'Jueves'    => $days_array[3],
+                'Viernes'   => $days_array[4],
+                'Sábado'    => $days_array[5],
+                'Domingo'   => $days_array[6]
+            ]
         ];
     }
 
     public function toListArray()
     {
-        return $this->toShowArray();
+        return [
+            'id'            => $this->id,
+            'name'          => $this->formatedName(),
+            'gate'          => $this->gate->name,
+            'range'         => $this->rangeToString().($this->end < $this->start ? ' (+1d)' : ''),
+            'company'       => $this->company ? $this->company->name : '-'
+        ];
+    }
+
+    public function deleteCascade()
+    {
+        $this->jobs()->detach();
+        $this->delete();
     }
 }

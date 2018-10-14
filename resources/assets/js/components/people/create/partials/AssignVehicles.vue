@@ -104,6 +104,7 @@ export default {
     beforeMount() {
         this.$store.dispatch('fetchList', 'vehicles');
         this.splitLists();
+        
     },
     computed: {
         vehicles: function() {
