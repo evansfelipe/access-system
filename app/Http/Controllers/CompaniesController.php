@@ -35,6 +35,7 @@ class CompaniesController extends Controller
             foreach ($request->groups as $group) {
                 $group['company_id'] = $company->id;
                 $gp = new Group($group);
+                $gp->daysToChar($group['days']);
                 $gp->save();
             }
         }
@@ -63,12 +64,22 @@ class CompaniesController extends Controller
     public function edit(Company $company)
     {
         $groups = $company->groups->map(function($group){
+            $days_array = $group->daysToArray();
             return [
                 'key'     => $group->id,
                 'name'    => $group->name,
                 'gate_id' => $group->gate_id,
                 'start'   => $group->start,
-                'end'     => $group->end
+                'end'     => $group->end,
+                'days'          => [
+                    'monday'    => $days_array[0] == 1 ? true : false,
+                    'tuesday'   => $days_array[1] == 1 ? true : false,
+                    'wednesday' => $days_array[2] == 1 ? true : false,
+                    'thursday'  => $days_array[3] == 1 ? true : false,
+                    'friday'    => $days_array[4] == 1 ? true : false,
+                    'saturday'  => $days_array[5] == 1 ? true : false,
+                    'sunday'    => $days_array[6] == 1 ? true : false
+                ]
             ];
         })->toArray();
 
@@ -118,12 +129,14 @@ class CompaniesController extends Controller
             $existing_group = Group::where('id', $group['key'])->first();
             if($existing_group) {
                 $existing_group->fill($group);
+                $existing_group->daysToChar($group['days']);
                 $existing_group->save();
                 array_push($existing_groups, $existing_group->id);
             }
             else {
                 $group['company_id'] = $company->id;
                 $gp = new Group($group);
+                $gp->daysToChar($group['days']);
                 $gp->save();
             }
         }

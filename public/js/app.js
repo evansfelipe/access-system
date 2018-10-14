@@ -55608,6 +55608,7 @@ var Model = function () {
          * Adds a new job to the jobs list of the person's model
          */
         addJob: function addJob(state) {
+            state.models['person'].modified = true;
             state.models.person.values.working_information.jobs.push({
                 key: Date.now(),
                 company_id: '',
@@ -55627,6 +55628,7 @@ var Model = function () {
                 attribute = _ref24.attribute,
                 value = _ref24.value;
 
+            state.models['person'].modified = true;
             var pos = state.models.person.values.working_information.jobs.getPositionById(job_key, 'key');
             var ref = state.models.person.values.working_information.jobs[pos];
             var attributes = attribute.split('.');
@@ -55646,6 +55648,7 @@ var Model = function () {
          * Given a job, removes it from the jobs list of the person's model.
          */
         deleteJob: function deleteJob(state, job) {
+            state.models['person'].modified = true;
             var pos = state.models.person.values.working_information.jobs.indexOf(job);
             if (pos !== -1) {
                 state.models.person.values.working_information.jobs.splice(pos, 1);
@@ -55655,6 +55658,7 @@ var Model = function () {
          * Given a job, adds a new card to its cards list.
          */
         addCardToJob: function addCardToJob(state, job) {
+            state.models['person'].modified = true;
             var pos = state.models.person.values.working_information.jobs.indexOf(job);
             if (pos !== -1) {
                 state.models.person.values.working_information.jobs[pos].cards.push({
@@ -55671,6 +55675,7 @@ var Model = function () {
                 attribute = _ref25.attribute,
                 value = _ref25.value;
 
+            state.models['person'].modified = true;
             var pos = state.models.person.values.working_information.jobs.indexOf(job);
             if (pos !== -1) {
                 var pos2 = state.models.person.values.working_information.jobs[pos].cards.indexOf(card);
@@ -55687,6 +55692,7 @@ var Model = function () {
             var job = _ref26.job,
                 card = _ref26.card;
 
+            state.models['person'].modified = true;
             var pos = state.models.person.values.working_information.jobs.indexOf(job);
             if (pos !== -1) {
                 var pos2 = state.models.person.values.working_information.jobs[pos].cards.indexOf(card);
@@ -55700,12 +55706,22 @@ var Model = function () {
          * Adds a new group to the groups list of the company's model
          */
         addGroup: function addGroup(state) {
+            state.models['company'].modified = true;
             state.models.company.values.assign_groups.groups.push({
                 key: 'T' + Date.now(),
                 name: '',
                 gate_id: '',
                 start: '',
-                end: ''
+                end: '',
+                days: {
+                    monday: false,
+                    tuesday: false,
+                    wednesday: false,
+                    thursday: false,
+                    friday: false,
+                    saturday: false,
+                    sunday: false
+                }
             });
         },
         /**
@@ -55716,15 +55732,29 @@ var Model = function () {
                 attribute = _ref27.attribute,
                 value = _ref27.value;
 
+            state.models['company'].modified = true;
             var pos = state.models.company.values.assign_groups.groups.getPositionById(group_key, 'key');
             var ref = state.models.company.values.assign_groups.groups[pos];
-            if (state.debug) console.log('Updating model: ', 'company', 'state.models.company.values.assign_groups.groups', value);
-            ref[attribute] = value;
+            // ref[attribute] = value;
+            var attributes = attribute.split('.');
+            var i = 1;
+            var last_attr = void 0;
+            attributes.forEach(function (attr) {
+                if (attributes.length === i) {
+                    last_attr = attr;
+                } else {
+                    ref = ref[attr];
+                    i++;
+                }
+            });
+            if (state.debug) console.log(last_attr, value);
+            ref[last_attr] = value;
         },
         /**
          * Given a group, removes it from the groups list of the company's model
          */
         deleteGroup: function deleteGroup(state, group) {
+            state.models['company'].modified = true;
             var pos = state.models.company.values.assign_groups.groups.indexOf(group);
             if (pos !== -1) {
                 state.models.company.values.assign_groups.groups.splice(pos, 1);
@@ -55839,7 +55869,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     name: !debug ? '' : 'Example group name',
                     gate_id: !debug ? '' : 1,
                     start: !debug ? '' : '09:00',
-                    end: !debug ? '' : '17:00'
+                    end: !debug ? '' : '17:00',
+                    days: {
+                        monday: false,
+                        tuesday: false,
+                        wednesday: false,
+                        thursday: false,
+                        friday: false,
+                        saturday: false,
+                        sunday: false
+                    }
                 }]
             }
         };
@@ -114548,6 +114587,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -114606,132 +114659,219 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "form-row" },
-    [
-      _c(
-        "form-item",
-        { attrs: { col: "col-5", label: "Nombre", errors: _vm.errors.name } },
-        [
-          _c("div", { staticClass: "col" }, [
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: _vm.name_placeholder },
-              domProps: { value: _vm.values.name },
-              on: {
-                input: function(e) {
-                  return _vm.update({ name: "name", value: e.target.value })
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          !_vm.values.name && _vm.name_placeholder
-            ? _c("div", { staticClass: "col-12" }, [
-                _c("small", [_vm._v("Mostrando nombre por defecto.")])
-              ])
-            : _vm._e()
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "form-item",
-        {
-          attrs: { col: "col-3", label: "Entrada", errors: _vm.errors.gate_id }
-        },
-        [
-          _c(
-            "div",
-            { staticClass: "col" },
-            [
-              _c("select2", {
-                attrs: {
-                  name: "gate_id",
-                  value: _vm.values.gate_id,
-                  placeholder: "Seleccione una entrada",
-                  options: _vm.gates
-                },
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "form-row" },
+      [
+        _c(
+          "form-item",
+          { attrs: { col: "col-5", label: "Nombre", errors: _vm.errors.name } },
+          [
+            _c("div", { staticClass: "col" }, [
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: _vm.name_placeholder },
+                domProps: { value: _vm.values.name },
                 on: {
-                  input: function(value) {
-                    return _vm.update({ name: "gate_id", value: value })
+                  input: function(e) {
+                    return _vm.update({ name: "name", value: e.target.value })
                   }
                 }
               })
-            ],
-            1
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "form-item",
-        {
-          attrs: {
-            col: "col-4",
-            label: "Franja horaria",
-            errors: []
-              .concat(_vm.errors.start ? _vm.errors.start : [])
-              .concat(_vm.errors.end ? _vm.errors.end : [])
-          }
-        },
-        [
-          _c(
-            "div",
-            { staticClass: "col" },
-            [
-              _c("el-time-select", {
-                staticStyle: { width: "100%" },
-                attrs: {
-                  placeholder: "Comienzo",
-                  value: _vm.values.start,
-                  "picker-options": _vm.timer_options
-                },
-                on: {
-                  input: function(value) {
-                    return _vm.update({ name: "start", value: value })
-                  }
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col" },
-            [
-              _c("el-time-select", {
-                staticStyle: { width: "100%" },
-                attrs: {
-                  placeholder: "Finalización",
-                  value: _vm.values.end,
-                  "picker-options": _vm.timer_options
-                },
-                on: {
-                  input: function(value) {
-                    return _vm.update({ name: "end", value: value })
-                  }
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _vm.different_days
-            ? _c("div", { staticClass: "col-12" }, [
-                _c("small", [
-                  _vm._v(
-                    "Esta franja comenzará un día y finalizará al siguiente."
-                  )
+            ]),
+            _vm._v(" "),
+            !_vm.values.name && _vm.name_placeholder
+              ? _c("div", { staticClass: "col-12" }, [
+                  _c("small", [_vm._v("Mostrando nombre por defecto.")])
                 ])
-              ])
-            : _vm._e()
-        ]
+              : _vm._e()
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "form-item",
+          {
+            attrs: {
+              col: "col-3",
+              label: "Entrada",
+              errors: _vm.errors.gate_id
+            }
+          },
+          [
+            _c(
+              "div",
+              { staticClass: "col" },
+              [
+                _c("select2", {
+                  attrs: {
+                    name: "gate_id",
+                    value: _vm.values.gate_id,
+                    placeholder: "Seleccione una entrada",
+                    options: _vm.gates
+                  },
+                  on: {
+                    input: function(value) {
+                      return _vm.update({ name: "gate_id", value: value })
+                    }
+                  }
+                })
+              ],
+              1
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "form-item",
+          {
+            attrs: {
+              col: "col-4",
+              label: "Franja horaria",
+              errors: []
+                .concat(_vm.errors.start ? _vm.errors.start : [])
+                .concat(_vm.errors.end ? _vm.errors.end : [])
+            }
+          },
+          [
+            _c(
+              "div",
+              { staticClass: "col" },
+              [
+                _c("el-time-select", {
+                  staticStyle: { width: "100%" },
+                  attrs: {
+                    placeholder: "Comienzo",
+                    value: _vm.values.start,
+                    "picker-options": _vm.timer_options
+                  },
+                  on: {
+                    input: function(value) {
+                      return _vm.update({ name: "start", value: value })
+                    }
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col" },
+              [
+                _c("el-time-select", {
+                  staticStyle: { width: "100%" },
+                  attrs: {
+                    placeholder: "Finalización",
+                    value: _vm.values.end,
+                    "picker-options": _vm.timer_options
+                  },
+                  on: {
+                    input: function(value) {
+                      return _vm.update({ name: "end", value: value })
+                    }
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm.different_days
+              ? _c("div", { staticClass: "col-12" }, [
+                  _c("small", [
+                    _vm._v(
+                      "Esta franja comenzará un día y finalizará al siguiente."
+                    )
+                  ])
+                ])
+              : _vm._e()
+          ]
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-row" }, [
+      _c(
+        "div",
+        { staticClass: "col" },
+        [
+          _c("hr-label", [_vm._v("Días habilitados")]),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Lunes", value: _vm.values.days.monday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.monday", value: value })
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Martes", value: _vm.values.days.tuesday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.tuesday", value: value })
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Miércoles", value: _vm.values.days.wednesday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.wednesday", value: value })
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Jueves", value: _vm.values.days.thursday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.thursday", value: value })
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Viernes", value: _vm.values.days.friday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.friday", value: value })
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Sábado", value: _vm.values.days.saturday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.saturday", value: value })
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("switch-box", {
+            staticClass: "mr-3",
+            attrs: { label: "Domingo", value: _vm.values.days.sunday },
+            on: {
+              update: function(value) {
+                return _vm.update({ name: "days.sunday", value: value })
+              }
+            }
+          })
+        ],
+        1
       )
-    ],
-    1
-  )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

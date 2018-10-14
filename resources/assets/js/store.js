@@ -278,6 +278,7 @@ export default {
          * Adds a new job to the jobs list of the person's model
          */
         addJob: function(state) {
+            state.models['person'].modified = true;
             state.models.person.values.working_information.jobs.push({
                 key: Date.now(),
                 company_id: '',
@@ -293,6 +294,7 @@ export default {
          * Given a job of the jobs list of the person's model, updates its values.
          */
         updateJob: function(state, {job_key, attribute, value}) {
+            state.models['person'].modified = true;
             let pos = state.models.person.values.working_information.jobs.getPositionById(job_key, 'key');
             let ref = state.models.person.values.working_information.jobs[pos];
             let attributes = attribute.split('.');
@@ -313,6 +315,7 @@ export default {
          * Given a job, removes it from the jobs list of the person's model.
          */
         deleteJob: function(state, job) {
+            state.models['person'].modified = true;
             let pos = state.models.person.values.working_information.jobs.indexOf(job);
             if(pos !== -1) {
                 state.models.person.values.working_information.jobs.splice(pos, 1);
@@ -322,6 +325,7 @@ export default {
          * Given a job, adds a new card to its cards list.
          */
         addCardToJob: function(state, job) {
+            state.models['person'].modified = true;
             let pos = state.models.person.values.working_information.jobs.indexOf(job);
             if(pos !== -1) {
                 state.models.person.values.working_information.jobs[pos].cards.push({
@@ -333,6 +337,7 @@ export default {
             }
         },
         editCardFromJob: function(state, {job, card, attribute, value}) {
+            state.models['person'].modified = true;
             let pos = state.models.person.values.working_information.jobs.indexOf(job);
             if(pos !== -1) {
                 let pos2 = state.models.person.values.working_information.jobs[pos].cards.indexOf(card);
@@ -346,6 +351,7 @@ export default {
          * Given a job and a card, removes the card from the card list of the job.
          */
         removeCardFromJob: function(state, {job, card}) {
+            state.models['person'].modified = true;
             let pos = state.models.person.values.working_information.jobs.indexOf(job);
             if(pos !== -1) {
                 let pos2 = state.models.person.values.working_information.jobs[pos].cards.indexOf(card);
@@ -359,27 +365,52 @@ export default {
          * Adds a new group to the groups list of the company's model
          */
         addGroup: function(state) {
+            state.models['company'].modified = true;
             state.models.company.values.assign_groups.groups.push({
                 key: 'T' + Date.now(),
                 name: '',
                 gate_id: '',
                 start: '',
-                end: ''
+                end: '',
+                days: {
+                    monday:    false,
+                    tuesday:   false,
+                    wednesday: false,
+                    thursday:  false,
+                    friday:    false,
+                    saturday:  false,
+                    sunday:    false,
+                }
             });
         },
         /**
          * Given a group of the groups list of the company's model, updates its values
          */
         updateGroup: function(state, {group_key, attribute, value}) {
+            state.models['company'].modified = true;
             let pos = state.models.company.values.assign_groups.groups.getPositionById(group_key, 'key');
             let ref = state.models.company.values.assign_groups.groups[pos];
-            if(state.debug) console.log('Updating model: ', 'company', 'state.models.company.values.assign_groups.groups', value);
-            ref[attribute] = value;
+            // ref[attribute] = value;
+            let attributes = attribute.split('.');
+            let i = 1;
+            let last_attr;
+            attributes.forEach(attr => {
+                if(attributes.length === i){
+                    last_attr = attr;
+                }
+                else {
+                    ref = ref[attr];
+                    i++;
+                }
+            });
+            if(state.debug) console.log(last_attr,value);
+            ref[last_attr] = value;
         },
         /**
          * Given a group, removes it from the groups list of the company's model
          */
         deleteGroup: function(state, group) {
+            state.models['company'].modified = true;
             let pos = state.models.company.values.assign_groups.groups.indexOf(group);
             if(pos !== -1) {
                 state.models.company.values.assign_groups.groups.splice(pos, 1);
