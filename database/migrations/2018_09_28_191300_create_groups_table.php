@@ -20,7 +20,7 @@ class CreateGroupsTable extends Migration
             $table->string('name', Group::LENGTHS['name']['max'])->nullable();
             $table->time('start')->required();
             $table->time('end')->required();
-            $table->integer('gate_id')->unsigned()->required();
+            $table->integer('zone_id')->unsigned()->required();
             $table->integer('company_id')->unsigned()->nullable();
             $table->char('days')->nullable();
             $table->timestamps();

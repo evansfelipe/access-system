@@ -52,31 +52,27 @@ class GenerateEntranceFiles extends Command
             $path = $file_path . $file_name . '.csv'; // TODO: write the correct file name and path.
             // Content to store.
             $content = "";
-            foreach($zone->gates as $gate) {
-                if($gate->enabled) {
-                    foreach($gate->groups as $group) {
-                        foreach($group->jobs as $job) {
-                            foreach($job->cards as $card) {
-                                // Validates that the person is not suspended, as well as the company and
-                                // that the card is not expired.
-                                if(true) { // TODO: Change
-                                    // Card FC + ID
-                                    $line = '4'.';'.$card->number.';';
-                                    // Hours range
-                                    $line = $line . ($group->end < $group->start ?
-                                            $group->start.';'.'23:59:59'.';'.'00:00:00'.';'.$group->end.';' :
-                                            $group->start.';'.$group->end.';;;');
-                                    // Days
-                                    $bin = $group->daysToArray();
-                                    $line = $line . implode(';', $bin) . ';';
-                                    // Gate number.
-                                    $line = $line . $gate->id.';';
-                                    // Risk level.
-                                    $line = $line . $job->person->risk;
-                                    // Appends the line to the file content.
-                                    $content = $content . $line . $br;
-                                }
-                            }
+            foreach($zone->groups as $group) {
+                foreach($group->jobs as $job) {
+                    foreach($job->cards as $card) {
+                        // Validates that the person is not suspended, as well as the company and
+                        // that the card is not expired.
+                        if(true) { // TODO: Change
+                            // Card FC + ID
+                            $line = '0004'.';'.$card->number.';';
+                            // Hours range
+                            $line = $line . ($group->end < $group->start ?
+                                    $group->start.';'.'23:59:59'.';'.'00:00:00'.';'.$group->end.';' :
+                                    $group->start.';'.$group->end.';;;');
+                            // Days
+                            $bin = $group->daysToArray();
+                            $line = $line . implode(';', $bin) . ';';
+                            // Gate number.
+                            $line = $line . 'FF;';//$gate->id.';';
+                            // Risk level.
+                            $line = $line . $job->person->risk;
+                            // Appends the line to the file content.
+                            $content = $content . $line . $br;
                         }
                     }
                 }

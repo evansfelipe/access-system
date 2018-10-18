@@ -18,11 +18,12 @@ class ListsController extends Controller
     public function peopleList(Request $request)
     {
         $timestamp = $request->timestamp;
-        $people = Person::select('id', 'last_name', 'name', 'cuil')
+        $people = Person::with('companies:companies.id,companies.name')
+                        ->select('people.id', 'people.last_name', 'people.name', 'people.cuil')
                         ->when($timestamp, function($query, $timestamp) {
                             return $query->where('updated_at', '>', $timestamp);
                         })
-                        ->orderBy('created_at','asc')
+                        ->orderBy('people.id', 'asc') // Id instead of created_at for efficiency.
                         ->get()
                         ->map(function($person) {
                             return [
@@ -30,10 +31,8 @@ class ListsController extends Controller
                                 'last_name'     => $person->last_name,
                                 'name'          => $person->name,
                                 'cuil'          => $person->cuil,
-                                'companies'     => $person->companies()->select('companies.id')->get()->map(function($job) {
-                                                        return $job->id;
-                                                    }),
-                                'company_name'  => $person->companies()->select('name')->get()->implode('name', ' / ')
+                                'companies'     => $person->companies->pluck('id'),
+                                'company_name'  => $person->companies->pluck('name')->implode('name', ' / ')
                             ];
                         });
         return response(json_encode($people))->header('Content-Type', 'application/json');        

@@ -11,10 +11,10 @@
                     <small>Mostrando nombre por defecto.</small>
                 </div>
             </form-item>
-            <form-item col="col-3" label="Entrada" :errors="errors.gate_id">
+            <form-item col="col-3" label="Entrada" :errors="errors.zone_id">
                 <div class="col">
-                    <select2    name="gate_id" :value="values.gate_id" @input="(value) => update({name: 'gate_id', value: value})"
-                                placeholder="Seleccione una entrada" :options="gates"/>
+                    <select2    name="zone_id" :value="values.zone_id" @input="(value) => update({name: 'zone_id', value: value})"
+                                placeholder="Seleccione una entrada" :options="zones"/>
                 </div>
             </form-item>
             <form-item col="col-4" label="Franja horaria" :errors="[].concat(errors.start ? errors.start : []).concat(errors.end ? errors.end : [])">
@@ -63,7 +63,7 @@ export default {
             required: true,
             type: String
         },
-        gates: {
+        zones: {
             required: true,
             type: Array
         },
@@ -87,10 +87,10 @@ export default {
     },
     computed: {
         name_placeholder: function() {
-            let gate = this.gates.getById(this.values.gate_id);
+            let zone = this.zones.getById(this.values.zone_id);
             let range = `(${this.values.start} - ${this.values.end})`
             return  (this.companyname ? this.companyname + ' ' : '') +
-                    (gate ? gate.text + ' ' : '') +
+                    (zone ? zone.text + ' ' : '') +
                     (this.values.start && this.values.end ? range : '');
         },
         different_days: function() {

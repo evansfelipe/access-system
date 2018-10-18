@@ -21,7 +21,7 @@ export default {
         return {
             columns: [
                 { name: 'name',         text: 'Nombre',         width:'50'},
-                { name: 'gate',         text: 'Entrada',        width:'25'},
+                { name: 'zone',         text: 'Zona',        width:'25'},
                 { name: 'range',        text: 'Franja horaria', width:'25'}
             ]
         }

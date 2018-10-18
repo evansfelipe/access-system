@@ -36,6 +36,11 @@ class Zone extends Model
         return $this->hasMany('App\Gate');
     }
 
+    public function groups()
+    {
+        return $this->hasMany('App\Group');
+    }
+
     public function toListArray()
     {
         return [

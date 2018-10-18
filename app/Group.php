@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
-    protected $fillable = ['name', 'gate_id', 'start', 'end', 'company_id'];
+    protected $fillable = ['name', 'zone_id', 'start', 'end', 'company_id'];
     
     /**
      * Array with the length of each string column of the database associated with this model.
@@ -32,10 +32,10 @@ class Group extends Model
                 'string',
                 'max:'.Group::LENGTHS['name']['max'],
             ],
-            'gate_id' => [
+            'zone_id' => [
                 'required',
                 'integer',
-                'exists:gates,id'
+                'exists:zones,id'
             ],
             'start' => [
                 'required',
@@ -87,11 +87,11 @@ class Group extends Model
     }
 
     /**
-     * The gate that this group manages.
+     * The zone that this group manages.
      */
-    public function gate()
+    public function zone()
     {
-        return $this->belongsTo('\App\Gate')->select(['id', 'name']);
+        return $this->belongsTo('\App\Zone')->select(['id', 'name']);
     }
 
     /**
@@ -122,7 +122,7 @@ class Group extends Model
         if($ret === '') {
             $company_name   = $this->company ? $this->company->name.' -' : '';
             // Composes the name
-            $ret = $company_name.' '.$this->gate->name.' ('.$this->rangeToString().')';
+            $ret = $company_name.' '.$this->zone->name.' ('.$this->rangeToString().')';
         }
         return $ret;
     }
@@ -158,7 +158,7 @@ class Group extends Model
         return [
             'id'            => $this->id,
             'name'          => $this->formatedName(),
-            'gate'          => $this->gate->name,
+            'zone'          => $this->zone->name,
             'range'         => $this->rangeToString().($this->end < $this->start ? ' (+1d)' : ''),
             'company'       => $this->company ? $this->company->name : '-',
             'company_id'    => $this->company ? $this->company->id : null,
@@ -179,7 +179,7 @@ class Group extends Model
         return [
             'id'            => $this->id,
             'name'          => $this->formatedName(),
-            'gate'          => $this->gate->name,
+            'zone'          => $this->zone->name,
             'range'         => $this->rangeToString().($this->end < $this->start ? ' (+1d)' : ''),
             'company'       => $this->company ? $this->company->name : '-',
             'company_id'    => $this->company ? $this->company->id : null,

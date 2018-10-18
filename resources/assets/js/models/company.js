@@ -22,7 +22,7 @@ export default {
                 groups: !debug ? [] : [{
                     key:        'T' + Date.now(),
                     name:       !debug ? '' : 'Example group name',
-                    gate_id:    !debug ? '' : 1,
+                    zone_id:    !debug ? '' : 1,
                     start:      !debug ? '' : '09:00',
                     end:        !debug ? '' : '17:00',
                     days: {

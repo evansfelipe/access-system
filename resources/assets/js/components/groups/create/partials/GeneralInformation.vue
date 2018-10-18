@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.gates.updating"/>
+        <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.zones.updating"/>
         <div class="form-row">
             <form-item label="Empresa" :errors="errors.company_id">
                 <div class="col">
@@ -20,10 +20,10 @@
             </form-item>
         </div>
         <div class="form-row">
-            <form-item label="Entrada" :errors="errors.gate_id">
+            <form-item label="Entrada" :errors="errors.zone_id">
                 <div class="col">
-                    <select2    name="gate_id" :value="values.gate_id" @input="(value) => update({name: 'gate_id', value: value})"
-                                placeholder="Seleccione una entrada" :options="gates"/>
+                    <select2    name="zone_id" :value="values.zone_id" @input="(value) => update({name: 'zone_id', value: value})"
+                                placeholder="Seleccione una zona" :options="zones"/>
                 </div>
             </form-item>
             <form-item label="Franja horaria" :errors="[].concat(errors.start ? errors.start : []).concat(errors.end ? errors.end : [])">
@@ -88,21 +88,18 @@ export default {
     },
     beforeMount() {
         this.$store.dispatch('fetchList','companies');
-        this.$store.dispatch('fetchList','gates');
-        console.log(this.values.days);
-        
-        console.log(this.values.days.monday, this.values.days.tuesday);
+        this.$store.dispatch('fetchList','zones');
     },
     computed: {
         companies: function() {
             return this.$store.getters.companies.asOptions();
         },
-        gates: function() {
-            return this.$store.getters.gates.asOptions();
+        zones: function() {
+            return this.$store.getters.zones.asOptions();
         },
         name_placeholder: function() {
             let company = this.companies.getById(this.values.company_id);
-            let gate = this.gates.getById(this.values.gate_id);
+            let gate = this.zones.getById(this.values.gate_id);
             let range = `(${this.values.start} - ${this.values.end})`
             return  (company ? company.text + ' - ' : '') +
                     (gate ? gate.text + ' ' : '') +

@@ -29,7 +29,7 @@ export default {
             columns: [
                 { name: 'name',         text: 'Nombre',         width:'40'},
                 { name: 'company',      text: 'Empresa',        width:'20'},
-                { name: 'gate',         text: 'Entrada',        width:'20'},
+                { name: 'zone',         text: 'Zona',        width:'20'},
                 { name: 'range',        text: 'Franja horaria', width:'20'}
             ],
             filter: {

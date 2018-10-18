@@ -25,7 +25,7 @@
 
 <template>
     <div>
-        <loading-cover v-if="this.$store.getters.gates.updating"/>
+        <loading-cover v-if="this.$store.getters.zones.updating"/>
         <template v-else>
             <transition-group name="group" tag="div">
                 <div class="grey-border mb-2" v-for="group in values.groups" :key="group.key">
@@ -38,7 +38,7 @@
                         <div class="col-12">
                             <group-information
                                 :companyname="companyname"
-                                :gates="gates"
+                                :zones="zones"
                                 :values="group"
                                 :errors="groups_errors[group.key] ? groups_errors[group.key] : []"
                                 @change="({attribute, value}) => editGroup(group, attribute, value)"
@@ -86,11 +86,11 @@ export default {
         }
     },
     beforeMount() {
-        this.$store.dispatch('fetchList','gates');
+        this.$store.dispatch('fetchList','zones');
     },
     computed: {
-        gates: function() {
-            return this.$store.getters.gates.asOptions();
+        zones: function() {
+            return this.$store.getters.zones.asOptions();
         }
     },
     methods: {

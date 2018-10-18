@@ -40,15 +40,6 @@ class Gate extends Model
         ];
     }
 
-    /**
-     * All the groups where this gate is assigned. It may be empty if this gate hasn't been assigned
-     * to a group yet.
-     */
-    public function groups()
-    {
-        return $this->hasMany('App\Group');
-    }
-
     public function toListArray()
     {
         return [
