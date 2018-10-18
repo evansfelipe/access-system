@@ -50,8 +50,8 @@ export default {
     methods: {
         saveSuccess: function(id) {
             this.$router.push(`/groups/show/${id}`);
-            this.$store.dispatch('addNotification', {type: 'success', message: `Contenedor ${this.id ? 'editado' : 'creado'} exitosamente.`});
-            this.$store.commit('resetModel', 'container');
+            this.$store.dispatch('addNotification', {type: 'success', message: `Grupo ${this.id ? 'editado' : 'creado'} exitosamente.`});
+            this.$store.commit('resetModel', 'group');
             this.first_save = true;
         },
         saveFailed: function({ errors, step_validated }) {
@@ -61,7 +61,7 @@ export default {
         },
         cancel: function() {
             this.$router.go(-1);
-            this.$store.commit('resetModel', 'container');
+            this.$store.commit('resetModel', 'group');
         },
     }
 }

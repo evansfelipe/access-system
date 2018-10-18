@@ -81,6 +81,10 @@ class SavePersonRequest extends FormRequest
                 unset($person_rules['picture'][$key]);
                 $person_rules['picture'] = array_merge(['nullable'], $person_rules['picture']);
             }
+            /**
+             * 
+             */
+            unset($working_information_rules['jobs.*.cards.*.number']['unique:cards,number']);
         }
         /**
          * Gets each card number sent in this request. It may have repeated values.
@@ -118,12 +122,23 @@ class SavePersonRequest extends FormRequest
                  * Adds the not_in validation rule with the remaining cards numbers to the number of the card under iteration.
                  * If the number is still in there, then the validation will fail because the number was repeated.
                  */
+                $card_number_rules = $working_information_rules['jobs.*.cards.*.number'];
+                if($this->route()->getName() === 'people.update' ) {
+                    $c = Card::find($card['key']);
+                    if(isset($c) && $c->person_company_id === $job['key'] && $c->number === $card['number']) {
+                        if(($key = array_search('unique:cards,number', $card_number_rules)) !== false) {
+                            unset($card_number_rules[$key]);
+                        }
+                        
+                    }
+                }
                 $working_information_rules['jobs.'.$jk.'.cards.'.$ck.'.number'] = array_merge(
-                    $working_information_rules['jobs.*.cards.*.number'],
+                    $card_number_rules,
                     [Rule::notIn($card_numbers_copy)]
                 );
             }
         }
+        \Debugbar::info($working_information_rules);
         /**
          * Removes some rules that (with the changes applied previously) are useless.
          */

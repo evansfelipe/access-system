@@ -60,6 +60,7 @@ class PeopleController extends Controller
      */
     public function storeDocument($person_id, $fileDataURI, $expiration, $file_type, $path)
     {
+        $ret = null;
         if(isset($fileDataURI)) {
             $person_document = new PersonDocument();
             $person_document->person_id = $person_id;
@@ -67,8 +68,9 @@ class PeopleController extends Controller
             $person_document->document_name = \Helpers::storeFile($path, $fileDataURI);
             $person_document->expiration = $expiration;
             $person_document->save();
-            return $person_document->id;
+            $ret = $person_document->id;
         }
+        return $ret;
     }
 
     /**
@@ -228,7 +230,7 @@ class PeopleController extends Controller
                     'picture_path'      => $person->getCurrentPicture(),
                     'last_name'         => $person->last_name,
                     'name'              => $person->name,
-                    'document_type'     => $person->document_type,
+                    'document_type'     => strval($person->document_type),
                     'document_number'   => $person->document_number,
                     'cuil'              => $person->cuil,
                     'birthday'          => $person->birthday ? date('Y-m-d', strtotime($person->birthday)) : '',
@@ -276,21 +278,91 @@ class PeopleController extends Controller
         $person->fill($request->toArray());
         $person->setContact($request->toArray());
         $person->setRequiredDocumentation($request->documents_required);
+        $path = $person->getStorageFolder();
         if($request->has('picture')) {
             $person->picture_name = \Helpers::storeFile($path.'pictures', $request->picture);
         }
         $person->save();
+
         // Updates the residency
         $person->residency->fill($request->toArray());
         $person->residency->save();
-        \Helpers::storeLocation($residency->city, $residency->province, $residency->country);
+        \Helpers::storeLocation($person->residency->city, $person->residency->province, $person->residency->country);
+
         // Updates the person-company relationship
-        $person_company = $person->company()->pivot;
-        $person_company->company_id = $request->company_id;
-        $person_company->activity_id = $request->activity_id;
-        $person_company->art = $request->art;
-        $person_company->pbip = $request->pbip;
-        $person_company->save();
+        $existing_jobs = [];
+        if(isset($request->jobs)) {
+            foreach ($request->jobs as $job) {
+
+                $old_jobs = $person->jobs()->pluck('id')->toArray();
+                $existing_job = PersonCompany::find($job['key']);
+                if($existing_job) {
+                    $existing_job->fill($job);
+                    $existing_job->subactivities = json_encode($job['subactivities']);
+                    if(isset($job['company_note']['file'])) {
+                        $existing_job->company_note_id = $this->storeDocument($person->id, $job['company_note']['file'], $job['company_note']['expiration'], 'company_note', $path);
+                    }
+                    if(isset($job['company_note']['file'])) {
+                        $existing_job->art_file_id = $this->storeDocument($person->id, $job['art_file']['file'], $job['art_file']['expiration'], 'art_file', $path);
+                    }
+                    $existing_job->save();
+                    $pc = $existing_job;
+                    array_push($existing_jobs, $existing_job->id);
+                }
+                else {
+                    $job['subactivities'] = json_encode($job['subactivities']);
+                    $new_job = new PersonCompany($job);
+                    $new_job->company_note_id = $this->storeDocument($person->id, $job['company_note']['file'], $job['company_note']['expiration'], 'company_note', $path);
+                    $new_job->art_file_id = $this->storeDocument($person->id, $job['art_file']['file'], $job['art_file']['expiration'], 'art_file', $path);
+                    $new_job->save();
+                    $pc = $new_job;
+                }
+
+                foreach($job['subactivities'] as $name) {
+                    \Helpers::storeSubactivity($name, $job['activity_id']);
+                }
+
+                $old_cards = $pc->cards->pluck('id')->toArray();
+                $existing_cards = [];
+                foreach ($job['cards'] as $card) {
+                    $existing_card = Card::find($card['key']);
+                    if($existing_card) {
+                        $existing_card->fill($card);
+                        $existing_card->save();
+                        array_push($existing_cards, $existing_card->id);
+                    }
+                    else {
+                        $new_card = new Card($card);
+                        $new_card->person_company_id = $pc->id;
+                        $new_card->save();
+                    }
+                    $removed_cards = array_diff($old_cards, $existing_cards);
+                    foreach ($removed_cards as $card_id) {
+                        $card = Card::where('id', $card_id)->first();
+                        $card->delete();
+                    }
+                }
+                
+                $removed_jobs = array_diff($old_jobs, $existing_jobs);
+                foreach ($removed_jobs as $job_id) {
+                    $job = PersonCompany::where('id', $job_id)->first();
+                    $job->delete();
+                }
+
+                $job_groups = $pc->groups->pluck('id')->toArray();
+                \Debugbar::info($job_groups);
+                $new_groups = array_diff($job['groups'], $job_groups);
+                $removed_groups = array_diff($job_groups, $job['groups']);
+                foreach($new_groups as $group_id){
+                    $person_group = new PersonJobGroup(['job_id' => $pc->id, 'group_id' => $group_id]);
+                    $person_group->save();
+                }
+                foreach($removed_groups as $group_id) {
+                    $pc->groups()->detach($group_id);
+                }
+            }
+        }
+
         // Updates the person-vehicles relationships
         $person_vehicles = [];
         foreach($person->vehicles as $vehicle) { array_push($person_vehicles, $vehicle->id); }
@@ -306,9 +378,12 @@ class PeopleController extends Controller
             }
         }
 
-        $card = $person->getActiveCard();
-        $card->fill($request->toArray());
-        $card->save();
+        // Stores new the documentation
+        foreach ($request->documents as $key => $data) {
+            if(isset($data['file'])){
+                $this->storeDocument($person->id, $data['file'], $data['expiration'], $key, $path);
+            }
+        }
 
         return response(json_encode(['id' => $person->id]), 200)->header('Content-Type', 'application/json');
     }
