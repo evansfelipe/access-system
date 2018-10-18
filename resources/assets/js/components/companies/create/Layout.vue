@@ -4,7 +4,7 @@
             <tab-item :active="tab === 0" @click.native="tab = 0" :has-errors="step_validated.general_information" icon="fas fa-building">
                 Información general
             </tab-item>
-            <tab-item :active="tab === 1" @click.native="tab = 1" :has-errors="step_validated.general_information" icon="fas fa-universal-access">
+            <tab-item :active="tab === 1" @click.native="tab = 1" :has-errors="step_validated.assign_groups" icon="fas fa-universal-access">
                 Asignar grupos
             </tab-item>
         </ul>

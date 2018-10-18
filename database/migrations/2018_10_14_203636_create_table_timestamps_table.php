@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateTableTimestampsTable extends Migration
 {
-    protected $tables = ['people', 'companies', 'vehicles', 'activities', 'subactivities', 'vehicle_types', 'groups', 'gates'];
+    protected $tables = ['people', 'companies', 'vehicles', 'activities', 'subactivities', 'vehicle_types', 'groups', 'gates', 'countries'];
     
     /**
      * Run the migrations.

@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
     div.notifications {
         position: absolute;
-        z-index: 11;
+        z-index: 1000;
         right: 1em;
         top: 1em;
         & .alert {

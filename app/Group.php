@@ -69,7 +69,6 @@ class Group extends Model
         $rules = Group::getValidationRules();
         $new_rules = [
             'groups' => [
-                'required',
                 'array'
             ]
         ];
@@ -95,11 +94,17 @@ class Group extends Model
         return $this->belongsTo('\App\Gate')->select(['id', 'name']);
     }
 
+    /**
+     * Returns a collection with each job that is associated to this groups.
+     */
     public function jobs()
     {
         return $this->belongsToMany('App\PersonCompany','person_job_groups','group_id','job_id');
     }
 
+    /**
+     * Returns an string with the hours range of this group.
+     */
     public function rangeToString()
     {
         $start_hour = date('H:i', strtotime($this->start));
@@ -107,9 +112,13 @@ class Group extends Model
         return $start_hour.' - '.$end_hour;
     }
 
+    /**
+     * Returns the name of this group. If there is a custom name, then returns it.
+     * Otherwise, creates a default name using the other information of this groups.
+     */
     public function formatedName()
     {
-        $ret = $this->name ?? '';;
+        $ret = $this->name ?? '';
         if($ret === '') {
             $company_name   = $this->company ? $this->company->name.' -' : '';
             // Composes the name
@@ -172,7 +181,8 @@ class Group extends Model
             'name'          => $this->formatedName(),
             'gate'          => $this->gate->name,
             'range'         => $this->rangeToString().($this->end < $this->start ? ' (+1d)' : ''),
-            'company'       => $this->company ? $this->company->name : '-'
+            'company'       => $this->company ? $this->company->name : '-',
+            'company_id'    => $this->company ? $this->company->id : null,
         ];
     }
 

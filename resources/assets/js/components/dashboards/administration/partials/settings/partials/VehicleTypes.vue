@@ -25,14 +25,14 @@
                     <template slot="input" slot-scope="{values, errors}">
                         <div class="row">
                             <form-item :errors="[].concat(errors['type'] || []).concat(errors['allows_container'] || [])" extra-style="margin-bottom: 0px;">
-                                <div class="col-7">
+                                <div class="col-10">
                                     <input  v-model="values.type" 
                                             type="text" ref="input"
                                             class="md-input" style="width: 100%; padding: 0"
                                             placeholder="Tipo"
                                     >
                                 </div>
-                                <div class="col-5">
+                                <div class="col-2">
                                     <switch-box :value="values.allows_container ? true : false"
                                                 @update="value => values.allows_container = value"
                                                 label="Contenedores"

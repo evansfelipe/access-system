@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gate extends Model
 {
-    protected $fillable = ['name', 'enabled'];
+    protected $fillable = ['name', 'enabled', 'zone_id'];
     
     /**
      * Array with the length of each string column of the database associated with this model.
@@ -31,6 +31,11 @@ class Gate extends Model
             'enabled' => [
                 'required',
                 'boolean'
+            ],
+            'zone_id' => [
+                'required',
+                'integer',
+                'exists:zones,id'
             ]
         ];
     }
@@ -49,7 +54,8 @@ class Gate extends Model
         return [
             'id'        => $this->id,
             'name'      => $this->name,
-            'enabled'   => $this->enabled
+            'enabled'   => $this->enabled,
+            'zone_id'   => $this->zone_id
         ];
     }
 }

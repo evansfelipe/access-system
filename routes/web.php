@@ -37,68 +37,68 @@ Route::middleware(['auth'])->prefix('app')->group(function() {
  */
 Route::middleware(['auth','user.administration'])->group(function() {
 
+    Route::get('/updated-at/{list}',    'ListsController@updatedAt')->name('lists.updated-at');
+
+    Route::get('/homelands/list',       'LocationsController@countries')->name('homelands.list');
+
     // People routes
     Route::prefix('people')->group(function() {
-        Route::get('/updated-at',                   'ListsController@peopleUpdatedAt')->name('people.updated-at');
         Route::get('/list',                         'ListsController@peopleList')->name('people.list');
         Route::get('/{person}/pictures',            'PeopleController@pictures')->name('people.pictures');
         Route::get('/document/{person_document}',   'PeopleController@document')->name('people.document');
         Route::get('/{person}/pdf',                 'PeopleController@pdf')->name('people.pdf');
         Route::post('/{person}/new-observation',    'PeopleController@newObservation')->name('people.new-observation');
+        Route::get('/id-search',        'ListsController@peopleIdSearch')->name('people.id-search');
     }); Route::resource('/people',                  'PeopleController')->only(['store', 'show', 'edit', 'update', 'destroy']);
 
     // Companies routes
     Route::prefix('companies')->group(function() {
-        Route::get('/updated-at',       'ListsController@companiesUpdatedAt')->name('companies.updated-at');
         Route::get('/list',             'ListsController@companiesList')->name('companies.list');
         Route::get('/id-search',        'ListsController@companiesIdSearch')->name('companies.id-search');
     }); Route::resource('/companies',   'CompaniesController')->only(['store', 'show', 'edit', 'update', 'destroy']);
 
     // Vehicles routes
     Route::prefix('vehicles')->group(function() {
-        Route::get('/updated-at',       'ListsController@vehiclesUpdatedAt')->name('vehicles.updated-at');
         Route::get('/list',             'ListsController@vehiclesList')->name('vehicles.list');
         Route::get('/id-search',        'ListsController@vehiclesIdSearch')->name('vehicles.id-search');
     }); Route::resource('/vehicles',    'VehiclesController')->only(['store', 'show', 'edit', 'update', 'destroy']);
 
-    // Containers routes
-    Route::prefix('containers')->group(function() {
-        Route::get('/updated-at',       'ListsController@containersUpdatedAt')->name('containers.updated-at');
-        Route::get('/list',             'ListsController@containersList')->name('containers.list');
-    }); Route::resource('/containers',  'ContainersController')->only(['store', 'show', 'edit', 'update', 'destroy']);
+    // Groups routes
+    Route::prefix('groups')->group(function() {
+        Route::get('/list',             'ListsController@groupsList')->name('groups.list');
+        Route::get('/id-search',        'ListsController@groupsIdSearch')->name('groups.id-search');
+    }); Route::resource('/groups',      'GroupsController')->only(['store', 'show', 'edit', 'update', 'destroy']);
     
     // Activities routes
     Route::prefix('activities')->group(function() {
-        Route::get('/updated-at',       'ListsController@activitiesUpdatedAt')->name('activities.updated-at');
         Route::get('/list',             'ListsController@activitiesList')->name('activities.list');
     });
 
     // Subactivities routes
     Route::prefix('subactivities')->group(function() {
-        Route::get('/updated-at',       'ListsController@subactivitiesUpdatedAt')->name('subactivities.updated-at');
         Route::get('/list',             'ListsController@subactivitiesList')->name('subactivities.list');
     });
 
     // Vehicle types routes
     Route::prefix('vehicle_types')->group(function() {
-        Route::get('/updated-at',       'ListsController@vehicleTypesUpdatedAt')->name('vehicle-types.updated-at');
         Route::get('/list',             'ListsController@vehicleTypesList')->name('vehicle-types.list');
     });
 
-    // Groups routes
-    Route::prefix('groups')->group(function() {
-        Route::get('/updated-at',       'ListsController@groupsUpdatedAt')->name('groups.updated-at');
-        Route::get('/list',             'ListsController@groupsList')->name('groups.list');
-    }); Route::resource('/groups',      'GroupsController')->only(['store', 'show', 'edit', 'update', 'destroy']);
     
     // Gates routes
     Route::prefix('gates')->group(function() {
-        Route::get('/updated-at',   'ListsController@gatesUpdatedAt')->name('gates.updated-at');
         Route::get('/list',         'ListsController@gatesList')->name('gates.list');
+    });
+
+    // Gates routes
+    Route::prefix('zones')->group(function() {
+        Route::get('/list',         'ListsController@zonesList')->name('zones.list');
     });
 
     // Settings Routes
     Route::prefix('settings')->group(function() {
+        Route::post('new-zone',                             'SettingsController@newZone')->name('settings.new-zone');
+        Route::put('update-zone/{zone}',                    'SettingsController@updateZone')->name('settings.update-zone');
         Route::post('new-gate',                             'SettingsController@newGate')->name('settings.new-gate');
         Route::put('update-gate/{gate}',                    'SettingsController@updateGate')->name('settings.update-gate');
         Route::post('new-activity',                         'SettingsController@newActivity')->name('settings.new-activity');

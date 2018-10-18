@@ -12,13 +12,17 @@
                     <input type="text" class="form-control form-control-sm" placeholder="CUIL / CUIT" v-model="conditions.cuil">
                 </div>
                 <div class="col col-xl-3">
-                    <select2    :value="conditions.risk" @input="value => conditions.risk"
+                    <select2    :value="conditions.risk" @input="value => conditions.risk = value"
                                 placeholder="Nivel de riesgo" :options="risks" size="small"/>
                 </div>
                 <div class="col col-xl-5">
+                    <select2    size="small" :value="conditions.company_id" @input="value => conditions.company_id = value"
+                                placeholder="Empresa" :options="companies" multiple/>
+                </div>
+                <!-- <div class="col col-xl-5">
                     <select2    :value="conditions.group_id" @input="value => conditions.group_id = value"
                                 placeholder="Grupos" :options="groups" size="small" multiple/>
-                </div>
+                </div> -->
             </div>
         </template>
         <!-- List -->
@@ -43,6 +47,7 @@ export default {
                 cuil:               '',
                 risk:               '',
                 group_id:           [],
+                company_id:         [],
             },
             filtered_ids: null,
         }
@@ -50,6 +55,7 @@ export default {
     beforeMount() {
         this.$store.dispatch('fetchList', 'groups');
         this.$store.dispatch('fetchList', 'people');
+        this.$store.dispatch('fetchList', 'companies');
     },
     computed: {
         // 
@@ -68,7 +74,10 @@ export default {
         // List of risks formated to be used as options.
         risks: function() {
             return this.$store.getters.static_lists.risks.asOptions();
-        }
+        },
+        companies: function() {
+            return this.$store.getters.companies.asOptions();
+        },
     },
     methods: {
         // Redirects to the profile of the clicked person.

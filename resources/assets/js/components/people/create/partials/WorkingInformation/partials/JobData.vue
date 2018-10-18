@@ -103,6 +103,15 @@ export default {
         editJob: function(attribute, value) {
             this.$emit('change', {attribute, value});
         }
+    },
+    watch: {
+        'job.company_id': function() {
+            let groups = this.job.groups.filter(group => {
+                let data = this.$store.getters.groups.getById(group);
+                return data.company_id === this.job.company_id || data.company_id === null;
+            });
+            this.editJob('groups', groups);
+        }
     }
 }
 </script>

@@ -39,65 +39,67 @@
         <template v-if="loading">
             <i class="fas fa-spinner fa-spin mr-2"></i> Actualizando lista...
         </template>
-        <template v-else-if="items.length > 0">
-            <div class="list-item hoverable" v-for="(item, key) in items" :key="item.id ? item.id : key">
+        <template v-else>
+            <div class="list-item">
                 <div class="inputs">
-                    <!-- Edit slot -->
-                    <slot v-if="editing.is && editing.id === item.id" name="input" :values="editing.values" :errors="editing.errors"/>
-                    <!-- Item show slot -->
-                    <div class="cursor-pointer" v-else @click="edit(item)">
-                        <slot name="show" :item="item"/>
-                    </div>
+                    <!-- Create slot -->
+                    <slot v-if="creating.is" name="input" :values="creating.values" :errors="creating.errors"/>
                 </div>
-                <div :class="`buttons ${editing.is && editing.id === item.id ? 'active' : ''}`">
-                    <!-- Cancel edit button -->
-                    <button v-if="editing.is && !editing.saving && editing.id === item.id" class="btn btn-link" @click="cancelEdit">
+                <div class="buttons active">
+                    <!-- Cancel create button -->
+                    <button v-if="creating.is && !creating.saving" class="btn btn-link" @click="cancelCreate">
                         <i class="fas fa-times"></i>
                     </button>
-                    <!-- Edit button -->
-                    <button v-if="!editing.is || (editing.is && editing.id !== item.id)" class="btn btn-link" @click="edit(item)">
-                        <i class="fas fa-pen"></i>
-                    </button>
-                    <!-- Save edit button -->
-                    <button v-else-if="editing.is && !editing.saving && editing.id === item.id" class="btn btn-link" @click="saveEdit">
+                    <!-- Create button -->
+                    <el-tooltip v-if="!creating.is" class="item" effect="dark" content="Agregar nuevo item a la lista" placement="left">
+                        <button class="btn btn-link" @click="create">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </el-tooltip>
+                    <!-- Save create button -->
+                    <button v-else-if="creating.is && !creating.saving" class="btn btn-link" @click="saveCreate">
                         <i class="fas fa-check"></i>
                     </button>
                     <!-- Loading icon -->
-                    <button v-else-if="editing.id === item.id" class="btn btn-link">
+                    <button v-else class="btn btn-link">
                         <i class="fas fa-spinner fa-spin"></i>
                     </button>
                 </div>
             </div>
+            <template v-if="items.length > 0">
+                <div class="list-item hoverable" v-for="(item, key) in items" :key="item.id ? item.id : key">
+                    <div class="inputs">
+                        <!-- Edit slot -->
+                        <slot v-if="editing.is && editing.id === item.id" name="input" :values="editing.values" :errors="editing.errors"/>
+                        <!-- Item show slot -->
+                        <div class="cursor-pointer" v-else @click="edit(item)">
+                            <slot name="show" :item="item"/>
+                        </div>
+                    </div>
+                    <div :class="`buttons ${editing.is && editing.id === item.id ? 'active' : ''}`">
+                        <!-- Cancel edit button -->
+                        <button v-if="editing.is && !editing.saving && editing.id === item.id" class="btn btn-link" @click="cancelEdit">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <!-- Edit button -->
+                        <button v-if="!editing.is || (editing.is && editing.id !== item.id)" class="btn btn-link" @click="edit(item)">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <!-- Save edit button -->
+                        <button v-else-if="editing.is && !editing.saving && editing.id === item.id" class="btn btn-link" @click="saveEdit">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <!-- Loading icon -->
+                        <button v-else-if="editing.id === item.id" class="btn btn-link">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </button>
+                    </div>
+                </div>
+            </template>
+            <h6 v-else class="text-center">
+                No se encontraron resultados
+            </h6>
         </template>
-        <h6 v-else class="text-center">
-            No se encontraron resultados
-        </h6>
-        <div v-if="!loading" class="list-item">
-            <div class="inputs">
-                <!-- Create slot -->
-                <slot v-if="creating.is" name="input" :values="creating.values" :errors="creating.errors"/>
-            </div>
-            <div class="buttons active">
-                <!-- Cancel create button -->
-                <button v-if="creating.is && !creating.saving" class="btn btn-link" @click="cancelCreate">
-                    <i class="fas fa-times"></i>
-                </button>
-                <!-- Create button -->
-                <el-tooltip v-if="!creating.is" class="item" effect="dark" content="Agregar nuevo item a la lista" placement="left">
-                    <button class="btn btn-link" @click="create">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </el-tooltip>
-                <!-- Save create button -->
-                <button v-else-if="creating.is && !creating.saving" class="btn btn-link" @click="saveCreate">
-                    <i class="fas fa-check"></i>
-                </button>
-                <!-- Loading icon -->
-                <button v-else class="btn btn-link">
-                    <i class="fas fa-spinner fa-spin"></i>
-                </button>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -165,8 +167,6 @@ export default {
             })
             .catch(error => {
                 if(error.response.status === 422) {
-                    console.log(error.response.data.errors);
-                    
                     this.creating.errors = error.response.data.errors;
                 }
             })

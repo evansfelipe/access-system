@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
+use App\Zone;
 class CreateZonesTable extends Migration
 {
     /**
@@ -15,7 +15,7 @@ class CreateZonesTable extends Migration
     {
         Schema::create('zones', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->required();
+            $table->string('name', Zone::LENGTHS['name']['max'])->required()->unique();
             $table->timestamps();
         });
     }

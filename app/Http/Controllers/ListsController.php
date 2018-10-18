@@ -1,17 +1,13 @@
 <?php namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\{ TableTimestamp, Person, Company, Vehicle, Container, Activity, Subactivity, VehicleType, Group, Gate, RiskLevel };
+use App\{ TableTimestamp, Person, Company, Vehicle, Container, Activity, Subactivity, VehicleType, Group, Zone, Gate };
 
 class ListsController extends Controller
 {
-    /**
-     * Returns the timestamp of the last update on people's table.
-     * 
-     * @return Timestamp
-     */
-    public function peopleUpdatedAt()
+
+    public function updatedAt($list)
     {
-        return TableTimestamp::lastTimestamp('people');
+        return TableTimestamp::lastTimestamp($list);
     }
 
     /**
@@ -19,9 +15,15 @@ class ListsController extends Controller
      * 
      * @return Array<Person>
      */
-    public function peopleList()
+    public function peopleList(Request $request)
     {
-        $people = Person::select('id', 'last_name', 'name', 'cuil')->orderBy('created_at','desc')->get()
+        $timestamp = $request->timestamp;
+        $people = Person::select('id', 'last_name', 'name', 'cuil')
+                        ->when($timestamp, function($query, $timestamp) {
+                            return $query->where('updated_at', '>', $timestamp);
+                        })
+                        ->orderBy('created_at','asc')
+                        ->get()
                         ->map(function($person) {
                             return [
                                 'id'            => $person->id,
@@ -38,13 +40,34 @@ class ListsController extends Controller
     }
 
     /**
-     * Returns the timestamp of the last update on companies's table.
-     * 
-     * @return Timestamp
+     * Returns an array with the id of each person that matches the filter conditions.
      */
-    public function companiesUpdatedAt()
+    public function peopleIdSearch(Request $request)
     {
-        return TableTimestamp::lastTimestamp('companies');
+        $people = Person::select();
+        // Document Number
+        $document_number = $request->document_number;
+        $people->when($document_number, function($query, $document_number) {
+            return $query->where('document_number', 'like', '%'.$document_number.'%');
+        });
+        // CUIT / CUIL
+        $cuil = $request->cuil;
+        $people->when($cuil, function($query, $cuil) {
+            return $query->where('cuil', 'like', '%'.$cuil.'%');
+        });
+        // Risk Level
+        $risk = $request->risk;
+        $people->when($risk, function($query, $risk) {
+            return $query->where('risk', $risk);
+        });
+        // Company ID
+        $company_id = $request->company_id;
+        $people->when($company_id, function($query, $company_id) {
+            return $query->whereHas('companies', function ($query) use ($company_id) {
+                return $query->whereIn('companies.id', $company_id);
+            });
+        });
+        return response(json_encode($people->get()->pluck('id')))->header('Content-Type', 'application/json');        
     }
 
     /**
@@ -52,9 +75,15 @@ class ListsController extends Controller
      * 
      * @return Array<Company>
      */
-    public function companiesList()
+    public function companiesList(Request $request)
     {
-        $companies = Company::select('id','business_name','name','area','cuit')->orderBy('created_at','desc')->get();
+        $timestamp = $request->timestamp;
+        $companies = Company::select('id','business_name','name','area','cuit')
+                            ->when($timestamp, function($query, $timestamp) {
+                                return $query->where('updated_at', '>', $timestamp);
+                            })
+                            ->orderBy('created_at','asc')
+                            ->get();
         return  response(json_encode($companies))->header('Content-Type', 'application/json');        
     }
 
@@ -102,37 +131,35 @@ class ListsController extends Controller
     }
 
     /**
-     * Returns the date of the last update on the vehicles
-     * 
-     * @return Timestamp
-     */
-    public function vehiclesUpdatedAt()
-    {
-        return TableTimestamp::lastTimestamp('vehicles');
-    }
-
-    /**
      * Returns the list of vehicles
      * 
      * @return Array<Vehicle>
      */
-    public function vehiclesList()
+    public function vehiclesList(Request $request)
     {
-        $vehicles = Vehicle::select(['id','type_id','plate','brand','model','year','colour','company_id'])->orderBy('created_at','desc')->with('company:id,name')->get()->map(function($vehicle) {
-            return [
-                'id'                => $vehicle->id,
-                'type_id'           => $vehicle->type_id,
-                'type_name'         => $vehicle->vehicleType->type,
-                'allows_container'  => $vehicle->vehicleType->allows_container,
-                'plate'             => $vehicle->plate,
-                'brand'             => $vehicle->brand,
-                'model'             => $vehicle->model,
-                'year'              => $vehicle->year,
-                'colour'            => $vehicle->colour,
-                'company_id'        => $vehicle->company_id,
-                'company_name'      => $vehicle->company->name
-            ];
-        });
+        $timestamp = $request->timestamp;
+        $vehicles = Vehicle::select(['id','type_id','plate','brand','model','year','colour','company_id'])
+                            ->when($timestamp, function($query, $timestamp) {
+                                return $query->where('updated_at', '>', $timestamp);
+                            })
+                            ->orderBy('created_at','asc')
+                            ->with('company:id,name')
+                            ->get()
+                            ->map(function($vehicle) {
+                                return [
+                                    'id'                => $vehicle->id,
+                                    'type_id'           => $vehicle->type_id,
+                                    'type_name'         => $vehicle->vehicleType->type,
+                                    'allows_container'  => $vehicle->vehicleType->allows_container,
+                                    'plate'             => $vehicle->plate,
+                                    'brand'             => $vehicle->brand,
+                                    'model'             => $vehicle->model,
+                                    'year'              => $vehicle->year,
+                                    'colour'            => $vehicle->colour,
+                                    'company_id'        => $vehicle->company_id,
+                                    'company_name'      => $vehicle->company->name
+                                ];
+                            });
         return response(json_encode($vehicles))->header('Content-Type', 'application/json');        
     }
 
@@ -186,14 +213,30 @@ class ListsController extends Controller
     }
 
     /**
-     * Returns the date of the last update on the containers
+     * Returns the list of groups
      * 
-     * @return Timestamp
+     * @return Array<VehicleType>
      */
-    public function containersUpdatedAt()
+    public function groupsList(Request $request)
     {
-        $container = Container::select(['updated_at'])->orderBy('updated_at','desc')->first();
-        return $container? $container->updated_at : null;        
+        $timestamp = $request->timestamp;
+        $groups = Group::select()
+                        ->when($timestamp, function($query, $timestamp) {
+                            return $query->where('updated_at', '>', $timestamp);
+                        })
+                        ->orderBy('created_at','asc')
+                        ->get()
+                        ->map(function($group) {
+                            return $group->toListArray();
+                        });
+        return response(json_encode($groups))->header('Content-Type', 'application/json');
+    }
+
+    /**
+     * Returns an array with the id of each vehicle that matches the filter conditions.
+     */
+    public function groupsIdSearch(Request $request)
+    {
     }
 
     /**
@@ -201,20 +244,16 @@ class ListsController extends Controller
      * 
      * @return Array<Container>
      */
-    public function containersList()
+    public function containersList(Request $request)
     {
-        $containers = Container::select(['id','series_number','format','brand','model'])->orderBy('created_at','desc')->get();
+        $timestamp = $request->timestamp;
+        $containers = Container::select(['id','series_number','format','brand','model'])
+                                ->when($timestamp, function($query, $timestamp) {
+                                    return $query->where('updated_at', '>', $timestamp);
+                                })
+                                ->orderBy('created_at','asc')
+                                ->get();
         return response(json_encode($containers))->header('Content-Type', 'application/json');        
-    }
-
-    /**
-     * Returns the date of the last update on the activities
-     * 
-     * @return Timestamp
-     */
-    public function activitiesUpdatedAt()
-    {
-        return TableTimestamp::lastTimestamp('activities');
     }
 
     /**
@@ -222,22 +261,19 @@ class ListsController extends Controller
      * 
      * @return Array<Activity>
      */
-    public function activitiesList()
+    public function activitiesList(Request $request)
     {
-        $activities = Activity::all(['id','name'])->map(function($activity) {
-            return $activity->toListArray();
-        });
+        $timestamp = $request->timestamp;
+        $activities = Activity::select(['id','name'])
+                                ->when($timestamp, function($query, $timestamp) {
+                                    return $query->where('updated_at', '>', $timestamp);
+                                })
+                                ->orderBy('created_at','asc')
+                                ->get()
+                                ->map(function($activity) {
+                                    return $activity->toListArray();
+                                });
         return response(json_encode($activities))->header('Content-Type', 'application/json');        
-    }
-
-    /**
-     * Returns the date of the last update on the subactivities
-     * 
-     * @return Timestamp
-     */
-    public function subactivitiesUpdatedAt()
-    {
-        return TableTimestamp::lastTimestamp('subactivities');
     }
 
     /**
@@ -245,22 +281,19 @@ class ListsController extends Controller
      * 
      * @return Array<Activity>
      */
-    public function subactivitiesList()
+    public function subactivitiesList(Request $request)
     { 
-        $subactivities = Subactivity::all(['id', 'activity_id', 'name'])->map(function($subactivity) {
-            return $subactivity->toListArray();
-        });
+        $timestamp = $request->timestamp;
+        $subactivities = Subactivity::select(['id', 'activity_id', 'name'])
+                                    ->when($timestamp, function($query, $timestamp) {
+                                        return $query->where('updated_at', '>', $timestamp);
+                                    })
+                                    ->orderBy('created_at','asc')
+                                    ->get()
+                                    ->map(function($subactivity) {
+                                        return $subactivity->toListArray();
+                                    });
         return response(json_encode($subactivities))->header('Content-Type', 'application/json');        
-    }
-
-    /**
-     * Returns the date of the last update on the vehicle types
-     *
-     * @return Timestamp
-     */
-    public function vehicleTypesUpdatedAt()
-    {
-        return TableTimestamp::lastTimestamp('vehicle_types');
     }
 
     /**
@@ -268,57 +301,59 @@ class ListsController extends Controller
      * 
      * @return Array<VehicleType>
      */
-    public function vehicleTypesList()
+    public function vehicleTypesList(Request $request)
     {
-        $types = VehicleType::all(['id','type','allows_container'])->map(function($type) {
-            return $type->toListArray();
-        });
+        $timestamp = $request->timestamp;
+        $types = VehicleType::select(['id','type','allows_container'])
+                            ->when($timestamp, function($query, $timestamp) {
+                                return $query->where('updated_at', '>', $timestamp);
+                            })
+                            ->orderBy('created_at','asc')
+                            ->get()
+                            ->map(function($type) {
+                                return $type->toListArray();
+                            });
         return response(json_encode($types))->header('Content-Type', 'application/json');        
     }
 
-    /**
-     * Returns the date of the last update on the groups
-     *
-     * @return Timestamp
-     */
-    public function groupsUpdatedAt()
-    {
-        return TableTimestamp::lastTimestamp('groups');  
-    }
-
-    /**
-     * Returns the list of groups
-     * 
-     * @return Array<VehicleType>
-     */
-    public function groupsList()
-    {
-        $groups = Group::all()->map(function($group) {
-            return $group->toListArray();
-        });
-        return response(json_encode($groups))->header('Content-Type', 'application/json');        
-    }
-
-    /**
-     * Returns the date of the last update on the gates
-     *
-     * @return Timestamp
-     */
-    public function gatesUpdatedAt()
-    {
-        return TableTimestamp::lastTimestamp('gates');      
-    }
 
     /**
      * Returns the list of gates
      * 
-     * @return Array<VehicleType>
+     * @return Array<Gate>
      */
-    public function gatesList()
+    public function gatesList(Request $request)
     {
-        $gates = Gate::all()->map(function($gate) {
-            return $gate->toListArray();
-        });
+        $timestamp = $request->timestamp;
+        $gates = Gate::select()
+                    ->when($timestamp, function($query, $timestamp) {
+                        return $query->where('updated_at', '>', $timestamp);
+                    })
+                    ->orderBy('created_at','asc')
+                    ->get()
+                    ->map(function($gate) {
+                        return $gate->toListArray();
+                    });
         return response(json_encode($gates))->header('Content-Type', 'application/json');        
+    }
+
+    /**
+     * Returns the list of zones
+     * 
+     * @return Array<Zone>
+     */
+    public function zonesList(Request $request)
+    {
+        $timestamp = $request->timestamp;
+        $zones = Zone::select()
+                    ->when($timestamp, function($query, $timestamp) {
+                        return $query->where('updated_at', '>', $timestamp);
+                    })
+                    ->orderBy('created_at','asc')
+                    ->get()
+                    ->map(function($zone) {
+                        return $zone->toListArray();
+                    });
+        return response(json_encode($zones))->header('Content-Type', 'application/json');        
     }
 }

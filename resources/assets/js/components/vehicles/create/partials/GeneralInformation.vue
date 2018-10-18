@@ -7,7 +7,7 @@
                 <form-item col="col-4" label="Tipo" :errors="errors.type">
                     <div class="col">
                         <select2 placeholder="Seleccione un tipo" :value="type_id" :options="types"
-                                    @input="(value) => this.$emit('typeUpdated', value)"/>
+                                    @input="(value) => update({name: 'type_id', value: value})"/>
                     </div>
                 </form-item>
                 <!-- Plate -->

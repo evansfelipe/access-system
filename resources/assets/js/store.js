@@ -18,7 +18,7 @@ class List {
             Vue.set(this.list, pos, item);
         }
         else {
-            this.list.push(item);
+            this.list.unshift(item);
         }
         if(timestamp) {
             this.timestamp = timestamp;
@@ -90,6 +90,7 @@ export default {
             sidebar_opened: true
         },
         lists: {
+            zones:          new List('zones'),
             gates:          new List('gates'),
             groups:         new List('groups'),
             people:         new List('people'),
@@ -100,7 +101,7 @@ export default {
             subactivities:  new List('subactivities'),
             vehicle_types:  new List('vehicle_types'),
             // Locations lists
-            homelands:      new List('app/locations/countries'),
+            homelands:      new List('homelands'),
         },
         static_lists: {
             risks:          new StaticList([{id: '1', name: 'Nivel 1'}, {id: '2', name: 'Nivel 2'}, {id: '3', name: 'Nivel 3'}]),
@@ -167,6 +168,9 @@ export default {
         },
         gates: function({lists}) {
             return lists.gates;
+        },
+        zones: function({lists}) {
+            return lists.zones;
         },
         homelands: function({lists}) {
             return lists.homelands;
@@ -245,7 +249,7 @@ export default {
             state.lists[what].updating = value;
         },
         set: function(state, {what, data, timestamp}) {
-            state.lists[what].list = data;
+            data.forEach(item => state.lists[what].addItem(item));
             state.lists[what].timestamp = timestamp;
         },
         updateModel: function(state, {which, properties_path, value}) {
@@ -492,14 +496,14 @@ export default {
         fetchList: function({ commit, state }, what) {
             if(state.debug) console.log('Validating timestamps:', what);
             commit(`updatingList`, { what, value: true });
-            axios.get(`/${state.lists[what].base_path}/updated-at`)
+            axios.get(`/updated-at/${state.lists[what].base_path}`)
             .then(response => {
-                let new_timestamp = new Date(response.data.updated_at);
+                let new_timestamp = response.data;
                 if(state.lists[what].timestamp === null || state.lists[what].timestamp < new_timestamp) {
                     if(state.debug) console.log('Fetching: ', what);
-                    axios.get(`/${state.lists[what].base_path}/list`)
+                    axios.get(`/${state.lists[what].base_path}/list`, {params: {timestamp: state.lists[what].timestamp}})
                     .then(response => {
-                        if(state.debug) console.log('Fetch success: ', what);
+                        if(state.debug) console.log('Fetch success: ', what, response.data);
                         commit(`set`, {what, data: response.data, timestamp: new_timestamp});
                     })
                     .catch(error => {
@@ -526,8 +530,6 @@ export default {
             commit('updateModel', { which: which, properties_path: 'editing', value: true });
             axios.get(`/${model.plural}/${id}/edit`)
             .then(response => {
-                console.log(response);
-                
                 commit('updateModel', {which: which, properties_path: 'id', value: response.data.id });
                 commit('updateModel', {which: which, properties_path: 'values', value: response.data.values });
             })
