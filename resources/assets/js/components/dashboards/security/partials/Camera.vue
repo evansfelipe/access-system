@@ -77,7 +77,7 @@
 <template>
     <div class="d-inline">
         <transition name="camera">
-            <div v-show="!minimized" :class="`shadow stream-opened ${fullscreen ? 'fullscreen' : ''} ${!fatal_error && !loading ? 'playing' : ''}`">
+            <div v-show="!minimized" @keyup.enter="handleFullscreen" :class="`shadow stream-opened ${fullscreen ? 'fullscreen' : ''} ${!fatal_error && !loading ? 'playing' : ''}`">
                 <!-- Loading -->
                 <i v-if="loading" class="fas fa-circle-notch fa-spin fa-3x"></i>
                 <!-- Fatal error -->

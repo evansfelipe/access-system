@@ -24,6 +24,13 @@
         height: auto;
     }
 
+    .container-enter-active, .container-leave-active { transition: all .3s }
+    .container-enter, .container-leave-to { opacity: 0 }
+    .container-leave-active { max-height: 100vh }
+    .container-leave-to {
+        max-height: 0;
+    }
+
 </style>
 
 <template>
@@ -45,15 +52,16 @@
         </ul>
         <div class="card card-default borderless-top">
             <div class="card-body" style="padding: 2em 3em;">
-
                 <template v-if="person">
                     <div class="form-row">
                         <div class="col-4">
-                            <div class="content">
+                            <div class="content text-center">
                                 <h3 class="text-center">{{ person.values.full_name }}</h3>
+                                <span v-if="person.access.allowed" class="badge badge-success">Acceso permitido</span>
+                                <span v-else class="badge badge-danger">Acceso denegado</span>
                                 <div class="p-3"><img class="img-fluid rounded-circle shadow-sm" :src="person.values.picture_path"></div>
-                                <div class=" d-flex justify-content-center"><access-card :number="person.values.card.number" :from="person.values.card.from" :until="person.values.card.until"/></div>
-                                <table class="m-2">
+                                <div class=" d-flex justify-content-center text-left"><access-card :number="person.values.card.number" :from="person.values.card.from" :until="person.values.card.until"/></div>
+                                <table class="m-2 text-left">
                                     <tr>
                                         <td class="small">Riesgo</td>
                                         <td class="strong">{{ person.values.risk }}</td>
@@ -78,6 +86,14 @@
                             </div>
                         </div>
                         <div class="col-8">
+                            <div class="form-row" style="padding: 1em">
+                                <div class="col-6">
+                                    <button class="btn btn-outline-success btn-block" @click="person.allowed()">Permitir acceso</button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-outline-danger btn-block" @click="person.denied()">Denegar acceso</button>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col">
                                     <div class="content">
@@ -95,23 +111,77 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="person.containers.length !== 0" class="row">
-                                <div class="col">
-                                    <div class="content">
-                                        <h5 class="mb-2 d-inline-block">Containers</h5>
-                                        <div class="d-inline-block float-right">
-                                            <input v-if="person.containers_search" v-model="person.containers_search_input" type="text" placeholder="Búsqueda" class="md-input" ref="containers_search">
-                                            <div class="d-inline cursor-pointer" @click="toggleContainerSearch"><i class="fas fa-search cursor-pointer"></i></div>
+                            <transition name="container" tag="div">
+                                <div v-if="person.allowsContainer()" class="row">
+                                    <div class="col">
+                                        <div class="content">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <h5 class="mr-3 d-inline">Contenedor</h5>
+                                                    <switch-box @update="value => person.setContainer(value)"/>
+                                                </div>
+                                            </div>
+                                            <transition name="container" tag="div">
+                                            <template v-if="person.container !== null">
+                                                
+                                                <div class="form-row mt-3">
+                                                    <form-item col="col-4" :errors="[]">
+                                                        <div class="col">
+                                                            <input type="text" name="serial_number" class="form-control form-control-sm" placeholder="Número de serie"
+                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                            >
+                                                        </div>
+                                                    </form-item>
+                                                    <form-item col="col-4" :errors="[]">
+                                                        <div class="col">
+                                                            <input type="text" name="brand" class="form-control form-control-sm" placeholder="Marca"
+                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                            >
+                                                        </div>
+                                                    </form-item>
+                                                    <form-item col="col-4" :errors="[]">
+                                                        <div class="col">
+                                                            <input type="text" name="model" class="form-control form-control-sm" placeholder="Modelo"
+                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                            >
+                                                        </div>
+                                                    </form-item>
+                                                    <form-item col="col-4" :errors="[]">
+                                                        <div class="col">
+                                                            <input type="text" name="format" class="form-control form-control-sm" placeholder="Formato"
+                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                            >
+                                                        </div>
+                                                    </form-item>
+                                                    <form-item col="col-4" :errors="[]">
+                                                        <div class="col">
+                                                            <input type="text" name="size" class="form-control form-control-sm" placeholder="Tamaño"
+                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                            >
+                                                        </div>
+                                                    </form-item>
+                                                    <form-item col="col-4" :errors="[]">
+                                                        <div class="col">
+                                                            <input type="text" name="colour" class="form-control form-control-sm" placeholder="Color"
+                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                            >
+                                                        </div>
+                                                    </form-item>
+                                                    <form-item col="col-12" :errors="[]">
+                                                        <div class="col">
+                                                            <textarea class="form-control form-control-sm" rows="2" placeholder="Observaciones del contenedor"
+                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                            ></textarea>
+                                                        </div>
+                                                    </form-item>
+                                                </div>
+                                                
+                                            </template>
+                                            </transition>
                                         </div>
-                                        <cards-carousel :list="person.containers"
-                                                        :selected="person.container"
-                                                        :keys="['series_number','format','size','brand','model','colour']"
-                                                        :filter="person.containers_search_input"
-                                                        @selection="id => person.selectContainer(id)"
-                                        />
                                     </div>
                                 </div>
-                            </div>
+                            </transition>
                             <div class="row">
                                 <div class="col">
                                     <div class="content">
@@ -149,8 +219,9 @@
 <script>
 
 class Person {
-    constructor(values) {
+    constructor(values, access) {
         this.values = values;
+        this.access = access;
 
         this.values.observations.forEach(observation => {
             observation.collapsed = true;
@@ -164,11 +235,8 @@ class Person {
         this.vehicles_search_input = "";
         this.vehicles_search = false;
         this.vehicle = null;
-
-        this.containers = [];
         this.container = null;
-        this.containers_search_input = "";
-        this.containers_search = false;
+
     }
 
     addObservation(observation) {
@@ -180,21 +248,40 @@ class Person {
     }
 
     selectVehicle(id) {
-        console.log(this);
-        
         this.vehicle = this.vehicle === id ? null : id;
-        this.container = null;
-        if(this.vehicle !== null) {
-            let vehicle_pos = this.values.vehicles.getPositionById(id);
-            this.containers = this.values.vehicles[vehicle_pos].containers;
-        }
-        else {
-            this.containers = [];
+        if(!this.allowsContainer()) {
+            this.container = null;
         }
     }
 
-    selectContainer(id) {
-        this.container = this.container === id ? null : id;
+    allowsContainer() {
+        let vehicle = this.values.vehicles.getById(this.vehicle);
+        return vehicle !== undefined ? vehicle.allows_container : false;
+    }
+
+    setContainer(value) {
+        if(value) {
+            this.container = {
+                serial_number : '',
+                brand:          '',
+                model:          '',
+                format:         '',
+                size:           '',
+                colour:         '',
+                observation:    ''
+            }
+        }
+        else {
+            this.container = null;
+        }
+    }
+
+    allowed() {
+        alert('Permitir el acceso');
+    }
+    
+    denied() {
+        alert('Denegar el acceso');
     }
 }
 
@@ -241,16 +328,20 @@ export default {
                     // Parses the JSON message.
                     let object = JSON.parse(message.payloadString);
                     // Checks if the message has the correct format.
-                    if(object.hasOwnProperty('card_number') && object.card_number) {
+                    if(object.hasOwnProperty('ID') && object.ID) {
                         // Gets the data associated with the card number.
-                        axios.get('security/person/' + object.card_number)
+                        axios.get('security/person/' + object.ID)
                         .then(response => {
-                            console.log(response.data);
-                            
-                            let person = new Person(response.data);
+                            let access = {
+                                device: object.Nombre,
+                                zone: object.Area,
+                                card_number: object.ID,
+                                allowed: object.Accion == "OK" ? true : false,
+                                date: object.Fecha
+                            };
+                            let person = new Person(response.data, access);
                             this.person = person;
                             this.people.push(person);
-
                             this.tab = this.people.length - 1;
 
                         })
@@ -317,13 +408,6 @@ export default {
             this.person.vehicles_search_input = "";
             if(this.person.vehicles_search) {
                 this.$nextTick(() => this.$refs.vehicles_search.focus())
-            }
-        },
-        toggleContainerSearch: function() {
-            this.person.containers_search = !this.person.containers_search;
-            this.person.containers_search_input = "";
-            if(this.person.containers_search) {
-                this.$nextTick(() => this.$refs.containers_search.focus())
             }
         }
     }

@@ -85,11 +85,7 @@ export default {
     computed: {
         list_filtered: function() {
             let search = this.filter;
-            console.log(search);
-            
             return this.list.filter((element) => {
-                console.log(element);
-                
                 let ret = false;
                 this.keys.forEach(key => {
                     ret = ret || element[key].toString().matches(search);

@@ -14,14 +14,14 @@ class SecurityController extends Controller
         $company = $card->job->company;
         $vehicles = $person->vehicles->map(function($vehicle) {
             return [
-                'id'        => $vehicle->id,
-                'plate'     => $vehicle->plate,
-                'brand'     => $vehicle->brand,
-                'model'     => $vehicle->model,
-                'type'      => $vehicle->vehicleType->type,
-                'colour'    => $vehicle->colour,
-                'year'      => $vehicle->year,
-                'containers'=> $vehicle->containers
+                'id'                => $vehicle->id,
+                'type'              => $vehicle->vehicleType->type,
+                'allows_container'  => $vehicle->vehicleType->allows_container,
+                'plate'             => $vehicle->plate,
+                'brand'             => $vehicle->brand,
+                'model'             => $vehicle->model,
+                'colour'            => $vehicle->colour,
+                'year'              => $vehicle->year,
             ];
         });
 
