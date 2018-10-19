@@ -26,13 +26,14 @@ class ListsController extends Controller
                         ->orderBy('people.id', 'asc') // Id instead of created_at for efficiency.
                         ->get()
                         ->map(function($person) {
+                            $companies = $person->companies;
                             return [
                                 'id'            => $person->id,
                                 'last_name'     => $person->last_name,
                                 'name'          => $person->name,
                                 'cuil'          => $person->cuil,
-                                'companies'     => $person->companies->pluck('id'),
-                                'company_name'  => $person->companies->pluck('name')->implode('name', ' / ')
+                                'companies'     => $companies->pluck('id'),
+                                'company_name'  => $companies->count() > 0 ? $companies->pluck('name')->implode('name', ' / ') : '-'
                             ];
                         });
         return response(json_encode($people))->header('Content-Type', 'application/json');        

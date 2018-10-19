@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         DB::table('vehicle_types')->insert([
             ['type' => 'Auto',      'allows_container' => false],
             ['type' => 'Tractor',   'allows_container' => false],
-            ['type' => 'Camion',    'allows_container' => true],
+            ['type' => 'Camión',    'allows_container' => true],
             ['type' => 'Grúa',      'allows_container' => false],
             ['type' => 'Remolque',  'allows_container' => false]
         ]);

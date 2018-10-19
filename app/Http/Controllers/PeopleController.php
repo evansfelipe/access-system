@@ -84,7 +84,6 @@ class PeopleController extends Controller
         // Saves the residency
         $residency = new Residency($request->toArray());
         $residency->save();
-        \Helpers::storeLocation($residency->city, $residency->province, $residency->country);
         // Saves the person
         $person = new Person($request->toArray());
         $person->setContact($request->toArray());
@@ -287,8 +286,6 @@ class PeopleController extends Controller
         // Updates the residency
         $person->residency->fill($request->toArray());
         $person->residency->save();
-        \Helpers::storeLocation($person->residency->city, $person->residency->province, $person->residency->country);
-
         // Updates the person-company relationship
         $existing_jobs = [];
         if(isset($request->jobs)) {

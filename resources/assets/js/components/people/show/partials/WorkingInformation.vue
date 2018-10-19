@@ -21,7 +21,8 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <span v-for="(group, gkey) in job.groups" :key="gkey" class="badge badge-primary mr-1">
+                    <span   v-for="(group, gkey) in job.groups" :key="gkey" class="badge badge-primary mr-1 cursor-pointer"
+                            @click="$router.push(`/groups/show/${group.id}`)">
                         {{ group.name }}
                     </span>
                     <hr>

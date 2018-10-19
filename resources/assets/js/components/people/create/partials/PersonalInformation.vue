@@ -138,7 +138,7 @@ export default {
             return {
                 sex:            this.$store.getters.static_lists.sexes.asOptions(),
                 risks:          this.$store.getters.static_lists.risks.asOptions(),
-                homeland:       this.$store.getters.homelands.asOptions(),
+                homeland:       this.$store.getters.homelands.asOptions('name', true),
                 blood_type:     this.$store.getters.static_lists.blood_types.asOptions(),
                 document_type:  this.$store.getters.static_lists.document_types.asOptions(),
             };

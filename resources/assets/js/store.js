@@ -25,10 +25,10 @@ class List {
         }
     }
 
-    asOptions(attr = 'name') {
+    asOptions(attr = 'name', force = false) {
         return this.list.map(item => {
             return {
-                id: item.id ? item.id : item[attr],
+                id: !item.id || force ? item[attr] : item.id,
                 text: item[attr],
             };
         });

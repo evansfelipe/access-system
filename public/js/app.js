@@ -55298,10 +55298,11 @@ var List = function () {
         key: 'asOptions',
         value: function asOptions() {
             var attr = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'name';
+            var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
             return this.list.map(function (item) {
                 return {
-                    id: item.id ? item.id : item[attr],
+                    id: !item.id || force ? item[attr] : item.id,
                     text: item[attr]
                 };
             });
@@ -101713,7 +101714,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "active-card" }, [
+  return _c("div", { staticClass: "active-card shadow-sm" }, [
     _vm._m(0),
     _vm._v(" "),
     _c("hr"),
@@ -108387,7 +108388,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return {
                 sex: this.$store.getters.static_lists.sexes.asOptions(),
                 risks: this.$store.getters.static_lists.risks.asOptions(),
-                homeland: this.$store.getters.homelands.asOptions(),
+                homeland: this.$store.getters.homelands.asOptions('name', true),
                 blood_type: this.$store.getters.static_lists.blood_types.asOptions(),
                 document_type: this.$store.getters.static_lists.document_types.asOptions()
             };
@@ -112897,6 +112898,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -112974,7 +112976,15 @@ var render = function() {
               _vm._l(job.groups, function(group, gkey) {
                 return _c(
                   "span",
-                  { key: gkey, staticClass: "badge badge-primary mr-1" },
+                  {
+                    key: gkey,
+                    staticClass: "badge badge-primary mr-1 cursor-pointer",
+                    on: {
+                      click: function($event) {
+                        _vm.$router.push("/groups/show/" + group.id)
+                      }
+                    }
+                  },
                   [
                     _vm._v(
                       "\n                    " +

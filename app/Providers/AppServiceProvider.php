@@ -16,6 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        \App\Residency::observe(\App\Observers\ResidencyObserver::class);
+
         Validator::extend('unique_with', function($attribute, $value, $parameters) {
             $table       = $parameters[0]; // the table where the combination is checked.
             $field       = $parameters[1]; // the name of the field with which it must be unique.
