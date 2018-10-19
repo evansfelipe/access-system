@@ -386,13 +386,14 @@ class PeopleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
      *
      * @param  \App\Person  $person
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Person $person)
+    public function toggleEnabled(Person $person)
     {
-        //
+        $person->enabled = !$person->enabled;
+        $person->save();
+        return response(json_encode(['enabled' => $person->enabled]), 200)->header('Content-Type', 'application/json');
     }
 }

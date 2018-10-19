@@ -325,6 +325,7 @@ class Person extends Model
     public function toShowArray() 
     {
         return [
+            'enabled'   => $this->enabled ? true : false,
             'personal_information'  => array_merge(
                 [
                     'picture'           => $this->getCurrentPicture(),

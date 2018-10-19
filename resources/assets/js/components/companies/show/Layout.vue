@@ -1,26 +1,26 @@
 <template>
     <div>
-        <!-- Tabs -->
-        <ul class="nav nav-tabs">
-            <!-- General information tab -->
-            <tab-item :active="tab === 0" @click.native="tab = 0" icon="fas fa-building">
-                Información general
-            </tab-item>
-            <!-- Assigned groups tab -->
-            <tab-item :active="tab === 1" @click.native="tab = 1" icon="fas fa-universal-access">
-                Grupos
-            </tab-item>
-            <!-- Assigned people tab -->
-            <tab-item :active="tab === 2" @click.native="tab = 2" icon="fas fa-users">
-                Personas
-            </tab-item>
-            <!-- Assigned vehicles tab -->
-            <tab-item :active="tab === 3" @click.native="tab = 3" icon="fas fa-car">
-                Vehículos
-            </tab-item>
-        </ul>
-        <!-- Content -->
         <show-wrapper :loading="!axios_finished" @edit="edit" @pdf="pdf">
+            <!-- Tabs -->
+            <ul slot="tabs" class="nav nav-tabs">
+                <!-- General information tab -->
+                <tab-item :active="tab === 0" @click.native="tab = 0" icon="fas fa-building">
+                    Información general
+                </tab-item>
+                <!-- Assigned groups tab -->
+                <tab-item :active="tab === 1" @click.native="tab = 1" icon="fas fa-universal-access">
+                    Grupos
+                </tab-item>
+                <!-- Assigned people tab -->
+                <tab-item :active="tab === 2" @click.native="tab = 2" icon="fas fa-users">
+                    Personas
+                </tab-item>
+                <!-- Assigned vehicles tab -->
+                <tab-item :active="tab === 3" @click.native="tab = 3" icon="fas fa-car">
+                    Vehículos
+                </tab-item>
+            </ul>
+            <!-- Content -->
             <general-information v-show="tab === 0" :values="values.general_information"/>
             <groups v-show="tab === 1" :values="values.assigned_groups"/>
             <people v-show="tab === 2" :values="values.assigned_people"/>

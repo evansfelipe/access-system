@@ -36,7 +36,7 @@
             <img :src="picture">
             <div class="hover"><i class="fas fa-search-plus fa-2x"></i></div>
         </div>
-        <div v-if="current !== null" class="img-wrapper" @click="current = null">
+        <div v-if="current !== null" class="img-wrapper d-flex align-items-center" @click="current = null">
             <img :src="current">
             <div class="hover"><i class="fas fa-search-minus fa-2x"></i></div>
         </div>

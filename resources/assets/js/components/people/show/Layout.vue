@@ -1,30 +1,30 @@
 <template>
     <div>
-        <!-- Tabs -->
-        <ul class="nav nav-tabs">
-            <!-- Personal information tab -->
-            <tab-item :active="tab === 0" @click.native="tab = 0" icon="fas fa-user">
-                Información personal
-            </tab-item>
-            <!-- Working information tab -->
-            <tab-item :active="tab === 1" @click.native="tab = 1" icon="fas fa-briefcase">
-                Información laboral
-            </tab-item>
-            <!-- Vehicles tab -->
-            <tab-item :active="tab === 2" @click.native="tab = 2" icon="fas fa-car">
-                Vehículos
-            </tab-item>
-            <!-- Documentation tab -->
-            <tab-item :active="tab === 3" @click.native="tab = 3" icon="fas fa-file-alt">
-                Documentación
-            </tab-item>
-            <!-- Observations tab -->
-            <tab-item :active="tab === 4" @click.native="tab = 4" icon="fas fa-eye">
-                Observaciones
-            </tab-item>
-        </ul>
-        <!-- Content -->
-        <show-wrapper :loading="!axios_finished" @edit="edit" @pdf="pdf">
+        <show-wrapper :loading="!axios_finished" :enabled="enabled" @edit="edit" @pdf="pdf" @toggle-enabled="toggleEnabled">
+            <!-- Tabs -->
+            <ul slot="tabs" class="nav nav-tabs">
+                <!-- Personal information tab -->
+                <tab-item :active="tab === 0" @click.native="tab = 0" icon="fas fa-user">
+                    Información personal
+                </tab-item>
+                <!-- Working information tab -->
+                <tab-item :active="tab === 1" @click.native="tab = 1" icon="fas fa-briefcase">
+                    Información laboral
+                </tab-item>
+                <!-- Vehicles tab -->
+                <tab-item :active="tab === 2" @click.native="tab = 2" icon="fas fa-car">
+                    Vehículos
+                </tab-item>
+                <!-- Documentation tab -->
+                <tab-item :active="tab === 3" @click.native="tab = 3" icon="fas fa-file-alt">
+                    Documentación
+                </tab-item>
+                <!-- Observations tab -->
+                <tab-item :active="tab === 4" @click.native="tab = 4" icon="fas fa-eye">
+                    Observaciones
+                </tab-item>
+            </ul>
+            <!-- Content -->
             <personal-information v-show="tab === 0" :person="personal_information"/>
             <working-information v-show="tab === 1" :jobs="jobs"/>
             <vehicles v-show="tab === 2" :vehicles="vehicles"/>
@@ -47,6 +47,7 @@
             return {
                 axios_finished: false,
                 tab: 0,
+                enabled: false,
                 personal_information: {},
                 jobs: [],
                 vehicles: [],
@@ -59,6 +60,7 @@
         beforeMount() {
             axios.get(`/people/${this.$route.params.id}`)
             .then(response => {
+                this.enabled = response.data.enabled;
                 this.personal_information = response.data.personal_information;
                 this.jobs = response.data.jobs;
                 this.vehicles = response.data.vehicles;
@@ -81,6 +83,11 @@
             },
             pdf: function() {
                 window.open(`/people/${this.$route.params.id}/pdf`, '_blanck', 'titlebar=no');
+            },
+            toggleEnabled: function() {
+                axios.post(`/people/${this.$route.params.id}/toggle-enabled`)
+                .then(response => this.enabled = response.data.enabled)
+                .catch(error => {})
             }
         }
     }

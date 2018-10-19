@@ -17,6 +17,7 @@ class CreatePeopleTable extends Migration
     {
         Schema::create('people', function (Blueprint $table) {
             $table->increments('id');
+            $table->boolean('enabled')->default(true);
             $table->string('picture_name')->default('');
             $table->string('last_name', Person::LENGTHS['last_name']['max'])->required();
             $table->string('name', Person::LENGTHS['name']['max'])->required();

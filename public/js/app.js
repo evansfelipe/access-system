@@ -103825,7 +103825,7 @@ var render = function() {
         ? _c(
             "div",
             {
-              staticClass: "img-wrapper",
+              staticClass: "img-wrapper d-flex align-items-center",
               on: {
                 click: function($event) {
                   _vm.current = null
@@ -104228,7 +104228,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.el-button + .el-button[data-v-7aa00ce3] {\n  margin-left: 0;\n  margin-top: 10px;\n}\ndiv.card-loading > div.card-body > div.row[data-v-7aa00ce3] {\n  height: 40vh;\n}\n", ""]);
+exports.push([module.i, "\n.el-button + .el-button[data-v-7aa00ce3] {\n  margin-left: 0;\n  margin-top: 10px;\n}\ndiv.card-loading > div.card-body > div.row[data-v-7aa00ce3] {\n  height: 40vh;\n}\n.wrapper[data-v-7aa00ce3] {\n  text-align: right;\n}\n.wrapper > .item[data-v-7aa00ce3] {\n    display: block;\n    float: right;\n    clear: right;\n}\nbutton.toggle-enabled[data-v-7aa00ce3] {\n  background-color: transparent;\n  border: 0;\n  border-radius: 3px;\n  outline: none;\n  margin: 0;\n  min-width: 100px;\n  color: white;\n  cursor: pointer;\n  font-weight: bold;\n  font-size: 80%;\n}\nbutton.toggle-enabled.enabled[data-v-7aa00ce3] {\n    background-color: #00C851;\n}\nbutton.toggle-enabled.enabled[data-v-7aa00ce3]::after {\n      content: 'Habilitado';\n}\nbutton.toggle-enabled.enabled[data-v-7aa00ce3]:hover {\n      background-color: #ff4444;\n}\nbutton.toggle-enabled.enabled[data-v-7aa00ce3]:hover::after {\n        content: 'Deshabilitar';\n}\nbutton.toggle-enabled.disabled[data-v-7aa00ce3] {\n    background-color: #ff4444;\n}\nbutton.toggle-enabled.disabled[data-v-7aa00ce3]::after {\n      content: 'Deshabilitado';\n}\nbutton.toggle-enabled.disabled[data-v-7aa00ce3]:hover {\n      background-color: #00C851;\n}\nbutton.toggle-enabled.disabled[data-v-7aa00ce3]:hover::after {\n        content: 'Habilitar';\n}\n", ""]);
 
 // exports
 
@@ -104273,6 +104273,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -104280,6 +104327,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             type: Boolean,
             required: false,
             default: false
+        },
+        enabled: {
+            type: Boolean,
+            required: false,
+            default: null
+        }
+    },
+    data: function data() {
+        return {
+            hover: false
+        };
+    },
+
+    methods: {
+        toggleEnabled: function toggleEnabled() {
+            var _this = this;
+
+            this.$confirm('¿Está seguro?', '', {
+                confirmButtonText: 'Sí',
+                cancelButtonText: 'No',
+                type: 'error'
+            }).then(function () {
+                return _this.$emit('toggle-enabled');
+            }).catch(function () {});
         }
     }
 });
@@ -104294,78 +104365,114 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {
-      class:
-        "card card-default borderless-top " +
-        (_vm.loading ? "card-loading" : "")
-    },
     [
-      _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "row" }, [
-          _c(
+      !_vm.loading && _vm.enabled !== null
+        ? _c(
             "div",
-            { staticClass: "col-11" },
-            [_vm.loading ? _c("loading-cover") : _vm._t("default")],
-            2
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-1 text-center" },
+            {
+              staticClass: "text-right",
+              on: {
+                mouseover: function($event) {
+                  _vm.hover = !_vm.hover
+                },
+                mouseleave: function($event) {
+                  _vm.hover = !_vm.hover
+                }
+              }
+            },
             [
-              _c(
-                "el-tooltip",
-                {
-                  staticClass: "item",
-                  attrs: {
-                    effect: "dark",
-                    content: "Editar",
-                    placement: "left"
-                  }
-                },
-                [
-                  _c("el-button", {
-                    attrs: { icon: "el-icon-edit", circle: "", plain: "" },
-                    on: {
-                      click: function($event) {
-                        _vm.$emit("edit")
-                      }
-                    }
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "el-tooltip",
-                {
-                  staticClass: "item",
-                  attrs: {
-                    effect: "dark",
-                    content: "Exportar como PDF",
-                    placement: "left"
-                  }
-                },
-                [
-                  _c("el-button", {
-                    attrs: { icon: "el-icon-document", circle: "", plain: "" },
-                    on: {
-                      click: function($event) {
-                        _vm.$emit("pdf")
-                      }
-                    }
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _vm._t("extra-buttons")
-            ],
-            2
+              _c("button", {
+                class:
+                  "toggle-enabled " + (_vm.enabled ? "enabled" : "disabled"),
+                on: { click: _vm.toggleEnabled }
+              })
+            ]
           )
-        ])
-      ])
-    ]
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._t("tabs"),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          class:
+            "card card-default borderless-top " +
+            (_vm.loading ? "card-loading" : "")
+        },
+        [
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "row" }, [
+              _c(
+                "div",
+                { staticClass: "col-11" },
+                [_vm.loading ? _c("loading-cover") : _vm._t("default")],
+                2
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "wrapper col-1" },
+                [
+                  _c(
+                    "el-tooltip",
+                    {
+                      staticClass: "item",
+                      attrs: {
+                        effect: "dark",
+                        content: "Editar",
+                        placement: "left"
+                      }
+                    },
+                    [
+                      _c("el-button", {
+                        attrs: { icon: "el-icon-edit", circle: "", plain: "" },
+                        on: {
+                          click: function($event) {
+                            _vm.$emit("edit")
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "el-tooltip",
+                    {
+                      staticClass: "item",
+                      attrs: {
+                        effect: "dark",
+                        content: "Exportar como PDF",
+                        placement: "left"
+                      }
+                    },
+                    [
+                      _c("el-button", {
+                        attrs: {
+                          icon: "el-icon-document",
+                          circle: "",
+                          plain: ""
+                        },
+                        on: {
+                          click: function($event) {
+                            _vm.$emit("pdf")
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _vm._t("extra-buttons")
+                ],
+                2
+              )
+            ])
+          ])
+        ]
+      )
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -112272,6 +112379,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             axios_finished: false,
             tab: 0,
+            enabled: false,
             personal_information: {},
             jobs: [],
             vehicles: [],
@@ -112285,6 +112393,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _this = this;
 
         axios.get('/people/' + this.$route.params.id).then(function (response) {
+            _this.enabled = response.data.enabled;
             _this.personal_information = response.data.personal_information;
             _this.jobs = response.data.jobs;
             _this.vehicles = response.data.vehicles;
@@ -112306,6 +112415,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         pdf: function pdf() {
             window.open('/people/' + this.$route.params.id + '/pdf', '_blanck', 'titlebar=no');
+        },
+        toggleEnabled: function toggleEnabled() {
+            var _this2 = this;
+
+            axios.post('/people/' + this.$route.params.id + '/toggle-enabled').then(function (response) {
+                return _this2.enabled = response.data.enabled;
+            }).catch(function (error) {});
         }
     }
 });
@@ -113701,84 +113817,92 @@ var render = function() {
     "div",
     [
       _c(
-        "ul",
-        { staticClass: "nav nav-tabs" },
-        [
-          _c(
-            "tab-item",
-            {
-              attrs: { active: _vm.tab === 0, icon: "fas fa-user" },
-              nativeOn: {
-                click: function($event) {
-                  _vm.tab = 0
-                }
-              }
-            },
-            [_vm._v("\n            Información personal\n        ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "tab-item",
-            {
-              attrs: { active: _vm.tab === 1, icon: "fas fa-briefcase" },
-              nativeOn: {
-                click: function($event) {
-                  _vm.tab = 1
-                }
-              }
-            },
-            [_vm._v("\n            Información laboral\n        ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "tab-item",
-            {
-              attrs: { active: _vm.tab === 2, icon: "fas fa-car" },
-              nativeOn: {
-                click: function($event) {
-                  _vm.tab = 2
-                }
-              }
-            },
-            [_vm._v("\n            Vehículos\n        ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "tab-item",
-            {
-              attrs: { active: _vm.tab === 3, icon: "fas fa-file-alt" },
-              nativeOn: {
-                click: function($event) {
-                  _vm.tab = 3
-                }
-              }
-            },
-            [_vm._v("\n            Documentación\n        ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "tab-item",
-            {
-              attrs: { active: _vm.tab === 4, icon: "fas fa-eye" },
-              nativeOn: {
-                click: function($event) {
-                  _vm.tab = 4
-                }
-              }
-            },
-            [_vm._v("\n            Observaciones\n        ")]
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
         "show-wrapper",
         {
-          attrs: { loading: !_vm.axios_finished },
-          on: { edit: _vm.edit, pdf: _vm.pdf }
+          attrs: { loading: !_vm.axios_finished, enabled: _vm.enabled },
+          on: {
+            edit: _vm.edit,
+            pdf: _vm.pdf,
+            "toggle-enabled": _vm.toggleEnabled
+          }
         },
         [
+          _c(
+            "ul",
+            {
+              staticClass: "nav nav-tabs",
+              attrs: { slot: "tabs" },
+              slot: "tabs"
+            },
+            [
+              _c(
+                "tab-item",
+                {
+                  attrs: { active: _vm.tab === 0, icon: "fas fa-user" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.tab = 0
+                    }
+                  }
+                },
+                [_vm._v("\n                Información personal\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "tab-item",
+                {
+                  attrs: { active: _vm.tab === 1, icon: "fas fa-briefcase" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.tab = 1
+                    }
+                  }
+                },
+                [_vm._v("\n                Información laboral\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "tab-item",
+                {
+                  attrs: { active: _vm.tab === 2, icon: "fas fa-car" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.tab = 2
+                    }
+                  }
+                },
+                [_vm._v("\n                Vehículos\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "tab-item",
+                {
+                  attrs: { active: _vm.tab === 3, icon: "fas fa-file-alt" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.tab = 3
+                    }
+                  }
+                },
+                [_vm._v("\n                Documentación\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "tab-item",
+                {
+                  attrs: { active: _vm.tab === 4, icon: "fas fa-eye" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.tab = 4
+                    }
+                  }
+                },
+                [_vm._v("\n                Observaciones\n            ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c("personal-information", {
             directives: [
               {
@@ -116410,71 +116534,78 @@ var render = function() {
     "div",
     [
       _c(
-        "ul",
-        { staticClass: "nav nav-tabs" },
-        [
-          _c(
-            "tab-item",
-            {
-              attrs: { active: _vm.tab === 0, icon: "fas fa-building" },
-              nativeOn: {
-                click: function($event) {
-                  _vm.tab = 0
-                }
-              }
-            },
-            [_vm._v("\n            Información general\n        ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "tab-item",
-            {
-              attrs: { active: _vm.tab === 1, icon: "fas fa-universal-access" },
-              nativeOn: {
-                click: function($event) {
-                  _vm.tab = 1
-                }
-              }
-            },
-            [_vm._v("\n            Grupos\n        ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "tab-item",
-            {
-              attrs: { active: _vm.tab === 2, icon: "fas fa-users" },
-              nativeOn: {
-                click: function($event) {
-                  _vm.tab = 2
-                }
-              }
-            },
-            [_vm._v("\n            Personas\n        ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "tab-item",
-            {
-              attrs: { active: _vm.tab === 3, icon: "fas fa-car" },
-              nativeOn: {
-                click: function($event) {
-                  _vm.tab = 3
-                }
-              }
-            },
-            [_vm._v("\n            Vehículos\n        ")]
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
         "show-wrapper",
         {
           attrs: { loading: !_vm.axios_finished },
           on: { edit: _vm.edit, pdf: _vm.pdf }
         },
         [
+          _c(
+            "ul",
+            {
+              staticClass: "nav nav-tabs",
+              attrs: { slot: "tabs" },
+              slot: "tabs"
+            },
+            [
+              _c(
+                "tab-item",
+                {
+                  attrs: { active: _vm.tab === 0, icon: "fas fa-building" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.tab = 0
+                    }
+                  }
+                },
+                [_vm._v("\n                Información general\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "tab-item",
+                {
+                  attrs: {
+                    active: _vm.tab === 1,
+                    icon: "fas fa-universal-access"
+                  },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.tab = 1
+                    }
+                  }
+                },
+                [_vm._v("\n                Grupos\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "tab-item",
+                {
+                  attrs: { active: _vm.tab === 2, icon: "fas fa-users" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.tab = 2
+                    }
+                  }
+                },
+                [_vm._v("\n                Personas\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "tab-item",
+                {
+                  attrs: { active: _vm.tab === 3, icon: "fas fa-car" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.tab = 3
+                    }
+                  }
+                },
+                [_vm._v("\n                Vehículos\n            ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c("general-information", {
             directives: [
               {
@@ -118637,32 +118768,36 @@ var render = function() {
     "div",
     [
       _c(
-        "ul",
-        { staticClass: "nav nav-tabs" },
-        [
-          _c(
-            "tab-item",
-            {
-              attrs: { active: _vm.tab === 0, icon: "fas fa-car" },
-              nativeOn: {
-                click: function($event) {
-                  _vm.tab = 0
-                }
-              }
-            },
-            [_vm._v("\n            Vehículo\n        ")]
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
         "show-wrapper",
         {
           attrs: { loading: !_vm.axios_finished },
           on: { edit: _vm.edit, pdf: _vm.pdf }
         },
         [
+          _c(
+            "ul",
+            {
+              staticClass: "nav nav-tabs",
+              attrs: { slot: "tabs" },
+              slot: "tabs"
+            },
+            [
+              _c(
+                "tab-item",
+                {
+                  attrs: { active: _vm.tab === 0, icon: "fas fa-car" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.tab = 0
+                    }
+                  }
+                },
+                [_vm._v("\n                Vehículo\n            ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c("general-information", {
             directives: [
               {
@@ -119981,32 +120116,39 @@ var render = function() {
     "div",
     [
       _c(
-        "ul",
-        { staticClass: "nav nav-tabs" },
-        [
-          _c(
-            "tab-item",
-            {
-              attrs: { active: _vm.tab === 0, icon: "fas fa-universal-access" },
-              nativeOn: {
-                click: function($event) {
-                  _vm.tab = 0
-                }
-              }
-            },
-            [_vm._v("\n            Grupo\n        ")]
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
         "show-wrapper",
         {
           attrs: { loading: !_vm.axios_finished },
           on: { edit: _vm.edit, pdf: _vm.pdf }
         },
         [
+          _c(
+            "ul",
+            {
+              staticClass: "nav nav-tabs",
+              attrs: { slot: "tabs" },
+              slot: "tabs"
+            },
+            [
+              _c(
+                "tab-item",
+                {
+                  attrs: {
+                    active: _vm.tab === 0,
+                    icon: "fas fa-universal-access"
+                  },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.tab = 0
+                    }
+                  }
+                },
+                [_vm._v("\n                Grupo\n            ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c("general-information", {
             directives: [
               {

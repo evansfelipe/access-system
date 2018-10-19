@@ -48,8 +48,9 @@ Route::middleware(['auth','user.administration'])->group(function() {
         Route::get('/document/{person_document}',   'PeopleController@document')->name('people.document');
         Route::get('/{person}/pdf',                 'PeopleController@pdf')->name('people.pdf');
         Route::post('/{person}/new-observation',    'PeopleController@newObservation')->name('people.new-observation');
-        Route::get('/id-search',        'ListsController@peopleIdSearch')->name('people.id-search');
-    }); Route::resource('/people',                  'PeopleController')->only(['store', 'show', 'edit', 'update', 'destroy']);
+        Route::get('/id-search',                    'ListsController@peopleIdSearch')->name('people.id-search');
+        Route::post('/{person}/toggle-enabled',     'PeopleController@toggleEnabled')->name('people.toggle-enable');
+    }); Route::resource('/people',                  'PeopleController')->only(['store', 'show', 'edit', 'update']);
 
     // Companies routes
     Route::prefix('companies')->group(function() {
