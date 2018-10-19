@@ -1,21 +1,10 @@
 <?php
-
 use Faker\Generator as Faker;
-
-use Illuminate\Http\Request;
-use App\Residency;
 
 $factory->define(App\Company::class, function (Faker $faker) {
     $option = ['S.R.L.', 'S.A.'];
     $cuit_options = ['30', '33', '34'];
-    $residency = new Residency([
-        'street'   => $faker->streetAddress,
-        'cp'       => $faker->postcode,
-        'country'  => $faker->country,
-        'province' => $faker->state,
-        'city'     => $faker->city,    
-    ]);
-    $residency->save();
+    $residency = factory(App\Residency::class)->create();
     $name = $faker->unique()->company;
 
     return [

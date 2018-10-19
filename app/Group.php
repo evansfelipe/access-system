@@ -154,6 +154,9 @@ class Group extends Model
 
     public function toShowArray()
     {
+        $people = $this->jobs()->with('person:people.id,people.last_name,people.name,people.cuil')->get()->map(function($job) {
+            return $job->person;
+        });
         $days_array = $this->daysToArray();
         return [
             'id'            => $this->id,
@@ -162,6 +165,7 @@ class Group extends Model
             'range'         => $this->rangeToString().($this->end < $this->start ? ' (+1d)' : ''),
             'company'       => $this->company ? $this->company->name : '-',
             'company_id'    => $this->company ? $this->company->id : null,
+            'people'        => $people,
             'days'          => [
                 'Lunes'     => $days_array[0],
                 'Martes'    => $days_array[1],

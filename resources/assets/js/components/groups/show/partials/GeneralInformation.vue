@@ -38,7 +38,7 @@
             <div class="col-12">
                 <custom-table
                     :columns="columns"
-                    :rows="[]"
+                    :rows="values.people"
                     :rowsquantity="5"
                     :no-rows-message="'No hay personas asignadas'"
                     @rowclicked="({id}) => $router.push(`/people/show/${id}`)"

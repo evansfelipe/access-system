@@ -66,7 +66,7 @@
                 </div>
                 <!-- Email -->
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col">
                         <small>Email</small>
                         <strong>{{ person.email }}</strong>
                     </div>

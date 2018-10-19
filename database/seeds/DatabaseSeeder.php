@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,35 +10,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // Creates the basic users for the system.
+        factory(App\User::class)->create(['email' => 'root@example.com',            'type' => \App\User::ROOT]);
+        factory(App\User::class)->create(['email' => 'security@example.com',        'type' => \App\User::SECURITY]);
+        factory(App\User::class)->create(['email' => 'administrator@example.com',   'type' => \App\User::ADMINISTRATION]);
+        // As the GroupFactory needs companies, we have to seed them first.
         factory(App\Company::class, 10)->create();
-        factory(App\Vehicle::class, 115)->create();
-        // factory(App\Person::class, 5)->create();
-        DB::table('users')->insert([
-            [
-                'name' => 'Root',
-                'email' =>'root@example.com',
-                'password' => bcrypt('secret'),
-                'type' => \App\User::ROOT
-            ],
-            [
-                'name' => 'Administrator',
-                'email' =>'administrator@example.com',
-                'password' => bcrypt('secret'),
-                'type' => \App\User::ADMINISTRATION
-            ],
-            [
-                'name' => 'Security',
-                'email' =>'security@example.com',
-                'password' => bcrypt('secret'),
-                'type' => \App\User::SECURITY
-            ]
-        ]);
-        
-        DB::table('activities')->insert([
-            ['name' => 'Pesquero'],
-            ['name' => 'Control de calidad']
-        ]);
-
+        // As the GroupFactory needs zones, we have to seed them first.
+        factory(App\Zone::class, 3)->create();
+        // As the PersonFactory needs groups, we have to seed them first.
+        factory(App\Group::class, 10)->create();
+        factory(App\Group::class)->create(['company_id' => null]); // We have to be sure at least a group without company exists.
+        factory(App\Group::class)->create(['company_id' => 1]); // We have to be sure at least a group with company exists.
+        // As the PersonFactory needs vehicles, we have to seed them here.
         DB::table('vehicle_types')->insert([
             ['type' => 'Auto',      'allows_container' => false],
             ['type' => 'Tractor',   'allows_container' => false],
@@ -47,10 +30,14 @@ class DatabaseSeeder extends Seeder
             ['type' => 'Grúa',      'allows_container' => false],
             ['type' => 'Remolque',  'allows_container' => false]
         ]);
+        factory(App\Vehicle::class, 115)->create();
+        // As the PersonFactory needs activities, we have to seed them here.
+        factory(App\Activity::class, 10)->create();
 
+        factory(App\Person::class, 10)->create();
 
         DB::table('countries')->truncate();
-        $countries = [
+        DB::table('countries')->insert([
             ['name' => 'Argentina'],
             ['name' => 'Afganistán'],
             ['name' => 'Albania'],
@@ -306,11 +293,10 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Yibuti'],
             ['name' => 'Zambia'],
             ['name' => 'Zimbabue'],
-        ];
-        DB::table('countries')->insert($countries);
+        ]);
 
         DB::table('provinces')->truncate();
-        $provinces = [
+        DB::table('provinces')->insert([
             ['name' => 'Buenos Aires',                      'country_id' => 1],
             ['name' => 'Catamarca',                         'country_id' => 1],
             ['name' => 'Chaco',                             'country_id' => 1],
@@ -334,15 +320,13 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Santiago del Estero',               'country_id' => 1],
             ['name' => 'Tierra del Fuego',                  'country_id' => 1],
             ['name' => 'Tucumán',                           'country_id' => 1],
-        ];
-        DB::table('provinces')->insert($provinces);
+        ]);
 
         DB::table('cities')->truncate();
-        $cities = [
+        DB::table('cities')->insert([
             ['name' => 'Ciudad Autónoma de Buenos Aires',   'province_id' => 1],
             ['name' => 'Mar del Plata',                     'province_id' => 1],
             ['name' => 'Miramar',                           'province_id' => 1],
-        ];
-        DB::table('cities')->insert($cities);
+        ]);
     }
 }

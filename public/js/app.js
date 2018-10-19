@@ -112669,7 +112669,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-4" }, [
+            _c("div", { staticClass: "col" }, [
               _c("small", [_vm._v("Email")]),
               _vm._v(" "),
               _c("strong", [_vm._v(_vm._s(_vm.person.email))])
@@ -119922,7 +119922,7 @@ var render = function() {
           _c("custom-table", {
             attrs: {
               columns: _vm.columns,
-              rows: [],
+              rows: _vm.values.people,
               rowsquantity: 5,
               "no-rows-message": "No hay personas asignadas"
             },
