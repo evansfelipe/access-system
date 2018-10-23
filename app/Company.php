@@ -9,9 +9,9 @@ class Company extends Model
      * Array with the length of each string column of the database associated with this model.
      */
     public const LENGTHS = [
-        'business_name' => ['max' => 50],
-        'name' => ['max' => 50],
-        'area' => ['max' => 50],
+        'business_name' => ['max' => 100],
+        'name' => ['max' => 100],
+        'area' => ['max' => 100],
         'cuit' => ['max' => 15],
     ];
 

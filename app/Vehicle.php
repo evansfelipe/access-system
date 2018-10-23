@@ -7,10 +7,10 @@ class Vehicle extends Model
 
     public const LENGTHS = [
         'owner' => ['max' => 100],
-        'plate' => ['min' => 5 ,'max' => 10],
-        'brand' => ['max' => 20],
-        'model' => ['max' => 30],
-        'colour' => ['max' => 15]
+        'plate' => ['min' => 5 ,'max' => 15],
+        'brand' => ['max' => 50],
+        'model' => ['max' => 50],
+        'colour' => ['max' => 50]
     ];
 
     /**
@@ -125,8 +125,7 @@ class Vehicle extends Model
                                                 'cuil'          => $person->cuil,
                                                 'company_name'  => $person->companies()->select('name')->get()->implode('name', ' / ')
                                             ];
-                                        }),
-            'assigned_containers'   => $this->containers
+                                        })
         ];
     }
 }
