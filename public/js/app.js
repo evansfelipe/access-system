@@ -106348,7 +106348,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\ntd.small[data-v-4bf18620] {\n  padding-right: 0.5em;\n  font-size: 75%;\n}\ntd.strong[data-v-4bf18620] {\n  font-weight: bold;\n}\ndiv.card-body[data-v-4bf18620] {\n  padding: 0.5em !important;\n}\ndiv.content[data-v-4bf18620] {\n  margin: 1em;\n  border: 1px solid #dedede;\n  padding: 1em;\n  border-radius: 5px;\n}\ntextarea.form-control[data-v-4bf18620] {\n  resize: none;\n  height: auto;\n}\n", ""]);
+exports.push([module.i, "\ntd.small[data-v-4bf18620] {\n  padding-right: 0.5em;\n  font-size: 75%;\n}\ntd.strong[data-v-4bf18620] {\n  font-weight: bold;\n}\ndiv.card-body[data-v-4bf18620] {\n  padding: 0.5em !important;\n}\ndiv.content[data-v-4bf18620] {\n  margin: 1em;\n  border: 1px solid #dedede;\n  padding: 1em;\n  border-radius: 5px;\n}\ntextarea.form-control[data-v-4bf18620] {\n  resize: none;\n  height: auto;\n}\n.container-enter-active[data-v-4bf18620], .container-leave-active[data-v-4bf18620] {\n  -webkit-transition: all .3s;\n  transition: all .3s;\n}\n.container-enter[data-v-4bf18620], .container-leave-to[data-v-4bf18620] {\n  opacity: 0;\n}\n.container-leave-active[data-v-4bf18620] {\n  max-height: 100vh;\n}\n.container-leave-to[data-v-4bf18620] {\n  max-height: 0;\n}\n", ""]);
 
 // exports
 
@@ -106511,13 +106511,84 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var Person = function () {
-    function Person(values) {
+    function Person(values, access) {
         _classCallCheck(this, Person);
 
         this.values = values;
+        this.access = access;
 
         this.values.observations.forEach(function (observation) {
             observation.collapsed = true;
@@ -106531,11 +106602,7 @@ var Person = function () {
         this.vehicles_search_input = "";
         this.vehicles_search = false;
         this.vehicle = null;
-
-        this.containers = [];
         this.container = null;
-        this.containers_search_input = "";
-        this.containers_search = false;
     }
 
     _createClass(Person, [{
@@ -106550,21 +106617,43 @@ var Person = function () {
     }, {
         key: "selectVehicle",
         value: function selectVehicle(id) {
-            console.log(this);
-
             this.vehicle = this.vehicle === id ? null : id;
-            this.container = null;
-            if (this.vehicle !== null) {
-                var vehicle_pos = this.values.vehicles.getPositionById(id);
-                this.containers = this.values.vehicles[vehicle_pos].containers;
-            } else {
-                this.containers = [];
+            if (!this.allowsContainer()) {
+                this.container = null;
             }
         }
     }, {
-        key: "selectContainer",
-        value: function selectContainer(id) {
-            this.container = this.container === id ? null : id;
+        key: "allowsContainer",
+        value: function allowsContainer() {
+            var vehicle = this.values.vehicles.getById(this.vehicle);
+            return vehicle !== undefined ? vehicle.allows_container : false;
+        }
+    }, {
+        key: "setContainer",
+        value: function setContainer(value) {
+            if (value) {
+                this.container = {
+                    serial_number: '',
+                    brand: '',
+                    model: '',
+                    format: '',
+                    size: '',
+                    colour: '',
+                    observation: ''
+                };
+            } else {
+                this.container = null;
+            }
+        }
+    }, {
+        key: "allowed",
+        value: function allowed() {
+            alert('Permitir el acceso');
+        }
+    }, {
+        key: "denied",
+        value: function denied() {
+            alert('Denegar el acceso');
         }
     }]);
 
@@ -106609,15 +106698,19 @@ var Person = function () {
                     // Parses the JSON message.
                     var object = JSON.parse(message.payloadString);
                     // Checks if the message has the correct format.
-                    if (object.hasOwnProperty('card_number') && object.card_number) {
+                    if (object.hasOwnProperty('ID') && object.ID) {
                         // Gets the data associated with the card number.
-                        axios.get('security/person/' + object.card_number).then(function (response) {
-                            console.log(response.data);
-
-                            var person = new Person(response.data);
+                        axios.get('security/person/' + object.ID).then(function (response) {
+                            var access = {
+                                device: object.Nombre,
+                                zone: object.Area,
+                                card_number: object.ID,
+                                allowed: object.Accion == "OK" ? true : false,
+                                date: object.Fecha
+                            };
+                            var person = new Person(response.data, access);
                             _this.person = person;
                             _this.people.push(person);
-
                             _this.tab = _this.people.length - 1;
                         }).catch(function (error) {
                             console.log(error);
@@ -106688,17 +106781,6 @@ var Person = function () {
             if (this.person.vehicles_search) {
                 this.$nextTick(function () {
                     return _this4.$refs.vehicles_search.focus();
-                });
-            }
-        },
-        toggleContainerSearch: function toggleContainerSearch() {
-            var _this5 = this;
-
-            this.person.containers_search = !this.person.containers_search;
-            this.person.containers_search_input = "";
-            if (this.person.containers_search) {
-                this.$nextTick(function () {
-                    return _this5.$refs.containers_search.focus();
                 });
             }
         }
@@ -107008,7 +107090,18 @@ var render = function() {
               "shadow stream-opened " +
               (_vm.fullscreen ? "fullscreen" : "") +
               " " +
-              (!_vm.fatal_error && !_vm.loading ? "playing" : "")
+              (!_vm.fatal_error && !_vm.loading ? "playing" : ""),
+            on: {
+              keyup: function($event) {
+                if (
+                  !("button" in $event) &&
+                  _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                ) {
+                  return null
+                }
+                return _vm.handleFullscreen($event)
+              }
+            }
           },
           [
             _vm.loading
@@ -107331,11 +107424,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             var search = this.filter;
-            console.log(search);
-
             return this.list.filter(function (element) {
-                console.log(element);
-
                 var ret = false;
                 _this.keys.forEach(function (key) {
                     ret = ret || element[key].toString().matches(search);
@@ -107574,10 +107663,18 @@ var render = function() {
               ? [
                   _c("div", { staticClass: "form-row" }, [
                     _c("div", { staticClass: "col-4" }, [
-                      _c("div", { staticClass: "content" }, [
+                      _c("div", { staticClass: "content text-center" }, [
                         _c("h3", { staticClass: "text-center" }, [
                           _vm._v(_vm._s(_vm.person.values.full_name))
                         ]),
+                        _vm._v(" "),
+                        _vm.person.access.allowed
+                          ? _c("span", { staticClass: "badge badge-success" }, [
+                              _vm._v("Acceso permitido")
+                            ])
+                          : _c("span", { staticClass: "badge badge-danger" }, [
+                              _vm._v("Acceso denegado")
+                            ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "p-3" }, [
                           _c("img", {
@@ -107588,7 +107685,10 @@ var render = function() {
                         _vm._v(" "),
                         _c(
                           "div",
-                          { staticClass: " d-flex justify-content-center" },
+                          {
+                            staticClass:
+                              " d-flex justify-content-center text-left"
+                          },
                           [
                             _c("access-card", {
                               attrs: {
@@ -107601,7 +107701,7 @@ var render = function() {
                           1
                         ),
                         _vm._v(" "),
-                        _c("table", { staticClass: "m-2" }, [
+                        _c("table", { staticClass: "m-2 text-left" }, [
                           _c("tr", [
                             _c("td", { staticClass: "small" }, [
                               _vm._v("Riesgo")
@@ -107668,279 +107768,663 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-8" }, [
-                      _c("div", { staticClass: "row" }, [
-                        _c("div", { staticClass: "col" }, [
-                          _c(
-                            "div",
-                            { staticClass: "content" },
-                            [
-                              _c("h5", { staticClass: "mb-2 d-inline-block" }, [
-                                _vm._v("Vehículos")
-                              ]),
-                              _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-8" },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "form-row",
+                            staticStyle: { padding: "1em" }
+                          },
+                          [
+                            _c("div", { staticClass: "col-6" }, [
                               _c(
-                                "div",
-                                { staticClass: "d-inline-block float-right" },
-                                [
-                                  _vm.person.vehicles_search
-                                    ? _c("input", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value:
-                                              _vm.person.vehicles_search_input,
-                                            expression:
-                                              "person.vehicles_search_input"
-                                          }
-                                        ],
-                                        ref: "vehicles_search",
-                                        staticClass: "md-input",
-                                        attrs: {
-                                          type: "text",
-                                          placeholder: "Búsqueda"
-                                        },
-                                        domProps: {
-                                          value:
-                                            _vm.person.vehicles_search_input
-                                        },
-                                        on: {
-                                          input: function($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.$set(
-                                              _vm.person,
-                                              "vehicles_search_input",
-                                              $event.target.value
-                                            )
-                                          }
-                                        }
-                                      })
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "d-inline cursor-pointer",
-                                      on: { click: _vm.toggleVehicleSearch }
-                                    },
-                                    [
-                                      _c("i", {
-                                        staticClass:
-                                          "fas fa-search cursor-pointer"
-                                      })
-                                    ]
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("cards-carousel", {
-                                attrs: {
-                                  list: _vm.person.values.vehicles,
-                                  selected: _vm.person.vehicle,
-                                  keys: [
-                                    "type",
-                                    "plate",
-                                    "brand",
-                                    "model",
-                                    "year",
-                                    "colour"
-                                  ],
-                                  filter: _vm.person.vehicles_search_input
-                                },
-                                on: {
-                                  selection: function(id) {
-                                    return _vm.person.selectVehicle(id)
-                                  }
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _vm.person.containers.length !== 0
-                        ? _c("div", { staticClass: "row" }, [
-                            _c("div", { staticClass: "col" }, [
-                              _c(
-                                "div",
-                                { staticClass: "content" },
-                                [
-                                  _c(
-                                    "h5",
-                                    { staticClass: "mb-2 d-inline-block" },
-                                    [_vm._v("Containers")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "d-inline-block float-right"
-                                    },
-                                    [
-                                      _vm.person.containers_search
-                                        ? _c("input", {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value:
-                                                  _vm.person
-                                                    .containers_search_input,
-                                                expression:
-                                                  "person.containers_search_input"
-                                              }
-                                            ],
-                                            ref: "containers_search",
-                                            staticClass: "md-input",
-                                            attrs: {
-                                              type: "text",
-                                              placeholder: "Búsqueda"
-                                            },
-                                            domProps: {
-                                              value:
-                                                _vm.person
-                                                  .containers_search_input
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                if ($event.target.composing) {
-                                                  return
-                                                }
-                                                _vm.$set(
-                                                  _vm.person,
-                                                  "containers_search_input",
-                                                  $event.target.value
-                                                )
-                                              }
-                                            }
-                                          })
-                                        : _vm._e(),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "d-inline cursor-pointer",
-                                          on: {
-                                            click: _vm.toggleContainerSearch
-                                          }
-                                        },
-                                        [
-                                          _c("i", {
-                                            staticClass:
-                                              "fas fa-search cursor-pointer"
-                                          })
-                                        ]
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c("cards-carousel", {
-                                    attrs: {
-                                      list: _vm.person.containers,
-                                      selected: _vm.person.container,
-                                      keys: [
-                                        "series_number",
-                                        "format",
-                                        "size",
-                                        "brand",
-                                        "model",
-                                        "colour"
-                                      ],
-                                      filter: _vm.person.containers_search_input
-                                    },
-                                    on: {
-                                      selection: function(id) {
-                                        return _vm.person.selectContainer(id)
-                                      }
+                                "button",
+                                {
+                                  staticClass:
+                                    "btn btn-outline-success btn-block",
+                                  on: {
+                                    click: function($event) {
+                                      _vm.person.allowed()
                                     }
-                                  })
-                                ],
-                                1
+                                  }
+                                },
+                                [_vm._v("Permitir acceso")]
                               )
-                            ])
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "row" }, [
-                        _c("div", { staticClass: "col" }, [
-                          _c("div", { staticClass: "content" }, [
-                            _c("h5", { staticClass: "mb-2" }, [
-                              _vm._v("Observaciones")
                             ]),
                             _vm._v(" "),
-                            _c("div", { staticClass: "form-row" }, [
-                              _c("div", { staticClass: "col-10" }, [
-                                _c("textarea", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.person.textarea,
-                                      expression: "person.textarea"
-                                    }
-                                  ],
-                                  staticClass: "form-control",
-                                  attrs: {
-                                    rows: "2",
-                                    placeholder: "Nueva observación"
-                                  },
-                                  domProps: { value: _vm.person.textarea },
+                            _c("div", { staticClass: "col-6" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "btn btn-outline-danger btn-block",
                                   on: {
-                                    input: function($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.$set(
-                                        _vm.person,
-                                        "textarea",
-                                        $event.target.value
-                                      )
+                                    click: function($event) {
+                                      _vm.person.denied()
+                                    }
+                                  }
+                                },
+                                [_vm._v("Denegar acceso")]
+                              )
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "col" }, [
+                            _c(
+                              "div",
+                              { staticClass: "content" },
+                              [
+                                _c(
+                                  "h5",
+                                  { staticClass: "mb-2 d-inline-block" },
+                                  [_vm._v("Vehículos")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "d-inline-block float-right" },
+                                  [
+                                    _vm.person.vehicles_search
+                                      ? _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.person
+                                                  .vehicles_search_input,
+                                              expression:
+                                                "person.vehicles_search_input"
+                                            }
+                                          ],
+                                          ref: "vehicles_search",
+                                          staticClass: "md-input",
+                                          attrs: {
+                                            type: "text",
+                                            placeholder: "Búsqueda"
+                                          },
+                                          domProps: {
+                                            value:
+                                              _vm.person.vehicles_search_input
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.person,
+                                                "vehicles_search_input",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "d-inline cursor-pointer",
+                                        on: { click: _vm.toggleVehicleSearch }
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass:
+                                            "fas fa-search cursor-pointer"
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("cards-carousel", {
+                                  attrs: {
+                                    list: _vm.person.values.vehicles,
+                                    selected: _vm.person.vehicle,
+                                    keys: [
+                                      "type",
+                                      "plate",
+                                      "brand",
+                                      "model",
+                                      "year",
+                                      "colour"
+                                    ],
+                                    filter: _vm.person.vehicles_search_input
+                                  },
+                                  on: {
+                                    selection: function(id) {
+                                      return _vm.person.selectVehicle(id)
                                     }
                                   }
                                 })
+                              ],
+                              1
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "transition",
+                          { attrs: { name: "container", tag: "div" } },
+                          [
+                            _vm.person.allowsContainer()
+                              ? _c("div", { staticClass: "row" }, [
+                                  _c("div", { staticClass: "col" }, [
+                                    _c(
+                                      "div",
+                                      { staticClass: "content" },
+                                      [
+                                        _c("div", { staticClass: "row" }, [
+                                          _c(
+                                            "div",
+                                            { staticClass: "col" },
+                                            [
+                                              _c(
+                                                "h5",
+                                                {
+                                                  staticClass: "mr-3 d-inline"
+                                                },
+                                                [_vm._v("Contenedor")]
+                                              ),
+                                              _vm._v(" "),
+                                              _c("switch-box", {
+                                                on: {
+                                                  update: function(value) {
+                                                    return _vm.person.setContainer(
+                                                      value
+                                                    )
+                                                  }
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "transition",
+                                          {
+                                            attrs: {
+                                              name: "container",
+                                              tag: "div"
+                                            }
+                                          },
+                                          [
+                                            _vm.person.container !== null
+                                              ? [
+                                                  _c(
+                                                    "div",
+                                                    {
+                                                      staticClass:
+                                                        "form-row mt-3"
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "form-item",
+                                                        {
+                                                          attrs: {
+                                                            col: "col-4",
+                                                            errors: []
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass: "col"
+                                                            },
+                                                            [
+                                                              _c("input", {
+                                                                staticClass:
+                                                                  "form-control form-control-sm",
+                                                                attrs: {
+                                                                  type: "text",
+                                                                  name:
+                                                                    "serial_number",
+                                                                  placeholder:
+                                                                    "Número de serie"
+                                                                },
+                                                                domProps: {
+                                                                  value:
+                                                                    _vm.person
+                                                                      .container
+                                                                      .serial_number
+                                                                },
+                                                                on: {
+                                                                  input: function(
+                                                                    e
+                                                                  ) {
+                                                                    return _vm.update(
+                                                                      {
+                                                                        name:
+                                                                          "name",
+                                                                        value:
+                                                                          e
+                                                                            .target
+                                                                            .value
+                                                                      }
+                                                                    )
+                                                                  }
+                                                                }
+                                                              })
+                                                            ]
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "form-item",
+                                                        {
+                                                          attrs: {
+                                                            col: "col-4",
+                                                            errors: []
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass: "col"
+                                                            },
+                                                            [
+                                                              _c("input", {
+                                                                staticClass:
+                                                                  "form-control form-control-sm",
+                                                                attrs: {
+                                                                  type: "text",
+                                                                  name: "brand",
+                                                                  placeholder:
+                                                                    "Marca"
+                                                                },
+                                                                domProps: {
+                                                                  value:
+                                                                    _vm.person
+                                                                      .container
+                                                                      .serial_number
+                                                                },
+                                                                on: {
+                                                                  input: function(
+                                                                    e
+                                                                  ) {
+                                                                    return _vm.update(
+                                                                      {
+                                                                        name:
+                                                                          "name",
+                                                                        value:
+                                                                          e
+                                                                            .target
+                                                                            .value
+                                                                      }
+                                                                    )
+                                                                  }
+                                                                }
+                                                              })
+                                                            ]
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "form-item",
+                                                        {
+                                                          attrs: {
+                                                            col: "col-4",
+                                                            errors: []
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass: "col"
+                                                            },
+                                                            [
+                                                              _c("input", {
+                                                                staticClass:
+                                                                  "form-control form-control-sm",
+                                                                attrs: {
+                                                                  type: "text",
+                                                                  name: "model",
+                                                                  placeholder:
+                                                                    "Modelo"
+                                                                },
+                                                                domProps: {
+                                                                  value:
+                                                                    _vm.person
+                                                                      .container
+                                                                      .serial_number
+                                                                },
+                                                                on: {
+                                                                  input: function(
+                                                                    e
+                                                                  ) {
+                                                                    return _vm.update(
+                                                                      {
+                                                                        name:
+                                                                          "name",
+                                                                        value:
+                                                                          e
+                                                                            .target
+                                                                            .value
+                                                                      }
+                                                                    )
+                                                                  }
+                                                                }
+                                                              })
+                                                            ]
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "form-item",
+                                                        {
+                                                          attrs: {
+                                                            col: "col-4",
+                                                            errors: []
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass: "col"
+                                                            },
+                                                            [
+                                                              _c("input", {
+                                                                staticClass:
+                                                                  "form-control form-control-sm",
+                                                                attrs: {
+                                                                  type: "text",
+                                                                  name:
+                                                                    "format",
+                                                                  placeholder:
+                                                                    "Formato"
+                                                                },
+                                                                domProps: {
+                                                                  value:
+                                                                    _vm.person
+                                                                      .container
+                                                                      .serial_number
+                                                                },
+                                                                on: {
+                                                                  input: function(
+                                                                    e
+                                                                  ) {
+                                                                    return _vm.update(
+                                                                      {
+                                                                        name:
+                                                                          "name",
+                                                                        value:
+                                                                          e
+                                                                            .target
+                                                                            .value
+                                                                      }
+                                                                    )
+                                                                  }
+                                                                }
+                                                              })
+                                                            ]
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "form-item",
+                                                        {
+                                                          attrs: {
+                                                            col: "col-4",
+                                                            errors: []
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass: "col"
+                                                            },
+                                                            [
+                                                              _c("input", {
+                                                                staticClass:
+                                                                  "form-control form-control-sm",
+                                                                attrs: {
+                                                                  type: "text",
+                                                                  name: "size",
+                                                                  placeholder:
+                                                                    "Tamaño"
+                                                                },
+                                                                domProps: {
+                                                                  value:
+                                                                    _vm.person
+                                                                      .container
+                                                                      .serial_number
+                                                                },
+                                                                on: {
+                                                                  input: function(
+                                                                    e
+                                                                  ) {
+                                                                    return _vm.update(
+                                                                      {
+                                                                        name:
+                                                                          "name",
+                                                                        value:
+                                                                          e
+                                                                            .target
+                                                                            .value
+                                                                      }
+                                                                    )
+                                                                  }
+                                                                }
+                                                              })
+                                                            ]
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "form-item",
+                                                        {
+                                                          attrs: {
+                                                            col: "col-4",
+                                                            errors: []
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass: "col"
+                                                            },
+                                                            [
+                                                              _c("input", {
+                                                                staticClass:
+                                                                  "form-control form-control-sm",
+                                                                attrs: {
+                                                                  type: "text",
+                                                                  name:
+                                                                    "colour",
+                                                                  placeholder:
+                                                                    "Color"
+                                                                },
+                                                                domProps: {
+                                                                  value:
+                                                                    _vm.person
+                                                                      .container
+                                                                      .serial_number
+                                                                },
+                                                                on: {
+                                                                  input: function(
+                                                                    e
+                                                                  ) {
+                                                                    return _vm.update(
+                                                                      {
+                                                                        name:
+                                                                          "name",
+                                                                        value:
+                                                                          e
+                                                                            .target
+                                                                            .value
+                                                                      }
+                                                                    )
+                                                                  }
+                                                                }
+                                                              })
+                                                            ]
+                                                          )
+                                                        ]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "form-item",
+                                                        {
+                                                          attrs: {
+                                                            col: "col-12",
+                                                            errors: []
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "div",
+                                                            {
+                                                              staticClass: "col"
+                                                            },
+                                                            [
+                                                              _c("textarea", {
+                                                                staticClass:
+                                                                  "form-control form-control-sm",
+                                                                attrs: {
+                                                                  rows: "2",
+                                                                  placeholder:
+                                                                    "Observaciones del contenedor"
+                                                                },
+                                                                domProps: {
+                                                                  value:
+                                                                    _vm.person
+                                                                      .container
+                                                                      .serial_number
+                                                                },
+                                                                on: {
+                                                                  input: function(
+                                                                    e
+                                                                  ) {
+                                                                    return _vm.update(
+                                                                      {
+                                                                        name:
+                                                                          "name",
+                                                                        value:
+                                                                          e
+                                                                            .target
+                                                                            .value
+                                                                      }
+                                                                    )
+                                                                  }
+                                                                }
+                                                              })
+                                                            ]
+                                                          )
+                                                        ]
+                                                      )
+                                                    ],
+                                                    1
+                                                  )
+                                                ]
+                                              : _vm._e()
+                                          ],
+                                          2
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ])
+                                ])
+                              : _vm._e()
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "col" }, [
+                            _c("div", { staticClass: "content" }, [
+                              _c("h5", { staticClass: "mb-2" }, [
+                                _vm._v("Observaciones")
                               ]),
                               _vm._v(" "),
-                              _c("div", { staticClass: "col-2" }, [
+                              _c("div", { staticClass: "form-row" }, [
+                                _c("div", { staticClass: "col-10" }, [
+                                  _c("textarea", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.person.textarea,
+                                        expression: "person.textarea"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      rows: "2",
+                                      placeholder: "Nueva observación"
+                                    },
+                                    domProps: { value: _vm.person.textarea },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.$set(
+                                          _vm.person,
+                                          "textarea",
+                                          $event.target.value
+                                        )
+                                      }
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "col-2" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "btn btn-block btn-outline-success",
+                                      staticStyle: { height: "100%" },
+                                      on: { click: _vm.newObservation }
+                                    },
+                                    [_vm._v("Enviar")]
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "row mt-3" }, [
                                 _c(
-                                  "button",
-                                  {
-                                    staticClass:
-                                      "btn btn-block btn-outline-success",
-                                    staticStyle: { height: "100%" },
-                                    on: { click: _vm.newObservation }
-                                  },
-                                  [_vm._v("Enviar")]
+                                  "div",
+                                  { staticClass: "col" },
+                                  [
+                                    _c("custom-table", {
+                                      attrs: {
+                                        columns: _vm.observations_columns,
+                                        rows: _vm.person.values.observations,
+                                        rowsquantity: 5,
+                                        "no-rows-message":
+                                          "No hay observaciones"
+                                      },
+                                      on: { rowclicked: _vm.toggleObservation }
+                                    })
+                                  ],
+                                  1
                                 )
                               ])
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "row mt-3" }, [
-                              _c(
-                                "div",
-                                { staticClass: "col" },
-                                [
-                                  _c("custom-table", {
-                                    attrs: {
-                                      columns: _vm.observations_columns,
-                                      rows: _vm.person.values.observations,
-                                      rowsquantity: 5,
-                                      "no-rows-message": "No hay observaciones"
-                                    },
-                                    on: { rowclicked: _vm.toggleObservation }
-                                  })
-                                ],
-                                1
-                              )
                             ])
                           ])
                         ])
-                      ])
-                    ])
+                      ],
+                      1
+                    )
                   ])
                 ]
               : _vm._e()
