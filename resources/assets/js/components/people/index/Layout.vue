@@ -1,33 +1,42 @@
+<style lang="scss" scoped>
+    div.form-row + div.form-row {
+        margin-top: 5px;
+    }
+</style>
+
 <template>
-    <index-wrapper  :conditions="conditions" :updating="updating" advanced-search-route="/people/id-search"
-                    @advanced-search-success="advancedSearchSuccess"
-                    @advanced-search-clear="advancedSearchClear">
+    <index-wrapper :updating="updating" @advanced-search-submit="paginate(1)" @advanced-search-clear="advancedSearchClear">
         <!-- Advanced search -->
         <template slot="advanced-search-filters">
             <div class="form-row">
-                <div class="col col-xl-2">
-                    <input type="text" class="form-control form-control-sm" placeholder="Documento" v-model="conditions.document_number">
+                <div class="col col-xl-4">
+                    <input type="text" class="form-control form-control-sm" placeholder="Apellido" v-model="filters.last_name">
                 </div>
-                <div class="col col-xl-2">
-                    <input type="text" class="form-control form-control-sm" placeholder="CUIL / CUIT" v-model="conditions.cuil">
+                <div class="col col-xl-4">
+                    <input type="text" class="form-control form-control-sm" placeholder="Nombre" v-model="filters.name">
                 </div>
-                <div class="col col-xl-3">
-                    <select2    :value="conditions.risk" @input="value => conditions.risk = value"
+                <div class="col col-xl-4">
+                    <input type="text" class="form-control form-control-sm" placeholder="Documento" v-model="filters.document_number">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col col-xl-4">
+                    <input type="text" class="form-control form-control-sm" placeholder="CUIL / CUIT" v-model="filters.cuil">
+                </div>
+                <div class="col col-xl-4">
+                    <select2    :value="filters.risk" @input="value => filters.risk = value"
                                 placeholder="Nivel de riesgo" :options="risks" size="small"/>
                 </div>
-                <div class="col col-xl-5">
-                    <select2    size="small" :value="conditions.company_id" @input="value => conditions.company_id = value"
-                                placeholder="Empresa" :options="companies" multiple/>
+                <div class="col col-xl-4">
+                    <remote-select2 size="small" :value="filters.company_id" path="/selects/companies" multiple
+                                    @input="value => filters.company_id = value" placeholder="Empresa"/>
                 </div>
-                <!-- <div class="col col-xl-5">
-                    <select2    :value="conditions.group_id" @input="value => conditions.group_id = value"
-                                placeholder="Grupos" :options="groups" size="small" multiple/>
-                </div> -->
             </div>
         </template>
         <!-- List -->
         <template slot="main-content">
             <custom-table :columns="columns" :rows="people" @rowclicked="showProfile"/>
+            <paginator-links v-if="people.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
         </template>
     </index-wrapper>
 </template>
@@ -42,59 +51,65 @@ export default {
                 {name: 'cuil',         text: 'CUIL / CUIT', width:'20'},
                 {name: 'company_name', text: 'Empresa',     width:'40'}
             ],
-            conditions: {
+            filters: {
+                last_name:          '',
+                name:               '',
                 document_number:    '',
                 cuil:               '',
                 risk:               '',
                 group_id:           [],
                 company_id:         [],
             },
-            filtered_ids: null,
         }
     },
     beforeMount() {
-        this.$store.dispatch('fetchList', 'groups');
-        this.$store.dispatch('fetchList', 'people');
-        this.$store.dispatch('fetchList', 'companies');
+        this.paginate(1);
     },
     computed: {
         // 
         updating: function() {
-            return  this.$store.getters.people.updating || this.$store.getters.groups.updating;
+            return  this.$store.getters.people.updating;
         },
         // List of people.
         people: function() {
-            let all = this.$store.getters.people.list;
-            return this.filtered_ids ? all.filter(person => this.filtered_ids.includes(person.id)) : all;
+            return this.$store.getters.people.paginator.data;
         },
-        // List of groups formated to be used as options.
-        groups: function() {
-            return this.$store.getters.groups.asOptions();
+        /**
+         * Returns the current and the last page of the pagination.
+         */
+        paginator: function() {
+            return {
+                current_page: this.$store.getters.people.paginator.current_page,
+                last_page: this.$store.getters.people.paginator.last_page
+            };
         },
         // List of risks formated to be used as options.
         risks: function() {
             return this.$store.getters.static_lists.risks.asOptions();
         },
-        companies: function() {
-            return this.$store.getters.companies.asOptions();
-        },
     },
     methods: {
+        /**
+         * Asks to the server for the given page.
+         */
+        paginate: function(page) {
+            this.$store.dispatch('paginateList', {what: 'people', page: page, filters: this.filters});
+        },
         // Redirects to the profile of the clicked person.
         showProfile: function(person) {
             this.$router.push(`/people/show/${person.id}`);
         },
-        advancedSearchSuccess: function(ids) {
-            this.filtered_ids = ids;
-        },
         advancedSearchClear: function() {
-            this.filtered_ids = null;
-            this.conditions = {
+            this.filters = {
+                last_name:          '',
+                name:               '',
                 document_number:    '',
                 cuil:               '',
                 risk:               '',
                 group_id:           [],
+                company_id:         [],
             };
+            this.paginate(1);
         }
     }
 }

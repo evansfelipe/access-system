@@ -2,15 +2,34 @@
     .collapse-enter-active, .collapse-leave-active { transition: all .3s }
     .collapse-enter, .collapse-leave-to { opacity: 0; max-height: 0; }
     .collapse-enter-to, .collapse-leave { opacity: 1; max-height: 100vh; }
+
+    .updating-enter-active, .updating-leave-active { transition: all .3s }
+    .updating-enter, .updating-leave-to { opacity: 0; max-height: 0; }
+    .updating-enter-to, .updating-leave { opacity: 1; max-height: 100vh; }
+
+    div.updating {
+        background-color: #3F729B;
+        color: white;
+        text-align: center;
+        font-weight: bold;
+        position: absolute;
+        padding: .5em 0;
+        top: 0;
+        left: calc(50% - 75px);
+        z-index: 100;
+        width: 150px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
 </style>
 
 <template>
     <div>
-        <div v-if="!updating" class="row text-right">
+        <div class="row text-right">
             <div class="col">
-                <button class="btn btn-link btn-sm" @click="advancedSearch">
+                <button class="btn btn-link btn-sm" @click="toggle">
                     <i :class="`fas fa-angle-${advanced_search.opened ? 'up' : 'down'}`"></i>
-                    {{ advanced_search.opened ? 'Ocultar' : 'Mostrar' }} búsqueda avanzada
+                    {{ advanced_search.opened ? 'Ocultar' : 'Mostrar' }} búsqueda
                 </button>
             </div>
         </div>
@@ -22,12 +41,12 @@
                     <div class="form-row mt-3">
                         <div class="col-12 text-right">
                             <el-tooltip class="item" effect="dark" content="Limpiar filtros" placement="left">
-                                <button class="btn btn-link btn-sm mr-4"  @click="$emit('advanced-search-clear')">
+                                <button :disabled="updating" class="btn btn-link btn-sm mr-4" @click="clear">
                                     <i class="ml-1 fas fa-eraser"></i>
                                 </button>
                             </el-tooltip>
-                            <button :disabled="advanced_search.loading" class="btn btn-outline-unique btn-sm" @click="submitAdvancedSearch">
-                                <i :class="`mr-1 fas fa-${advanced_search.loading ? 'circle-notch fa-spin' : 'search'}`"></i>
+                            <button :disabled="updating" class="btn btn-outline-unique btn-sm" @click="submit">
+                                <i :class="`mr-1 fas fa-${updating ? 'circle-notch fa-spin' : 'search'}`"></i>
                                 Buscar
                             </button>
                         </div>
@@ -36,9 +55,13 @@
             </div>
         </transition>
         <div class="card">
-            <div class="card-body" :style="updating ? 'min-height: 60vh' : ''">
-                <loading-cover v-if="updating"/>
-                <slot v-else name="main-content"/>
+            <div class="card-body">
+                <transition name="updating">
+                    <div v-if="updating" class="updating shadow-sm">
+                        Cargando...
+                    </div>
+                </transition>
+                <slot name="main-content"/>
             </div>
         </div>
     </div>
@@ -51,43 +74,28 @@ export default {
             type:       Boolean,
             required:   false,
             default:    false
-        },
-        advancedSearchRoute: {
-            type:       String,
-            required:   true
-        },
-        conditions: {
-            type:       Object,
-            required:   false,
-            default:    () => {}
         }
     },
     data() {
         return {
             advanced_search: {
                 opened:  false,
-                loading: false,
-                ids: null
             },
         };
     },
     methods: {
-        advancedSearch: function() {
+        toggle: function() {
             this.advanced_search.opened = !this.advanced_search.opened;
             if(!this.advanced_search.opened) {
-                this.$emit('advanced-search-clear');
+                this.clear();
             }
         },
-        submitAdvancedSearch: function() {
-            this.advanced_search.loading = true;
-            axios.get(this.advancedSearchRoute, {params: this.conditions})
-            .then(response  => this.$emit('advanced-search-success', response.data))
-            .catch(error    => {
-                this.$store.dispatch('addNotification', {type: 'danger', message: 'Algo salió mal. Intentelo nuevamente.'});
-                this.$emit('advanced-search-clear')
-            })
-            .finally(()     => this.advanced_search.loading = false)
+        clear: function() {
+            this.$emit('advanced-search-clear');
         },
+        submit: function() {
+            this.$emit('advanced-search-submit');
+        }
     }
 }
 </script>

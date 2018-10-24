@@ -5,47 +5,46 @@
 </style>
 
 <template>
-    <index-wrapper  :conditions="conditions" :updating="updating" advanced-search-route="/vehicles/id-search"
-                    @advanced-search-success="advancedSearchSuccess"
-                    @advanced-search-clear="advancedSearchClear">
+    <index-wrapper :updating="updating" @advanced-search-submit="paginate(1)" @advanced-search-clear="advancedSearchClear">
         <!-- Advanced search -->
         <template slot="advanced-search-filters">
             <div class="form-row">
                 <div class="col-12 col-md-6">
-                    <select2    size="small" :value="conditions.type_id" @input="value => conditions.type_id = value"
-                                placeholder="Tipo de vehículo" :options="vehicle_types" multiple/>
+                    <remote-select2 size="small" :value="filters.type_id" path="/selects/vehicle-types" multiple
+                                    @input="value => filters.type_id = value" placeholder="Tipo de vehículo"/>
                 </div>
                 <div class="col-12 col-md-12 col-xl-6">
-                    <select2    size="small" :value="conditions.company_id" @input="value => conditions.company_id = value"
-                                placeholder="Empresa" :options="companies" multiple/>
+                    <remote-select2 size="small" :value="filters.company_id" path="/selects/companies" multiple
+                                    @input="value => filters.company_id = value" placeholder="Empresa"/>
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-12 col-md-6 col-xl-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Titular" v-model="conditions.owner">
+                    <input type="text" class="form-control form-control-sm" placeholder="Titular" v-model="filters.owner">
                 </div>
                 <div class="col-12 col-md-6 col-xl-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Patente" v-model="conditions.plate">
+                    <input type="text" class="form-control form-control-sm" placeholder="Patente" v-model="filters.plate">
                 </div>
                 <div class="col-12 col-md-6 col-xl-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Color" v-model="conditions.colour">
+                    <input type="text" class="form-control form-control-sm" placeholder="Color" v-model="filters.colour">
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-12 col-md-6 col-xl-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Marca" v-model="conditions.brand">
+                    <input type="text" class="form-control form-control-sm" placeholder="Marca" v-model="filters.brand">
                 </div>
                 <div class="col-12 col-md-6 col-xl-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Modelo" v-model="conditions.model">
+                    <input type="text" class="form-control form-control-sm" placeholder="Modelo" v-model="filters.model">
                 </div>
                 <div class="col-12 col-md-6 col-xl-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Año" v-model="conditions.year">
+                    <input type="text" class="form-control form-control-sm" placeholder="Año" v-model="filters.year">
                 </div>
             </div>
         </template>
         <!-- List -->
         <template slot="main-content">
             <custom-table :columns="columns" :rows="vehicles" @rowclicked="showProfile"/>
+            <paginator-links v-if="vehicles.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
         </template>
     </index-wrapper>
 </template>
@@ -61,7 +60,7 @@ export default {
                 {name: 'year',         text: 'Año',     width: '10'},
                 {name: 'company_name', text: 'Empresa', width: '35'},
             ],
-            conditions: {
+            filters: {
                 plate:        "",
                 brand:        "",
                 model:        "",
@@ -71,47 +70,49 @@ export default {
                 company_id:   [],
                 type_id:      [],
             },
-            filtered_ids: null
         }
     },
     beforeMount() {
-        this.$store.dispatch('fetchList', 'vehicles');
-        this.$store.dispatch('fetchList', 'companies');
-        this.$store.dispatch('fetchList', 'vehicle_types');
+        this.paginate(1);
     },
     computed: {
         updating: function() { 
-            return  this.$store.getters.vehicles.updating ||
-                    this.$store.getters.companies.updating ||
-                    this.$store.getters.vehicle_types.updating;
+            return  this.$store.getters.vehicles.updating;
         },
-
+        /**
+         * Returns the vehicles of the current page.
+         */
         vehicles: function() {
-            let all = this.$store.getters.vehicles.list;
-            return this.filtered_ids ? all.filter(vehicle => this.filtered_ids.includes(vehicle.id)) : all;
+            return this.$store.getters.vehicles.paginator.data;
         },
-
-        companies: function() {
-            return this.$store.getters.companies.asOptions();
-        },
-
-        vehicle_types: function() {
-            return this.$store.getters.vehicle_types.asOptions('type')
+        /**
+         * Returns the current and the last page of the pagination.
+         */
+        paginator: function() {
+            return {
+                current_page: this.$store.getters.vehicles.paginator.current_page,
+                last_page: this.$store.getters.vehicles.paginator.last_page
+            };
         },
     },
     methods: {
+        /**
+         * Asks to the server for the given page.
+         */
+        paginate: function(page) {
+            this.$store.dispatch('paginateList', {what: 'vehicles', page: page, filters: this.filters});
+        },
         /**
          * Redirects to the profile of the clicked vehicle.
          */
         showProfile: function(vehicle) {
             this.$router.push(`/vehicles/show/${vehicle.id}`);
         },
-        advancedSearchSuccess: function(ids) {
-            this.filtered_ids = ids;
-        },
+        /**
+         * Restarts filters and asks to the server for the first page.
+         */
         advancedSearchClear: function() {
-            this.filtered_ids = null;
-            this.conditions = {
+            this.filters = {
                 plate:        "",
                 brand:        "",
                 model:        "",
@@ -121,6 +122,7 @@ export default {
                 company_id:   [],
                 type_id:      [],
             };
+            this.paginate(1);
         }
     }
 }

@@ -1,37 +1,36 @@
 <template>
-    <index-wrapper  :conditions="conditions" :updating="updating" advanced-search-route="/companies/id-search"
-                    @advanced-search-success="advancedSearchSuccess"
-                    @advanced-search-clear="advancedSearchClear">
+    <index-wrapper :updating="updating" @advanced-search-submit="paginate(1)" @advanced-search-clear="advancedSearchClear">
         <!-- Advanced search -->
         <template slot="advanced-search-filters">
             <div class="form-row">
                 <div class="col-12 col-md-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="Razón social" v-model="conditions.business_name">
+                    <input type="text" class="form-control form-control-sm" placeholder="Razón social" v-model="filters.business_name">
                 </div>
                 <div class="col-12 col-md-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="Nombre" v-model="conditions.name">
+                    <input type="text" class="form-control form-control-sm" placeholder="Nombre" v-model="filters.name">
                 </div>
                 <div class="col-12 col-md-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="Rubro" v-model="conditions.area">
+                    <input type="text" class="form-control form-control-sm" placeholder="Rubro" v-model="filters.area">
                 </div>
                 <div class="col-12 col-md-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="CUIT" v-model="conditions.cuit">
+                    <input type="text" class="form-control form-control-sm" placeholder="CUIT" v-model="filters.cuit">
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-12 col-md-6">
                     <small>Vencimiento (desde):</small>
-                    <date-picker size="small" :value="conditions.expiration_from" @input="value => conditions.expiration_from = value"/>
+                    <date-picker size="small" :value="filters.expiration_from" @input="value => filters.expiration_from = value"/>
                 </div>
                 <div class="col-12 col-md-6">
                     <small>Vencimiento (hasta):</small>
-                    <date-picker size="small" :value="conditions.expiration_until" @input="value => conditions.expiration_until = value"/>
+                    <date-picker size="small" :value="filters.expiration_until" @input="value => filters.expiration_until = value"/>
                 </div>
             </div>
         </template>
         <!-- List -->
         <template slot="main-content">
             <custom-table :columns="columns" :rows="companies" @rowclicked="showProfile"/>
+            <paginator-links v-if="companies.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
         </template>
     </index-wrapper>
 </template>
@@ -46,7 +45,7 @@ export default {
                 {name: 'area',          text: 'Rubro',          width: '20'},
                 {name: 'cuit',          text: 'CUIT',           width: '20'}
             ],
-            conditions: {
+            filters: {
                 business_name:  "",
                 name:           "",
                 area:           "",
@@ -54,41 +53,60 @@ export default {
                 expiration_from:"",
                 expiration_until:""
             },
-            filtered_ids: null
         }
     },
-    beforeMount() {
-        this.$store.dispatch('fetchList', 'companies');
+    mounted() {
+        this.paginate(1);
     },
     computed: {
+        /**
+         * Returns whether the list of companies is being updated or not.
+         */
         updating: function() { 
             return this.$store.getters.companies.updating
         },
+        /**
+         * Returns the groups of the current page.
+         */
         companies: function() {
-            let all = this.$store.getters.companies.list;
-            return this.filtered_ids ? all.filter(company => this.filtered_ids.includes(company.id)) : all;
+            return this.$store.getters.companies.paginator.data;
         },
-    },
+        /**
+         * Returns the current and the last page of the pagination.
+         */
+        paginator: function() {
+            return {
+                current_page: this.$store.getters.companies.paginator.current_page,
+                last_page: this.$store.getters.companies.paginator.last_page
+            };
+        }
+     },
     methods: {
+        /**
+         * Asks to the server for the given page.
+         */
+        paginate: function(page) {
+            this.$store.dispatch('paginateList', {what: 'companies', page: page, filters: this.filters});
+        },
         /**
          * Redirects to the profile of the clicked person.
          */
         showProfile: function(company) {
             this.$router.push(`/companies/show/${company.id}`);
         },
-        advancedSearchSuccess: function(ids) {
-            this.filtered_ids = ids;
-        },
+        /**
+         * Restarts filters and asks to the server for the first page.
+         */
         advancedSearchClear: function() {
-            this.filtered_ids = null;
-            this.conditions = {
-                business_name:  "",
-                name:           "",
-                area:           "",
-                cuit:           "",
-                expiration_from:"",
-                expiration_until:""
+            this.filters = {
+                business_name:      "",
+                name:               "",
+                area:               "",
+                cuit:               "",
+                expiration_from:    "",
+                expiration_until:   ""
             };
+            this.paginate(1);
         }
     }
 }

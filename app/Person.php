@@ -28,9 +28,10 @@ class Person extends Model
     public const LENGTHS = [
         'last_name' => ['max' => 50],
         'name' => ['max' => 50],
-        'document_number' => ['min' => 7, 'max' => 12],
+        'document_number' => ['min' => 7, 'max' => 15],
         'cuil' => ['max' => 15],
-        'pna' => ['min' => 10, 'max' => 15],
+        'pna' => ['min' => 10, 'max' => 30],
+        'register_number' => ['max' => 15]
     ];
 
     /**
@@ -101,7 +102,8 @@ class Person extends Model
             ],
             'register_number' => [
                 'nullable',
-                'integer'
+                'string',
+                'max:'.Person::LENGTHS['register_number']['max']
             ],
             'pna' => [
                 'string', 
@@ -338,7 +340,7 @@ class Person extends Model
                     'blood_type'        => $this->blood_type    ?? '-',
                     'homeland'          => $this->homeland ?? '-',
                     'risk'              => 'Nivel '.$this->risk,
-                    'register_number'   => $this->register_number,
+                    'register_number'   => !empty($this->register_number) ? $this->register_number : '-',
                     'pna'               => $this->pna           ?? '-',
                 ],
                 $this->contactToArray(),
@@ -374,7 +376,7 @@ class Person extends Model
             'personal_information'  => [
                 'Tipo de documento'     => $this->documentTypeToString(),
                 'Número de documento'   => $this->document_number,
-                'CUIL'                  => $this->cuil          ?? '-',
+                'CUIL'                  => !empty($this->cuil) ? $this->cuil : '-',
                 'Fecha de nacimiento'   => \Helpers::timestampToDate($this->birthday),
                 'Género'                => $this->sexToString(),
                 'Grupo sangíneo'        => $this->blood_type    ?? '-',
@@ -399,6 +401,19 @@ class Person extends Model
                                                 'cards' => $job->cards
                                             ];
                                         }),
+        ];
+    }
+
+    public function toListArray()
+    {
+        $companies = $this->companies;
+        return [
+            'id'            => $this->id,
+            'last_name'     => $this->last_name,
+            'name'          => $this->name,
+            'cuil'          => $this->cuil ?? '-',
+            'companies'     => $companies->pluck('id'),
+            'company_name'  => $companies->count() > 0 ? $companies->pluck('name')->implode('name', ' / ') : '-'
         ];
     }
 }

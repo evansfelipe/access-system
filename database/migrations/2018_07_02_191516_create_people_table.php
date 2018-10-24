@@ -29,7 +29,7 @@ class CreatePeopleTable extends Migration
             $table->string('blood_type', 3)->nullable();
             $table->string('homeland')->nullable();
             $table->integer('risk')->unsigned()->required();
-            $table->integer('register_number')->unsigned()->nullable();
+            $table->string('register_number', Person::LENGTHS['register_number']['max'])->nullable();
             $table->string('pna', Person::LENGTHS['pna']['max'])->nullable();
             $table->json('contact')->nullable();
             $table->json('required_documentation')->required();

@@ -23,28 +23,18 @@ class ListsController extends Controller
                         ->when($timestamp, function($query, $timestamp) {
                             return $query->where('updated_at', '>', $timestamp);
                         })
-                        ->orderBy('people.id', 'asc') // Id instead of created_at for efficiency.
-                        ->get()
-                        ->map(function($person) {
-                            $companies = $person->companies;
-                            return [
-                                'id'            => $person->id,
-                                'last_name'     => $person->last_name,
-                                'name'          => $person->name,
-                                'cuil'          => $person->cuil,
-                                'companies'     => $companies->pluck('id'),
-                                'company_name'  => $companies->count() > 0 ? $companies->pluck('name')->implode('name', ' / ') : '-'
-                            ];
-                        });
-        return response(json_encode($people))->header('Content-Type', 'application/json');        
-    }
+                        ->orderBy('people.id', 'asc'); // Id instead of created_at for efficiency.
 
-    /**
-     * Returns an array with the id of each person that matches the filter conditions.
-     */
-    public function peopleIdSearch(Request $request)
-    {
-        $people = Person::select();
+        // Last name
+        $last_name = $request->last_name;
+        $people->when($last_name, function($query, $last_name) {
+            return $query->where('last_name', 'like', '%'.$last_name.'%');
+        });
+        // Name
+        $name = $request->name;
+        $people->when($name, function($query, $name) {
+            return $query->where('name', 'like', '%'.$name.'%');
+        });
         // Document Number
         $document_number = $request->document_number;
         $people->when($document_number, function($query, $document_number) {
@@ -67,7 +57,20 @@ class ListsController extends Controller
                 return $query->whereIn('companies.id', $company_id);
             });
         });
-        return response(json_encode($people->get()->pluck('id')))->header('Content-Type', 'application/json');        
+
+        if(isset($request->page)) {
+            $people = $people->paginate(10);
+            $people->getCollection()->transform(function($person) {
+                return $person->toListArray();
+            });
+        }
+        else {
+            $people = $people->get()->map(function($person) {
+                return $person->toListArray();
+            });
+        }
+
+        return response(json_encode($people))->header('Content-Type', 'application/json');        
     }
 
     /**
@@ -82,17 +85,7 @@ class ListsController extends Controller
                             ->when($timestamp, function($query, $timestamp) {
                                 return $query->where('updated_at', '>', $timestamp);
                             })
-                            ->orderBy('created_at','asc')
-                            ->get();
-        return  response(json_encode($companies))->header('Content-Type', 'application/json');        
-    }
-
-    /**
-     * Returns an array with the id of each company that matches the filter conditions.
-     */
-    public function companiesIdSearch(Request $request)
-    {
-        $companies = Company::select('id');
+                            ->orderBy('id','asc');
         // Business name
         $business_name = $request->business_name;
         $companies->when($business_name, function($query, $business_name) {
@@ -127,7 +120,8 @@ class ListsController extends Controller
                 return $query->where('expiration', '<=', $expiration_until);
             });
         }
-        return response(json_encode($companies->get()->pluck('id')))->header('Content-Type', 'application/json');        
+
+        return  response(json_encode(isset($request->page) ? $companies->paginate(10) : $companies->get()))->header('Content-Type', 'application/json');        
     }
 
     /**
@@ -142,33 +136,9 @@ class ListsController extends Controller
                             ->when($timestamp, function($query, $timestamp) {
                                 return $query->where('updated_at', '>', $timestamp);
                             })
-                            ->orderBy('created_at','asc')
-                            ->with('company:id,name')
-                            ->get()
-                            ->map(function($vehicle) {
-                                return [
-                                    'id'                => $vehicle->id,
-                                    'type_id'           => $vehicle->type_id,
-                                    'type_name'         => $vehicle->vehicleType->type,
-                                    'allows_container'  => $vehicle->vehicleType->allows_container,
-                                    'plate'             => $vehicle->plate,
-                                    'brand'             => $vehicle->brand,
-                                    'model'             => $vehicle->model,
-                                    'year'              => $vehicle->year,
-                                    'colour'            => $vehicle->colour,
-                                    'company_id'        => $vehicle->company_id,
-                                    'company_name'      => $vehicle->company->name
-                                ];
-                            });
-        return response(json_encode($vehicles))->header('Content-Type', 'application/json');        
-    }
+                            ->orderBy('id','asc')
+                            ->with('company:id,name');
 
-    /**
-     * Returns an array with the id of each vehicle that matches the filter conditions.
-     */
-    public function vehiclesIdSearch(Request $request)
-    {
-        $vehicles = Vehicle::select('id');
         // Plate
         $plate = $request->plate;
         $vehicles->when($plate, function($query, $plate) {
@@ -204,12 +174,25 @@ class ListsController extends Controller
         $vehicles->when($company_id, function($query, $company_id) {
             return $query->whereIn('company_id', $company_id);
         });
-        // Vehicle type
+        // Type ID
         $type_id = $request->type_id;
         $vehicles->when($type_id, function($query, $type_id) {
             return $query->whereIn('type_id', $type_id);
         });
-        return response(json_encode($vehicles->get()->pluck('id')))->header('Content-Type', 'application/json');        
+
+        if(isset($request->page)) {
+            $vehicles = $vehicles->paginate(10);
+            $vehicles->getCollection()->transform(function($vehicle) {
+                return $vehicle->toListArray();
+            });
+        }
+        else {
+            $vehicles = $vehicles->get()->map(function($vehicle) {
+                return $vehicle->toListArray();
+            });
+        }
+        
+        return response(json_encode($vehicles))->header('Content-Type', 'application/json');        
     }
 
     /**
@@ -224,19 +207,21 @@ class ListsController extends Controller
                         ->when($timestamp, function($query, $timestamp) {
                             return $query->where('updated_at', '>', $timestamp);
                         })
-                        ->orderBy('created_at','asc')
-                        ->get()
-                        ->map(function($group) {
-                            return $group->toListArray();
-                        });
-        return response(json_encode($groups))->header('Content-Type', 'application/json');
-    }
+                        ->orderBy('created_at','asc');
 
-    /**
-     * Returns an array with the id of each vehicle that matches the filter conditions.
-     */
-    public function groupsIdSearch(Request $request)
-    {
+        if(isset($request->page)) {
+            $groups = $groups->paginate(10);
+            $groups->getCollection()->transform(function($group) {
+                return $group->toListArray();
+            });
+        }
+        else {
+            $groups = $groups->get()->map(function($group) {
+                return $group->toListArray();
+            });
+        }
+
+        return response(json_encode($groups))->header('Content-Type', 'application/json');
     }
 
     /**
@@ -315,7 +300,6 @@ class ListsController extends Controller
                             });
         return response(json_encode($types))->header('Content-Type', 'application/json');        
     }
-
 
     /**
      * Returns the list of gates

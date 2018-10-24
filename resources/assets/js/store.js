@@ -6,6 +6,11 @@ class List {
         this.timestamp = null;
         this.updating  = false;
         this.list      = [];
+        this.paginator = {
+            data: [],
+            current_page: null,
+            last_page: null        
+        };
     }
 
     getById(id) {
@@ -248,9 +253,11 @@ export default {
         updatingList: function(state, {what, value}) {
             state.lists[what].updating = value;
         },
-        set: function(state, {what, data, timestamp}) {
+        set: function(state, {what, data, timestamp, paginator}) {
+            state.lists[what].list = [];
             data.forEach(item => state.lists[what].addItem(item));
-            state.lists[what].timestamp = timestamp;
+            state.lists[what].timestamp = timestamp ? timestamp : null;
+            state.lists[what].paginator = paginator;
         },
         updateModel: function(state, {which, properties_path, value}) {
             if(state.debug) console.log('Updating model: ', which, properties_path, value);
@@ -519,6 +526,19 @@ export default {
             .catch(error => {
                 if(state.debug) console.log('Error while validating timestamps: ', what, error);
             });
+        },
+
+        paginateList: function({commit, state}, {what, page, filters}) {
+            commit(`updatingList`, { what, value: true });
+            axios.get(`/${state.lists[what].base_path}/list?page=${page}`, {params: filters})
+            .then(response => {
+                if(state.debug) console.log('Pagination success: ', what, response.data);
+                commit(`set`, {what, data: response.data.data, paginator: response.data});
+            })
+            .catch(error => {
+                if(state.debug) console.log('Pagination failed: ', what, error);
+            })
+            .finally(() => commit(`updatingList`, {what, value: false}));
         },
         /**
          * Given a model name and an ID, gets the data associated to this combination from the server.

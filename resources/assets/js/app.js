@@ -28,6 +28,8 @@ Vue.use(ElementUI, {locale});
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component('remote-select2'            , require('./components/_common/RemoteSelect2.vue'));
+
 // Common components that are re-usable across all components
 Vue.component('hr-label'            , require('./components/_common/HrLabel.vue'));
 Vue.component('select2'             , require('./components/_common/Select2.vue'));
@@ -41,6 +43,7 @@ Vue.component('date-picker'         , require('./components/_common/DatePicker.v
 Vue.component('custom-table'        , require('./components/_common/CustomTable.vue'));
 Vue.component('loading-cover'       , require('./components/_common/LoadingCover.vue'));
 Vue.component('modal-wrapper'       , require('./components/_common/ModalWrapper.vue'));
+Vue.component('paginator-links'     , require('./components/_common/PaginatorLinks.vue'));
 Vue.component('residency-input'     , require('./components/_common/ResidencyInput.vue'));
 Vue.component('pictures-gallery'    , require('./components/_common/PicturesGallery.vue'));
 Vue.component('abbreviation-text'   , require('./components/_common/AbbreviationText.vue'));

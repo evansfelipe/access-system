@@ -3,7 +3,7 @@
 class BaseClass
 {
     protected function parsedString($string) {
-        $copy = trim($string);
+        $copy = trim((string) $string);
         return strlen($copy) > 0 ? $copy : null;
     }
 
@@ -14,6 +14,7 @@ class BaseClass
     }
 
     public function scape($value) {
-        return mysqli_real_escape_string($this->mysql, $this->parsedString($value));
+        $str = $this->parsedString($value);
+        return $str !== null ? mysqli_real_escape_string($this->mysql, $str) : null;
     }
 }

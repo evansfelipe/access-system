@@ -35,7 +35,7 @@
 <template>
     <div>
         <template v-if="rows.length > 0">
-            <div v-if="rowsquantity === null" class="row mb-2">
+            <!-- <div v-if="rowsquantity === null" class="row mb-2">
                 <div class="col-4">
                     Mostrar
                     <select2 :value="pagination.quantity" @input="value => pagination.quantity = value" :options="options.rows" :clearable="false" size="mini" width="30%"/>
@@ -45,7 +45,7 @@
                     <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" :disabled="advancedsearch" style="width:14em">
                     <i class="fas fa-search"></i>
                 </div>
-            </div>
+            </div> -->
             <!-- Data displayed on a table -->
             <div class="row">
                 <div class="col">
@@ -84,7 +84,7 @@
                 </div>
             </div>
             <!-- Pagination -->
-            <div class="row mt-2">
+            <!-- <div class="row mt-2">
                 <div v-if="rowsquantity !== null" class="col-4">
                     <i class="fas fa-search"></i>
                     <input v-model="condition" type="text" class="md-input" placeholder="Búsqueda" style="width:12em" :disabled="advancedsearch">
@@ -114,7 +114,7 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> -->
         </template>
         <!-- No data situation -->
         <h4 v-else class="text-center mt-5 mb-5">{{ noRowsMessage }}</h4>

@@ -1,13 +1,15 @@
 <template>
     <el-select  :style="`width: ${width}`" 
-                :value="value"     :disabled="disabled || loading"
-                :name="name"            :placeholder="!loading ? placeholder : 'Cargando valores...'"
+                :value="value"     :disabled="disabled"
+                :name="name"            :placeholder="placeholder"
                 :multiple="multiple"    :allow-create="tags"
                 filterable              default-first-option
                 :clearable="clearable"  :size="size"
                 :loading="loading"      loading-text="Cargando..."
                 auto-complete="nope"    :filter-method="filterMethod"
                 @change="value => this.$emit('input', value)"
+
+                :remote-method="remoteMethod" :remote="remoteMethod !== null"
     >
         <el-option
             v-for="item in filtered_options"
@@ -75,6 +77,11 @@ export default {
             type:       String,
             required:   false,
             default:    '100%'
+        },
+        remoteMethod: {
+            type: Function,
+            required: false,
+            default: null
         }
     },
     data() {
