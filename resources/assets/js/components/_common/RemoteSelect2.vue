@@ -4,7 +4,7 @@
                  :loading="loading"
                  :options="options"
                  :remote-method="remote"
-                 :multiple="multiple"
+                 :multiple="multiple" :tags="tags"
                  @input="input" :size="size" :placeholder="placeholder"/> 
     </div>
 </template>
@@ -39,6 +39,11 @@ export default {
             type: String,
             required: false,
             default: ''
+        },
+        tags: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data() {

@@ -5,7 +5,7 @@ include './tables/companies.php';
 include './tables/vehicles.php';
 include './tables/people.php';
 
-$mysql = mysqli_connect('192.168.0.115', 'homestead', 'secret', 'homestead');
+$mysql = mysqli_connect('192.168.0.104', 'homestead', 'secret', 'homestead');
 $mssql = sqlsrv_connect('192.168.0.110\SQLEXPRESS, 49157', ["database" => "sa2010", "UID" => "sa", "pwd" => "Consorcio2018"]);
 
 if(!($mssql && $mysql)) {
@@ -21,7 +21,7 @@ if(!($mssql && $mysql)) {
 }
 else {
     // Truncates the tables we are going to alter.
-    $tables = ['residencies', 'companies', 'vehicles', 'vehicle_types', 'people'];
+    $tables = ['residencies', 'companies', 'vehicles', 'vehicle_types', 'people', 'activities', 'company_people'];
     $q_truncate = "TRUNCATE TABLE :table";
     foreach ($tables as $table) {
         if(!mysqli_query($mysql, str_replace(':table', $table, $q_truncate))) {

@@ -408,12 +408,13 @@ class Person extends Model
     {
         $companies = $this->companies;
         return [
-            'id'            => $this->id,
-            'last_name'     => $this->last_name,
-            'name'          => $this->name,
-            'cuil'          => $this->cuil ?? '-',
-            'companies'     => $companies->pluck('id'),
-            'company_name'  => $companies->count() > 0 ? $companies->pluck('name')->implode('name', ' / ') : '-'
+            'id'                => $this->id,
+            'last_name'         => $this->last_name,
+            'name'              => $this->name,
+            'cuil'              => !empty($this->cuil) ? $this->cuil : '-',
+            'document_number'   => !empty($this->document_number) ? $this->document_number : '-',
+            'companies'         => $companies->pluck('id'),
+            'company_name'      => $companies->count() > 0 ? $companies->pluck('name')->implode('name', ' / ') : '-'
         ];
     }
 }

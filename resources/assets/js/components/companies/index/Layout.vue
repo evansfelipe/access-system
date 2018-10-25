@@ -1,5 +1,5 @@
 <template>
-    <index-wrapper :updating="updating" @advanced-search-submit="paginate(1)" @advanced-search-clear="advancedSearchClear">
+    <index-wrapper @advanced-search-submit="paginate(1)" @advanced-search-clear="advancedSearchClear">
         <!-- Advanced search -->
         <template slot="advanced-search-filters">
             <div class="form-row">
@@ -29,7 +29,8 @@
         </template>
         <!-- List -->
         <template slot="main-content">
-            <custom-table :columns="columns" :rows="companies" @rowclicked="showProfile"/>
+            <custom-table :updating="updating" :columns="columns" :rows="companies" @rowclicked="showProfile"/>
+            <br v-if="companies.length > 0">
             <paginator-links v-if="companies.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
         </template>
     </index-wrapper>

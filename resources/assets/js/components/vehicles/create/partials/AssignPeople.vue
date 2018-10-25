@@ -1,159 +1,184 @@
-<style lang="scss" scoped>    
-    .dropdown-toggle::after {
-        display:none;
-    }
-
-    .btn-list, .btn-list:disabled {
+<style lang="scss" scoped>
+    .btn-list {
+        width: 100%;
         background-color: transparent;
-        font-weight: bold;
         border: 1px solid grey;
-        color: grey;
-    }
 
-    .btn-list.selected {
-        border-color: #3F729B;
-        color: #3F729B;
+        &:disabled {
+            color: grey;
+        }
+
+        &.selected {
+            border-color: #3F729B;
+            color: #3F729B;
+            font-weight: bold;
+        }
     }
 </style>
 
 <template>
     <div>
-        <loading-cover v-if="this.$store.getters.people.updating"/>
-        <template v-else>
-            <!-- Options buttons -->
-            <div class="row text-center mb-3">
-                <div class="col-12">
-                    <div class="row">
-                        <!-- Company people list button -->
-                        <div class="col-4">
-                            <button type="button" :class="`btn btn-block btn-list ${selected_list === 'company' ? 'selected' : ''}`"
-                                    @click="selected_list = 'company'"
-                                    :disabled="company_people.length <= 0">
-                                <span class="badge badge-dark ml-1">{{ company_people.length }}</span> <abbreviation-text :text="companyname"/>
-                            </button>
-                        </div>
-                        <!-- other people list button -->
-                        <div class="col-4">
-                            <button type="button" :class="`btn btn-block btn-list ${selected_list === 'other' ? 'selected' : ''}`"
-                                    @click="selected_list = 'other'"
-                                    :disabled="other_people.length <= 0">
-                                <span class="badge badge-dark ml-1">{{ other_people.length }}</span> Otras empresas
-                            </button>
-                        </div>
-                        <!-- Selected people list button -->
-                        <div class="col-4">
-                            <button type="button" :class="`btn btn-block btn-list ${selected_list === 'picked' ? 'selected' : ''}`"
-                                    @click="selected_list = 'picked'"
-                                    :disabled="people_picked.length <= 0">
-                                <span class="badge badge-dark ml-1">{{ people_picked.length }}</span> Seleccionados
-                            </button>
-                        </div>
-                    </div>
-                </div>
+        <!-- Change list buttons -->
+        <div class="form-row mb-3">
+            <!-- Company people list button -->
+            <div class="col-4">
+                <button type="button" :class="`btn btn-list ${selected_list === 'company' ? 'selected' : ''}`" @click="getCompanyPeople">
+                    Empresa seleccionada
+                </button>
             </div>
-            <!-- /Options buttons -->
-            <!-- People list -->
-            <div class="row">
-                <div class="col-12 table-container">
-                    <custom-table
-                        :columns="columns"
-                        :rows="people_list"
-                        :pickable="{
-                            active: true,
-                            list: people_picked
-                        }"
-                        @rowclicked="togglePerson"
-                    />
-                </div>
+            <!-- other people list button -->
+            <div class="col-4">
+                <button type="button" :class="`btn btn-list ${selected_list === 'other' ? 'selected' : ''}`" @click="getOtherPeople">
+                    Otras empresas
+                </button>
             </div>
-            <!-- /People list -->
-        </template>
+            <!-- Selected people list button -->
+            <div class="col-4">
+                <button :disabled="people_picked.length <= 0" type="button" :class="`btn btn-list ${selected_list === 'picked' ? 'selected' : ''}`" @click="getPickedPeople">
+                    <span class="badge badge-dark mr-1">{{ people_picked.length }}</span> Seleccionados
+                </button>
+            </div>
+        </div>
+        <!-- List -->
+        <div class="row">
+            <div class="col">
+                <custom-table
+                    :updating="updating"
+                    :columns="columns" :rows="paginator.data"
+                    :pickable="{ active: true, list: people_picked }"
+                    @rowclicked="togglePerson"
+                />
+            </div>
+        </div>
+        <!-- Pagination and Search -->
+        <div class="row mt-3">
+            <div class="col-6">
+                <search-input @input="searchHandler" placeholder="Filtrar columnas"/>
+            </div>
+            <div class="col-6">
+                <paginator-links v-if="paginator.data.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
     props: {
-        companyid: { 
+        companyId: { 
             required: false,
             type: Number,
             default: null
-        },
-        companyname: { 
-            required: false,
-            type: String,
-            default: 'Empresas asignadas'
         }
     },
     data: function() {
         return {
-            people_list: [],
-            other_people: [],
-            company_people: [],
             selected_list: '',
-            show_outdated: false,
+            search: '',
             columns: [ 
-                {name: 'last_name', text: 'Apellido'},
-                {name: 'name',      text: 'Nombre'},
-                {name: 'cuil',      text: 'CUIL / CUIT'}
-            ]
+                { name: 'last_name',            text: 'Apellido'    },
+                { name: 'name',                 text: 'Nombre'      },
+                { name: 'document_number',      text: 'Documento'   },
+                { name: 'cuil',                 text: 'CUIL / CUIT' }
+            ],
+            filters: {
+                wildcard:       '',
+                not_company_id: [],
+                company_id:     [],
+                ids:            []
+            }
         };
     },
-    beforeMount() {
-        this.$store.dispatch('fetchList', 'people');
-        this.splitList();
+    mounted() {
+        this.getOtherPeople();
     },
     computed: {
-        people: function() {
-            return this.$store.getters.people.list;
+        /**
+         * 
+         */
+        updating: function() {
+            return this.$store.getters.people.updating;
         },
+        /**
+         * An array with the ids of the assigned people for the vehicle.
+         */
         people_picked: function() {
             return this.$store.getters.vehicle.values.assign_people.people_id;
         },
-        picked_list: function() {
-            let list = [];
-            this.people_picked.forEach(person_id => {
-                list.push(this.$store.getters.people.getById(person_id));
-            });
-            return list;
+        /**
+         * 
+         */
+        paginator: function() {
+            return this.$store.getters.people.paginator;
         }
     }, 
     methods: {
-        splitList() {
-            this.company_people = [];
-            this.other_people = [];
-            this.people.forEach(person => {
-                if( person.companies.includes(this.companyid) ) {
-                    this.company_people.push(person);
-                }
-                else {
-                    this.other_people.push(person);
-                }
-            });
-            this.selected_list = this.company_people.length > 0 ? 'company' : 'other';
-            this.people_list = this.company_people.length > 0 ? this.company_people : this.other_people;
+        /**
+         * Asks to the server for the given page.
+         */
+        paginate: function(page) {
+            this.$store.dispatch('paginateList', {what: 'people', page, filters: this.filters});
         },
+        /**
+         * 
+         */
+        searchHandler: function(value) {
+            this.search = value;
+            switch (this.selected_list) {
+                case 'company':
+                    this.getCompanyPeople();
+                    break;
+                case 'other':
+                    this.getOtherPeople();
+                    break;
+                case 'picked':
+                    this.getPickedPeople();
+                    break;
+            }
+        },
+        /**
+         * 
+         */
+        resetFilters: function() {
+            this.filters = {
+                wildcard:       this.search,
+                not_company_id: [],
+                company_id:     [],
+                ids:            []
+            };
+        },
+        /**
+         * 
+         */
+        getCompanyPeople: function() {
+            this.selected_list = 'company';
+            this.resetFilters();
+            this.filters.company_id = [this.companyId];
+            this.paginate(1);
+        },
+        /**
+         * 
+         */
+        getOtherPeople: function() {
+            this.selected_list = 'other';
+            this.resetFilters();
+            this.filters.not_company_id = [this.companyId];
+            this.paginate(1);
+        },
+        /**
+         * 
+         */
+        getPickedPeople: function() {
+            this.selected_list = 'picked';
+            this.resetFilters();
+            this.filters.ids = this.people_picked;
+            this.paginate(1);
+        },
+        /**
+         * 
+         */
         togglePerson(person) {
             this.$store.commit('pickPerson', person.id);
-        }
-    },
-    watch: {
-        companyid: function() {
-            this.splitList();
-        },
-        people: function() {
-            this.splitList();
-        },
-        selected_list: function(value) {
-            if( value === 'company' ) {
-                this.people_list = this.company_people;
-            }
-            else if( value === 'other' ) {
-                this.people_list = this.other_people;
-            }
-            else if( value === 'picked' ) {
-                this.people_list = this.picked_list;
-            }
         }
     }
 }

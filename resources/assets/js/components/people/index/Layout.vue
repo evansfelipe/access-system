@@ -5,7 +5,7 @@
 </style>
 
 <template>
-    <index-wrapper :updating="updating" @advanced-search-submit="paginate(1)" @advanced-search-clear="advancedSearchClear">
+    <index-wrapper @advanced-search-submit="paginate(1)" @advanced-search-clear="advancedSearchClear">
         <!-- Advanced search -->
         <template slot="advanced-search-filters">
             <div class="form-row">
@@ -35,8 +35,9 @@
         </template>
         <!-- List -->
         <template slot="main-content">
-            <custom-table :columns="columns" :rows="people" @rowclicked="showProfile"/>
-            <paginator-links v-if="people.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
+            <custom-table :updating="updating" :columns="columns" :rows="paginator.data" @rowclicked="showProfile"/>
+            <br v-if="paginator.data.length > 0">
+            <paginator-links v-if="paginator.data.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
         </template>
     </index-wrapper>
 </template>
@@ -46,10 +47,10 @@ export default {
     data: function() {
         return {
             columns: [
-                {name: 'last_name',    text: 'Apellido',    width:'20'},
-                {name: 'name',         text: 'Nombre',      width:'20'},
-                {name: 'cuil',         text: 'CUIL / CUIT', width:'20'},
-                {name: 'company_name', text: 'Empresa',     width:'40'}
+                { name: 'last_name',         text: 'Apellido',   width:'20' },
+                { name: 'name',              text: 'Nombre',     width:'20' },
+                { name: 'document_number',   text: 'Documento',  width:'20' },
+                { name: 'company_name',      text: 'Empresa',    width:'40' }
             ],
             filters: {
                 last_name:          '',
@@ -66,24 +67,21 @@ export default {
         this.paginate(1);
     },
     computed: {
-        // 
+        /**
+         * 
+         */
         updating: function() {
             return  this.$store.getters.people.updating;
-        },
-        // List of people.
-        people: function() {
-            return this.$store.getters.people.paginator.data;
         },
         /**
          * Returns the current and the last page of the pagination.
          */
         paginator: function() {
-            return {
-                current_page: this.$store.getters.people.paginator.current_page,
-                last_page: this.$store.getters.people.paginator.last_page
-            };
+            return this.$store.getters.people.paginator;
         },
-        // List of risks formated to be used as options.
+        /**
+         * 
+         */
         risks: function() {
             return this.$store.getters.static_lists.risks.asOptions();
         },
@@ -95,10 +93,15 @@ export default {
         paginate: function(page) {
             this.$store.dispatch('paginateList', {what: 'people', page: page, filters: this.filters});
         },
-        // Redirects to the profile of the clicked person.
+        /**
+         * 
+         */
         showProfile: function(person) {
             this.$router.push(`/people/show/${person.id}`);
         },
+        /**
+         * 
+         */
         advancedSearchClear: function() {
             this.filters = {
                 last_name:          '',

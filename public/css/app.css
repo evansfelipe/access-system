@@ -10512,7 +10512,7 @@ i.far.centered {
 }
 
 div.grey-border {
-  border-radius: 3px;
+  border-radius: 0.25rem;
   border: 1px solid #dedede;
   padding: 1em;
 }

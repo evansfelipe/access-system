@@ -5,7 +5,7 @@
 </style>
 
 <template>
-    <index-wrapper :updating="updating" @advanced-search-submit="paginate(1)" @advanced-search-clear="advancedSearchClear">
+    <index-wrapper @advanced-search-submit="paginate(1)" @advanced-search-clear="advancedSearchClear">
         <!-- Advanced search -->
         <template slot="advanced-search-filters">
             <div class="form-row">
@@ -43,8 +43,9 @@
         </template>
         <!-- List -->
         <template slot="main-content">
-            <custom-table :columns="columns" :rows="vehicles" @rowclicked="showProfile"/>
-            <paginator-links v-if="vehicles.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
+            <custom-table :updating="updating" :columns="columns" :rows="paginator.data" @rowclicked="showProfile"/>
+            <br v-if="paginator.data.length > 0">
+            <paginator-links v-if="paginator.data.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
         </template>
     </index-wrapper>
 </template>
@@ -80,19 +81,10 @@ export default {
             return  this.$store.getters.vehicles.updating;
         },
         /**
-         * Returns the vehicles of the current page.
-         */
-        vehicles: function() {
-            return this.$store.getters.vehicles.paginator.data;
-        },
-        /**
          * Returns the current and the last page of the pagination.
          */
         paginator: function() {
-            return {
-                current_page: this.$store.getters.vehicles.paginator.current_page,
-                last_page: this.$store.getters.vehicles.paginator.last_page
-            };
+            return this.$store.getters.vehicles.paginator;
         },
     },
     methods: {

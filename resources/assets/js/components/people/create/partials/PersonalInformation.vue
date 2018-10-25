@@ -59,8 +59,8 @@
                 <div class="form-row">
                     <form-item col="col-6" label="Nacionalidad" :errors="errors.homeland">
                         <div class="col">
-                            <select2    :tags="true" name="homeland" :value="values.homeland" @input="(value) => update({name: 'homeland', value: value})"
-                                        :options="options.homeland" :loading="$store.getters.homelands.updating"/>
+                            <remote-select2 :value="values.homeland" path="/selects/countries" :fixed-params="{id: values.homeland}"
+                                            @input="value => update({name: 'homeland', value: value})" :tags="true"/>
                         </div>
                     </form-item>
                     <form-item col="col-6" label="Nivel de riesgo" :errors="errors.risk">
@@ -125,9 +125,6 @@ export default {
             type: Array,
         }
     },
-    mounted() {
-        this.$store.dispatch('fetchList', 'homelands');
-    },
     methods: {
         update: function({name, value}) {
             this.$store.commit('updateModel', { which: 'person', properties_path: `values.personal_information.${name}`, value: value });
@@ -138,7 +135,6 @@ export default {
             return {
                 sex:            this.$store.getters.static_lists.sexes.asOptions(),
                 risks:          this.$store.getters.static_lists.risks.asOptions(),
-                homeland:       this.$store.getters.homelands.asOptions('name', true),
                 blood_type:     this.$store.getters.static_lists.blood_types.asOptions(),
                 document_type:  this.$store.getters.static_lists.document_types.asOptions(),
             };

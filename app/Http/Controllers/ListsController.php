@@ -19,12 +19,16 @@ class ListsController extends Controller
     {
         $timestamp = $request->timestamp;
         $people = Person::with('companies:companies.id,companies.name')
-                        ->select('people.id', 'people.last_name', 'people.name', 'people.cuil')
+                        ->select('people.id', 'people.last_name', 'people.name', 'people.document_number')
                         ->when($timestamp, function($query, $timestamp) {
                             return $query->where('updated_at', '>', $timestamp);
                         })
                         ->orderBy('people.id', 'asc'); // Id instead of created_at for efficiency.
-
+        // ID
+        $ids = $request->ids;
+        $people->when($ids, function($query, $ids) {
+            return $query->whereIn('id', $ids);
+        });
         // Last name
         $last_name = $request->last_name;
         $people->when($last_name, function($query, $last_name) {
@@ -55,6 +59,24 @@ class ListsController extends Controller
         $people->when($company_id, function($query, $company_id) {
             return $query->whereHas('companies', function ($query) use ($company_id) {
                 return $query->whereIn('companies.id', $company_id);
+            });
+        });
+        // People that is not associated with a list of companies id.
+        $not_company_id = $request->not_company_id;
+        $people->when($not_company_id, function($query, $not_company_id) {
+            return $query->whereHas('companies', function ($query) use ($not_company_id) {
+                return $query->whereNotIn('companies.id', $not_company_id);
+            });
+        });
+
+        // Wildcard
+        $wildcard = $request->wildcard;
+        $people->when($wildcard, function($query, $wildcard) {
+            return $query->where(function($query) use ($wildcard) {
+                return $query->where('name',                'like', '%'.$wildcard.'%')
+                             ->orWhere('cuil',              'like', '%'.$wildcard.'%')
+                             ->orWhere('last_name',         'like', '%'.$wildcard.'%')
+                             ->orWhere('document_number',   'like', '%'.$wildcard.'%');
             });
         });
 

@@ -2,25 +2,6 @@
     .collapse-enter-active, .collapse-leave-active { transition: all .3s }
     .collapse-enter, .collapse-leave-to { opacity: 0; max-height: 0; }
     .collapse-enter-to, .collapse-leave { opacity: 1; max-height: 100vh; }
-
-    .updating-enter-active, .updating-leave-active { transition: all .3s }
-    .updating-enter, .updating-leave-to { opacity: 0; max-height: 0; }
-    .updating-enter-to, .updating-leave { opacity: 1; max-height: 100vh; }
-
-    div.updating {
-        background-color: #3F729B;
-        color: white;
-        text-align: center;
-        font-weight: bold;
-        position: absolute;
-        padding: .5em 0;
-        top: 0;
-        left: calc(50% - 75px);
-        z-index: 100;
-        width: 150px;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-    }
 </style>
 
 <template>
@@ -41,12 +22,12 @@
                     <div class="form-row mt-3">
                         <div class="col-12 text-right">
                             <el-tooltip class="item" effect="dark" content="Limpiar filtros" placement="left">
-                                <button :disabled="updating" class="btn btn-link btn-sm mr-4" @click="clear">
+                                <button class="btn btn-link btn-sm mr-4" @click="clear">
                                     <i class="ml-1 fas fa-eraser"></i>
                                 </button>
                             </el-tooltip>
-                            <button :disabled="updating" class="btn btn-outline-unique btn-sm" @click="submit">
-                                <i :class="`mr-1 fas fa-${updating ? 'circle-notch fa-spin' : 'search'}`"></i>
+                            <button class="btn btn-outline-unique btn-sm" @click="submit">
+                                <i class="mr-1 fas fa-search"></i>
                                 Buscar
                             </button>
                         </div>
@@ -56,11 +37,6 @@
         </transition>
         <div class="card">
             <div class="card-body">
-                <transition name="updating">
-                    <div v-if="updating" class="updating shadow-sm">
-                        Cargando...
-                    </div>
-                </transition>
                 <slot name="main-content"/>
             </div>
         </div>
@@ -69,13 +45,6 @@
 
 <script>
 export default {
-    props: {
-        updating: {
-            type:       Boolean,
-            required:   false,
-            default:    false
-        }
-    },
     data() {
         return {
             advanced_search: {

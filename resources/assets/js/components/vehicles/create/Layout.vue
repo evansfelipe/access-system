@@ -17,7 +17,7 @@
             <general-information v-show="tab === 0" :errors="general_information_errors" :values="values.general_information"
                                     @typeUpdated="value => updateType(value)"
             />
-            <assign-people v-show="tab === 1" :errors="assign_people_errors" :values="values.assign_people" :companyid="company_id" :companyname="company_name"/>
+            <assign-people v-show="tab === 1" :errors="assign_people_errors" :values="values.assign_people" :company-id="company_id"/>
         </creation-wrapper>
     </div>
 </template>
@@ -58,14 +58,6 @@ export default {
                 ret = this.values.general_information.company_id;
             }
             return parseInt(ret);
-        },
-        company_name: function() {
-            let ret = '';
-            if(this.values.general_information.company_id && !this.$store.getters.companies.updating) {
-                let val = this.$store.getters.companies.list.filter(company => company.id == this.values.general_information.company_id);
-                return val.length > 0 ? val[0].name : '-';
-            }
-            return ret;
         },
         general_information_errors: function() {
             return this.errors['general_information'] ? this.errors['general_information'] : []; 

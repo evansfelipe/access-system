@@ -3,6 +3,7 @@
         & > a.page-link {
             background-color: #3F729B;
             border-color: #3F729B;
+            font-weight: bold;
         }
         &.disabled > a.page-link {
             color: white;
@@ -11,8 +12,8 @@
 </style>
 
 <template>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-end mt-3 mb-0">
+    <nav>
+        <ul class="pagination justify-content-end m-0">
             <!-- Primera -->
             <li :class="`page-item ${paginator.current_page <= 1 ? 'disabled' : ''}`">
                 <a class="page-link" :disabled="paginator.current_page <= 1" @click.prevent="changePage(1)">Primera</a>
@@ -62,11 +63,11 @@
                 type: Object,
                 required: true,
             },
-            offset: {
-                type: Number,
-                required: false,
-                default: 5
-            }
+        },
+        data() {
+            return {
+                offset: 5
+            };
         },
         methods: {
             isCurrentPage(page) {

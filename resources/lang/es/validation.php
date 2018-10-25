@@ -176,6 +176,7 @@ return [
         'groups.*.end'              => 'Finalización',
         // Vehicle's general information
         'type'                      => 'Tipo',
+        'type_id'                   => 'Tipo',
         'plate'                     => 'Patente',
         'owner'                     => 'Titular',
         'brand'                     => 'Marca',
