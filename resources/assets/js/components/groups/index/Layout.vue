@@ -82,7 +82,7 @@ export default {
             this.$router.push(`/groups/show/${group.id}`);
         },
         /**
-         * Restarts filters and asks to the server for the first page.
+         * Restarts filters and pagination.
          */
         advancedSearchClear: function() {
             this.filters = {

@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\{ TableTimestamp, Person, Company, Vehicle, Container, Activity, Subactivity, VehicleType, Group, Zone, Gate };
 
 class ListsController extends Controller
@@ -11,49 +12,40 @@ class ListsController extends Controller
     }
 
     /**
-     * Returns an array with each person from the system, order desc by the creation timestamp.
-     * 
      * @return Array<Person>
      */
     public function peopleList(Request $request)
     {
-        $timestamp = $request->timestamp;
-        $people = Person::with('companies:companies.id,companies.name')
-                        ->select('people.id', 'people.last_name', 'people.name', 'people.document_number')
-                        ->when($timestamp, function($query, $timestamp) {
-                            return $query->where('updated_at', '>', $timestamp);
-                        })
-                        ->orderBy('people.id', 'asc'); // Id instead of created_at for efficiency.
-        // ID
-        $ids = $request->ids;
-        $people->when($ids, function($query, $ids) {
-            return $query->whereIn('id', $ids);
+        $people = Person::leftJoin('company_people', 'people.id', '=', 'company_people.person_id')
+                        ->leftJoin('companies', 'companies.id', '=', 'company_people.company_id')
+                        ->groupBy('people.id', 'people.last_name', 'people.name', 'people.document_number', 'people.cuil')
+                        ->select(
+                            'people.id', 
+                            'people.last_name', 
+                            'people.name', 
+                            'people.document_number', 
+                            'people.cuil',
+                            DB::raw('group_concat(distinct companies.name separator " / ") as company_name')
+                        );
+
+        // Sorts when its needed.
+        \Helpers::orderBy($people, $request, ['last_name', 'name', 'document_number', 'cuil', 'company_name']);
+        
+        // Filters.
+        \Helpers::whereLike($people, $request, ['last_name', 'name', 'document_number', 'cuil', 'risk', 'sex']);
+
+        $id = $request->id;
+        $people->when($id, function($query, $id) {
+            return $query->whereIn('people.id', $id);
         });
-        // Last name
-        $last_name = $request->last_name;
-        $people->when($last_name, function($query, $last_name) {
-            return $query->where('last_name', 'like', '%'.$last_name.'%');
+
+        $activity_id = $request->activity_id;
+        $people->when($activity_id, function($query, $activity_id) {
+            return $query->whereHas('activities', function ($query) use ($activity_id) {
+                return $query->whereIn('activities.id', $activity_id);
+            });
         });
-        // Name
-        $name = $request->name;
-        $people->when($name, function($query, $name) {
-            return $query->where('name', 'like', '%'.$name.'%');
-        });
-        // Document Number
-        $document_number = $request->document_number;
-        $people->when($document_number, function($query, $document_number) {
-            return $query->where('document_number', 'like', '%'.$document_number.'%');
-        });
-        // CUIT / CUIL
-        $cuil = $request->cuil;
-        $people->when($cuil, function($query, $cuil) {
-            return $query->where('cuil', 'like', '%'.$cuil.'%');
-        });
-        // Risk Level
-        $risk = $request->risk;
-        $people->when($risk, function($query, $risk) {
-            return $query->where('risk', $risk);
-        });
+
         // Company ID
         $company_id = $request->company_id;
         $people->when($company_id, function($query, $company_id) {
@@ -70,66 +62,28 @@ class ListsController extends Controller
         });
 
         // Wildcard
-        $wildcard = $request->wildcard;
-        $people->when($wildcard, function($query, $wildcard) {
-            return $query->where(function($query) use ($wildcard) {
-                return $query->where('name',                'like', '%'.$wildcard.'%')
-                             ->orWhere('cuil',              'like', '%'.$wildcard.'%')
-                             ->orWhere('last_name',         'like', '%'.$wildcard.'%')
-                             ->orWhere('document_number',   'like', '%'.$wildcard.'%');
-            });
-        });
+        \Helpers::wildcard($people, $request->wildcard, ['people.name', 'people.last_name', 'people.document_number', 'people.cuil']);
 
-        if(isset($request->page)) {
-            $people = $people->paginate(10);
-            $people->getCollection()->transform(function($person) {
-                return $person->toListArray();
-            });
-        }
-        else {
-            $people = $people->get()->map(function($person) {
-                return $person->toListArray();
-            });
-        }
-
-        return response(json_encode($people))->header('Content-Type', 'application/json');        
+        // If a page is asked, then paginates the query. Otherwise, gets all the records.
+        return  response(json_encode(isset($request->page) ? $people->paginate(10) : $people->get()))
+                ->header('Content-Type', 'application/json');        
     }
 
     /**
-     * Returns an array with each company from the system, order desc by the creation timestamp.
-     * 
      * @return Array<Company>
      */
     public function companiesList(Request $request)
     {
-        $timestamp = $request->timestamp;
-        $companies = Company::select('id','business_name','name','area','cuit')
-                            ->when($timestamp, function($query, $timestamp) {
-                                return $query->where('updated_at', '>', $timestamp);
-                            })
-                            ->orderBy('id','asc');
-        // Business name
-        $business_name = $request->business_name;
-        $companies->when($business_name, function($query, $business_name) {
-            return $query->where('business_name', 'like', '%'.$business_name.'%');
-        });
-        // Name
-        $name = $request->name;
-        $companies->when($name, function($query, $name) {
-            return $query->where('name', 'like', '%'.$name.'%');
-        });
-        // Area
-        $area = $request->area;
-        $companies->when($area, function($query, $area) {
-            return $query->where('area', 'like', '%'.$area.'%');
-        });
-        // CUIT
-        $cuit = $request->cuit;
-        $companies->when($cuit, function($query, $cuit) {
-            return $query->where('cuit', 'like', '%'.$cuit.'%');
-        });
+        $companies = Company::select('id', 'business_name', 'name', 'area', 'cuit');
+
+        // Sorts when its needed.
+        \Helpers::orderBy($companies, $request, ['business_name', 'name', 'area', 'cuit']);
+
+        // Filters.
+        \Helpers::whereIn($companies, $request, ['company_id', 'type_id']);
+        \Helpers::whereLike($companies, $request, ['business_name', 'name', 'area', 'cuit']);
         // Expiration
-        if(isset($request->expiration_from) && isset($request->expiration_until)) {
+        if(!empty($request->expiration_from) && !empty($request->expiration_until)) {
             $companies->whereBetween('expiration', [$request->expiration_from, $request->expiration_until]);
         }
         else {
@@ -143,83 +97,62 @@ class ListsController extends Controller
             });
         }
 
-        return  response(json_encode(isset($request->page) ? $companies->paginate(10) : $companies->get()))->header('Content-Type', 'application/json');        
+        // If a page is asked, then paginates the query. Otherwise, gets all the records.
+        return  response(json_encode(isset($request->page) ? $companies->paginate(10) : $companies->get()))
+                ->header('Content-Type', 'application/json');        
     }
 
     /**
-     * Returns the list of vehicles
-     * 
      * @return Array<Vehicle>
      */
     public function vehiclesList(Request $request)
     {
-        $timestamp = $request->timestamp;
-        $vehicles = Vehicle::select(['id','type_id','plate','brand','model','year','colour','company_id'])
-                            ->when($timestamp, function($query, $timestamp) {
-                                return $query->where('updated_at', '>', $timestamp);
-                            })
-                            ->orderBy('id','asc')
-                            ->with('company:id,name');
+        // TODO: check if type_id, type_name and allows_container are still needed.
+        $vehicles = Vehicle::join('companies', 'vehicles.company_id', '=', 'companies.id')
+                           ->select(
+                               'vehicles.id',
+                               'vehicles.plate',
+                               'vehicles.brand',
+                               'vehicles.model',
+                               'vehicles.year',
+                               'companies.name as company_name'
+                            );
 
-        // Plate
-        $plate = $request->plate;
-        $vehicles->when($plate, function($query, $plate) {
-            return $query->where('plate', 'like', '%'.$plate.'%');
-        });
-        // Brand
-        $brand = $request->brand;
-        $vehicles->when($brand, function($query, $brand) {
-            return $query->where('brand', 'like', '%'.$brand.'%');
-        });
-        // Model
-        $model = $request->model;
-        $vehicles->when($model, function($query, $model) {
-            return $query->where('model', 'like', '%'.$model.'%');
-        });
-        // Year
-        $year = $request->year;
-        $vehicles->when($year, function($query, $year) {
-            return $query->where('year', 'like', '%'.$year.'%');
-        });
-        // Owner
-        $owner = $request->owner;
-        $vehicles->when($owner, function($query, $owner) {
-            return $query->where('owner', 'like', '%'.$owner.'%');
-        });
-        // Colour
-        $colour = $request->colour;
-        $vehicles->when($colour, function($query, $colour) {
-            return $query->where('colour', 'like', '%'.$colour.'%');
-        });
-        // Company ID
-        $company_id = $request->company_id;
-        $vehicles->when($company_id, function($query, $company_id) {
-            return $query->whereIn('company_id', $company_id);
-        });
-        // Type ID
-        $type_id = $request->type_id;
-        $vehicles->when($type_id, function($query, $type_id) {
-            return $query->whereIn('type_id', $type_id);
+        // Sorts when its needed.
+        \Helpers::orderBy($vehicles, $request, ['plate', 'brand', 'model', 'year', 'company_name']);
+
+        // Filters.
+        \Helpers::whereIn($vehicles, $request, ['company_id', 'type_id']);
+        \Helpers::whereLike($vehicles, $request, ['plate', 'brand', 'model', 'year', 'owner', 'colour']);
+
+        $id = $request->id;
+        $vehicles->when($id, function($query, $id) {
+            return $query->whereIn('vehicles.id', $id);
         });
 
-        if(isset($request->page)) {
-            $vehicles = $vehicles->paginate(10);
-            $vehicles->getCollection()->transform(function($vehicle) {
-                return $vehicle->toListArray();
+        $not_company_id = $request->not_company_id;
+        $vehicles->when($not_company_id, function($query, $not_company_id) {
+            return $query->whereNotIn('company_id', $not_company_id);
+        });
+
+        // Wildcard
+        $wildcard = $request->wildcard;
+        $vehicles->when($wildcard, function($query, $wildcard) {
+            return $query->where(function($query) use ($wildcard) {
+                return $query->where('vehicles.plate',     'like', '%'.$wildcard.'%')
+                            ->orWhere('vehicles.brand',   'like', '%'.$wildcard.'%')
+                            ->orWhere('vehicles.model',   'like', '%'.$wildcard.'%')
+                            ->orWhere('vehicles.year',    'like', '%'.$wildcard.'%')
+                            ->orWhere('vehicles.colour',  'like', '%'.$wildcard.'%');
             });
-        }
-        else {
-            $vehicles = $vehicles->get()->map(function($vehicle) {
-                return $vehicle->toListArray();
-            });
-        }
-        
-        return response(json_encode($vehicles))->header('Content-Type', 'application/json');        
+        });
+
+        // If a page is asked, then paginates the query. Otherwise, gets all the records.
+        return response(json_encode(!empty($request->page) ? $vehicles->paginate(10) : $vehicles->get()))
+               ->header('Content-Type', 'application/json');        
     }
 
     /**
-     * Returns the list of groups
-     * 
      * @return Array<VehicleType>
      */
     public function groupsList(Request $request)
@@ -247,8 +180,6 @@ class ListsController extends Controller
     }
 
     /**
-     * Returns the list of containers
-     * 
      * @return Array<Container>
      */
     public function containersList(Request $request)
@@ -264,8 +195,6 @@ class ListsController extends Controller
     }
 
     /**
-     * Returns the list of activities
-     * 
      * @return Array<Activity>
      */
     public function activitiesList(Request $request)
@@ -284,8 +213,6 @@ class ListsController extends Controller
     }
 
     /**
-     * Returns the list of subactivities
-     * 
      * @return Array<Activity>
      */
     public function subactivitiesList(Request $request)
@@ -304,8 +231,6 @@ class ListsController extends Controller
     }
 
     /**
-     * Returns the list of vehicle types
-     * 
      * @return Array<VehicleType>
      */
     public function vehicleTypesList(Request $request)
@@ -324,8 +249,6 @@ class ListsController extends Controller
     }
 
     /**
-     * Returns the list of gates
-     * 
      * @return Array<Gate>
      */
     public function gatesList(Request $request)
@@ -344,8 +267,6 @@ class ListsController extends Controller
     }
 
     /**
-     * Returns the list of zones
-     * 
      * @return Array<Zone>
      */
     public function zonesList(Request $request)

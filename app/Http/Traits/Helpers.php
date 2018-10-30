@@ -10,6 +10,45 @@ use App\Location\{ City, Province, Country };
 
 trait Helpers {
 
+    public static function wildcard($query, $wildcard, Array $columns) {
+        if(!empty($wildcard)) {
+            return $query->where(function($q) use ($wildcard, $columns) {
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'like', '%'.$wildcard.'%');
+                }
+            });
+        }
+    }
+
+    public static function orderBy($query, Request $request, Array $columns)
+    {
+        if( !empty($request->column) && in_array($request->column, $columns) &&
+            !empty($request->order)  && in_array($request->order,  ['asc', 'desc'])){
+            $query->orderBy($request->column, $request->order);
+        }
+        else {
+            $query->orderBy('id', 'desc');
+        }
+    }
+
+    public static function whereLike($query, Request $request, $columns) {
+        foreach ($columns as $column) {
+            $aux = $request[$column];
+            $query->when($aux, function($q, $aux) use($column) {
+                $q->where($column, 'like', '%'.$aux.'%');
+            });
+        }
+    }
+
+    public static function whereIn($query, Request $request, $columns) {
+        foreach ($columns as $column) {
+            $aux = $request[$column];
+            $query->when($aux, function($q, $aux) use($column) {
+                $q->whereIn($column, $aux);
+            });
+        }
+    }
+
     public static function storeSubactivity($name, $activity_id)
     {
         $ret = Subactivity::where('activity_id', $activity_id)->where('name', $name)->first();

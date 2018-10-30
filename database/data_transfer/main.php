@@ -21,7 +21,7 @@ if(!($mssql && $mysql)) {
 }
 else {
     // Truncates the tables we are going to alter.
-    $tables = ['residencies', 'companies', 'vehicles', 'vehicle_types', 'people', 'activities', 'company_people'];
+    $tables = ['residencies', 'companies', 'vehicles', 'vehicle_types', 'people', 'activities', 'company_people', 'cards'];
     $q_truncate = "TRUNCATE TABLE :table";
     foreach ($tables as $table) {
         if(!mysqli_query($mysql, str_replace(':table', $table, $q_truncate))) {
@@ -29,8 +29,16 @@ else {
         }
     }
 
-    // Companies
-    $q_companies = "SELECT * FROM dbo.Empresa WHERE id_empresa IN (SELECT MIN(id_empresa) AS id FROM dbo.Empresa WHERE cuit IS NOT NULL AND cuit <> '' AND LEN(cuit) <= 15 GROUP BY cuit)";
+    /**
+     * Migración de empresas y sus datos asociados.
+     * Se migraran aquellas empresas que:
+     *      - Tengan un CUIT distinto de null y distinto de vacio.
+     *      - Tengan un CUIT cuya longitud sea menor o igual a 15 caracteres.
+     *      - Si existen más de una empresa con el mismo CUIT, se las agruparan en una única empresa,
+     *        ya que el CUIT debe ser unique.
+     */
+    $q_companies = "SELECT * FROM dbo.Empresa
+                    WHERE id_empresa IN (SELECT MIN(id_empresa) AS id FROM dbo.Empresa WHERE cuit IS NOT NULL AND cuit <> '' AND LEN(cuit) <= 15 GROUP BY cuit)";
     $companies = sqlsrv_query($mssql, $q_companies);
     if(!$companies) {
        die(print_r( sqlsrv_errors(), true));
@@ -53,13 +61,11 @@ else {
         $p_query = "SELECT * FROM dbo.Usuario WHERE nombre IS NOT NULL AND nombre <> '' AND apellido IS NOT NULL AND apellido <> '' AND id_empresa = ".$row['id_empresa'];
         $people = sqlsrv_query($mssql, $p_query);
         while($p_row = sqlsrv_fetch_array($people, SQLSRV_FETCH_ASSOC)) {
-            // var_dump($row);
-            // exit();
             $p_row['domicilio'] = $p_row['direccion'];
             $p_row['provincia_estado'] = $p_row['provincia'];
             $residency = new Residency($mysql, $p_row);
             $residency_id = $residency->save();
-            $person = new Person($mysql, array_merge($p_row, ['company_id' => $company_id, 'residency_id' => $residency_id]));
+            $person = new Person($mysql, $mssql, array_merge($p_row, ['company_id' => $company_id, 'residency_id' => $residency_id]));
             $person->save();
         }
     }

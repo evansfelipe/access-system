@@ -43,7 +43,7 @@
         </template>
         <!-- List -->
         <template slot="main-content">
-            <custom-table :updating="updating" :columns="columns" :rows="paginator.data" @rowclicked="showProfile"/>
+            <custom-table :updating="updating" :columns="columns" :rows="paginator.data" @rowclicked="showProfile" @sort="sortHandler"/>
             <br v-if="paginator.data.length > 0">
             <paginator-links v-if="paginator.data.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
         </template>
@@ -55,11 +55,11 @@ export default {
     data: function() {
         return {
             columns: [
-                {name: 'plate',        text: 'Patente', width: '15'},
-                {name: 'brand',        text: 'Marca',   width: '20'},
-                {name: 'model',        text: 'Modelo',  width: '20'},
-                {name: 'year',         text: 'Año',     width: '10'},
-                {name: 'company_name', text: 'Empresa', width: '35'},
+                { name: 'plate',        text: 'Patente', width: '15' },
+                { name: 'brand',        text: 'Marca',   width: '20' },
+                { name: 'model',        text: 'Modelo',  width: '20' },
+                { name: 'year',         text: 'Año',     width: '10' },
+                { name: 'company_name', text: 'Empresa', width: '35' },
             ],
             filters: {
                 plate:        "",
@@ -71,17 +71,24 @@ export default {
                 company_id:   [],
                 type_id:      [],
             },
+            sort: {
+                column: null,
+                order:  null,
+            }
         }
     },
     beforeMount() {
         this.paginate(1);
     },
     computed: {
+        /**
+         * Returns whether the list of vehicles is being updated or not.
+         */
         updating: function() { 
             return  this.$store.getters.vehicles.updating;
         },
         /**
-         * Returns the current and the last page of the pagination.
+         * Returns the vehicles paginator.
          */
         paginator: function() {
             return this.$store.getters.vehicles.paginator;
@@ -89,10 +96,17 @@ export default {
     },
     methods: {
         /**
+         * Paginates the vehicles using the new sort condition.
+         */
+        sortHandler: function(sort) {
+            this.sort = sort;
+            this.paginate(1);
+        },
+        /**
          * Asks to the server for the given page.
          */
         paginate: function(page) {
-            this.$store.dispatch('paginateList', {what: 'vehicles', page: page, filters: this.filters});
+            this.$store.dispatch('paginateList', {what: 'vehicles', page: page, filters: this.filters, sort: this.sort});
         },
         /**
          * Redirects to the profile of the clicked vehicle.
@@ -101,7 +115,7 @@ export default {
             this.$router.push(`/vehicles/show/${vehicle.id}`);
         },
         /**
-         * Restarts filters and asks to the server for the first page.
+         * Restarts filters and pagination.
          */
         advancedSearchClear: function() {
             this.filters = {

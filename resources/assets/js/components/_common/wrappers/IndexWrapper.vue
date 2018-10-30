@@ -15,12 +15,18 @@
             </div>
         </div>
         <transition name="collapse">
-            <div v-show="advanced_search.opened" class="card">
+            <div v-if="advanced_search.opened" class="card">
                 <div class="card-body advanced-search-slot" style="background: #fafafa">
                     <slot name="advanced-search-filters"/>
 
                     <div class="form-row mt-3">
-                        <div class="col-12 text-right">
+                        <div class="col-4">
+                            <small v-if="advanced_search.sended">
+                                <i class="fas fa-exclamation-circle"></i>
+                                Hay filtros aplicados
+                            </small>
+                        </div>
+                        <div class="col-8 text-right">
                             <el-tooltip class="item" effect="dark" content="Limpiar filtros" placement="left">
                                 <button class="btn btn-link btn-sm mr-4" @click="clear">
                                     <i class="ml-1 fas fa-eraser"></i>
@@ -49,6 +55,7 @@ export default {
         return {
             advanced_search: {
                 opened:  false,
+                sended:  false
             },
         };
     },
@@ -60,9 +67,11 @@ export default {
             }
         },
         clear: function() {
+            this.advanced_search.sended = false;
             this.$emit('advanced-search-clear');
         },
         submit: function() {
+            this.advanced_search.sended = true;
             this.$emit('advanced-search-submit');
         }
     }

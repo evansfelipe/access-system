@@ -36,9 +36,8 @@
                     <div class="form-row">
                         <div class="col-12">
                             <!-- Company, Activity & Subactivities -->
-                            <job-data   :job="job"  :companies="companies" :activities="activities"
-                                        :errors="jobs_errors[job.key] || []" @change="({attribute, value}) => editJob(job, attribute, value)"
-                            />
+                            <job-data   :job="job" :errors="jobs_errors[job.key] || []"
+                                        @change="({attribute, value}) => editJob(job, attribute, value)"/>
                         </div>
                         <div class="col-12">
                             <hr-label>Tarjeta{{ job.cards.length > 1 ? 's' : '' }}</hr-label>
@@ -54,13 +53,11 @@
                 </div>
             </transition-group>
             <!-- Add job button -->
-            <div class="mt-3">
-                <div class="row">
-                    <div class="col text-right">
-                        <button class="btn btn-link" @click="addJob">
-                            <i class="fas fa-plus"></i> Agregar trabajo
-                        </button>
-                    </div>
+            <div class="row mt-3">
+                <div class="col text-right">
+                    <button class="btn btn-link" @click="addJob">
+                        <i class="fas fa-plus"></i> Agregar trabajo
+                    </button>
                 </div>
             </div>
         </template>
@@ -89,24 +86,13 @@ export default {
         }
     },
     beforeMount() {
-        this.$store.dispatch('fetchList', 'companies');
-        this.$store.dispatch('fetchList', 'activities');
         // Used on childs. Called here so it is not fetched once for every added child.
         this.$store.dispatch('fetchList', 'groups');
-        this.$store.dispatch('fetchList', 'subactivities');
     },
     computed: {
         updating: function() {
             return  this.$store.getters.groups.updating ||
-                    this.$store.getters.companies.updating ||
-                    this.$store.getters.activities.updating ||
                     this.$store.getters.subactivities.updating;
-        },
-        companies: function() {
-            return this.$store.getters.companies.asOptions();
-        },
-        activities: function() {
-            return this.$store.getters.activities.asOptions();
         }
     },
     methods: {
@@ -135,7 +121,7 @@ export default {
                 /**
                  * The jobs error array is indexed using the position of each job within the array of jobs sent to the server.
                  * This means that, for example, the error under index 2 corresponds to the job that is in position 2 of 
-                 * the jobs array. For the correct rendering, we need that the array of jobs errors is indexed using the key of
+                 * the jobs array. For the correct rendering, we need that the array of jobs errors indexed by the key of
                  * each job, instead of its position in the array of jobs (because this is the key we are using on v-for).
                  * 
                  * We don't need to update the jobs error array when a job is deleted (or created or updated) because, as we had mapped 

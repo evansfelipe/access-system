@@ -528,17 +528,20 @@ export default {
             });
         },
 
-        paginateList: function({commit, state}, {what, page, filters}) {
-            commit(`updatingList`, { what, value: true });
-            axios.get(`/${state.lists[what].base_path}/list?page=${page}`, {params: filters})
-            .then(response => {
-                if(state.debug) console.log('Pagination success: ', what, response.data);
-                commit(`set`, {what, data: response.data.data, paginator: response.data});
-            })
-            .catch(error => {
-                if(state.debug) console.log('Pagination failed: ', what, error);
-            })
-            .finally(() => commit(`updatingList`, {what, value: false}));
+        paginateList: function({commit, state}, {what, page, filters, sort}) {
+            if(!state.lists[what].updating) {
+                if(state.debug) console.log("Paginating:", what);
+                commit(`updatingList`, { what, value: true });
+                axios.get(`/${state.lists[what].base_path}/list?page=${page}`, {params: {...filters, ...sort}}) 
+                .then(response => {
+                    if(state.debug) console.log('Pagination success: ', what, response.data);
+                    commit(`set`, {what, data: response.data.data, paginator: response.data});
+                })
+                .catch(error => {
+                    if(state.debug) console.log('Pagination failed: ', what, error);
+                })
+                .finally(() => commit(`updatingList`, {what, value: false}));
+            }
         },
         /**
          * Given a model name and an ID, gets the data associated to this combination from the server.

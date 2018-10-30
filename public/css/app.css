@@ -10517,6 +10517,10 @@ div.grey-border {
   padding: 1em;
 }
 
+.card-body {
+  border-radius: .30rem;
+}
+
 /**
  * Form items styles
  */

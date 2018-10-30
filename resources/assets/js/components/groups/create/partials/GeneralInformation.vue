@@ -1,11 +1,11 @@
 <template>
     <div>
-        <loading-cover v-if="this.$store.getters.companies.updating || this.$store.getters.zones.updating"/>
+        <loading-cover v-if="this.$store.getters.zones.updating"/>
         <div class="form-row">
             <form-item label="Empresa" :errors="errors.company_id">
                 <div class="col">
-                    <select2    name="company_id" :value="values.company_id" @input="(value) => update({name: 'company_id', value: value})"
-                                placeholder="Seleccione una empresa" :options="companies"/>
+                    <remote-select2 :value="values.company_id" path="/selects/companies" placeholder="Seleccione una empresa"
+                                    @input="value => update({name: 'company_id', value: value})" :fixed-params="{id: values.company_id}"/>
                 </div>
             </form-item>
             <form-item label="Nombre" :errors="errors.name">
@@ -87,18 +87,14 @@ export default {
         };
     },
     beforeMount() {
-        this.$store.dispatch('fetchList','companies');
         this.$store.dispatch('fetchList','zones');
     },
     computed: {
-        companies: function() {
-            return this.$store.getters.companies.asOptions();
-        },
         zones: function() {
             return this.$store.getters.zones.asOptions();
         },
         name_placeholder: function() {
-            let company = this.companies.getById(this.values.company_id);
+            let company = "";
             let gate = this.zones.getById(this.values.gate_id);
             let range = `(${this.values.start} - ${this.values.end})`
             return  (company ? company.text + ' - ' : '') +

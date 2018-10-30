@@ -22,7 +22,7 @@
         <div class="form-row mb-3">
             <!-- Company people list button -->
             <div class="col-4">
-                <button type="button" :class="`btn btn-list ${selected_list === 'company' ? 'selected' : ''}`" @click="getCompanyPeople">
+                <button :disabled="!companyId" type="button" :class="`btn btn-list ${selected_list === 'company' ? 'selected' : ''}`" @click="getCompanyPeople">
                     Empresa seleccionada
                 </button>
             </div>
@@ -44,16 +44,18 @@
             <div class="col">
                 <custom-table
                     :updating="updating"
-                    :columns="columns" :rows="paginator.data"
+                    :columns="columns"
+                    :rows="paginator.data"
                     :pickable="{ active: true, list: people_picked }"
                     @rowclicked="togglePerson"
+                    @sort="sortHandler"
                 />
             </div>
         </div>
         <!-- Pagination and Search -->
         <div class="row mt-3">
             <div class="col-6">
-                <search-input @input="searchHandler" placeholder="Filtrar columnas"/>
+                <search-input :updating="updating" @input="searchHandler" placeholder="Filtrar columnas"/>
             </div>
             <div class="col-6">
                 <paginator-links v-if="paginator.data.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
@@ -85,7 +87,11 @@ export default {
                 wildcard:       '',
                 not_company_id: [],
                 company_id:     [],
-                ids:            []
+                id:             []
+            },
+            sort: {
+                column: null,
+                order:  null,
             }
         };
     },
@@ -114,10 +120,17 @@ export default {
     }, 
     methods: {
         /**
+         * Paginates the people using the new sort condition.
+         */
+        sortHandler: function(sort) {
+            this.sort = sort;
+            this.paginate(1);
+        },
+        /**
          * Asks to the server for the given page.
          */
         paginate: function(page) {
-            this.$store.dispatch('paginateList', {what: 'people', page, filters: this.filters});
+            this.$store.dispatch('paginateList', {what: 'people', page, filters: this.filters, sort: this.sort});
         },
         /**
          * 
@@ -144,7 +157,7 @@ export default {
                 wildcard:       this.search,
                 not_company_id: [],
                 company_id:     [],
-                ids:            []
+                id:            []
             };
         },
         /**
@@ -171,7 +184,7 @@ export default {
         getPickedPeople: function() {
             this.selected_list = 'picked';
             this.resetFilters();
-            this.filters.ids = this.people_picked;
+            this.filters.id = this.people_picked;
             this.paginate(1);
         },
         /**
@@ -179,6 +192,27 @@ export default {
          */
         togglePerson(person) {
             this.$store.commit('pickPerson', person.id);
+        }
+    },
+    watch: {
+        companyId: {
+            handler: function(newValue) {
+                switch(this.selected_list) {
+                    case 'company':
+                        if(newValue)
+                            this.getCompanyPeople();
+                        else
+                            this.getOtherPeople();
+                        break;
+                    case 'other':
+                        this.getOtherPeople();
+                        break;
+                    case 'picked':
+                        this.getPickedPeople();
+                        break;
+                }
+            },
+            deep: true
         }
     }
 }

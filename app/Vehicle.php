@@ -128,21 +128,4 @@ class Vehicle extends Model
                                         })
         ];
     }
-
-    public function toListArray()
-    {
-        return [
-            'id'                => $this->id,
-            'type_id'           => $this->type_id,
-            'type_name'         => $this->vehicleType->type,
-            'allows_container'  => $this->vehicleType->allows_container,
-            'plate'             => $this->plate,
-            'brand'             => $this->brand,
-            'model'             => $this->model,
-            'year'              => $this->year,
-            'colour'            => $this->colour,
-            'company_id'        => $this->company_id,
-            'company_name'      => $this->company->name
-        ];
-    }
 }

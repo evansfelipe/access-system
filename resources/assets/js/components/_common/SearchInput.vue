@@ -9,6 +9,7 @@
     input {
         padding: 0 5px;
         border: 0;
+        border-left: 1px solid rgb(222,222,222);
         outline: none;
         background-color: transparent;
         width: calc(95% - 25px);
@@ -17,9 +18,12 @@
 
 <template>
     <div class="d-inline-block grey-border p-1">
+        <button v-if="updating">
+            <i class="fas fa-circle-notch fa-spin fa-fw"></i>
+        </button>
         <!-- Toggle Button -->
-        <button @click="opened = !opened">
-            <i :class="`fas fa-${opened ? 'times' : 'search'}`"></i>
+        <button v-else @click="opened = !opened">
+            <i :class="`fas fa-${opened ? 'times' : 'search'} fa-fw`"></i>
         </button>
         <!-- Input -->
         <input v-if="opened" ref="input" type="text" :placeholder="placeholder" v-model="value" @keyup="keyup" @keydown="keydown">
@@ -29,6 +33,11 @@
 <script>
 export default {
     props: {
+        updating: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
         placeholder: {
             type: String,
             required: false,

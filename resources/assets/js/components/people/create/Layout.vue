@@ -25,7 +25,7 @@
         >
             <personal-information v-show="tab === 0" :errors="personal_information_errors" :values="values.personal_information"/>
             <working-information  v-show="tab === 1" :errors="working_information_errors"  :values="values.working_information"/>
-            <!-- <assign-vehicles      v-show="tab === 2" :companyname="company_name" :assignedcompanies="assigned_companies"/> -->
+            <assign-vehicles      v-show="tab === 2" :assigned-companies="assigned_companies"/>
             <documentation        v-show="tab === 3" :errors="documentation_errors"/>
         </creation-wrapper>
     </div>
@@ -34,10 +34,10 @@
 <script>
     export default {
         components: {
-            'personal-information': require('./partials/PersonalInformation.vue'),
-            'working-information':  require('./partials/WorkingInformation/Layout.vue'),
             'assign-vehicles':      require('./partials/AssignVehicles.vue'),
+            'personal-information': require('./partials/PersonalInformation.vue'),
             'documentation':        require('./partials/Documentation/Layout.vue'),
+            'working-information':  require('./partials/WorkingInformation/Layout.vue'),
         },
         data: function() {
             return {
@@ -57,30 +57,10 @@
             updating: function() {
                 return this.$store.getters.person.updating;
             },
-            /**
-             * Concatenates the person's last name with the person name. If some one of those values isn't seted, then puts an 'x'.
-             */
-            full_name: function() {
-                return (this.values.personal_information.last_name || 'x') + ', ' + (this.values.personal_information.name || 'x');
-            },
-            /**
-             * Company's name associated with the company id stored in the component data.
-             */
-            company_name: function() {
-                let ret = 'Empresas asignadas';
-                if(!this.$store.getters.companies.updating) {
-                    let jobs = this.values.working_information.jobs;
-                    if(jobs.length === 1 && jobs[0].company_id) {
-                        let val = this.$store.getters.companies.list.filter(company => company.id == jobs[0].company_id);
-                        ret = val[0] ? val[0].name : ret;
-                    }
-                }
-                return ret;
-            },
             assigned_companies: function() {
                 let ids = [];
                 this.values.working_information.jobs.forEach(job => {
-                    if(job.company_id !== '') ids.push(parseInt(job.company_id));
+                    if(job.company_id) ids.push(parseInt(job.company_id));
                 });
                 return ids;
             },

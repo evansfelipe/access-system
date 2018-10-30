@@ -2,11 +2,13 @@
 
 class Person extends BaseClass
 {
-    public function __construct($mysql, $values) {
+    public function __construct($mysql, $mssql, $values) {
         parent::__construct($mysql, $values);
+        $this->mssql = $mssql;
     }
 
     public function save() {
+        // First, we have to save the basic person information.
         $contact = json_encode([
             'fax'          => $this->scape($this->values['fax']),
             'email'        => $this->scape($this->values['email']),
@@ -60,22 +62,22 @@ class Person extends BaseClass
 
         $person_id = mysqli_insert_id($this->mysql);
 
+        // Now, we have to save the person job.
         $empresa_tarea = strtoupper($this->values['empresa_tarea']);
         $empresa_tarea = $this->scape($empresa_tarea);
-        $empresa_tarea = str_replace('-', ' ', $empresa_tarea);
-        $empresa_tarea = str_replace('.', '', $empresa_tarea);
-        $empresa_tarea = str_replace('/', '', $empresa_tarea);
-        $empresa_tarea = str_replace('.', '', $empresa_tarea);
-        $empresa_tarea = str_replace('PBIP', 'P.B.I.P.', $empresa_tarea);
-        $empresa_tarea = str_replace('ESTIBADO ', 'ESTIBADOR ', $empresa_tarea);
-        $empresa_tarea = str_replace('PROFECIONAL ', 'PROFESIONAL ', $empresa_tarea);
-        $empresa_tarea = preg_replace('/^[^A-Za-z]+/', '', $empresa_tarea); // Numbers from the beginning
-        $empresa_tarea = preg_replace('!\s+!', ' ', $empresa_tarea); // Multiple whitespace
+        $empresa_tarea = str_replace('-',               ' ',            $empresa_tarea);
+        $empresa_tarea = str_replace('.',               '',             $empresa_tarea);
+        $empresa_tarea = str_replace('/',               '',             $empresa_tarea);
+        $empresa_tarea = str_replace('.',               '',             $empresa_tarea);
+        $empresa_tarea = str_replace('PBIP',            'P.B.I.P.',     $empresa_tarea);
+        $empresa_tarea = str_replace('ESTIBADO ',       'ESTIBADOR ',   $empresa_tarea);
+        $empresa_tarea = str_replace('PROFECIONAL ',    'PROFESIONAL ', $empresa_tarea);
+        $empresa_tarea = preg_replace('/^[^A-Za-z]+/',  '',             $empresa_tarea); // Numbers from the beginning
+        $empresa_tarea = preg_replace('!\s+!',          ' ',            $empresa_tarea); // Multiple whitespace
         $empresa_tarea = $this->removeAccentMarks($empresa_tarea);
         if(empty($empresa_tarea)) {
             $empresa_tarea = 'XXXXX';
         }
-
 
         $q_activity = 'SELECT id FROM activities WHERE name = "' . $empresa_tarea . '"';
         if($result = mysqli_query($this->mysql, $q_activity)) {
@@ -107,6 +109,41 @@ class Person extends BaseClass
         if(!mysqli_query($this->mysql, $q_job)) {
             echo $q_job . PHP_EOL;
             die('Error creating the person job.'.PHP_EOL.mysqli_error($this->mysql));
+        }
+
+        $job_id = mysqli_insert_id($this->mysql);
+
+        // Now, we have to save each card for the job.
+        $q_cards = 'SELECT P.fc, P.numero, CASE WHEN P.id_grupo IS NOT NULL THEN 1 ELSE 0 END AS activa, U.validez_desde, U.validez_hasta
+                    FROM dbo.Pin_por_usuario AS PU, dbo.Usuario AS U, dbo.Pin as P
+                    where U.id_usuario = PU.id_usuario AND P.id_pin = PU.id_pin AND PU.id_usuario = ' . $this->values['id_usuario'];
+
+        $cards = sqlsrv_query($this->mssql, $q_cards);
+        while($card_row = sqlsrv_fetch_array($cards, SQLSRV_FETCH_ASSOC)) {
+            $q_cards = 'INSERT INTO cards (fc, number, person_company_id, active, `from`, until, created_at, updated_at)
+                        VALUES (:fc, ":number", :person_company_id, ":active", ":from", ":until", ":created_at", ":updated_at")';
+
+            $values = [
+                $this->scape($card_row['fc']),
+                $this->scape($card_row['numero']),
+                $job_id,
+                $this->scape($card_row['activa']),
+                $this->values['validez_desde'] ? $this->values['validez_desde']->format('Y-m-d H:i:s') : 'null',
+                $this->values['validez_hasta'] ? $this->values['validez_hasta']->format('Y-m-d H:i:s') : 'null',
+                $this->now,
+                $this->now,
+            ];
+
+            $q_cards = str_replace(
+                [":fc", ":number", ":person_company_id", ":active", ":from", ":until", ":created_at", ":updated_at"],
+                $values,
+                $q_cards
+            );
+
+            if(!mysqli_query($this->mysql, $q_cards)) {
+                echo $q_cards . PHP_EOL;
+                die('Error creating the card.'.PHP_EOL.mysqli_error($this->mysql));
+            }
         }
 
         return $person_id;

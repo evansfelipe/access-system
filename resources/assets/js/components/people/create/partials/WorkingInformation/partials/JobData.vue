@@ -4,23 +4,22 @@
             <!-- Company -->
             <form-item col="col-4" label="Empresa" :errors="company_errors">
                 <div class="col">
-                    <select2    placeholder="Seleccione una empresa" :value="job.company_id" :options="companies"
-                                @input="(value) => editJob('company_id', value)"/>
+                    <remote-select2 :value="job.company_id" path="/selects/companies" placeholder="Seleccione una empresa"
+                                    @input="value => editJob('company_id', value)" :fixed-params="{id: job.company_id}"/>
                 </div>
             </form-item>
             <!-- Activity -->
             <form-item col="col-4" label="Actividad" :errors="activity_errors">
                 <div class="col">
-                    <select2    placeholder="Seleccione una actividad" :value="job.activity_id" :options="activities"
-                                @input="(value) => editJob('activity_id', value)"/>
+                    <remote-select2 :value="job.activity_id" path="/selects/activities" placeholder="Seleccione una actividad"
+                                    @input="value => editJob('activity_id', value)" :fixed-params="{id: job.activity_id}"/>
                 </div>
             </form-item>
             <!-- Subactivities -->
             <form-item col="col-4" label="Subactividad/es" :errors="subactivities_errors">
                 <div class="col">
-                    <select2    placeholder="Seleccione subactividad/es" :value="job.subactivities" :options="subactivities_options"
-                                :tags="true" name="subactivities" :multiple="true"
-                                @input="value => editJob('subactivities', value)"/>
+                    <remote-select2 :value="job.subactivities" path="/selects/subactivities" placeholder="Seleccione subactividad/es" multiple
+                                    @input="value => editJob('subactivities', value)" :fixed-params="{name: job.subactivities, activity_id: [job.activity_id]}"/>
                 </div>
             </form-item>
         </div>
@@ -67,16 +66,6 @@ export default {
         errors: {
             type: Array,
             required: true
-        },
-        companies: {
-            type: Array,
-            required: false,
-            default: () => []
-        },
-        activities: {
-            type: Array,
-            required: false,
-            default: () => []
         },
     },
     computed: {

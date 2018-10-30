@@ -140,6 +140,11 @@ class Person extends Model
                     ->withPivot('id','activity_id','subactivities');
     }
 
+    public function activities()
+    {
+        return $this->belongsToMany('App\Activity', 'company_people', 'person_id', 'activity_id');
+    }
+
     public function jobs()
     {
         return \App\PersonCompany::hydrate(
@@ -401,20 +406,6 @@ class Person extends Model
                                                 'cards' => $job->cards
                                             ];
                                         }),
-        ];
-    }
-
-    public function toListArray()
-    {
-        $companies = $this->companies;
-        return [
-            'id'                => $this->id,
-            'last_name'         => $this->last_name,
-            'name'              => $this->name,
-            'cuil'              => !empty($this->cuil) ? $this->cuil : '-',
-            'document_number'   => !empty($this->document_number) ? $this->document_number : '-',
-            'companies'         => $companies->pluck('id'),
-            'company_name'      => $companies->count() > 0 ? $companies->pluck('name')->implode('name', ' / ') : '-'
         ];
     }
 }

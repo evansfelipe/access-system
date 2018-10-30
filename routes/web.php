@@ -39,8 +39,6 @@ Route::middleware(['auth','user.administration'])->group(function() {
 
     Route::get('/updated-at/{list}',    'ListsController@updatedAt')->name('lists.updated-at');
 
-    Route::get('/homelands/list',       'LocationsController@countries')->name('homelands.list');
-
     // People routes
     Route::prefix('people')->group(function() {
         Route::get('/list',                         'ListsController@peopleList')->name('people.list');
@@ -113,8 +111,11 @@ Route::middleware(['auth','user.administration'])->group(function() {
     // Route::resource('/cards', 'CardsController');
 
     Route::prefix('selects')->group(function() {
+        Route::get('homelands',     'SelectsController@homelands')->name('selects.homelands');
         Route::get('companies',     'SelectsController@companies')->name('selects.companies');
+        Route::get('activities',    'SelectsController@activities')->name('selects.activities');
         Route::get('vehicle-types', 'SelectsController@vehicleTypes')->name('selects.vehicle-types');
+        Route::get('subactivities', 'SelectsController@subactivities')->name('selects.subactivities');
     });
 });
 /**

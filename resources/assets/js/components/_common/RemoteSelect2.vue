@@ -53,18 +53,16 @@ export default {
         };
     },
     mounted() {
-        if(this.fixedParams !== null) {
-            this.get(this.fixedParams);
-        }
+        this.get(this.fixedParams);
     },
     methods: {
         remote: function(filter) {
             filter = filter.trim();
-            if(filter !== '') {
+            if(filter.length >= 2) {
                 this.get({filter, ...this.fixedParams});
             }
             else {
-                this.options = [];
+                this.get(this.fixedParams);
             }
         },
         get: function(params) {
