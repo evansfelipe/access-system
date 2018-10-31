@@ -319,6 +319,23 @@ class Person extends Model
 
     public function getStorageFolder()
     {
+        $dir = storage_path('app/documentation/');
+        if (!file_exists($dir) && !is_dir($dir)) {
+            mkdir($dir);
+        }
+        $dir = storage_path('app/documentation/'.($this->id % 10).'/');
+        if (!file_exists($dir) && !is_dir($dir)) {
+            mkdir($dir);
+        }
+        $dir = storage_path('app/documentation/'.($this->id % 10).'/'.$this->id.'/');
+        if (!file_exists($dir) && !is_dir($dir)) {
+            mkdir($dir);
+        }
+        $dir = storage_path('app/documentation/'.($this->id % 10).'/'.$this->id.'/pictures');
+        if (!file_exists($dir) && !is_dir($dir)) {
+            mkdir($dir);         
+        }
+
         $mod = $this->id % 10;
         return 'documentation/'.$mod.'/'.$this->id.'/';
     }

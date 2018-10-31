@@ -66,9 +66,9 @@
                             <el-button @click="$emit('edit')" icon="el-icon-edit" circle plain/>
                         </el-tooltip>
                         
-                        <el-tooltip class="item" effect="dark" content="Exportar como PDF" placement="left">
+                        <!-- <el-tooltip class="item" effect="dark" content="Exportar como PDF" placement="left">
                             <el-button @click="$emit('pdf')" icon="el-icon-document" circle plain/>
-                        </el-tooltip>
+                        </el-tooltip> -->
 
                         <slot name="extra-buttons"/>
                     </div>

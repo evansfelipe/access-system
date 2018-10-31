@@ -24,9 +24,9 @@ class DataTransferSeeder extends Seeder
         }
 
         $aux = trim($string);
-        $aux = strtoupper($aux);
         $aux = preg_replace('!\s+!', ' ', $aux);
         $aux = $this->removeAccentMarks($aux);
+        $aux = strtoupper($aux);
 
         return strlen($aux) > 0 ? $aux : $def;
     }
@@ -40,7 +40,7 @@ class DataTransferSeeder extends Seeder
     {   
         $sqlsrv = DB::connection('sqlsrv');
 
-        foreach(['residencies', 'companies', 'vehicles', 'vehicle_types', 'people', 'activities', 'company_people', 'cards', 'person_vehicle'] as $table) {
+        foreach(['residencies', 'companies', 'vehicles', 'vehicle_types', 'people', 'activities', 'company_people', 'cards', 'person_vehicle', 'person_job_groups'] as $table) {
             DB::table($table)->truncate();
         }
 
@@ -215,6 +215,27 @@ class DataTransferSeeder extends Seeder
                 'pbip_file'         => false,
                 'pna_file'          => false,
             ]);
+
+            $blood_type = null;
+
+            switch ($persona->grupo_sanguineo) {
+                case 1:
+                    $blood_type = "A";
+                    break;
+                case 2:
+                    $blood_type = "B";
+                    break;
+                case 3:
+                    $blood_type = "AB";
+                    break;
+                case 4:
+                    $blood_type = "0";
+                    break;
+            }
+
+            if(!empty($blood_type)) {
+                $blood_type = $blood_type . ($person->factor == 1 ? '+' : '-');
+            }
             
             // Guarda esta persona junto a su contacto y documentación requerida.
             $person = new \App\Person([
@@ -230,7 +251,8 @@ class DataTransferSeeder extends Seeder
                 'pna'                       => $persona->prontuario,
                 'contact'                   => $contact,
                 'required_documentation'    => $required_documentation,
-                'residency_id'              => $residency->id
+                'residency_id'              => $residency->id,
+                'blood_type'                => $blood_type
             ]);
             $person->save();
 
@@ -277,8 +299,24 @@ class DataTransferSeeder extends Seeder
                             ->where('PU.id_usuario', $persona->id_usuario)
                             ->whereNotNull('P.numero')
                             ->where('P.numero', '<>', '')
-                            ->select('P.fc as fc', 'P.numero as numero', 'P.id_grupo as id_grupo', 'U.validez_desde as validez_desde', 'U.validez_hasta as validez_hasta')
+                            ->select(
+                                'P.id_pin as id_pin',
+                                'P.fc as fc',
+                                'P.numero as numero',
+                                'P.id_grupo as id_grupo',
+                                'U.validez_desde as validez_desde',
+                                'U.validez_hasta as validez_hasta'
+                            )
                             ->get();
+
+
+            $pin_controlador_query = $sqlsrv->table('dbo.Grupo_pines as GP')
+                                            ->join('dbo.Grupo_pines_franja as GPF', 'GP.id_grupo', '=', 'GPF.id_grupo')
+                                            ->join('dbo.Franja_horaria as FH', 'FH.id_franja_horaria', '=', 'GPF.id_franja_horaria')
+                                            ->join('dbo.Pin as P', 'P.id_grupo', '=', 'GP.id_grupo')
+                                            ->select('P.id_pin', 'FH.id_controlador');
+
+            $groups = [];
 
             foreach ($pines as $pin) {
                 $card = new \App\Card([
@@ -290,8 +328,54 @@ class DataTransferSeeder extends Seeder
                     'until'             => new Carbon($pin->validez_hasta),
                 ]);
                 $card->save();
+
+                $id_controladores = $pin_controlador_query->where('P.id_pin', $pin->id_pin)->get()->pluck('id_controlador');
+
+                foreach ($id_controladores as $id) {
+                    $group_id = null;
+                    switch ($id) {
+                        case 5244:
+                        case 5245:
+                        case 5246:
+                        case 5247:
+                            $group_id = 1;
+                            break;
+                        
+                        case 5248:
+                            $group_id = 2;
+                            break;
+
+                        case 5250:
+                            $group_id = 3;
+                            break;
+
+                        case 5251:
+                            $group_id = 4;
+                            break;
+
+                        case 5252:
+                            $group_id = 5;
+                            break;
+                        
+                        case 5256:
+                            $group_id = 6;
+                            break;
+                    }
+
+                    if(!empty($group_id) && !in_array($group_id, $groups)) {
+                        array_push($groups, $group_id);
+                    }
+                }
             }
-            
+
+            foreach ($groups as $group_id) {
+                $person_job_group = new \App\PersonJobGroup([
+                    'job_id'    => $job->id,
+                    'group_id'  => $group_id
+                ]);
+                $person_job_group->save();
+            }
+
             $vehiculo_persona = $sqlsrv ->table('dbo.vehiculo_usuario')
                                         ->where('id_usuario', $persona->id_usuario)
                                         ->select('id_vehiculo')

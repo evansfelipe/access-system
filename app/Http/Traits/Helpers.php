@@ -26,14 +26,12 @@ trait Helpers {
             !empty($request->order)  && in_array($request->order,  ['asc', 'desc'])){
             $query->orderBy($request->column, $request->order);
         }
-        else {
-            $query->orderBy('id', 'desc');
-        }
     }
 
     public static function whereLike($query, Request $request, $columns) {
         foreach ($columns as $column) {
-            $aux = $request[$column];
+            $name = explode('.', $column);
+            $aux = $request[$name[count($name) - 1]];
             $query->when($aux, function($q, $aux) use($column) {
                 $q->where($column, 'like', '%'.$aux.'%');
             });

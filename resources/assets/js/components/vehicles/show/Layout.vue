@@ -28,7 +28,6 @@ export default {
         };
     },
     beforeMount() {
-        this.$store.dispatch('fetchList','vehicle_types');
         axios.get(`/vehicles/${this.$route.params.id}`)
             .then(response => {
                 this.axios_finished = true;

@@ -32,7 +32,7 @@ class ListsController extends Controller
         \Helpers::orderBy($people, $request, ['last_name', 'name', 'document_number', 'cuil', 'company_name']);
         
         // Filters.
-        \Helpers::whereLike($people, $request, ['last_name', 'name', 'document_number', 'cuil', 'risk', 'sex']);
+        \Helpers::whereLike($people, $request, ['people.last_name', 'people.name', 'people.document_number', 'people.cuil', 'people.risk', 'people.sex']);
 
         $id = $request->id;
         $people->when($id, function($query, $id) {
@@ -65,7 +65,7 @@ class ListsController extends Controller
         \Helpers::wildcard($people, $request->wildcard, ['people.name', 'people.last_name', 'people.document_number', 'people.cuil']);
 
         // If a page is asked, then paginates the query. Otherwise, gets all the records.
-        return  response(json_encode(isset($request->page) ? $people->paginate(10) : $people->get()))
+        return  response(json_encode(isset($request->page) ? $people->paginate(20) : $people->get()))
                 ->header('Content-Type', 'application/json');        
     }
 

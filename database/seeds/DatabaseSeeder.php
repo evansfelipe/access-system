@@ -10,31 +10,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('users')->truncate();
         // Creates the basic users for the system.
         factory(App\User::class)->create(['email' => 'root@example.com',            'type' => \App\User::ROOT]);
         factory(App\User::class)->create(['email' => 'security@example.com',        'type' => \App\User::SECURITY]);
         factory(App\User::class)->create(['email' => 'administrator@example.com',   'type' => \App\User::ADMINISTRATION]);
-        // As the GroupFactory needs companies, we have to seed them first.
-        factory(App\Company::class, 10)->create();
-        // As the GroupFactory needs zones, we have to seed them first.
-        factory(App\Zone::class, 3)->create();
-        // As the PersonFactory needs groups, we have to seed them first.
-        factory(App\Group::class, 10)->create();
-        factory(App\Group::class)->create(['company_id' => null]); // We have to be sure at least a group without company exists.
-        factory(App\Group::class)->create(['company_id' => 1]); // We have to be sure at least a group with company exists.
-        // As the PersonFactory needs vehicles, we have to seed them here.
-        DB::table('vehicle_types')->insert([
-            ['type' => 'Auto',      'allows_container' => false],
-            ['type' => 'Tractor',   'allows_container' => false],
-            ['type' => 'Camión',    'allows_container' => true],
-            ['type' => 'Grúa',      'allows_container' => false],
-            ['type' => 'Remolque',  'allows_container' => false]
-        ]);
-        factory(App\Vehicle::class, 115)->create();
-        // As the PersonFactory needs activities, we have to seed them here.
-        factory(App\Activity::class, 10)->create();
 
-        factory(App\Person::class, 10)->create();
+        DB::table('zones')->truncate();
+        DB::table('groups')->truncate();
+        foreach (['Zona 1 - A Pie', 'Zona 1 - Automóviles', 'Zona 1 - Camiones', 'Zona 2', 'Zona 3', 'Zona 4'] as $name) {
+            $zone = factory(App\Zone::class)->create(['name' => $name]);
+
+            factory(App\Group::class)->create([
+                'name'          => $name . ' (00:00 - 23:59)',
+                'start'         => '00:00',
+                'end'           => '23:59',
+                'zone_id'       => $zone->id,
+                'company_id'    => null,
+                'days'          => chr(bindec('1111111')),
+            ]);
+        }
+
+        $this->call(DataTransferSeeder::class);
 
         DB::table('countries')->truncate();
         DB::table('countries')->insert([
@@ -326,7 +323,13 @@ class DatabaseSeeder extends Seeder
         DB::table('cities')->insert([
             ['name' => 'Ciudad Autónoma de Buenos Aires',   'province_id' => 1],
             ['name' => 'Mar del Plata',                     'province_id' => 1],
+            ['name' => 'Batán',                             'province_id' => 1],
+            ['name' => 'Bahía Blanca',                      'province_id' => 1],
             ['name' => 'Miramar',                           'province_id' => 1],
+            ['name' => 'Santa Clara del Mar',               'province_id' => 1],
+            ['name' => 'Tandil',                            'province_id' => 1],
+            ['name' => 'La Plata',                          'province_id' => 1],
+            ['name' => 'Lobería',                           'province_id' => 1],
         ]);
     }
 }

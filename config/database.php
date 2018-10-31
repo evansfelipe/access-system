@@ -89,21 +89,6 @@ return [
             'prefix' => '',
         ],
 
-        'mysql_homestead' => [
-            'driver' => 'mysql',
-            'host' => '192.168.10.10',
-            'port' => env('DB_PORT', '3306'),
-            'database' => 'homestead',
-            'username' => 'homestead',
-            'password' => 'secret',
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'strict' => true,
-            'engine' => null,
-        ],
-
     ],
 
     /*
