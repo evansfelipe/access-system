@@ -1,11 +1,12 @@
 <template>
+    <div>
     <custom-table
         :columns="columns"
         :rows="vehicles"
-        :rowsquantity="10"
         :no-rows-message="'No hay vehículos asignados'"
         @rowclicked="({id}) => $router.push(`/vehicles/show/${id}`)"
     />
+    </div>
 </template>
 
 <script>

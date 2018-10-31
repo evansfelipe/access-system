@@ -115,6 +115,7 @@ class ListsController extends Controller
                                'vehicles.brand',
                                'vehicles.model',
                                'vehicles.year',
+                               'vehicles.colour',
                                'companies.name as company_name'
                             );
 

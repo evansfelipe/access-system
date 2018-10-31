@@ -82,15 +82,20 @@ class CompaniesController extends Controller
             ];
         })->toArray();
 
+        $contact = $company->contactToArray();
+
         $general_information = array_merge([
             'business_name' => $company->business_name,
             'name'          => $company->name,
             'area'          => $company->area,
             'cuit'          => $company->cuit,
             'expiration'    => $company->expiration ? date('Y-m-d', strtotime($company->expiration)) : '',
+            'phone'         => $contact->phone,
+            'email'         => $contact->email,
+            'web'           => $contact->web !== '-' ? $contact->web : '',
+            'fax'           => $contact->fax !== '-' ? $contact->fax : '',
         ],
-        $company->residency->toArray(),
-        $company->contactToArray());
+        $company->residency->toArray());
 
         $data = [
             'id'    => $company->id,

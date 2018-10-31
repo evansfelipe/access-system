@@ -1,3 +1,10 @@
+<style lang="scss" scoped>
+    td {
+        text-align: left;
+        vertical-align: top;
+    }
+</style>
+
 <template>
     <div>
         <div v-for="(job, key) in jobs" :key="key" class="grey-border my-2">
