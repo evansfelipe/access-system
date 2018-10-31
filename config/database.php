@@ -67,15 +67,41 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        // 'sqlsrv' => [
+        //     'driver' => 'sqlsrv',
+        //     'host' => env('DB_HOST', 'localhost'),
+        //     'port' => env('DB_PORT', '1433'),
+        //     'database' => env('DB_DATABASE', 'forge'),
+        //     'username' => env('DB_USERNAME', 'forge'),
+        //     'password' => env('DB_PASSWORD', ''),
+        //     'charset' => 'utf8',
+        //     'prefix' => '',
+        // ]
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => '192.168.1.37\SQLEXPRESS',
+            'port' => '49160',
+            'database' => 'sa2010',
+            'username' => 'sa',
+            'password' => 'Consorcio2018',
             'charset' => 'utf8',
             'prefix' => '',
+        ],
+
+        'mysql_homestead' => [
+            'driver' => 'mysql',
+            'host' => '192.168.10.10',
+            'port' => env('DB_PORT', '3306'),
+            'database' => 'homestead',
+            'username' => 'homestead',
+            'password' => 'secret',
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
         ],
 
     ],

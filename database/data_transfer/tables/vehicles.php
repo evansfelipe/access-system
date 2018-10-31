@@ -2,8 +2,9 @@
 
 class Vehicle extends BaseClass
 {
-    public function __construct($mysql, $values) {
+    public function __construct($mysql, $mssql, $values) {
         parent::__construct($mysql, $values);
+        $this->mssql = $mssql;
     }
 
     public function save() {
@@ -194,6 +195,14 @@ class Vehicle extends BaseClass
             die('Error creating the vehicle.'.PHP_EOL.mysqli_error($this->mysql));
         }
 
-        return mysqli_insert_id($this->mysql);
+        $new_vehicle_id = mysqli_insert_id($this->mysql);
+
+        $q_vehicle = 'UPDATE dbo.vehiculo_usuario SET id_vehiculo_migracion = ' . $new_vehicle_id . ' WHERE id_vehiculo = ' . $this->values['id_vehiculo'];
+        $vehicles = sqlsrv_query($this->mssql, $q_vehicle);
+        if(!$vehicles) {
+           die(print_r( sqlsrv_errors(), true));
+        }
+
+        return $new_vehicle_id;
     }
 }

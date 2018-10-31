@@ -146,6 +146,32 @@ class Person extends BaseClass
             }
         }
 
+        $q_vehicles = 'SELECT id_vehiculo_migracion FROM dbo.vehiculo_usuario WHERE id_vehiculo_migracion IS NOT NULL AND id_usuario = ' . $this->values['id_usuario'];
+        $vehicles = sqlsrv_query($this->mssql, $q_vehicles);
+        while($vehicle_row = sqlsrv_fetch_array($vehicles, SQLSRV_FETCH_ASSOC)) {
+            $q_person_vehicle = 'INSERT INTO person_vehicle (person_id, vehicle_id, created_at, updated_at)
+                                 VALUES (:person_id, :vehicle_id, ":created_at", ":updated_at")';
+            
+            $values = [
+                $person_id,
+                $vehicle_row['id_vehiculo_migracion'],
+                $this->now,
+                $this->now,
+            ];
+
+            $q_person_vehicle = str_replace(
+                [":person_id", ":vehicle_id", ":created_at", ":updated_at"],
+                $values,
+                $q_person_vehicle
+            );
+
+            if(!mysqli_query($this->mysql, $q_person_vehicle)) {
+                echo $q_person_vehicle . PHP_EOL;
+                die('Error creating the vehicle person relationship.'.PHP_EOL.mysqli_error($this->mysql));
+            }
+        }
+
+
         return $person_id;
     }
 }
