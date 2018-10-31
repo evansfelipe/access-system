@@ -44,6 +44,7 @@
         </div>
 
         <loading-cover v-if="connecting"/>
+
         <ul class="nav nav-tabs">
             <tab-item v-for="(p,key) in people" :key="key" :active="tab === key" @click.native="changeTab(key)">
                 <div class="d-inline-block mr-2" @click="closeTab(key)"><i class="fas fa-times"></i></div>
@@ -88,10 +89,10 @@
                         <div class="col-8">
                             <div class="form-row" style="padding: 1em">
                                 <div class="col-6">
-                                    <button class="btn btn-outline-success btn-block" @click="person.allowed()">Permitir acceso</button>
+                                    <button class="btn btn-outline-success btn-block" @click="allowed(person)">Permitir acceso</button>
                                 </div>
                                 <div class="col-6">
-                                    <button class="btn btn-outline-danger btn-block" @click="person.denied()">Denegar acceso</button>
+                                    <button class="btn btn-outline-danger btn-block" @click="denied(person)">Denegar acceso</button>
                                 </div>
                             </div>
                             <div class="row">
@@ -128,49 +129,49 @@
                                                     <form-item col="col-4" :errors="[]">
                                                         <div class="col">
                                                             <input type="text" name="serial_number" class="form-control form-control-sm" placeholder="Número de serie"
-                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                                    v-model="person.container.serial_number"
                                                             >
                                                         </div>
                                                     </form-item>
                                                     <form-item col="col-4" :errors="[]">
                                                         <div class="col">
                                                             <input type="text" name="brand" class="form-control form-control-sm" placeholder="Marca"
-                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                                    v-model="person.container.brand"
                                                             >
                                                         </div>
                                                     </form-item>
                                                     <form-item col="col-4" :errors="[]">
                                                         <div class="col">
                                                             <input type="text" name="model" class="form-control form-control-sm" placeholder="Modelo"
-                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                                    v-model="person.container.model"
                                                             >
                                                         </div>
                                                     </form-item>
                                                     <form-item col="col-4" :errors="[]">
                                                         <div class="col">
                                                             <input type="text" name="format" class="form-control form-control-sm" placeholder="Formato"
-                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                                    v-model="person.container.format"
                                                             >
                                                         </div>
                                                     </form-item>
                                                     <form-item col="col-4" :errors="[]">
                                                         <div class="col">
                                                             <input type="text" name="size" class="form-control form-control-sm" placeholder="Tamaño"
-                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                                    v-model="person.container.size"
                                                             >
                                                         </div>
                                                     </form-item>
                                                     <form-item col="col-4" :errors="[]">
                                                         <div class="col">
                                                             <input type="text" name="colour" class="form-control form-control-sm" placeholder="Color"
-                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                                    v-model="person.container.colour"
                                                             >
                                                         </div>
                                                     </form-item>
                                                     <form-item col="col-12" :errors="[]">
                                                         <div class="col">
                                                             <textarea class="form-control form-control-sm" rows="2" placeholder="Observaciones del contenedor"
-                                                                    :value="person.container.serial_number" @input="(e) => update({name: 'name', value: e.target.value})"
+                                                                    v-model="person.container.observation"
                                                             ></textarea>
                                                         </div>
                                                     </form-item>
@@ -191,7 +192,7 @@
                                                 <textarea class="form-control" v-model="person.textarea" rows="2" placeholder="Nueva observación"></textarea>
                                             </div>
                                             <div class="col-2">
-                                                <button class="btn btn-block btn-outline-success" style="height:100%" @click="newObservation">Enviar</button>
+                                                <button class="btn btn-block btn-outline-primary" style="height:100%" @click="newObservation">Enviar</button>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
@@ -275,14 +276,6 @@ class Person {
             this.container = null;
         }
     }
-
-    allowed() {
-        alert('Permitir el acceso');
-    }
-    
-    denied() {
-        alert('Denegar el acceso');
-    }
 }
 
 export default {
@@ -299,7 +292,6 @@ export default {
             people: [],
             person: null,
             tab: 0,
-
             observations_columns: [
                 {name: 'date', text: 'Fecha',   width: '20'},
                 {name: 'user', text: 'Usuario', width: '20'},
@@ -333,11 +325,11 @@ export default {
                         axios.get('security/person/' + object.ID)
                         .then(response => {
                             let access = {
-                                device: object.Nombre,
-                                zone: object.Area,
+                                device: object.N,
+                                zone: object.A,
                                 card_number: object.ID,
-                                allowed: object.Accion == "OK" ? true : false,
-                                date: object.Fecha
+                                allowed: object.Ac == "OK" ? true : false,
+                                date: object.F
                             };
                             let person = new Person(response.data, access);
                             this.person = person;
@@ -409,6 +401,47 @@ export default {
             if(this.person.vehicles_search) {
                 this.$nextTick(() => this.$refs.vehicles_search.focus())
             }
+        },
+        modal: function(text, callback) {
+            this.$prompt(text, 'Ingrese un comentario', {
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar',
+                inputValidator: (value) => {
+                    let msg = value.trim();
+                    return msg.length !== 0;
+                }
+            }).then(({ value }) => callback(value)).catch(() => {});
+        },
+        allowed: function(person) {
+            let data = {person: person.values.id, vehicle: person.vehicle, container: person.container, action: person.access.allowed, access: true};
+            if(!person.access.allowed) {
+                this.modal('¿Por qué deja pasar a una persona con acceso denegado?', (value) => {
+                    data.observation = value;
+                    this.storeEntrance(data);
+                });
+            }
+            else {
+                this.storeEntrance(data);
+            }
+        },
+        denied: function(person) {
+            let data = {card: person.values.card.number, vehicle: person.vehicle, container: person.container, action: person.access.allowed, access: false};
+            if(person.access.allowed) {
+                this.modal('¿Por qué prohibe el paso a una persona con acceso permitido?', (value) => {
+                    data.observation = value;
+                    this.storeEntrance(data);
+                });
+            }
+            else {
+                this.storeEntrance(data);
+            }
+        },
+        storeEntrance: function(data) {
+            axios.post(`/security/entrance`, data)
+                .then(response => {
+                    this.closeTab(this.tab);
+                })
+                .catch(error => console.log(error));
         }
     }
 }

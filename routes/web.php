@@ -123,5 +123,6 @@ Route::middleware(['auth','user.administration'])->group(function() {
  */
 Route::middleware(['auth', 'user.security'])->prefix('security')->group(function() {
     Route::get('/person/{card_number}',             'SecurityController@personInfo');
+    Route::post('/entrance',                        'SecurityController@storeEntrance');
     Route::post('/person/{person}/new-observation', 'PeopleController@newObservation');
 });

@@ -30,7 +30,18 @@ $factory->define(App\Person::class, function (Faker $faker) {
         'register_number'           => $faker->ean8,
         'pna'                       => $faker->ean8,
         'contact'                   => json_encode($contact),
-        'required_documentation'    => json_encode([]),
+        'required_documentation'    => json_encode((object) [
+                                        'acc_pers'          => true,
+                                        'art_file'          => false,
+                                        'boarding_card'     => true,
+                                        'boarding_passbook' => false,
+                                        'company_note'      => true,
+                                        'dni_copy'          => false,
+                                        'driver_license'    => true,
+                                        'health_notebook'   => false,
+                                        'pbip_file'         => true,
+                                        'pna_file'          => false
+        ]),
         'residency_id'              => $residency->id,
     ];
 });
