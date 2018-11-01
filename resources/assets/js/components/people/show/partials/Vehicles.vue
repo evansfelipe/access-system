@@ -1,32 +1,32 @@
 <template>
-    <div>
-    <custom-table
-        :columns="columns"
-        :rows="vehicles"
-        :no-rows-message="'No hay vehículos asignados'"
-        @rowclicked="({id}) => $router.push(`/vehicles/show/${id}`)"
+    <remote-custom-table    list="vehicles" 
+                            :columns="columns"
+                            :filters="filters"
+                            @rowclicked="({id}) => $router.push(`/vehicles/show/${id}`)"
+                            :paginate-on-mounted="true"
     />
-    </div>
 </template>
 
 <script>
 export default {
     props: {
         vehicles: {
-            type:     Array,
-            required: false,
-            default:  () => []
+            type: Array,
+            required: true,
         }
     },
-    data: function() {
+    data() {
         return {
-            columns: [ 
-                {name: 'plate',  text: 'Patente'},
-                {name: 'brand',  text: 'Marca'},
-                {name: 'model',  text: 'Modelo'},
-                {name: 'year',   text: 'Año'},
-                {name: 'colour', text: 'Color'},
+            columns: [
+                { name: 'plate',     text: 'Patente' },
+                { name: 'brand',     text: 'Marca'   },
+                { name: 'model',     text: 'Modelo'  },
+                { name: 'year',      text: 'Año'     },
+                { name: 'colour',    text: 'Color'   },
             ],
+            filters: {
+                id: this.vehicles.length ? this.vehicles : [-1],
+            }
         }
     }
 }

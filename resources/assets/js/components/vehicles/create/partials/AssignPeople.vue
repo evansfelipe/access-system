@@ -39,28 +39,13 @@
                 </button>
             </div>
         </div>
-        <!-- List -->
-        <div class="row">
-            <div class="col">
-                <custom-table
-                    :updating="updating"
-                    :columns="columns"
-                    :rows="paginator.data"
-                    :pickable="{ active: true, list: people_picked }"
-                    @rowclicked="togglePerson"
-                    @sort="sortHandler"
-                />
-            </div>
-        </div>
-        <!-- Pagination and Search -->
-        <div class="row mt-3">
-            <div class="col-6">
-                <search-input :updating="updating" @input="searchHandler" placeholder="Filtrar columnas"/>
-            </div>
-            <div class="col-6">
-                <paginator-links v-if="paginator.data.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
-            </div>
-        </div>
+
+        <remote-custom-table    list="people" 
+                                :columns="columns"
+                                :filters="filters"
+                                :pickable="{ active: true, list: people_picked }"
+                                @rowclicked="togglePerson"
+        />
     </div>
 </template>
 
@@ -76,7 +61,6 @@ export default {
     data: function() {
         return {
             selected_list: '',
-            search: '',
             columns: [ 
                 { name: 'last_name',            text: 'Apellido'    },
                 { name: 'name',                 text: 'Nombre'      },
@@ -84,15 +68,10 @@ export default {
                 { name: 'cuil',                 text: 'CUIL / CUIT' }
             ],
             filters: {
-                wildcard:       '',
                 not_company_id: [],
                 company_id:     [],
                 id:             []
             },
-            sort: {
-                column: null,
-                order:  null,
-            }
         };
     },
     mounted() {
@@ -100,64 +79,21 @@ export default {
     },
     computed: {
         /**
-         * 
-         */
-        updating: function() {
-            return this.$store.getters.people.updating;
-        },
-        /**
          * An array with the ids of the assigned people for the vehicle.
          */
         people_picked: function() {
             return this.$store.getters.vehicle.values.assign_people.people_id;
         },
-        /**
-         * 
-         */
-        paginator: function() {
-            return this.$store.getters.people.paginator;
-        }
     }, 
     methods: {
-        /**
-         * Paginates the people using the new sort condition.
-         */
-        sortHandler: function(sort) {
-            this.sort = sort;
-            this.paginate(1);
-        },
-        /**
-         * Asks to the server for the given page.
-         */
-        paginate: function(page) {
-            this.$store.dispatch('paginateList', {what: 'people', page, filters: this.filters, sort: this.sort});
-        },
-        /**
-         * 
-         */
-        searchHandler: function(value) {
-            this.search = value;
-            switch (this.selected_list) {
-                case 'company':
-                    this.getCompanyPeople();
-                    break;
-                case 'other':
-                    this.getOtherPeople();
-                    break;
-                case 'picked':
-                    this.getPickedPeople();
-                    break;
-            }
-        },
         /**
          * 
          */
         resetFilters: function() {
             this.filters = {
-                wildcard:       this.search,
                 not_company_id: [],
                 company_id:     [],
-                id:            []
+                id:             []
             };
         },
         /**
@@ -167,7 +103,6 @@ export default {
             this.selected_list = 'company';
             this.resetFilters();
             this.filters.company_id = [this.companyId];
-            this.paginate(1);
         },
         /**
          * 
@@ -175,8 +110,7 @@ export default {
         getOtherPeople: function() {
             this.selected_list = 'other';
             this.resetFilters();
-            this.filters.not_company_id = [this.companyId];
-            this.paginate(1);
+            this.filters.not_company_id = this.companyId ? [this.companyId] : [];
         },
         /**
          * 
@@ -185,7 +119,6 @@ export default {
             this.selected_list = 'picked';
             this.resetFilters();
             this.filters.id = this.people_picked;
-            this.paginate(1);
         },
         /**
          * 

@@ -5,37 +5,41 @@
 </style>
 
 <template>
-    <index-wrapper @advanced-search-submit="paginate(1)" @advanced-search-clear="advancedSearchClear">
+    <index-wrapper @advanced-search-submit="commitFilters" @advanced-search-clear="advancedSearchClear">
         <!-- Advanced search -->
         <template slot="advanced-search-filters">
             <div class="form-row">
                 <div class="col-12 col-md-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="Razón social" v-model="filters.business_name">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Razón social" v-model="tempFilters.business_name">
                 </div>
                 <div class="col-12 col-md-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="Nombre" v-model="filters.name">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Nombre" v-model="tempFilters.name">
                 </div>
                 <div class="col-12 col-md-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="Rubro" v-model="filters.area">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Rubro" v-model="tempFilters.area">
                 </div>
                 <div class="col-12 col-md-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="CUIT" v-model="filters.cuit">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="CUIT" v-model="tempFilters.cuit">
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-12 col-md-6">
-                    <date-picker size="small" :value="filters.expiration_from" @input="value => filters.expiration_from = value" placeholder="Vencimiento (desde)"/>
+                    <date-picker size="small" :value="tempFilters.expiration_from" @keyup.enter="commitFilters" @input="value => tempFilters.expiration_from = value" placeholder="Vencimiento (desde)"/>
                 </div>
                 <div class="col-12 col-md-6">
-                    <date-picker size="small" :value="filters.expiration_until" @input="value => filters.expiration_until = value" placeholder="Vencimiento (hasta)"/>
+                    <date-picker size="small" :value="tempFilters.expiration_until" @keyup.enter="commitFilters" @input="value => tempFilters.expiration_until = value" placeholder="Vencimiento (hasta)"/>
                 </div>
             </div>
         </template>
         <!-- List -->
         <template slot="main-content">
-            <custom-table :updating="updating" :columns="columns" :rows="paginator.data" @rowclicked="showProfile" @sort="sortHandler"/>
-            <br v-if="paginator.data.length > 0">
-            <paginator-links v-if="paginator.data.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
+            <remote-custom-table    list="companies" 
+                                    :columns="columns"
+                                    :filters="filters"
+                                    @rowclicked="showProfile"
+                                    :paginate-on-mounted="true"
+                                    :wildcard="false"
+            />
         </template>
     </index-wrapper>
 </template>
@@ -50,7 +54,8 @@ export default {
                 { name: 'area',          text: 'Rubro',          width: '20' },
                 { name: 'cuit',          text: 'CUIT',           width: '20' }
             ],
-            filters: {
+            filters: {},
+            tempFilters: {
                 business_name:    "",
                 name:             "",
                 area:             "",
@@ -58,43 +63,9 @@ export default {
                 expiration_from:  "",
                 expiration_until: ""
             },
-            sort: {
-                column: null,
-                order:  null,
-            }
         }
     },
-    mounted() {
-        this.paginate(1);
-    },
-    computed: {
-        /**
-         * Returns whether the list of companies is being updated or not.
-         */
-        updating: function() { 
-            return this.$store.getters.companies.updating
-        },
-        /**
-         * Returns the companies paginator.
-         */
-        paginator: function() {
-            return this.$store.getters.companies.paginator;
-        }
-     },
     methods: {
-        /**
-         * Paginates the companies using the new sort condition.
-         */
-        sortHandler: function(sort) {
-            this.sort = sort;
-            this.paginate(1);
-        },
-        /**
-         * Asks to the server for the given page.
-         */
-        paginate: function(page) {
-            this.$store.dispatch('paginateList', {what: 'companies', page: page, filters: this.filters, sort: this.sort});
-        },
         /**
          * Redirects to the profile of the clicked person.
          */
@@ -105,7 +76,7 @@ export default {
          * Restarts filters and pagination.
          */
         advancedSearchClear: function() {
-            this.filters = {
+            this.tempFilters = {
                 business_name:      "",
                 name:               "",
                 area:               "",
@@ -113,7 +84,20 @@ export default {
                 expiration_from:    "",
                 expiration_until:   ""
             };
-            this.paginate(1);
+            this.commitFilters();
+        },
+        /**
+         * 
+         */
+        commitFilters: function() {
+            this.filters = {
+                business_name:      this.tempFilters.business_name,
+                name:               this.tempFilters.name,
+                area:               this.tempFilters.area,
+                cuit:               this.tempFilters.cuit,
+                expiration_from:    this.tempFilters.expiration_from,
+                expiration_until:   this.tempFilters.expiration_until
+            };
         }
     }
 }

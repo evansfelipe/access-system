@@ -26,6 +26,9 @@ trait Helpers {
             !empty($request->order)  && in_array($request->order,  ['asc', 'desc'])){
             $query->orderBy($request->column, $request->order);
         }
+        else {
+            $query->orderBy('id', 'desc');
+        }
     }
 
     public static function whereLike($query, Request $request, $columns) {

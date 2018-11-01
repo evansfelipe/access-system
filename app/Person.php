@@ -369,7 +369,7 @@ class Person extends Model
                 $this->residency ? $this->residency->toArray() : []
             ),
             'jobs'              => $this->jobs(),
-            'vehicles'          => $this->vehicles->toArray(),
+            'vehicles'          => $this->vehicles->pluck('id'),
             'observations'      => $this->observations->toArray(),
             'documents'         => $this->documents->map(function($document) {
                                         return [

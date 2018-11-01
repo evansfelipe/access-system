@@ -65,20 +65,6 @@
             </div>
         </div>
         <br>
-        <div class="row">
-            <div class="col-12">
-                <hr-label>Personas asignadas</hr-label>
-            </div>
-            <div class="col-12">
-                <custom-table
-                    :columns="columns"
-                    :rows="values.assigned_people"
-                    :rowsquantity="5"
-                    :no-rows-message="'No hay personas asignadas'"
-                    @rowclicked="({id}) => $router.push(`/people/show/${id}`)"
-                />
-            </div>
-        </div>
     </div>
 </template>
 
@@ -90,14 +76,5 @@ export default {
             required: true
         }
     },
-    data() {
-        return {
-            columns: [
-                {name: 'full_name',     text: 'Apellido y Nombre'},
-                {name: 'cuil',          text: 'CUIL / CUIT'},
-                {name: 'company_name',  text: 'Empresas'}
-            ]
-        };
-    }
 }
 </script>

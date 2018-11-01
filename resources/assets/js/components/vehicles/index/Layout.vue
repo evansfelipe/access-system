@@ -5,47 +5,51 @@
 </style>
 
 <template>
-    <index-wrapper @advanced-search-submit="paginate(1)" @advanced-search-clear="advancedSearchClear">
+    <index-wrapper @advanced-search-submit="commitFilters" @advanced-search-clear="advancedSearchClear">
         <!-- Advanced search -->
         <template slot="advanced-search-filters">
             <div class="form-row">
                 <div class="col-12 col-md-6">
-                    <remote-select2 size="small" :value="filters.type_id" path="/selects/vehicle-types" multiple
-                                    @input="value => filters.type_id = value" placeholder="Tipo de vehículo"/>
+                    <remote-select2 size="small" :value="tempFilters.type_id" path="/selects/vehicle-types" multiple
+                                    @input="value => tempFilters.type_id = value" placeholder="Tipo de vehículo"/>
                 </div>
                 <div class="col-12 col-md-12 col-xl-6">
-                    <remote-select2 size="small" :value="filters.company_id" path="/selects/companies" multiple
-                                    @input="value => filters.company_id = value" placeholder="Empresa"/>
+                    <remote-select2 size="small" :value="tempFilters.company_id" path="/selects/companies" multiple
+                                    @input="value => tempFilters.company_id = value" placeholder="Empresa"/>
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-12 col-md-6 col-xl-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Titular" v-model="filters.owner">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Titular" v-model="tempFilters.owner">
                 </div>
                 <div class="col-12 col-md-6 col-xl-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Patente" v-model="filters.plate">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Patente" v-model="tempFilters.plate">
                 </div>
                 <div class="col-12 col-md-6 col-xl-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Color" v-model="filters.colour">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Color" v-model="tempFilters.colour">
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-12 col-md-6 col-xl-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Marca" v-model="filters.brand">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Marca" v-model="tempFilters.brand">
                 </div>
                 <div class="col-12 col-md-6 col-xl-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Modelo" v-model="filters.model">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Modelo" v-model="tempFilters.model">
                 </div>
                 <div class="col-12 col-md-6 col-xl-4">
-                    <input type="text" class="form-control form-control-sm" placeholder="Año" v-model="filters.year">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Año" v-model="tempFilters.year">
                 </div>
             </div>
         </template>
         <!-- List -->
         <template slot="main-content">
-            <custom-table :updating="updating" :columns="columns" :rows="paginator.data" @rowclicked="showProfile" @sort="sortHandler"/>
-            <br v-if="paginator.data.length > 0">
-            <paginator-links v-if="paginator.data.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
+            <remote-custom-table    list="vehicles" 
+                                    :columns="columns"
+                                    :filters="filters"
+                                    @rowclicked="showProfile"
+                                    :paginate-on-mounted="true"
+                                    :wildcard="false"
+            />
         </template>
     </index-wrapper>
 </template>
@@ -61,7 +65,8 @@ export default {
                 { name: 'year',         text: 'Año',     width: '10' },
                 { name: 'company_name', text: 'Empresa', width: '35' },
             ],
-            filters: {
+            filters: {},
+            tempFilters: {
                 plate:        "",
                 brand:        "",
                 model:        "",
@@ -71,43 +76,9 @@ export default {
                 company_id:   [],
                 type_id:      [],
             },
-            sort: {
-                column: null,
-                order:  null,
-            }
         }
     },
-    beforeMount() {
-        this.paginate(1);
-    },
-    computed: {
-        /**
-         * Returns whether the list of vehicles is being updated or not.
-         */
-        updating: function() { 
-            return  this.$store.getters.vehicles.updating;
-        },
-        /**
-         * Returns the vehicles paginator.
-         */
-        paginator: function() {
-            return this.$store.getters.vehicles.paginator;
-        },
-    },
     methods: {
-        /**
-         * Paginates the vehicles using the new sort condition.
-         */
-        sortHandler: function(sort) {
-            this.sort = sort;
-            this.paginate(1);
-        },
-        /**
-         * Asks to the server for the given page.
-         */
-        paginate: function(page) {
-            this.$store.dispatch('paginateList', {what: 'vehicles', page: page, filters: this.filters, sort: this.sort});
-        },
         /**
          * Redirects to the profile of the clicked vehicle.
          */
@@ -118,7 +89,7 @@ export default {
          * Restarts filters and pagination.
          */
         advancedSearchClear: function() {
-            this.filters = {
+            this.tempFilters = {
                 plate:        "",
                 brand:        "",
                 model:        "",
@@ -128,7 +99,22 @@ export default {
                 company_id:   [],
                 type_id:      [],
             };
-            this.paginate(1);
+            this.commitFilters();
+        },
+        /**
+         * 
+         */
+        commitFilters: function() {
+            this.filters = {
+                plate:        this.tempFilters.plate,
+                brand:        this.tempFilters.brand,
+                model:        this.tempFilters.model,
+                year:         this.tempFilters.year,
+                colour:       this.tempFilters.colour,
+                owner:        this.tempFilters.owner,
+                company_id:   this.tempFilters.company_id,
+                type_id:      this.tempFilters.type_id,
+            };
         }
     }
 }

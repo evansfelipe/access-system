@@ -29,7 +29,9 @@ Vue.use(ElementUI, {locale});
  */
 
 Vue.component('remote-select2'            , require('./components/_common/RemoteSelect2.vue'));
+Vue.component('remote-custom-table'            , require('./components/_common/RemoteCustomTable.vue'));
 Vue.component('search-input'            , require('./components/_common/SearchInput.vue'));
+Vue.component('auto-input'            , require('./components/_common/AutoInput.vue'));
 
 // Common components that are re-usable across all components
 Vue.component('hr-label'            , require('./components/_common/HrLabel.vue'));

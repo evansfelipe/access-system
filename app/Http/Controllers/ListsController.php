@@ -53,6 +53,7 @@ class ListsController extends Controller
                 return $query->whereIn('companies.id', $company_id);
             });
         });
+        \Debugbar::info($request);
         // People that is not associated with a list of companies id.
         $not_company_id = $request->not_company_id;
         $people->when($not_company_id, function($query, $not_company_id) {
@@ -65,7 +66,7 @@ class ListsController extends Controller
         \Helpers::wildcard($people, $request->wildcard, ['people.name', 'people.last_name', 'people.document_number', 'people.cuil']);
 
         // If a page is asked, then paginates the query. Otherwise, gets all the records.
-        return  response(json_encode(isset($request->page) ? $people->paginate(20) : $people->get()))
+        return  response(json_encode(isset($request->page) ? $people->paginate(10) : $people->get()))
                 ->header('Content-Type', 'application/json');        
     }
 

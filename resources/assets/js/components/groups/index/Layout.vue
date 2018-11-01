@@ -1,27 +1,31 @@
 <template>
-    <index-wrapper @advanced-search-submit="paginate(1)" @advanced-search-clear="advancedSearchClear">
+    <index-wrapper @advanced-search-submit="commitFilters" @advanced-search-clear="advancedSearchClear">
         <!-- Advanced search -->
         <template slot="advanced-search-filters">
             <div class="form-row">
                 <div class="col-12 col-md-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="Nombre" v-model="filters.name">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Nombre" v-model="tempFilters.name">
                 </div>
                 <div class="col-12 col-md-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="Empresa" v-model="filters.company">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Empresa" v-model="tempFilters.company">
                 </div>
                 <div class="col-12 col-md-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="Zona" v-model="filters.zone">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Zona" v-model="tempFilters.zone">
                 </div>
                 <div class="col-12 col-md-3">
-                    <input type="text" class="form-control form-control-sm" placeholder="Franja horaria" v-model="filters.range">
+                    <input type="text" class="form-control form-control-sm" @keyup.enter="commitFilters" placeholder="Franja horaria" v-model="tempFilters.range">
                 </div>
             </div>
         </template>
         <!-- List -->
         <template slot="main-content">
-            <custom-table :updating="updating" :columns="columns" :rows="groups" @rowclicked="showProfile"/>
-            <br v-if="groups.length > 0">
-            <paginator-links v-if="groups.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
+            <remote-custom-table    list="groups" 
+                                    :columns="columns"
+                                    :filters="filters"
+                                    @rowclicked="showProfile"
+                                    :paginate-on-mounted="true"
+                                    :wildcard="false"
+            />
         </template>
     </index-wrapper>
 </template>
@@ -36,7 +40,8 @@ export default {
                 { name: 'zone',         text: 'Zona',           width:'20' },
                 { name: 'range',        text: 'Franja horaria', width:'20' }
             ],
-            filters: {
+            filters: {},
+            tempFilters: {
                 name:       "",
                 company:    "",
                 zone:       "",
@@ -44,37 +49,7 @@ export default {
             },
         }
     },
-    beforeMount() {
-        this.paginate(1);
-    },
-    computed: {
-        /**
-         * Returns whether the list of groups is being updated or not.
-         */
-        updating: function() { return this.$store.getters.groups.updating },
-        /**
-         * Returns the groups of the current page.
-         */
-        groups: function() {
-            return this.$store.getters.groups.paginator.data;
-        },
-        /**
-         * Returns the current and the last page of the pagination.
-         */
-        paginator: function() {
-            return {
-                current_page: this.$store.getters.groups.paginator.current_page,
-                last_page: this.$store.getters.groups.paginator.last_page
-            };
-        }
-    },
     methods: {
-        /**
-         * Asks to the server for the given page.
-         */
-        paginate: function(page) {
-            this.$store.dispatch('paginateList', {what: 'groups', page: page, filters: this.filters});
-        },
         /**
          * Redirects to the profile of the clicked group.
          */
@@ -85,13 +60,24 @@ export default {
          * Restarts filters and pagination.
          */
         advancedSearchClear: function() {
-            this.filters = {
+            this.tempFilters = {
                 name:       "",
                 company:    "",
                 zone:       "",
                 range:      ""
             };
-            this.paginate(1);
+            this.commitFilters();
+        },
+        /**
+         * 
+         */
+        commitFilters: function() {
+            this.filters = {
+                name:       this.tempFilters.name,
+                company:    this.tempFilters.company,
+                zone:       this.tempFilters.zone,
+                range:      this.tempFilters.range
+            };
         }
     }
 }

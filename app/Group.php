@@ -165,7 +165,7 @@ class Group extends Model
             'range'         => $this->rangeToString().($this->end < $this->start ? ' (+1d)' : ''),
             'company'       => $this->company ? $this->company->name : '-',
             'company_id'    => $this->company ? $this->company->id : null,
-            'people'        => $people,
+            'people'        => $people->pluck('id'),
             'days'          => [
                 'Lunes'     => $days_array[0],
                 'Martes'    => $days_array[1],
