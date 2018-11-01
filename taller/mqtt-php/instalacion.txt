@@ -1,0 +1,6 @@
+apt install php-dev libevent-dev libmosquitto-dev
+pecl install Mosquitto-alpha
+pecl install event
+
+mosquitto_pub -h mqtt.fi.mdp.edu.ar -t /cp/1234556/s -m '{"N":"XXXX","A":"XXXX","C":"INICIO","F":"XXXX"}'
+mosquitto_pub -h mqtt.fi.mdp.edu.ar -t /cp/1234556/s -m '{"N":"XXXX","A":"XXXX","C":"APERTURA","ID":"XXXX","Ac":"XXX","F":"XXXX"}'
