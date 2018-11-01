@@ -1,4 +1,8 @@
 <?php
+// El loopForEver no me deja instalar la alarma tengo que usar otro comando.
+//
+//
+
 echo "Iniciando Programa";
 $client = new Mosquitto\Client();
 $client->onConnect('connect');
@@ -17,6 +21,9 @@ try {
 
 $client->subscribe('/cp/#', 1);
 $client->setReconnectDelay(5);
+
+pcntl_alarm(5);
+pcntl_signal_dispatch();
 
 $client->loopForever();
 function connect($r) {
@@ -89,3 +96,6 @@ function disconnect() {
 }
 
 
+function alarm() {
+    echo 'Received an alarm signal !' . PHP_EOL;
+}
