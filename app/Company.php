@@ -132,8 +132,9 @@ class Company extends Model
             'assigned_groups'       => $this->groups->map(function($group){
                 return $group->toListArray();
             }),
-            'assigned_people'       => $this->people()->select('people.id','last_name','name','cuil')->get(),
-            'assigned_vehicles'     => $this->vehicles
+            'assigned_people'       => $this->people->pluck('id'),
+            // 'assigned_people'       => $this->people()->select('people.id','last_name','name','cuil')->get(),
+            'assigned_vehicles'     => $this->vehicles->pluck('id')
         ];
     }
 

@@ -20,9 +20,9 @@ export default {
     data() {
         return {
             columns: [
-                { name: 'name',         text: 'Nombre',         width:'50'},
-                { name: 'zone',         text: 'Zona',        width:'25'},
-                { name: 'range',        text: 'Franja horaria', width:'25'}
+                { name: 'name',         text: 'Nombre',         width:'50' },
+                { name: 'zone',         text: 'Zona',           width:'25' },
+                { name: 'range',        text: 'Franja horaria', width:'25' }
             ]
         }
     }

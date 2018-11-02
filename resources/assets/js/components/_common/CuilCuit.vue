@@ -47,7 +47,10 @@ export default {
     },
     computed: {
         val: function() {
-            return this.value.split('-');
+            let ret = [];
+            if(this.value)
+                ret = this.value.split('-');
+            return ret.length === 3 ? ret : ['','',''];
         }
     },
     methods: {

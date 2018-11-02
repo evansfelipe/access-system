@@ -41,7 +41,7 @@ Route::middleware(['auth','user.administration'])->group(function() {
 
     // People routes
     Route::prefix('people')->group(function() {
-        Route::get('/list',                         'ListsController@peopleList')->name('people.list');
+        Route::post('/list',                         'ListsController@peopleList')->name('people.list');
         Route::get('/{person}/pictures',            'PeopleController@pictures')->name('people.pictures');
         Route::get('/document/{person_document}',   'PeopleController@document')->name('people.document');
         Route::get('/{person}/pdf',                 'PeopleController@pdf')->name('people.pdf');
@@ -52,46 +52,46 @@ Route::middleware(['auth','user.administration'])->group(function() {
 
     // Companies routes
     Route::prefix('companies')->group(function() {
-        Route::get('/list',             'ListsController@companiesList')->name('companies.list');
+        Route::post('/list',             'ListsController@companiesList')->name('companies.list');
         Route::get('/id-search',        'ListsController@companiesIdSearch')->name('companies.id-search');
     }); Route::resource('/companies',   'CompaniesController')->only(['store', 'show', 'edit', 'update', 'destroy']);
 
     // Vehicles routes
     Route::prefix('vehicles')->group(function() {
-        Route::get('/list',             'ListsController@vehiclesList')->name('vehicles.list');
+        Route::post('/list',             'ListsController@vehiclesList')->name('vehicles.list');
         Route::get('/id-search',        'ListsController@vehiclesIdSearch')->name('vehicles.id-search');
     }); Route::resource('/vehicles',    'VehiclesController')->only(['store', 'show', 'edit', 'update', 'destroy']);
 
     // Groups routes
     Route::prefix('groups')->group(function() {
-        Route::get('/list',             'ListsController@groupsList')->name('groups.list');
+        Route::post('/list',             'ListsController@groupsList')->name('groups.list');
         Route::get('/id-search',        'ListsController@groupsIdSearch')->name('groups.id-search');
     }); Route::resource('/groups',      'GroupsController')->only(['store', 'show', 'edit', 'update', 'destroy']);
     
     // Activities routes
     Route::prefix('activities')->group(function() {
-        Route::get('/list',             'ListsController@activitiesList')->name('activities.list');
+        Route::post('/list',             'ListsController@activitiesList')->name('activities.list');
     });
 
     // Subactivities routes
     Route::prefix('subactivities')->group(function() {
-        Route::get('/list',             'ListsController@subactivitiesList')->name('subactivities.list');
+        Route::post('/list',             'ListsController@subactivitiesList')->name('subactivities.list');
     });
 
     // Vehicle types routes
     Route::prefix('vehicle_types')->group(function() {
-        Route::get('/list',             'ListsController@vehicleTypesList')->name('vehicle-types.list');
+        Route::post('/list',             'ListsController@vehicleTypesList')->name('vehicle-types.list');
     });
 
     
     // Gates routes
     Route::prefix('gates')->group(function() {
-        Route::get('/list',         'ListsController@gatesList')->name('gates.list');
+        Route::post('/list',         'ListsController@gatesList')->name('gates.list');
     });
 
     // Gates routes
     Route::prefix('zones')->group(function() {
-        Route::get('/list',         'ListsController@zonesList')->name('zones.list');
+        Route::post('/list',         'ListsController@zonesList')->name('zones.list');
     });
 
     // Settings Routes

@@ -40,27 +40,12 @@
             </div>
         </div>
         <!-- List -->
-        <div class="row">
-            <div class="col">
-                <custom-table
-                    :updating="updating"
-                    :columns="columns"
-                    :rows="paginator.data"
-                    :pickable="{ active: true, list: vehicles_picked }"
-                    @rowclicked="toggleVehicle"
-                    @sort="sortHandler"
-                />
-            </div>
-        </div>
-        <!-- Pagination and Search -->
-        <div class="row mt-3">
-            <div class="col-6">
-                <search-input :updating="updating" @input="searchHandler" placeholder="Filtrar columnas"/>
-            </div>
-            <div class="col-6">
-                <paginator-links v-if="paginator.data.length > 0" :paginator="paginator" @paginate="page => paginate(page)"/>
-            </div>
-        </div>
+        <remote-custom-table    list="vehicles" 
+                                :columns="columns"
+                                :filters="filters"
+                                :pickable="{ active: true, list: vehicles_picked }"
+                                @rowclicked="toggleVehicle"
+        />
     </div>
 </template>
 
@@ -76,7 +61,6 @@ export default {
     data: function() {
         return {
             selected_list: '',
-            search: '',
             columns: [ 
                 { name: 'plate',    text: 'Patente' },
                 { name: 'brand',    text: 'Marca'   },
@@ -90,10 +74,6 @@ export default {
                 company_id:     [],
                 id:             []
             },
-            sort: {
-                column: null,
-                order:  null,
-            }
         };
     },
     mounted() {
@@ -103,53 +83,11 @@ export default {
         /**
          * 
          */
-        updating: function() {
-            return this.$store.getters.vehicles.updating;
-        },
-        /**
-         * 
-         */
         vehicles_picked: function() {
             return this.$store.getters.person.values.assign_vehicles.vehicles_id;
         },
-        /**
-         * 
-         */
-        paginator: function() {
-            return this.$store.getters.vehicles.paginator;
-        },
     }, 
     methods: {
-        /**
-         * Paginates the people using the new sort condition.
-         */
-        sortHandler: function(sort) {
-            this.sort = sort;
-            this.paginate(1);
-        },
-        /**
-         * Asks to the server for the given page.
-         */
-        paginate: function(page) {
-            this.$store.dispatch('paginateList', {what: 'vehicles', page, filters: this.filters, sort: this.sort});
-        },
-        /**
-         * 
-         */
-        searchHandler: function(value) {
-            this.search = value;
-            switch (this.selected_list) {
-                case 'company':
-                    this.getCompanyVehicles();
-                    break;
-                case 'other':
-                    this.getOtherVehicles();
-                    break;
-                case 'picked':
-                    this.getPickedVehicles();
-                    break;
-            }
-        },
         /**
          * 
          */
@@ -168,7 +106,6 @@ export default {
             this.selected_list = 'company';
             this.resetFilters();
             this.filters.company_id = this.assignedCompanies;
-            this.paginate(1);
         },
         /**
          * 
@@ -177,7 +114,6 @@ export default {
             this.selected_list = 'other';
             this.resetFilters();
             this.filters.not_company_id = this.assignedCompanies;
-            this.paginate(1);
         },
         /**
          * 
@@ -186,7 +122,6 @@ export default {
             this.selected_list = 'picked';
             this.resetFilters();
             this.filters.id = this.vehicles_picked;
-            this.paginate(1);
         },
         /**
          * 

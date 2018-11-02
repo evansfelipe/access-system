@@ -25,8 +25,12 @@ class CreateCompanyPeopleTable extends Migration
             $table->integer('art_number')->required();
             $table->integer('art_file_id')->unsigned()->nullable();
             $table->json('subactivities');
-            $table->unique(['person_id', 'company_id']);
+            // $table->unique(['person_id', 'company_id']);
             $table->timestamps();
+
+            $table->foreign('company_id')->references('id')->on('companies');
+            $table->foreign('person_id')->references('id')->on('people');
+
         });
     }
 

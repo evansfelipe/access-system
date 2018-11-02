@@ -26,7 +26,7 @@
             <i :class="`fas fa-${opened ? 'times' : 'search'} fa-fw`"></i>
         </button>
         <!-- Input -->
-        <input v-if="opened" ref="input" type="text" :placeholder="placeholder" v-model="value" @keyup="keyup" @keydown="keydown">
+        <input v-if="opened" ref="input" type="text" :placeholder="placeholder" v-model="value" @keyup="keyup" @keydown="keydown" @keyup.enter="enter">
     </div>
 </template>
 
@@ -64,6 +64,13 @@ export default {
          */
         keydown: function() {
             clearTimeout(this.interval_id);
+        },
+        /**
+         * 
+         */
+        enter: function() {
+            clearTimeout(this.interval_id);
+            this.input();
         },
         /**
          * Emits an event to the parent with the input's value.

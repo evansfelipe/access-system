@@ -117,15 +117,7 @@ class Vehicle extends Model
             'colour'                => $this->colour,
             'insurance'             => \Helpers::timestampToDate($this->insurance),
             'vtv'                   => \Helpers::timestampToDate($this->vtv),
-            'assigned_people'       => $this->people()->select('people.id','last_name','name','cuil')->get()
-                                        ->map(function($person) {
-                                            return [
-                                                'id'            => $person->id,
-                                                'full_name'     => $person->fullName(),
-                                                'cuil'          => $person->cuil,
-                                                'company_name'  => $person->companies()->select('name')->get()->implode('name', ' / ')
-                                            ];
-                                        })
+            'assigned_people'       => $this->people->pluck('id')
         ];
     }
 }

@@ -6,7 +6,7 @@
 
 <template>
     <div>
-        <div class="row text-right">
+        <div class="row text-right mb-1">
             <div class="col">
                 <button class="btn btn-link btn-sm" @click="toggle">
                     <i :class="`fas fa-angle-${advanced_search.opened ? 'up' : 'down'}`"></i>

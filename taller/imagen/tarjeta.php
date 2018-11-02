@@ -9,7 +9,7 @@ $im     = imagecreatefrompng("tarjeta.png");
 $naranja = imagecolorallocate($im, 220, 210, 60);
 $blanco = imagecolorallocate($im, 255, 255, 255);
 $negro = imagecolorallocate($im, 0, 0, 0);
-$cadena = "2";
+$cadena = "1";
 //calculo de lugar
 $px     = (imagesx($im) - 7.5 * strlen($cadena)) / 6;
 $px2     = imagesx($im) / 3;
@@ -50,7 +50,7 @@ imagecopymerge($im, $thumb, 120, 280,0 , 0, 75, 35, 90);
 
 
 // Agregando texto...
-$cadena = "Koala, Super";
+$cadena = "Prueba, Super";
 $px     = (imagesx($im) - 6.5 * strlen($cadena)) / 2;
 imagefttext($im, 12, 0, $px, 230, $negro, $font_file, $cadena);
 //imagestring($im, 3, $px, 220 , $cadena, $negro);

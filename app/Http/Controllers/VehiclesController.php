@@ -67,13 +67,13 @@ class VehiclesController extends Controller
             'people_id' => $people_id
         ];
 
-        $containers_id = [];
-        foreach ($veh['assigned_containers'] as $assigned_container) {
-            array_push($containers_id, $assigned_container['id']);
-        }
-        $assign_containers = [
-            'containers_id' => $containers_id
-        ];
+        // $containers_id = [];
+        // foreach ($veh['assigned_containers'] as $assigned_container) {
+        //     array_push($containers_id, $assigned_container['id']);
+        // }
+        // $assign_containers = [
+        //     'containers_id' => $containers_id
+        // ];
 
         $general_information = [
             'type_id'       => $veh['type']['id'],
@@ -82,7 +82,7 @@ class VehiclesController extends Controller
             'insurance'     => $vehicle->insurance ? date('Y-m-d', strtotime($vehicle->insurance)) : '',
         ];
 
-        unset($veh['id'], $veh['company'], $veh['type'], $veh['vtv'], $veh['insurance'], $veh['assigned_people'], $veh['assigned_containers']);
+        unset($veh['id'], $veh['company'], $veh['type'], $veh['vtv'], $veh['insurance'], $veh['assigned_people']/*, $veh['assigned_containers']*/);
 
         $general_information = array_merge($general_information, $veh);
 
@@ -91,7 +91,7 @@ class VehiclesController extends Controller
             'values' => [
                 'general_information' => $general_information,
                 'assign_people'       => $assign_people,
-                'assign_containers'   => $assign_containers
+                // 'assign_containers'   => $assign_containers
             ]
         ];
         return response(json_encode($data), 200)->header('Content-Type', 'application/json');        

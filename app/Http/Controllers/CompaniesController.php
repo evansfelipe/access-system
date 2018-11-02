@@ -83,6 +83,7 @@ class CompaniesController extends Controller
         })->toArray();
 
         $contact = $company->contactToArray();
+        \Debugbar::info($contact);
 
         $general_information = array_merge([
             'business_name' => $company->business_name,
@@ -90,10 +91,10 @@ class CompaniesController extends Controller
             'area'          => $company->area,
             'cuit'          => $company->cuit,
             'expiration'    => $company->expiration ? date('Y-m-d', strtotime($company->expiration)) : '',
-            'phone'         => $contact->phone,
-            'email'         => $contact->email,
-            'web'           => $contact->web !== '-' ? $contact->web : '',
-            'fax'           => $contact->fax !== '-' ? $contact->fax : '',
+            'phone'         => $contact['phone'],
+            'email'         => $contact['email'],
+            'web'           => $contact['web'] !== '-' ? $contact-['web'] : '',
+            'fax'           => $contact['fax'] !== '-' ? $contact-['fax'] : '',
         ],
         $company->residency->toArray());
 

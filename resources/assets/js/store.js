@@ -67,7 +67,7 @@ class Model {
         this.updating = false;
         this.editing  = false;
         this.modified = false;
-        this.values   = require(`./models/${this.name}.js`).default.default(debug);
+        this.values   = require(`./models/${this.name}.js`).default.default(false);
     }
 
     restart() {
@@ -508,7 +508,7 @@ export default {
                 let new_timestamp = response.data;
                 if(state.lists[what].timestamp === null || state.lists[what].timestamp < new_timestamp) {
                     if(state.debug) console.log('Fetching: ', what);
-                    axios.get(`/${state.lists[what].base_path}/list`, {params: {timestamp: state.lists[what].timestamp}})
+                    axios.post(`/${state.lists[what].base_path}/list`, {timestamp: state.lists[what].timestamp})
                     .then(response => {
                         if(state.debug) console.log('Fetch success: ', what, response.data);
                         commit(`set`, {what, data: response.data, timestamp: new_timestamp});
@@ -532,7 +532,7 @@ export default {
             if(!state.lists[what].updating) {
                 if(state.debug) console.log("Paginating:", what);
                 commit(`updatingList`, { what, value: true });
-                axios.get(`/${state.lists[what].base_path}/list?page=${page}`, {params: {...filters, ...sort}}) 
+                axios.post(`/${state.lists[what].base_path}/list?page=${page}`, {...filters, ...sort}) 
                 .then(response => {
                     if(state.debug) console.log('Pagination success: ', what, response.data);
                     commit(`set`, {what, data: response.data.data, paginator: response.data});

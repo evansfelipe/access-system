@@ -10,6 +10,7 @@
             </ul>
             <!-- Content -->
             <general-information v-show="tab === 0" :values="general_information"/>
+            <assigned-people v-show="tab === 0" :values="general_information.people"/>
         </show-wrapper>
     </div>
 </template>
@@ -18,6 +19,7 @@
 export default {
     components: {
         'general-information':   require('./partials/GeneralInformation.vue'),
+        'assigned-people':   require('./partials/AssignedPeople.vue'),
     },
     data: function() {
         return {
