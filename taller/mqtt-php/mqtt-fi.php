@@ -22,9 +22,6 @@ try {
 $client->subscribe('/cp/#', 1);
 $client->setReconnectDelay(5);
 
-pcntl_alarm(5);
-pcntl_signal_dispatch();
-
 $client->loopForever();
 function connect($r) {
 	echo "I got code {$r}\n";
@@ -33,9 +30,10 @@ function subscribe() {
 	echo "Subscribed to a topic\n";
 }
 function message($message) {
+	$client = $GLOBALS["client"];
 	printf("Got a message on topic %s with payload:\n%s\n", $message->topic, $message->payload);
 	$supertopic = $message->tokeniseTopic($message->topic);
-	if (is_array($supertopic) && isset($supertopic[1])) {
+	if (is_array($supertopic) && isset($supertopic[2])) {
 		  try {
 			$val = json_decode($message->payload);
 			if (is_null($val)) {
@@ -63,26 +61,38 @@ function message($message) {
 							echo ' - Error desconocido';
 						break;
 					}
-				echo "Es vacio ".json_last_error();
+				//echo "Es vacio ".json_last_error();
+			} else {
+					
+				  $Class = "C".ucfirst(strtolower($val->C));
+				  $file = "class.".strtolower($val->C).".php";
+				  if (file_exists("mensaje/$file")){
+					  include_once("mensaje/$file");
+					  $m=new $Class($supertopic[2]);
+					  $m->setCommand("php aristan device:mqtt ");
+					  $return = $m->mensaje($val);
+				  } else {
+					  echo "no existe el mensaje";
+				  }
+				  //var_dump($supertopic);
+				  $topic = 	"/".$supertopic[1]."/".$supertopic[2]."/"."r";
+				  //echo "vuelta topic --> $topic";
+				  if ($return != NULL || $return != "") {
+					  if (isJSON($return)) {
+						echo "publicando en $topic --".$return."--";
+						$client->publish( $topic, $return);
+					  } else {
+						  echo "Error: ".$return;
+						}
+				  } else {
+					  echo "No hay mensaje de vuelta en este mensaje\n";
+				  }	
 			}
 		  } catch (Exception $e) {
 				echo '{"result":"FALSE","message":"Caught exception: ' .  $e->getMessage() . ' ~"}';
 			}
 		  //var_dump($val);
-		  $Class = "C".ucfirst(strtolower($val->C));
-		  $file = "class.".strtolower($val->C).".php";
-		  if (file_exists("mensaje/$file")){
-			  include_once("mensaje/$file");
-			  $m=new $Class($supertopic[1]);
-			  $return = $m->mensaje($val);
-		  } else {
-			  echo "no existe el mensaje";
-		  }
-		  if ($return != NULL) {
-			  $client->publish( $message->topic, $return);
-		  } else {
-			  echo "No hay mensaje de vuelta en este mensaje\n";
-		  }
+		  
 		  
 	}
 }
@@ -99,3 +109,8 @@ function disconnect() {
 function alarm() {
     echo 'Received an alarm signal !' . PHP_EOL;
 }
+
+function isJSON($string){
+   return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
+}
+
